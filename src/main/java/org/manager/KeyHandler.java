@@ -4,42 +4,46 @@ import java.awt.event.KeyEvent;
 
 public class KeyHandler {
 
-    public static void keyPressed(KeyEvent e) {
+    /**Key pressed in ASCI characters
+     *
+     */
+    private int[] keyPressed = new int[256];
 
-        int key = e.getKeyCode();
-
-        if (key == KeyEvent.VK_A) {
-            System.out.println("AAA");
-        }
-
-        if (key == KeyEvent.VK_D) {
-
-        }
-
-        if (key == KeyEvent.VK_SHIFT) {
-
-        }
-
-        if (key == KeyEvent.VK_SPACE) {
-        }
-
-        if (key == KeyEvent.VK_ESCAPE) {
-
+    /**Constructor for KeyHandler
+     */
+    public KeyHandler() {
+        for(int i = 0; i < 256; i++) {
+            keyPressed[i] = 0;
         }
     }
-    public static void keyReleased(KeyEvent e) {
+    /**
+     * Method called when a key is pressed.
+     *
+     * @param e The KeyEvent object representing the key press event
+     */
+    public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
+        keyPressed[key] = 1;
+        System.out.println(key);
 
-        if (key == KeyEvent.VK_A) {
+    }
 
-        }
+    /**
+     * Method called when a key is released.
+     *
+     * @param e The KeyEvent object representing the key release event
+     */
+    public void keyReleased(KeyEvent e) {
+        int key = e.getKeyCode();
+        keyPressed[key] = 0;
+    }
 
-        if (key == KeyEvent.VK_D) {
-
-        }
-
-        if (key == KeyEvent.VK_SHIFT) {
-
-        }
+    /**
+     * Method to get the array representing pressed keys.
+     *
+     * @return An array representing pressed keys, where 1 indicates pressed and 0 indicates released
+     */
+    int[] getKeyPressed() {
+        return keyPressed;
     }
 }
