@@ -239,4 +239,14 @@ public class Collider
             }
         }
     }
+
+    /** calculates the manhattan distance between two colliders. <br>
+     *  not an actual distance calculator, only good for determining which collider is the closest to a collider */
+    public static float getDistanceBetweenColliders(Collider c1, Collider c2)
+    {
+        float distance=0;
+        distance+=Math.abs(c1.position.x-c2.position.x)-0.5f*(c1.scale.x+ c2.scale.x);
+        distance+=Math.abs(c1.position.y-c2.position.y)-0.5f*(c1.scale.y+ c2.scale.y);
+        return distance;
+    }
 }

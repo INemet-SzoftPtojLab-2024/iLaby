@@ -158,4 +158,36 @@ public class ColliderGroup
     }
 
     private static int nextId=1;
+
+    /** a function to calculate all the collisions between a collider and the colliders of a collider group */
+    public static void resolveCollision(ColliderGroup cg, Collider c, boolean noResolution)
+    {
+        //filter out the colliders in the colliderGroup that are not touching the collider c
+        Collider[] touching=(Collider[])cg.colliders.stream().filter(cgc->(Collider.getDistanceBetweenColliders(c,cgc)<0)).toArray();
+
+        //sort the array by distance
+        float[] distances=new float[touching.length];
+        for(int i=0;i<distances.length;i++)
+            distances[i]=Collider.getDistanceBetweenColliders(c,touching[i]);
+
+        for(int i=0;i<touching.length;i++)
+        {
+            for (int j=i;j<touching.length-1;j++)
+            {
+                if(distances[j]>distances[j+1])
+                {
+                    Collider tempC=touching[j];
+                    touching[j]=touching[j+1];
+                    touching[j+1]=tempC;
+                    float tempF=distances[j];
+                    distances[j]=distances[j+1];
+                    distances[j+1]=tempF;
+                }
+            }
+        }
+
+        //resolve collisions
+        for(int i=0;i<touching.length;i++)
+            Collider.resolveCollision(c,touching[i],noResolution);
+    }
 }

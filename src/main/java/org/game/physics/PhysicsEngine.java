@@ -49,8 +49,8 @@ public class PhysicsEngine
             {
                 if(!cg.isColliderInBounds(c))
                     continue;
-                for(Collider ck : cg.getColliders())
-                    Collider.resolveCollision(c,ck, false);
+
+                ColliderGroup.resolveCollision(cg,c,false);
             }
         }
 
