@@ -68,6 +68,11 @@ public class Isten {
      */
     private void addRenderables() {
 
+        //adding the background
+        //it can be added here, since it doesn't require an updatable (it doesn't update over time)
+        renderer.addRenderable(new Image(new Vec2(), 1, 1, new Vec2(500,500), "./assets/bg.png"));
+
+
     }
 
     /**

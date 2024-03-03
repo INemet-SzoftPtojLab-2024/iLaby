@@ -21,7 +21,7 @@ public class FallingKuba extends Updatable {
         isten.getPhysicsEngine().addCollider(c);//register collider in the physics engine
 
         //create the image of the kuba
-        im = new Image(new Vec2(), 1, 1, new Vec2(50,50), "./assets/cube.jpg");
+        im = new Image(new Vec2(), 1, 1, new Vec2(50,50), "./assets/amogus.png");
         isten.getRenderer().addRenderable(im);//register image in the renderer
     }
 

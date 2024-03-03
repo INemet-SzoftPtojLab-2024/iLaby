@@ -14,21 +14,21 @@ public class Chamber extends Updatable {
     public void onStart(Isten isten) {
         //adding colliders
         cg=new ColliderGroup();
-        cg.addCollider(new Collider(new Vec2(0,4), new Vec2(5,0.5f)));
-        cg.addCollider(new Collider(new Vec2(0,-4), new Vec2(5,0.5f)));
+        cg.addCollider(new Collider(new Vec2(0,3.5f), new Vec2(5,2)));
+        cg.addCollider(new Collider(new Vec2(0,-3.5f), new Vec2(5,2)));
         isten.getPhysicsEngine().addColliderGroup(cg); //register the collider group in the physics engien
 
 
         //adding images
         for(Collider c : cg.getColliders())
         {
-            Image im = new Image(new Vec2(), 1, 1, new Vec2(250,25), "./assets/cube.jpg");
+            Image im = new Image(new Vec2(), 1, 1, Vec2.scale(c.getScale(),50), "./assets/sus.png");
             Vec2 imageScale=Vec2.scale(c.getScale(), 50);
             Vec2 imagePos=isten.convertWorldToScreen(c.getPosition(),new Vec2(), 50);
             imagePos.x-=0.5f*imageScale.x;
             imagePos.y-=0.5f*imageScale.y;
             im.setPosition(imagePos);
-            isten.getRenderer().addRenderable(im);
+            isten.getRenderer().addRenderable(im);//register the image in the renderer
         }
     }
 
