@@ -1,5 +1,7 @@
 package main.java.org.game;
 
+import main.java.org.Demo.Chamber;
+import main.java.org.Demo.FallingKuba;
 import main.java.org.game.Graphics.GameRenderer;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.Text;
@@ -66,10 +68,6 @@ public class Isten {
      */
     private void addRenderables() {
 
-        String imagePath = "./assets/cube.jpg";
-
-        renderer.addRenderable(new Text("Hello!", new Vec2(150, 100), "./assets/Monocraft.ttf", 68, 255, 255, 255));
-        renderer.addRenderable(new Image(new Vec2(200,200), 1, 1, new Vec2(100,100), imagePath));
     }
 
     /**
@@ -77,7 +75,8 @@ public class Isten {
      */
     private void addUpdatables()
     {
-
+        updatables.add(new FallingKuba());
+        updatables.add(new Chamber());
     }
 
     /**
