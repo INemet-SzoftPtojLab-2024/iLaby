@@ -61,8 +61,8 @@ public class Collider
     /** returns a reference to the velocity of the collider */
     public Vec2 getVelocity(){return this.velocity;}//doesn't clone return value
     public String getTag(){return this.tag;}
-    /** returns an array of the infos about the collisions in which the collider partake in the last phyiscs update. it is safe to modify */
-    public String[] getLastCollisionTags(){return (String[])this.lastCollisionInfo.toArray();}
+    /** returns a list of the infos about the collisions in which the collider partake in the last phyiscs update */
+    public ArrayList<CollisionInfo> getLastCollisionInfo(){return this.lastCollisionInfo;}
     public boolean isSolid(){return this.isSolid;}
     public boolean isMovable(){return this.isMovable;}
 

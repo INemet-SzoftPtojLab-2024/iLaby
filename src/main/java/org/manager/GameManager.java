@@ -62,10 +62,11 @@ public class GameManager {
                     while(stage==GameStage.INGAME)
                     {
                         long currentTime=System.nanoTime();
-                        float deltaTime=(float)((currentTime-lastFrame)*0.000000001);
+                        double deltaTime=(currentTime-lastFrame)*0.000000001;
                         lastFrame=currentTime;
 
                         isten.update(deltaTime);
+                        try{Thread.sleep(1);}catch (Exception amogus){} //do not remove plz
                     }
                     break;
             }

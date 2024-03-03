@@ -56,13 +56,14 @@ public class GameRenderer extends JPanel implements ActionListener {
 
         setBackground(new Color(50,50,50));
 
+        //graphics.dispose();
+
+        graphics.fillRect(0,0,this.getWidth(), this.getHeight());
+
         if(renderables.isEmpty()) return;
         for(int i = 0; i < renderables.size(); i++) {
             renderables.get(i).render(graphics);
         }
-
-        graphics.dispose();
-
     }
 
     @Override

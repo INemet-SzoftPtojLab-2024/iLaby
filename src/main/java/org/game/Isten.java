@@ -34,7 +34,8 @@ public class Isten {
      *
      * @param deltaTime The time elapsed since the last update
      */
-    public void update(float deltaTime) {
+    public void update(double deltaTime) {
+
         physicsEngine.step(deltaTime);
 
         //check if updatable has been initialized
@@ -87,6 +88,9 @@ public class Isten {
     public GameRenderer getRenderer() {
         return renderer;
     }
+
+    /** returns the physics engine if the isten */
+    public PhysicsEngine getPhysicsEngine(){return physicsEngine;}
 
     /**
      * Method to convert world coordinates to screen coordinates.

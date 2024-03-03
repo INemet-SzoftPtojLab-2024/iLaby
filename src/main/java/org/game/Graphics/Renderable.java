@@ -20,7 +20,8 @@ abstract class Renderable {
      *
      * @return The position of the renderable object
      */
-    public Vec2 getPosition() {
+    public final Vec2 getPosition() {
         return position;
     }
+    public final void setPosition(Vec2 position) { this.position=position;}
 }

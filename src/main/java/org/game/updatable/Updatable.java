@@ -9,7 +9,7 @@ public abstract class Updatable {
 
     /** az elso update hivas elott hivodik.*/
     public abstract void onStart(Isten isten);
-    public abstract void onUpdate(Isten isten, float deltaTime);
+    public abstract void onUpdate(Isten isten, double deltaTime);
     public abstract void onDestroy();
 
     public final String getTag(){return tag;}

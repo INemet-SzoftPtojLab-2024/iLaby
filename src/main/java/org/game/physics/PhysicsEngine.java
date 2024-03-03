@@ -24,7 +24,7 @@ public class PhysicsEngine
      *  - the colliders are moved by their velocity <br>
      *  - collisions between simulated colliders and the colliders in the collider group, in which the simulated collider is, will be resolved <br>
      *  - if two simulated colliders overlap, their collision history will be also updated, but collision between them is not resolved*/
-    public void step(float deltaTime)
+    public void step(double deltaTime)
     {
         //clear collision tags
         for(Collider c : simulatedColliders)
@@ -39,7 +39,7 @@ public class PhysicsEngine
             if(!c.isMovable())
                 continue;
 
-            c.setPosition(Vec2.scale(c.getVelocity(),deltaTime));
+            c.setPosition(Vec2.sum(c.getPosition(),new Vec2((float)((double)c.getVelocity().x*deltaTime), (float)((double)c.getVelocity().y*deltaTime))));
         }
 
         //resolve collisions between colliders in collidergroups and simulated colliders

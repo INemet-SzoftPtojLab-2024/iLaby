@@ -3,7 +3,7 @@ package main.java.org.game.physics;
 import main.java.org.linalg.Vec2;
 
 /** infos about a collision between two colliders*/
-public final class CollisionInfo {
+public class CollisionInfo {
     /**the tag of the other collider. null if the tag is unknown*/
     public final String tag;
     /** the id of the other collider. -1 if the id is unknown*/
