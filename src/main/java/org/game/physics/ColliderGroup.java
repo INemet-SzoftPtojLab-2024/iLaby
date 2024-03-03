@@ -163,7 +163,7 @@ public class ColliderGroup
     public static void resolveCollision(ColliderGroup cg, Collider c, boolean noResolution)
     {
         //filter out the colliders in the colliderGroup that are not touching the collider c
-        Collider[] touching=(Collider[])cg.colliders.stream().filter(cgc->(Collider.getDistanceBetweenColliders(c,cgc)<0)).toArray();
+        Collider[] touching=(Collider[])cg.colliders.stream().filter(cgc->(Collider.getDistanceBetweenColliders(c,cgc)<0)).toArray(Collider[]::new);
 
         //sort the array by distance
         float[] distances=new float[touching.length];
