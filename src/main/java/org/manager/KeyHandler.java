@@ -24,8 +24,7 @@ public class KeyHandler {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
         keyPressed[key] = 1;
-        System.out.println(key);
-
+        //System.out.println(key);
     }
 
     /**

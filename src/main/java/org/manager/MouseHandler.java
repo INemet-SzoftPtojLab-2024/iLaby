@@ -3,12 +3,10 @@ package main.java.org.manager;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-
 /**
- * Class to handle mouse events.
+ * Class to handle mouse events
  */
     public class MouseHandler implements MouseListener {
-
     /**
      * Method called when the mouse is clicked.
      *

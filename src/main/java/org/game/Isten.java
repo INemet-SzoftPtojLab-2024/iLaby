@@ -11,17 +11,29 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Timer;
 
+/**
+ * The main class representing the game part of the program.
+ */
 public class Isten {
     private PhysicsEngine physicsEngine;
     private GameRenderer renderer;
     private ArrayList<Updatable> updatables;
 
+    /**
+     * Constructor for Isten.
+     * Initializes the physics engine, game renderer, and list of updatables.
+     */
     public Isten() {
         physicsEngine=new PhysicsEngine();
         renderer=new GameRenderer();
         updatables=new ArrayList<>();
     }
 
+    /**
+     * Method to update the game state.
+     *
+     * @param deltaTime The time elapsed since the last update
+     */
     public void update(float deltaTime) {
         physicsEngine.step(deltaTime);
 
@@ -40,11 +52,17 @@ public class Isten {
         renderer.repaint();
     }
 
+    /**
+     * Method to initialize the game.
+     */
     public void init() {
         addUpdatables();
         addRenderables();
     }
 
+    /**
+     * Method to add renderable objects to the game renderer.
+     */
     private void addRenderables() {
 
         String imagePath = "./assets/cube.jpg";
@@ -53,15 +71,31 @@ public class Isten {
         renderer.addRenderable(new Image(new Vec2(200,200), 1, 1, new Vec2(100,100), imagePath));
     }
 
+    /**
+     * Method to add updatable objects to the game.
+     */
     private void addUpdatables()
     {
 
     }
 
+    /**
+     * Method to get the game renderer.
+     *
+     * @return The game renderer
+     */
     public GameRenderer getRenderer() {
         return renderer;
     }
 
+    /**
+     * Method to convert world coordinates to screen coordinates.
+     *
+     * @param worldSpaceCoords The world space coordinates to convert
+     * @param centerOfScreenInWorldSpace The center of the screen in world space coordinates
+     * @param pixelsPerWorldSpaceUnit The scale factor for converting world space to screen space
+     * @return The screen space coordinates
+     */
     public Vec2 convertWorldToScreen(Vec2 worldSpaceCoords,Vec2 centerOfScreenInWorldSpace, float pixelsPerWorldSpaceUnit)
     {
         Vec2 coords=Vec2.subtract(worldSpaceCoords,centerOfScreenInWorldSpace);
