@@ -4,9 +4,12 @@ import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 
+/** a class that handles the collision detection */
 public class PhysicsEngine
 {
+    /** the list of the colliders that are simulated by the physics engine */
     private ArrayList<Collider> simulatedColliders;
+    /** the list of the colliderGroups that are simulated by the physics engine */
     private ArrayList<ColliderGroup> colliderGroups;
 
     public PhysicsEngine()
@@ -15,6 +18,12 @@ public class PhysicsEngine
         colliderGroups=new ArrayList<>();
     }
 
+    /** steps the physics simulation by deltaTime. the value of the deltaTime is in seconds <br>
+     *  the simulation happens so: <br>
+     *  - the collision history of the colliders is reset <br>
+     *  - the colliders are moved by their velocity <br>
+     *  - collisions between simulated colliders and the colliders in the collider group, in which the simulated collider is, will be resolved <br>
+     *  - if two simulated colliders overlap, their collision history will be also updated, but collision between them is not resolved*/
     public void step(float deltaTime)
     {
         //clear collision tags
@@ -41,20 +50,29 @@ public class PhysicsEngine
                 if(!cg.isColliderInBounds(c))
                     continue;
                 for(Collider ck : cg.getColliders())
-                    Collider.resolveCollision(c,ck);
+                    Collider.resolveCollision(c,ck, false);
             }
         }
 
         //resolve collisions between simulated colliders
-        //TODO if necessary
+        int length=simulatedColliders.size();
+        for(int i=0;i<length;i++)
+        {
+            for(int j=i+1;j<length;j++)
+            {
+                Collider.resolveCollision(simulatedColliders.get(i), simulatedColliders.get(j),true);
+            }
+        }
     }
 
+    /** deletes the current state of the physics engine */
     public void reset()
     {
         simulatedColliders.clear();
         colliderGroups.clear();
     }
 
+    /** gets a simulated collider by its id. if the collider is not found, the function returns null */
     public Collider getCollider(int colliderId)
     {
         for(int i=0;i<simulatedColliders.size();i++)
@@ -63,6 +81,7 @@ public class PhysicsEngine
         return null;
     }
 
+    /** adds a collider to the list of the simulated colliders */
     public void addCollider(Collider c)
     {
         if(c==null)
@@ -70,6 +89,7 @@ public class PhysicsEngine
         simulatedColliders.add(c);
     }
 
+    /** removes a collider from the list of the simulated colliders */
     public void removeCollider(Collider c)
     {
         for(int i=0;i<simulatedColliders.size();i++)
@@ -82,6 +102,7 @@ public class PhysicsEngine
         }
     }
 
+    /** removes a collider from the list of the simulated colliders */
     public void removeCollider(int colliderId)
     {
         for(int i=0;i<simulatedColliders.size();i++)
@@ -94,7 +115,7 @@ public class PhysicsEngine
         }
     }
 
-
+    /** gets a colliderGroup from the list of the colliders groups. if the collider group is not found, returns null */
     public ColliderGroup getColliderGroup(int colliderGroupId)
     {
         for(int i=0;i<colliderGroups.size();i++)
@@ -103,6 +124,7 @@ public class PhysicsEngine
         return null;
     }
 
+    /** adds a colliderGroup to the list of the colliderGroups */
     public void addColliderGroup(ColliderGroup cg)
     {
         if(cg==null)
@@ -110,6 +132,7 @@ public class PhysicsEngine
         colliderGroups.add(cg);
     }
 
+    /** removes a colliderGroup from the list of the colliderGroups */
     public void removeColliderGroup(ColliderGroup cg)
     {
         for(int i=0;i<colliderGroups.size();i++)
@@ -122,6 +145,7 @@ public class PhysicsEngine
         }
     }
 
+    /** removes a colliderGroup from the list of the colliderGroups */
     public void removeColliderGroup(int colliderGroupId)
     {
         for(int i=0;i<colliderGroups.size();i++)

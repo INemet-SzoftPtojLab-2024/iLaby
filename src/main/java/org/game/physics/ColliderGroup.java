@@ -6,9 +6,15 @@ import java.util.ArrayList;
 
 public class ColliderGroup
 {
+    /** an id that is einzigartig for this colliderGroup */
     public final int id;
+    /** list of colliders in the collider group */
     private ArrayList<Collider> colliders;
-    Vec2 lowerBound, upperBound;//the lower left and upper right corner of the box, that contains all of the colliders in the collider group
+
+    /**the lower left corner of the box, that contains all of the colliders in the collider group*/
+    private Vec2 lowerBound;
+    /**the upper right corner of the box, that contains all of the colliders in the collider group*/
+    private Vec2 upperBound;
 
     public ColliderGroup()
     {
@@ -18,11 +24,13 @@ public class ColliderGroup
         upperBound=new Vec2();
     }
 
+    /** returns a reference to the list of the colliders in the group. the return value is NOT safe */
     public ArrayList<Collider> getColliders()//returns a reference to the colliders list
     {
         return colliders;
     }
 
+    /** gets a collider by its id. returns null if the collider was not found */
     public Collider getCollider(int colliderId)
     {
         for(int i=0;i<colliders.size();i++)
@@ -31,6 +39,7 @@ public class ColliderGroup
         return null;
     }
 
+    /** adds a collider to the colliderGroup */
     public void addCollider(Collider c)
     {
         if(c==null)
@@ -63,6 +72,7 @@ public class ColliderGroup
         }
     }
 
+    /** removes a collider */
     public void removeCollider(Collider c)
     {
         boolean found=false;
@@ -80,6 +90,7 @@ public class ColliderGroup
             updateBounds();
     }
 
+    /** removes a collider based on its id */
     public void removeCollider(int colliderId)
     {
         boolean found=false;
@@ -97,6 +108,7 @@ public class ColliderGroup
             updateBounds();
     }
 
+    /** searches for the lowest and the highest coordinate in which the colliderGroup has colliders */
     private void updateBounds()
     {
         if(colliders.isEmpty())
@@ -128,6 +140,7 @@ public class ColliderGroup
         upperBound=upper;
     }
 
+    /** returns true if the collider is in the bounds of the colliderGroup on which the function was called */
     public boolean isColliderInBounds(Collider c)//is the collider in the bounds of the colliderGroup
     {
         Vec2 cLower=Vec2.subtract(c.getPosition(),Vec2.scale(c.getScale(),0.5f));
@@ -144,5 +157,5 @@ public class ColliderGroup
         return true;
     }
 
-    private static int nextId=0;
+    private static int nextId=1;
 }
