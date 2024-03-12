@@ -64,6 +64,7 @@ public class GameRenderer extends JPanel implements ActionListener {
 
         if(renderables.isEmpty()) return;
         for(int i = 0; i < renderables.size(); i++) {
+            if(renderables.get(i).isVisible())
             renderables.get(i).render(graphics);
         }
     }

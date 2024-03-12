@@ -27,6 +27,7 @@ public class Image extends Renderable {
         scale = new Vec2(1,1);
         width = 10;
         height = 10;
+        visible = true;
     }
     /**
      * Constructor for Image.
@@ -37,12 +38,13 @@ public class Image extends Renderable {
      * @param scale The scale of the image
      * @param imagePath The path to the image file
      */
-    public Image(Vec2 pos, int w, int h, Vec2 scale, String imagePath) {
+    public Image(Vec2 pos, int w, int h, Vec2 scale, String imagePath, boolean visible) {
 
         this.position = pos;
         this.width = w;
         this.height = h;
         this.scale = scale;
+        this.visible = visible;
 
         try {
             image = ImageIO.read(new File(imagePath));
