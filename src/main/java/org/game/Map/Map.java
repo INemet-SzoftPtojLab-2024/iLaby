@@ -2,6 +2,7 @@ package main.java.org.game.Map;
 
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Isten;
+import main.java.org.game.physics.Collider;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 
@@ -21,16 +22,25 @@ public class Map extends Updatable {
     }
 
     private void createTestMap(Isten isten) {
+        /*
         ArrayList<UnitRoom> unitRooms = new ArrayList<>();
         for (int i = 0; i< 13; i++) {
             for (int j = 0; j<10; j++) {
                 unitRooms.add(new UnitRoom(new Vec2(i*64,j*64)));
-                Image image = new Image(new Vec2(i*64,j*64),64,64,new Vec2(1,1),"./assets/tile.png");
+                Image image = new Image(new Vec2(i*64,j*64),64,64,new Vec2(1,1),"./assets/tile.png",true);
                 unitRooms.get(unitRooms.size()-1).setImage(image);
                 isten.getRenderer().addRenderable(image);
             }
-        }
-
+        }*/
+        UnitRoom unitRoom = new UnitRoom(new Vec2(200,200));
+        Image image = new Image(new Vec2(200,200),64,64,new Vec2(1,1),"./assets/tile.png",true);
+        isten.getRenderer().addRenderable(image);
+        Wall w1 = new Wall(),w2;
+        Collider c = new Collider(new Vec2(200,200),new Vec2(100,100));
+        c.setMovability(false);
+        c.setVelocity(new Vec2(0,0));
+        w1.setCollider(c);
+        isten.getPhysicsEngine().addCollider(c);
     }
 
     @Override
