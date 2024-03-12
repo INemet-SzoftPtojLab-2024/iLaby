@@ -70,8 +70,6 @@ public class Player extends Updatable {
             playerCollider.getVelocity().x = 2 * run;
         } else if (!d && !a) playerCollider.getVelocity().x = 0;
 
-        System.out.println(deltaTime);
-
         //animation
 
         time += deltaTime;
