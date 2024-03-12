@@ -50,12 +50,12 @@ public class Player extends Updatable {
 
         //move the character
         int run = 1;
-        boolean w = isten.getRenderer().getKeyHandler().getKeyPressed()['W'];
-        boolean a = isten.getRenderer().getKeyHandler().getKeyPressed()['A'];
-        boolean s = isten.getRenderer().getKeyHandler().getKeyPressed()['S'];
-        boolean d = isten.getRenderer().getKeyHandler().getKeyPressed()['D'];
+        boolean w = isten.getInputHandler().isKeyDown('W');
+        boolean a = isten.getInputHandler().isKeyDown('A');
+        boolean s = isten.getInputHandler().isKeyDown('S');
+        boolean d = isten.getInputHandler().isKeyDown('D');
 
-        if (isten.getRenderer().getKeyHandler().getKeyPressed()[16]) run *= 2;//Shift is run
+        if (isten.getInputHandler().isKeyDown(16)) run *= 2;//Shift is run
 
         if (w) {
             playerCollider.getVelocity().y = 2 * run;
@@ -74,7 +74,7 @@ public class Player extends Updatable {
 
         time += deltaTime;
 
-        if (time > 0.1f) { //after this much time does the animation changes
+        if (time > 0.2f/run) { //after this much time does the animation changes
             int prev = activeImage;
             if (playerCollider.getVelocity().x > 0) activeImage = 0;
             else if (playerCollider.getVelocity().x < 0) activeImage = 2;
