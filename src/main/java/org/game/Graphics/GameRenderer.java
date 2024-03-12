@@ -24,7 +24,7 @@ public class GameRenderer extends JPanel implements ActionListener {
      * Constructor for GameRenderer.
      */
     public GameRenderer() {
-        this.setPreferredSize(new Dimension(500, 500));
+        this.setPreferredSize(new Dimension(1024, 640));
         setFocusable(true);
 
         //Keyboard

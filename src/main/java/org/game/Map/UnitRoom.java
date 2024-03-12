@@ -9,9 +9,16 @@ public class UnitRoom {
     private Item item;
     public Image image;
 
+    public UnitRoom(Vec2 pos) {
+        this.position = pos;
+    }
+
     public void setPosition(Vec2 position) {
         this.position = position;
     }
 
+    public void setImage(Image image) {
+        this.image = image;
+    }
 
 }

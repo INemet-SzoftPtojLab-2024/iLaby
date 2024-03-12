@@ -3,6 +3,7 @@ package main.java.org.game;
 import main.java.org.game.Graphics.GameRenderer;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.Text;
+import main.java.org.game.Map.Map;
 import main.java.org.game.physics.PhysicsEngine;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
@@ -27,6 +28,7 @@ public class Isten {
         physicsEngine=new PhysicsEngine();
         renderer=new GameRenderer();
         updatables=new ArrayList<>();
+        updatables.add(new Map());
     }
 
     /**
