@@ -1,7 +1,6 @@
 package main.java.org.game.Graphics;
 
-import main.java.org.manager.KeyHandler;
-import main.java.org.manager.MouseHandler;
+import main.java.org.game.Input.Input;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,22 +16,18 @@ import java.util.ArrayList;
 public class GameRenderer extends JPanel implements ActionListener {
 
     private ArrayList<Renderable> renderables;
-    private static KeyHandler keyHandler;
-    private static MouseHandler mouseHandler = new MouseHandler();
 
     /**
      * Constructor for GameRenderer.
      */
-    public GameRenderer() {
-        this.setPreferredSize(new Dimension(1024, 640));
+    public GameRenderer(Input input) {
+        this.setPreferredSize(new Dimension(500, 500));
         setFocusable(true);
 
-        //Keyboard
-        keyHandler = new KeyHandler();
-        addKeyListener(new TAdapter());
-
-        //Mouse
-        addMouseListener(mouseHandler);
+        //input
+        input.setTargetComponent(this);
+        this.addKeyListener(input);
+        this.addMouseListener(input);
 
         setDoubleBuffered(true);
         renderables = new ArrayList<>();
@@ -62,6 +57,7 @@ public class GameRenderer extends JPanel implements ActionListener {
 
         if(renderables.isEmpty()) return;
         for(int i = 0; i < renderables.size(); i++) {
+            if(renderables.get(i).isVisible())
             renderables.get(i).render(graphics);
         }
     }
@@ -69,29 +65,5 @@ public class GameRenderer extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         //Needed for implementation
-    }
-
-    /**
-     * Internal class for handling keyboard events.
-     */
-    private class TAdapter extends KeyAdapter {
-
-        /**
-         * Method called when a key is released.
-         *
-         * @param e The KeyEvent object representing the key release event
-         */
-        public void keyReleased(KeyEvent e) {
-            keyHandler.keyReleased(e); // Call key released method in key handler
-        }
-
-        /**
-         * Method called when a key is pressed.
-         *
-         * @param e The KeyEvent object representing the key press event
-         */
-        public void keyPressed(KeyEvent e) {
-            keyHandler.keyPressed(e); // Call key pressed method in key handler
-        }
     }
 }

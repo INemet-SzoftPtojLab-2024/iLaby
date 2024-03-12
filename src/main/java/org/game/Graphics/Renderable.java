@@ -9,6 +9,7 @@ import java.awt.*;
  */
 abstract class Renderable {
     protected Vec2 position;
+    protected boolean visible;
     /**
      * Abstract method to render the object.
      *
@@ -23,5 +24,10 @@ abstract class Renderable {
     public final Vec2 getPosition() {
         return position;
     }
+
     public final void setPosition(Vec2 position) { this.position=position;}
+
+    public final boolean isVisible(){ return visible; }
+
+    public void setVisible(boolean visible) { this.visible = visible; }
 }

@@ -1,34 +1,34 @@
 package main.java.org.game;
 
+import main.java.org.entities.player.Player;
 import main.java.org.game.Graphics.GameRenderer;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.Text;
-import main.java.org.game.Map.Map;
+import main.java.org.game.Input.Input;
 import main.java.org.game.physics.PhysicsEngine;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Timer;
 
 /**
  * The main class representing the game part of the program.
  */
 public class Isten {
-    private PhysicsEngine physicsEngine;
-    private GameRenderer renderer;
-    private ArrayList<Updatable> updatables;
+    private final PhysicsEngine physicsEngine;
+    private final GameRenderer renderer;
+    private final ArrayList<Updatable> updatables;
+    private final Input inputHandler;
 
     /**
      * Constructor for Isten.
      * Initializes the physics engine, game renderer, and list of updatables.
      */
     public Isten() {
+        inputHandler=new Input();
         physicsEngine=new PhysicsEngine();
-        renderer=new GameRenderer();
+        renderer=new GameRenderer(inputHandler);
         updatables=new ArrayList<>();
-        updatables.add(new Map());
     }
 
     /**
@@ -37,6 +37,8 @@ public class Isten {
      * @param deltaTime The time elapsed since the last update
      */
     public void update(double deltaTime) {
+
+        inputHandler.update();
 
         physicsEngine.step(deltaTime);
 
@@ -70,8 +72,8 @@ public class Isten {
 
         String imagePath = "./assets/cube.jpg";
 
-        renderer.addRenderable(new Text("Hello!", new Vec2(150, 100), "./assets/Monocraft.ttf", 68, 255, 255, 255));
-        renderer.addRenderable(new Image(new Vec2(200,200), 1, 1, new Vec2(100,100), imagePath));
+        renderer.addRenderable(new Text("Hello!", new Vec2(150, 100), "./assets/Monocraft.ttf", 68, 255, 255, 255, true));
+        //renderer.addRenderable(new Image(new Vec2(200,200), 1, 1, new Vec2(100,100), imagePath));
     }
 
     /**
@@ -79,7 +81,7 @@ public class Isten {
      */
     private void addUpdatables()
     {
-
+        updatables.add(new Player());
     }
 
     /**
@@ -91,8 +93,11 @@ public class Isten {
         return renderer;
     }
 
-    /** returns the physics engine if the isten */
+    /** returns the physics engine of the isten */
     public PhysicsEngine getPhysicsEngine(){return physicsEngine;}
+
+    /** returns the inputhandler of the isten */
+    public Input getInputHandler(){return inputHandler;}
 
     /**
      * Method to convert world coordinates to screen coordinates.
