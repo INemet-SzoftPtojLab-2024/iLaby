@@ -118,4 +118,17 @@ public class Isten {
         coords.y=this.renderer.getHeight()-coords.y;
         return coords;
     }
+
+    public Vec2 convertScreenToWorld(Vec2 screenCoords,Vec2 centerOfScreenInWorldSpace, float pixelsPerWorldSpaceUnit)
+    {
+
+        Vec2 coords = screenCoords;
+        coords.y = coords.y - this.renderer.getHeight();
+        coords.y -=0.5f*this.renderer.getHeight();
+        coords.x -=0.5f*this.renderer.getWidth();
+        coords.scale(1/pixelsPerWorldSpaceUnit);
+        coords=Vec2.sum(screenCoords,centerOfScreenInWorldSpace);
+
+        return coords;
+    }
 }

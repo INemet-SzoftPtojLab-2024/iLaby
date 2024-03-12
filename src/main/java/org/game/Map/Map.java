@@ -34,18 +34,16 @@ public class Map extends Updatable {
             }
         }*/
         UnitRoom unitRoom = new UnitRoom(new Vec2(200,200));
-        Image image = new Image(new Vec2(0,0),64,64,new Vec2(1,1),"./assets/tile.png",true);
+        Image image = new Image(new Vec2(225,225),50,50,new Vec2(1,1),"./assets/floor.png",true);
         isten.getRenderer().addRenderable(image);
-        Wall w1 = new Wall(),w2;
-        Collider c = new Collider(new Vec2(0,0),new Vec2(1,1));
-        Collider c2 = new Collider(new Vec2(30,30),new Vec2(1,1));
-        c.setMovability(false);
-        ColliderGroup cg = new ColliderGroup();
-        cg.addCollider(c);
-        cg.addCollider(c2);
-        w1.setCollider(c);
-        w1.setCollider(c2);
-        isten.getPhysicsEngine().addColliderGroup(cg);
+        Wall w1 = new Wall(isten,unitRoom,FramePosition.up);
+        Wall w2 = new Wall(isten,unitRoom,FramePosition.down);
+        Wall w3 = new Wall(isten,unitRoom,FramePosition.left);
+        Wall w4 = new Wall(isten,unitRoom,FramePosition.right);
+        unitRoom.setTop(w1);
+        unitRoom.setDown(w2);
+        unitRoom.setLeft(w3);
+        unitRoom.setRight(w4);
     }
 
     @Override
