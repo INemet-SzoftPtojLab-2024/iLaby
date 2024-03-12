@@ -47,6 +47,8 @@ public class GameRenderer extends JPanel implements ActionListener {
         renderables.add(r);
     }
 
+    public void deleteRenderable(Renderable r){renderables.remove(r);}
+
     /**
      * Method to paint/render the graphics.
      *
@@ -65,6 +67,8 @@ public class GameRenderer extends JPanel implements ActionListener {
             renderables.get(i).render(graphics);
         }
     }
+
+    public KeyHandler getKeyHandler(){return keyHandler;}
 
     @Override
     public void actionPerformed(ActionEvent e) {

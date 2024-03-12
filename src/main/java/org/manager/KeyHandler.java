@@ -7,13 +7,13 @@ public class KeyHandler {
     /**Key pressed in ASCI characters
      *
      */
-    private int[] keyPressed = new int[256];
+    private boolean[] keyPressed = new boolean[256];
 
     /**Constructor for KeyHandler
      */
     public KeyHandler() {
         for(int i = 0; i < 256; i++) {
-            keyPressed[i] = 0;
+            keyPressed[i] = false;
         }
     }
     /**
@@ -23,7 +23,7 @@ public class KeyHandler {
      */
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-        keyPressed[key] = 1;
+        keyPressed[key] = true;
         //System.out.println(key);
     }
 
@@ -34,7 +34,7 @@ public class KeyHandler {
      */
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
-        keyPressed[key] = 0;
+        keyPressed[key] = false;
     }
 
     /**
@@ -42,7 +42,7 @@ public class KeyHandler {
      *
      * @return An array representing pressed keys, where 1 indicates pressed and 0 indicates released
      */
-    int[] getKeyPressed() {
+    public boolean[] getKeyPressed() {
         return keyPressed;
     }
 }
