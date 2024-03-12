@@ -19,6 +19,7 @@ public class UnitRoom {
     public UnitRoom(Vec2 pos) {
         this.position = pos;
         this.inRoom = false;
+        adjacentUnitRooms = new ArrayList<>();
     }
     public void setImage(Image image) {
         this.image = image;
@@ -43,5 +44,9 @@ public class UnitRoom {
     }
     public int getColNum(){
         return (int)position.x/64;
+    }
+
+    public Vec2 getPosition() {
+        return position;
     }
 }

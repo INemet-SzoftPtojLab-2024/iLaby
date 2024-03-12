@@ -16,7 +16,11 @@ public class Room {
         adjacentRooms = new ArrayList<>();
     }
     boolean isAdjacent(Room room) {
-        return false;
+       // if(this.equals(room)) return false; egynelore nem kell lekezelni
+        for(Room checkRoom : adjacentRooms) {
+            if (room.equals(checkRoom)) return true;
+        }
+        return  false;
     }
 
     public ArrayList<UnitRoom> getUnitRooms() {
@@ -26,4 +30,7 @@ public class Room {
         return adjacentRooms;
     }
 
+    public int getID() {
+        return ID;
+    }
 }
