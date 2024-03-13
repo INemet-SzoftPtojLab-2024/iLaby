@@ -16,6 +16,8 @@ public abstract class Renderable {
     protected int hOrigin=CENTER;
     protected int vOrigin=CENTER;
 
+    private boolean visible=true;
+
     /**
      * Abstract method to render the object.
      *
@@ -37,6 +39,14 @@ public abstract class Renderable {
     }
     public final void setScale(Vec2 scale) {
         this.scale = scale;
+    }
+
+    public final boolean getVisibility(){
+        return this.visible;
+    }
+    public final void setVisibility(boolean visible)
+    {
+        this.visible=visible;
     }
 
     /**
