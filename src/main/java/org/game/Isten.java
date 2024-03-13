@@ -28,7 +28,7 @@ public class Isten {
         physicsEngine=new PhysicsEngine();
         renderer=new GameRenderer();
         updatables=new ArrayList<>();
-        updatables.add(new Map(10,10));
+        updatables.add(new Map(20,20));
     }
 
     /**

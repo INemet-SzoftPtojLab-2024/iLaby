@@ -13,7 +13,8 @@ import java.util.Random;
 
 
 public class Map extends Updatable {
-    private ArrayList<Room> rooms;
+    ArrayList<Room> rooms;
+
     private UnitRoom[][] unitRooms;
     private int mapRowSize;
     private int mapColumnSize;
@@ -50,7 +51,7 @@ public class Map extends Updatable {
                 if(j<columnNumber-1) unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i][j+1]);
             }
         }
-        for(int i = 0;i<rowNumber;i++){
+        for(int i = 0;i<rowNumber;i++){ //test
             for(int j = 0; j<columnNumber;j++){
                 int printer = rowNumber*i+j;
                 System.out.println("Room: "+  printer + ",   " + i+ "row" + j +"column. Position:"+ unitRooms[i][j].getPosition().x + ": " + unitRooms[i][j].getPosition().y);
@@ -62,6 +63,27 @@ public class Map extends Updatable {
             int j = number - i * rowNumber;
             chosenUnitRoom(unitRooms[i][j]);
         }
+
+        //test
+        for(int i = 0;i<rowNumber;i++) {
+
+            for (int j = 0; j < columnNumber; j++) {
+                System.out.print(unitRooms[i][j].getOwnerRoom().getID() + " ");
+            }
+            System.out.println();
+        }
+        int one = 0;
+        int two = 0;
+        int tree = 0;
+        int four = 0;
+        for(Room room : rooms){
+            if(room.getUnitRooms().size() == 4) four++;
+            if(room.getUnitRooms().size() == 3) tree++;
+            if(room.getUnitRooms().size() == 2) two++;
+            if(room.getUnitRooms().size() == 1) one++;
+        }
+        System.out.println(one + " " + two +" " + tree + " " + four + " Sum:" + (int)(one + two + tree+ four));
+        System.out.println("Roomnum: " + rooms.size());
 
     }
 
