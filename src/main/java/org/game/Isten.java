@@ -1,7 +1,11 @@
 package main.java.org.game;
 
+
 import main.java.org.game.Camera.Camera;
 import main.java.org.game.Graphics.*;
+
+import main.java.org.entities.player.Player;
+
 import main.java.org.game.Input.Input;
 import main.java.org.game.physics.PhysicsEngine;
 import main.java.org.game.updatable.Updatable;
@@ -77,7 +81,7 @@ public class Isten {
      */
     private void addUpdatables()
     {
-
+        updatables.add(new Player());
     }
 
     /**
