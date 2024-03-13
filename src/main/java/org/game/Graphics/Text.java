@@ -79,14 +79,53 @@ public class Text extends Renderable {
 
         //Set font
         graphics.setFont(font);
+        FontMetrics fm=graphics.getFontMetrics(font);
+
+        //calculate position
+        Vec2 tempPos=new Vec2();
+        Vec2 tempScale;
+        if(text!=null)
+            tempScale=new Vec2(fm.stringWidth(text), fm.getHeight());
+        else
+            tempScale=new Vec2();
+
+        switch(hOrigin)
+        {
+            case Renderable.LEFT:
+                tempPos.x=renderedPosition.x;
+                break;
+
+            case Renderable.CENTER:
+                tempPos.x=renderedPosition.x-0.5f*tempScale.x;
+                break;
+
+            case Renderable.RIGHT:
+                tempPos.x=renderedPosition.x-tempScale.x;
+                break;
+        }
+
+        switch(vOrigin)
+        {
+            case Renderable.BOTTOM:
+                tempPos.y=renderedPosition.y;
+                break;
+
+            case Renderable.CENTER:
+                tempPos.y=renderedPosition.y+0.5f*tempScale.y;
+                break;
+
+            case Renderable.TOP:
+                tempPos.y=renderedPosition.y+tempScale.y;
+                break;
+        }
 
         //Shadow
         graphics.setColor(Color.black);
-        graphics.drawString(text, (int)position.x+5, (int)position.y+5);
+        graphics.drawString(text, (int)tempPos.x+5, (int)tempPos.y+5);
 
         //Text with its color
         graphics.setColor(color);
-        graphics.drawString(text, (int)position.x, (int)position.y);
+        graphics.drawString(text, (int)tempPos.x, (int)tempPos.y);
     }
 
     /**
@@ -96,5 +135,11 @@ public class Text extends Renderable {
      */
     public String getText() {
         return text;
+    }
+
+    @Override
+    public boolean isUIElement()
+    {
+        return false;
     }
 }

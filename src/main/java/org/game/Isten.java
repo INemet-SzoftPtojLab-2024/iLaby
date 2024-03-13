@@ -1,9 +1,11 @@
 package main.java.org.game;
 
+
+import main.java.org.game.Camera.Camera;
+import main.java.org.game.Graphics.*;
+
 import main.java.org.entities.player.Player;
-import main.java.org.game.Graphics.GameRenderer;
-import main.java.org.game.Graphics.Image;
-import main.java.org.game.Graphics.Text;
+
 import main.java.org.game.Input.Input;
 import main.java.org.game.physics.PhysicsEngine;
 import main.java.org.game.updatable.Updatable;
@@ -19,6 +21,7 @@ public class Isten {
     private final GameRenderer renderer;
     private final ArrayList<Updatable> updatables;
     private final Input inputHandler;
+    private final Camera camera;
 
     /**
      * Constructor for Isten.
@@ -26,8 +29,9 @@ public class Isten {
      */
     public Isten() {
         inputHandler=new Input();
+        camera=new Camera();
         physicsEngine=new PhysicsEngine();
-        renderer=new GameRenderer(inputHandler);
+        renderer=new GameRenderer(camera, inputHandler);
         updatables=new ArrayList<>();
     }
 
@@ -70,10 +74,6 @@ public class Isten {
      */
     private void addRenderables() {
 
-        String imagePath = "./assets/cube.jpg";
-
-        renderer.addRenderable(new Text("Hello!", new Vec2(150, 100), "./assets/Monocraft.ttf", 68, 255, 255, 255, true));
-        //renderer.addRenderable(new Image(new Vec2(200,200), 1, 1, new Vec2(100,100), imagePath));
     }
 
     /**
@@ -99,21 +99,6 @@ public class Isten {
     /** returns the inputhandler of the isten */
     public Input getInputHandler(){return inputHandler;}
 
-    /**
-     * Method to convert world coordinates to screen coordinates.
-     *
-     * @param worldSpaceCoords The world space coordinates to convert
-     * @param centerOfScreenInWorldSpace The center of the screen in world space coordinates
-     * @param pixelsPerWorldSpaceUnit The scale factor for converting world space to screen space
-     * @return The screen space coordinates
-     */
-    public Vec2 convertWorldToScreen(Vec2 worldSpaceCoords,Vec2 centerOfScreenInWorldSpace, float pixelsPerWorldSpaceUnit)
-    {
-        Vec2 coords=Vec2.subtract(worldSpaceCoords,centerOfScreenInWorldSpace);
-        coords.scale(pixelsPerWorldSpaceUnit);
-        coords.x+=0.5f*this.renderer.getWidth();
-        coords.y+=0.5f*this.renderer.getHeight();
-        coords.y=this.renderer.getHeight()-coords.y;
-        return coords;
-    }
+    /** returns the camera of the isten */
+    public Camera getCamera(){return this.camera;}
 }

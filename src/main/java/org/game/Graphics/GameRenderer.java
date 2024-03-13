@@ -1,6 +1,8 @@
 package main.java.org.game.Graphics;
 
+import main.java.org.game.Camera.Camera;
 import main.java.org.game.Input.Input;
+import main.java.org.linalg.Vec2;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,11 +18,12 @@ import java.util.ArrayList;
 public class GameRenderer extends JPanel implements ActionListener {
 
     private ArrayList<Renderable> renderables;
+    private Camera camera;
 
     /**
      * Constructor for GameRenderer.
      */
-    public GameRenderer(Input input) {
+    public GameRenderer(Camera camera, Input input) {
         this.setPreferredSize(new Dimension(500, 500));
         setFocusable(true);
 
@@ -31,6 +34,8 @@ public class GameRenderer extends JPanel implements ActionListener {
 
         setDoubleBuffered(true);
         renderables = new ArrayList<>();
+
+        this.camera=camera;
     }
 
     /**
@@ -49,6 +54,22 @@ public class GameRenderer extends JPanel implements ActionListener {
      */
     public void paint(Graphics graphics) {
 
+        //calculate renderable positions on screen
+        for(int i=0;i<renderables.size();i++)
+        {
+            if(renderables.get(i).isUIElement())
+            {
+                renderables.get(i).setRenderedPosition(renderables.get(i).getPosition());
+                renderables.get(i).setRenderedScale(renderables.get(i).getScale());
+                continue;
+            }
+
+            Vec2 temp=convertWorldToScreen(renderables.get(i).getPosition(), camera);
+            renderables.get(i).setRenderedPosition(temp);
+            renderables.get(i).setRenderedScale(Vec2.scale(renderables.get(i).getScale(),camera.getPixelsPerUnit()));
+        }
+
+        //actual render
         setBackground(new Color(50,50,50));
 
         //graphics.dispose();
@@ -57,9 +78,27 @@ public class GameRenderer extends JPanel implements ActionListener {
 
         if(renderables.isEmpty()) return;
         for(int i = 0; i < renderables.size(); i++) {
-            if(renderables.get(i).isVisible())
+            if(!renderables.get(i).getVisibility())
+                continue;
             renderables.get(i).render(graphics);
         }
+    }
+
+    /**
+     * Method to convert world coordinates to screen coordinates.
+     *
+     * @param worldSpaceCoords The world space coordinates to convert
+     * @param cam camera
+     * @return The screen space coordinates
+     */
+    public Vec2 convertWorldToScreen(Vec2 worldSpaceCoords, Camera cam)
+    {
+        Vec2 coords=Vec2.subtract(worldSpaceCoords,cam.getPosition());
+        coords.scale(cam.getPixelsPerUnit());
+        coords.x+=0.5f*this.getWidth();
+        coords.y+=0.5f*this.getHeight();
+        coords.y=this.getHeight()-coords.y;
+        return coords;
     }
 
     @Override
