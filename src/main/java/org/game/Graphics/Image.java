@@ -34,7 +34,6 @@ public class Image extends Renderable {
 
         this.position = pos;
         this.scale = scale;
-        this.visible = visible;
 
         try {
             image = ImageIO.read(new File(imagePath));

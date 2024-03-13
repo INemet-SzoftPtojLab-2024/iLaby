@@ -32,16 +32,18 @@ public class Player extends Updatable {
         isten.getPhysicsEngine().addCollider(playerCollider);//register collider in the physics engine
 
         playerImage = new ArrayList<>();
-        playerImage.add(new Image(new Vec2(), 1, 1, new Vec2(50, 50), "./assets/character_right1.png", false));
-        playerImage.add(new Image(new Vec2(), 1, 1, new Vec2(50, 50), "./assets/character_right2.png", true));
-        playerImage.add(new Image(new Vec2(), 1, 1, new Vec2(50, 50), "./assets/character_left1.png", false));
-        playerImage.add(new Image(new Vec2(), 1, 1, new Vec2(50, 50), "./assets/character_left2.png", false));
-
-        activeImage = 1;
+        playerImage.add(new Image(new Vec2(), new Vec2(1, 1), "./assets/character_right1.png"));
+        playerImage.add(new Image(new Vec2(), new Vec2(1, 1), "./assets/character_right2.png"));
+        playerImage.add(new Image(new Vec2(), new Vec2(1, 1), "./assets/character_left1.png"));
+        playerImage.add(new Image(new Vec2(), new Vec2(1, 1), "./assets/character_left2.png"));
 
         for (Image im : playerImage) {
+            im.setVisibility(false);
             isten.getRenderer().addRenderable(im);//register images in the renderer
         }
+
+        activeImage = 1;
+        playerImage.get(activeImage).setVisibility(true);
     }
 
     @Override
@@ -81,18 +83,15 @@ public class Player extends Updatable {
             else if (prev > 1) activeImage = 2;
             else activeImage = 0;
             if (prev % 2 == 0 || playerCollider.getVelocity().magnitude()==0.0f ) activeImage++;
-            playerImage.get(prev).setVisible(false);
-            playerImage.get(activeImage).setVisible(true);
+            playerImage.get(prev).setVisibility(false);
+            playerImage.get(activeImage).setVisibility(true);
             time = 0.0f;
         }
 
         //move image
         //the origin of the image is in its top right corner, therefore the imagePos looks like this: screenSpace(collider position) - 0.5*imageScale
-        Vec2 imageScale = Vec2.scale(playerCollider.getScale(), 50);
-        Vec2 imagePos = isten.convertWorldToScreen(playerCollider.getPosition(), new Vec2(), 50);
-        imagePos.x -= 0.5f * imageScale.x;
-        imagePos.y -= 0.5f * imageScale.y;
-        for (int i = 0; i < 4; i++) playerImage.get(i).setPosition(imagePos);
+
+        for (int i = 0; i < 4; i++) playerImage.get(i).setPosition(playerCollider.getPosition());
     }
 
     @Override
