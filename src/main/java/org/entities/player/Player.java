@@ -32,10 +32,10 @@ public class Player extends Updatable {
         isten.getPhysicsEngine().addCollider(playerCollider);//register collider in the physics engine
 
         playerImage = new ArrayList<>();
-        playerImage.add(new Image(new Vec2(), 1, 1, new Vec2(50, 50), "./assets/character_right1.jpg", false));
-        playerImage.add(new Image(new Vec2(), 1, 1, new Vec2(50, 50), "./assets/character_right2.jpg", true));
-        playerImage.add(new Image(new Vec2(), 1, 1, new Vec2(50, 50), "./assets/character_left1.jpg", false));
-        playerImage.add(new Image(new Vec2(), 1, 1, new Vec2(50, 50), "./assets/character_left2.jpg", false));
+        playerImage.add(new Image(new Vec2(), 1, 1, new Vec2(50, 50), "./assets/character_right1.png", false));
+        playerImage.add(new Image(new Vec2(), 1, 1, new Vec2(50, 50), "./assets/character_right2.png", true));
+        playerImage.add(new Image(new Vec2(), 1, 1, new Vec2(50, 50), "./assets/character_left1.png", false));
+        playerImage.add(new Image(new Vec2(), 1, 1, new Vec2(50, 50), "./assets/character_left2.png", false));
 
         activeImage = 1;
 
@@ -78,7 +78,9 @@ public class Player extends Updatable {
             int prev = activeImage;
             if (playerCollider.getVelocity().x > 0) activeImage = 0;
             else if (playerCollider.getVelocity().x < 0) activeImage = 2;
-            if (prev % 2 == 0) activeImage++;
+            else if (prev > 1) activeImage = 2;
+            else activeImage = 0;
+            if (prev % 2 == 0 || playerCollider.getVelocity().magnitude()==0.0f ) activeImage++;
             playerImage.get(prev).setVisible(false);
             playerImage.get(activeImage).setVisible(true);
             time = 0.0f;
