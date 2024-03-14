@@ -1,6 +1,5 @@
 package main.java.org.game;
 
-
 import main.java.org.game.Camera.Camera;
 import main.java.org.game.Graphics.*;
 
