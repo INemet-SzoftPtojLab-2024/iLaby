@@ -56,23 +56,23 @@ public class Isten {
         for(Updatable u : updatables)
             u.onUpdate(this,deltaTime);
 
-        if(inputHandler.isKeyPressed(65) ){
-            camera.Pan(new Vec2(-0.3f,0));
+        if(inputHandler.isKeyDown(65) ){
+            camera.Pan(new Vec2(-0.01f,0));
         }
-        else if(inputHandler.isKeyPressed(68) ){
-            camera.Pan(new Vec2(0.3f,0));
+        if(inputHandler.isKeyDown(68) ){
+            camera.Pan(new Vec2(0.01f,0));
         }
-        else if(inputHandler.isKeyPressed(87) ){
-            camera.Pan(new Vec2(0,0.3f));
+        if(inputHandler.isKeyDown(87) ){
+            camera.Pan(new Vec2(0,0.01f));
         }
-        else if(inputHandler.isKeyPressed(83) ){
-            camera.Pan(new Vec2(0,-0.3f));
+        if(inputHandler.isKeyDown(83) ){
+            camera.Pan(new Vec2(0,-0.01f));
         }
-        else if(inputHandler.isKeyPressed(78)) {
-            camera.Zoom(1.0f / 1.1f);
+        if(inputHandler.isKeyDown(78)) {
+            camera.Zoom(1.0f / 1.001f);
         }
-        else if(inputHandler.isKeyPressed(90)) {
-            camera.Zoom(1.1f);
+        if(inputHandler.isKeyDown(90)) {
+            camera.Zoom(1.001f);
         }
 
 

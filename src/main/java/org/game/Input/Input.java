@@ -206,8 +206,6 @@ public class Input implements KeyListener, MouseListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println(e.getKeyCode());
-
         if(e.getKeyCode()>=256)
             return;
         nextKeyDown[e.getKeyCode()]=true;
