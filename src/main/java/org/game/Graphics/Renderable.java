@@ -32,6 +32,7 @@ public abstract class Renderable {
     public final Vec2 getPosition() {
         return position;
     }
+
     public final void setPosition(Vec2 position) { this.position=position;}
 
     public final Vec2 getScale() {
