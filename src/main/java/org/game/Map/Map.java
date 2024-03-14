@@ -45,11 +45,14 @@ public class Map extends Updatable {
             chosenUnitRoom(unitRooms[i][j]);
         }
 
+        addImages(isten);
+
         //test
         for(int i = 0;i<mapRowSize;i++) {
 
             for (int j = 0; j < mapColumnSize; j++) {
                 System.out.print(unitRooms[i][j].getOwnerRoom().getID() + " ");
+                unitRooms[i][j].createWalls(isten);
             }
             System.out.println();
         }
@@ -65,7 +68,6 @@ public class Map extends Updatable {
         }
         System.out.println(one + " " + two +" " + tree + " " + four + " Sum:" + (int)(one + two + tree+ four));
         System.out.println("Roomnum: " + rooms.size());
-        addImages(isten);
     }
 
     private void createTestMap(Isten isten) {
@@ -97,9 +99,10 @@ public class Map extends Updatable {
                 isten.getRenderer().addRenderable(img);
             }
             i++;
-            i = i % 11 + 1;
+            i = i % 10 + 1;
         }
     }
+
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
