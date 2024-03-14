@@ -3,13 +3,11 @@ package main.java.org.entities.player;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Isten;
 import main.java.org.game.physics.Collider;
-import main.java.org.game.physics.ColliderGroup;
-import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 
-public class Player extends Updatable {
+public class Player extends Entity {
 
     Collider playerCollider;
     ArrayList<Image> playerImage;
