@@ -109,7 +109,6 @@ public class Input implements KeyListener, MouseListener {
     {
         if(keyCode>=256)
             return false;
-
         if(keyDown[keyCode]&&!previousKeyDown[keyCode])
             return true;
         return false;
@@ -207,6 +206,8 @@ public class Input implements KeyListener, MouseListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        System.out.println(e.getKeyCode());
+
         if(e.getKeyCode()>=256)
             return;
         nextKeyDown[e.getKeyCode()]=true;

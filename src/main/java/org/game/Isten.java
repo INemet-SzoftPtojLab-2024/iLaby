@@ -3,6 +3,7 @@ package main.java.org.game;
 import main.java.org.game.Camera.Camera;
 import main.java.org.game.Graphics.*;
 import main.java.org.game.Input.Input;
+import main.java.org.game.Map.Map;
 import main.java.org.game.physics.PhysicsEngine;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
@@ -29,6 +30,7 @@ public class Isten {
         physicsEngine=new PhysicsEngine();
         renderer=new GameRenderer(camera, inputHandler);
         updatables=new ArrayList<>();
+        updatables.add(new Map(10,10));
     }
 
     /**
@@ -53,6 +55,26 @@ public class Isten {
         //call onUpdates
         for(Updatable u : updatables)
             u.onUpdate(this,deltaTime);
+
+        if(inputHandler.isKeyPressed(65) ){
+            camera.Pan(new Vec2(-0.3f,0));
+        }
+        else if(inputHandler.isKeyPressed(68) ){
+            camera.Pan(new Vec2(0.3f,0));
+        }
+        else if(inputHandler.isKeyPressed(87) ){
+            camera.Pan(new Vec2(0,0.3f));
+        }
+        else if(inputHandler.isKeyPressed(83) ){
+            camera.Pan(new Vec2(0,-0.3f));
+        }
+        else if(inputHandler.isKeyPressed(78)) {
+            camera.Zoom(1.0f / 1.1f);
+        }
+        else if(inputHandler.isKeyPressed(90)) {
+            camera.Zoom(1.1f);
+        }
+
 
         renderer.repaint();
     }

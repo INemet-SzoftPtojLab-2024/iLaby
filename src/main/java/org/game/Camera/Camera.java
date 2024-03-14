@@ -32,4 +32,13 @@ public class Camera {
     {
         this.pixelsPerUnit=pixelsPerUnit;
     }
+
+
+    public void Zoom(float z) {
+        pixelsPerUnit *= z;
+    }
+
+    public void Pan(Vec2 p) {
+        position = Vec2.sum(p,position);
+    }
 }

@@ -21,53 +21,34 @@ public class Map extends Updatable {
 
     @Override
     public void onStart(Isten isten) {
-
-    }
-
-    private void createTestMap(Isten isten) {
-        ArrayList<UnitRoom> unitRooms = new ArrayList<>();
-        for (int i = 0; i< 13; i++) {
-            for (int j = 0; j<10; j++) {
-                unitRooms.add(new UnitRoom(new Vec2(i*64,j*64)));
-                Image image = new Image(new Vec2(i*64,j*64),64,64,new Vec2(1,1),"./assets/tile.png");
-                unitRooms.get(unitRooms.size()-1).setImage(image);
-                isten.getRenderer().addRenderable(image);
-            }
-        }
-
-    }
-    public Map(int rowNumber, int columnNumber){
-        mapRowSize = rowNumber;
-        mapColumnSize = columnNumber;
-        rooms = new ArrayList<>();
-        setUnitRooms(rowNumber, columnNumber);
-        for(int i = 0; i<rowNumber;i++)
+        setUnitRooms(mapRowSize, mapColumnSize);
+        for(int i = 0; i<mapRowSize;i++)
         {
-            for(int j = 0;j<columnNumber;j++)
+            for(int j = 0;j<mapColumnSize;j++)
             {
                 if(i>0) unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i-1][j]);
                 if(j>0) unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i][j-1]);
-                if(i<rowNumber-1) unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i+1][j]);
-                if(j<columnNumber-1) unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i][j+1]);
+                if(i<mapRowSize-1) unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i+1][j]);
+                if(j<mapColumnSize-1) unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i][j+1]);
             }
         }
-        for(int i = 0;i<rowNumber;i++){ //test
-            for(int j = 0; j<columnNumber;j++){
-                int printer = rowNumber*i+j;
+        for(int i = 0;i<mapRowSize;i++){ //test
+            for(int j = 0; j<mapColumnSize;j++){
+                int printer = mapRowSize*i+j;
                 System.out.println("Room: "+  printer + ",   " + i+ "row" + j +"column. Position:"+ unitRooms[i][j].getPosition().x + ": " + unitRooms[i][j].getPosition().y);
             }
         }
         int[] randomNums = shuffleUnitRooms();
         for(int number : randomNums ){
-            int i = (int)(number/ rowNumber);
-            int j = number - i * rowNumber;
+            int i = (int)(number/ mapRowSize);
+            int j = number - i * mapRowSize;
             chosenUnitRoom(unitRooms[i][j]);
         }
 
         //test
-        for(int i = 0;i<rowNumber;i++) {
+        for(int i = 0;i<mapRowSize;i++) {
 
-            for (int j = 0; j < columnNumber; j++) {
+            for (int j = 0; j < mapColumnSize; j++) {
                 System.out.print(unitRooms[i][j].getOwnerRoom().getID() + " ");
             }
             System.out.println();
@@ -84,9 +65,41 @@ public class Map extends Updatable {
         }
         System.out.println(one + " " + two +" " + tree + " " + four + " Sum:" + (int)(one + two + tree+ four));
         System.out.println("Roomnum: " + rooms.size());
-
+        addImages(isten);
     }
 
+    private void createTestMap(Isten isten) {
+        ArrayList<UnitRoom> unitRooms = new ArrayList<>();
+        for (int i = 0; i< 13; i++) {
+            for (int j = 0; j<10; j++) {
+                unitRooms.add(new UnitRoom(new Vec2(i*64,j*64)));
+                Image image = new Image(new Vec2(i*64,j*64),new Vec2(1,1),"./assets/tile.png");
+                unitRooms.get(unitRooms.size()-1).setImage(image);
+                isten.getRenderer().addRenderable(image);
+            }
+        }
+
+    }
+    public Map(int rowNumber, int columnNumber){
+        mapRowSize = rowNumber;
+        mapColumnSize = columnNumber;
+        rooms = new ArrayList<>();
+    }
+
+    private void addImages(Isten isten) {
+
+        Image img;
+        int i = 1;
+        for(Room room: rooms) {
+            String path = "./assets/rooms/" + i + ".png";
+            for(UnitRoom unitRoom: room.getUnitRooms()) {
+                img = new Image(unitRoom.getPosition(), new Vec2(1,1), path);
+                isten.getRenderer().addRenderable(img);
+            }
+            i++;
+            i = i % 11 + 1;
+        }
+    }
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
@@ -112,7 +125,7 @@ public class Map extends Updatable {
         {
             for(int j = 0;j<columnNumber;j++)
             {
-                unitRooms[i][j] = new UnitRoom(new Vec2(i*64,j*64));
+                unitRooms[i][j] = new UnitRoom(new Vec2(i,j));
             }
         }
     }

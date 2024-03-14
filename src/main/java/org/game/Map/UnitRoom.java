@@ -40,10 +40,10 @@ public class UnitRoom {
         return ownerRoom;
     }
     public int getRowNum(){
-        return (int)position.y/64;
+        return (int)position.y;
     }
     public int getColNum(){
-        return (int)position.x/64;
+        return (int)position.x;
     }
 
     public Vec2 getPosition() {
