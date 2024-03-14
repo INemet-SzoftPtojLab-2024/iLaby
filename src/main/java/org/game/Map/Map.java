@@ -47,16 +47,14 @@ public class Map extends Updatable {
 
         addImages(isten);
 
-        //test
         for(int i = 0;i<mapRowSize;i++) {
-
             for (int j = 0; j < mapColumnSize; j++) {
-                System.out.print(unitRooms[i][j].getOwnerRoom().getID() + " ");
                 unitRooms[i][j].createWalls(isten);
             }
-            System.out.println();
         }
-        int one = 0;
+
+        //test
+        /*int one = 0;
         int two = 0;
         int tree = 0;
         int four = 0;
@@ -68,18 +66,7 @@ public class Map extends Updatable {
         }
         System.out.println(one + " " + two +" " + tree + " " + four + " Sum:" + (int)(one + two + tree+ four));
         System.out.println("Roomnum: " + rooms.size());
-    }
-
-    private void createTestMap(Isten isten) {
-        ArrayList<UnitRoom> unitRooms = new ArrayList<>();
-        for (int i = 0; i< 13; i++) {
-            for (int j = 0; j<10; j++) {
-                unitRooms.add(new UnitRoom(new Vec2(i*64,j*64)));
-                Image image = new Image(new Vec2(i*64,j*64),new Vec2(1,1),"./assets/tile.png");
-                unitRooms.get(unitRooms.size()-1).setImage(image);
-                isten.getRenderer().addRenderable(image);
-            }
-        }
+        */
 
     }
     public Map(int rowNumber, int columnNumber){
@@ -147,17 +134,19 @@ public class Map extends Updatable {
             }
         }
         if(unitRoomNeighbourRooms.isEmpty()){
-            System.out.println("Új szoba kerül felvételre ID-val:" + unitRoom.getRowNum()*mapRowSize+unitRoom.getColNum());
+            //System.out.println("Új szoba kerül felvételre ID-val:" + unitRoom.getRowNum()*mapRowSize+unitRoom.getColNum());
             Room newRoom = new Room(unitRoom.getRowNum()*mapRowSize+unitRoom.getColNum());
             unitRoom.setOwnerRoom(newRoom);
             newRoom.getUnitRooms().add(unitRoom);
             rooms.add(newRoom);
-            System.out.println("A szoba tömb mérete: " + rooms.size());
+            //System.out.println("A szoba tömb mérete: " + rooms.size());
         }
         else{
-            System.out.println("Unitroomot egy roomba addoljuk, aminek az ID-ja" + minimalRoom.getID() + "A UnitRoom ID-ja: " +
+           /* System.out.println("Unitroomot egy roomba addoljuk, aminek az ID-ja" + minimalRoom.getID() + "A UnitRoom ID-ja: " +
                     unitRoom.getRowNum()*mapRowSize+unitRoom.getColNum() +
                     " A minimalroom unitroomszáma addolás előtt: " + minimalRoom.getUnitRooms().size());
+
+            */
             unitRoom.setOwnerRoom(minimalRoom);
             minimalRoom.getUnitRooms().add(unitRoom);
             if(unitRoomNeighbourRooms.size()>1){
@@ -169,7 +158,7 @@ public class Map extends Updatable {
                 }
 
             }
-            System.out.println(" A minimalroom unitroomszáma addolás után: " + minimalRoom.getUnitRooms().size());
+            //System.out.println(" A minimalroom unitroomszáma addolás után: " + minimalRoom.getUnitRooms().size());
         }
 
     }
@@ -187,12 +176,5 @@ public class Map extends Updatable {
             numbers[i] = temp;
         }
         return numbers;
-    }
-    public void drawMap(Graphics2D g2) {
-        for (Room r: rooms) {
-           for (UnitRoom u: r.getUnitRooms()) {
-               u.image.render(g2);
-           }
-        }
     }
 }
