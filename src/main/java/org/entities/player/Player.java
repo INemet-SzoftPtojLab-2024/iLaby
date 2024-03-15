@@ -1,6 +1,10 @@
 package main.java.org.entities.player;
 
+import main.java.org.game.Camera.Camera;
+import main.java.org.game.Graphics.GameRenderer;
 import main.java.org.game.Graphics.Image;
+import main.java.org.game.Graphics.Text;
+import main.java.org.game.Graphics.TextUI;
 import main.java.org.game.Isten;
 import main.java.org.game.physics.Collider;
 import main.java.org.linalg.Vec2;
@@ -13,12 +17,22 @@ public class Player extends Entity {
     ArrayList<Image> playerImage;
     int activeImage;
     float time;
+    TextUI playerName;
 
     public Player() {
         playerCollider = null;
         playerImage = null;
         activeImage = 0;
         time = 0.0f;
+        playerName = null;
+    }
+
+    public Player(String name) {
+        playerCollider = null;
+        playerImage = null;
+        activeImage = 0;
+        time = 0.0f;
+        playerName = new TextUI(name, new Vec2(0,0), 15, 255,255,255);;
     }
 
     @Override
@@ -42,6 +56,12 @@ public class Player extends Entity {
 
         activeImage = 1;
         playerImage.get(activeImage).setVisibility(true);
+
+        if(playerName != null){
+            playerName.setVisibility(true);
+            isten.getRenderer().addRenderable(playerName);
+        }
+
     }
 
     @Override
@@ -74,13 +94,13 @@ public class Player extends Entity {
 
         time += deltaTime;
 
-        if (time > 0.2f/run) { //after this much time does the animation changes
+        if (time > 0.2f / run) { //after this much time does the animation changes
             int prev = activeImage;
             if (playerCollider.getVelocity().x > 0) activeImage = 0;
             else if (playerCollider.getVelocity().x < 0) activeImage = 2;
             else if (prev > 1) activeImage = 2;
             else activeImage = 0;
-            if (prev % 2 == 0 || playerCollider.getVelocity().magnitude()==0.0f ) activeImage++;
+            if (prev % 2 == 0 || playerCollider.getVelocity().magnitude() == 0.0f) activeImage++;
             playerImage.get(prev).setVisibility(false);
             playerImage.get(activeImage).setVisibility(true);
             time = 0.0f;
@@ -89,11 +109,24 @@ public class Player extends Entity {
         //move image
         //the origin of the image is in its top right corner, therefore the imagePos looks like this: screenSpace(collider position) - 0.5*imageScale
 
-        for (int i = 0; i < 4; i++) playerImage.get(i).setPosition(playerCollider.getPosition());
+        for (int i = 0; i < 4; i++) {
+            Camera cam = isten.getCamera();
+            GameRenderer gameRenderer = isten.getRenderer();
+            Vec2 playerPosition = playerCollider.getPosition();
+            playerImage.get(i).setPosition(playerPosition);
+
+            Vec2 namePositionInWorldCoords = Vec2.sum(playerPosition, new Vec2( 0,(float)0.8));
+            Vec2 namePositionInScreenCoords = gameRenderer.convertWorldToScreen(namePositionInWorldCoords, cam);
+            playerName.setPosition(namePositionInScreenCoords);
+        }
     }
 
     @Override
     public void onDestroy() {
         //not implemented yet
+    }
+
+    public void setPlayerName(TextUI playerName){
+        this.playerName = playerName;
     }
 }
