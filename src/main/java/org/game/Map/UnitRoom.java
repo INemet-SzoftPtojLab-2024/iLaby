@@ -79,28 +79,28 @@ public class UnitRoom {
             collider = new Collider(new Vec2(position.x, position.y + 0.5f), new Vec2(1, 0.1f));
             img = new Image(collider.getPosition(), new Vec2(1,0.1f), path);
             isten.getRenderer().addRenderable(img);
-
+            ownerRoom.addCollider(collider);
         }
         if(!hasBottom) {
             bottom = new Wall();
             collider = new Collider(new Vec2(position.x, position.y - 0.9f + 0.4f), new Vec2(1, 0.1f));
             img = new Image(collider.getPosition(), new Vec2(1,0.1f), path);
             isten.getRenderer().addRenderable(img);
-
+            ownerRoom.addCollider(collider);
         }
         if(!hasRight) {
             right = new Wall();
             collider = new Collider(new Vec2(position.x + 0.9f - 0.4f, position.y), new Vec2(0.1f, 1f));
             img = new Image(collider.getPosition(), new Vec2(0.1f,1f), path);
             isten.getRenderer().addRenderable(img);
-
+            ownerRoom.addCollider(collider);
         }
         if(!hasLeft) {
             left = new Wall();
             collider = new Collider(new Vec2(position.x - 0.5f, position.y), new Vec2(0.1f, 1f));
             img = new Image(collider.getPosition(), collider.getScale(), path);
             isten.getRenderer().addRenderable(img);
-
+            ownerRoom.addCollider(collider);
         }
 
 

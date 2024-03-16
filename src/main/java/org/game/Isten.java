@@ -20,6 +20,7 @@ public class Isten {
     private final PhysicsEngine physicsEngine;
     private final GameRenderer renderer;
     private final ArrayList<Updatable> updatables;
+    private final ArrayList<Updatable> pendingUpdatables;
     private final Input inputHandler;
     private final Camera camera;
 
@@ -33,7 +34,7 @@ public class Isten {
         physicsEngine=new PhysicsEngine();
         renderer=new GameRenderer(camera, inputHandler);
         updatables=new ArrayList<>();
-        updatables.add(new Map(10,10));
+        pendingUpdatables=new ArrayList<>();
     }
 
     /**
@@ -47,6 +48,13 @@ public class Isten {
 
         physicsEngine.step(deltaTime);
 
+        //add pending updatables to updatables
+        for(Updatable u : pendingUpdatables)
+        {
+            updatables.add(u);
+        }
+        pendingUpdatables.clear();
+
         //check if updatable has been initialized
         for(Updatable u : updatables)
             if(!u.isInitialized())
@@ -58,26 +66,6 @@ public class Isten {
         //call onUpdates
         for(Updatable u : updatables)
             u.onUpdate(this,deltaTime);
-
-        if(inputHandler.isKeyDown(65) ){
-            camera.Pan(new Vec2(-0.01f,0));
-        }
-        if(inputHandler.isKeyDown(68) ){
-            camera.Pan(new Vec2(0.01f,0));
-        }
-        if(inputHandler.isKeyDown(87) ){
-            camera.Pan(new Vec2(0,0.01f));
-        }
-        if(inputHandler.isKeyDown(83) ){
-            camera.Pan(new Vec2(0,-0.01f));
-        }
-        if(inputHandler.isKeyDown(78)) {
-            camera.Zoom(1.0f / 1.001f);
-        }
-        if(inputHandler.isKeyDown(90)) {
-            camera.Zoom(1.001f);
-        }
-
 
         renderer.repaint();
     }
@@ -103,6 +91,7 @@ public class Isten {
     private void addUpdatables()
     {
         updatables.add(new Player());
+        updatables.add(new Map(10,10));
     }
 
     /**
@@ -122,4 +111,15 @@ public class Isten {
 
     /** returns the camera of the isten */
     public Camera getCamera(){return this.camera;}
+
+
+    public void addUpdatable(Updatable u)
+    {
+        pendingUpdatables.add(u);
+    }
+
+    public void removeUpdatable(Updatable u)
+    {
+        updatables.remove(u);
+    }
 }

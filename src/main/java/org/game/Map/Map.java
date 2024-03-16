@@ -53,6 +53,10 @@ public class Map extends Updatable {
             }
         }
 
+        //adding rooms to updatables
+        for(int i=0;i<rooms.size();i++)
+            isten.addUpdatable(rooms.get(i));
+
         //test
         /*int one = 0;
         int two = 0;
