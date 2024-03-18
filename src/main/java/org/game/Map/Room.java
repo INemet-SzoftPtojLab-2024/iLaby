@@ -15,6 +15,7 @@ public class Room extends Updatable {
     //ArrayList<Player> players;
     boolean discovered;
     RoomType roomType;
+    private ArrayList<Integer> hasDoorWith;
 
     ColliderGroup roomColliders;
 
@@ -23,6 +24,7 @@ public class Room extends Updatable {
         unitRooms = new ArrayList<>();
         adjacentRooms = new ArrayList<>();
         roomColliders=new ColliderGroup();
+        hasDoorWith = new ArrayList<>();
     }
 
     @Override
@@ -60,4 +62,16 @@ public class Room extends Updatable {
     }
 
     public void addCollider(Collider c){roomColliders.addCollider(c);}
+
+    public void addHasDoorWith(int i) {
+        hasDoorWith.add(i);
+    }
+
+    public boolean hasDoorWith(int i) {
+        return hasDoorWith.contains(i);
+    }
+
+    public boolean hasDoor() {
+        return (!hasDoorWith.isEmpty());
+    }
 }

@@ -54,8 +54,11 @@ public class UnitRoom {
 
     public void createWalls(Isten isten) {
         boolean hasTop = false, hasBottom = false, hasLeft = false, hasRight = false;
+        boolean topIsDoor = false, bottomIsDoor = false, leftIsDoor = false, rightIsDoor = false;
         for(UnitRoom neighbour: adjacentUnitRooms) {
-            if(neighbour.getOwnerRoom().getID() != ownerRoom.getID()) continue;
+            if(neighbour.getOwnerRoom().getID() != ownerRoom.getID()) {
+                continue;
+            }
 
             if(neighbour.getPosition().x < position.x) {
                 hasLeft = true;
@@ -71,38 +74,27 @@ public class UnitRoom {
             }
         }
 
-        Image img;
-        Collider collider;
         String path = "./assets/rooms/11.png";
+        String doorPath = "./assets/rooms/8.png";
         if(!hasTop) {
-            top = new Wall();
-            collider = new Collider(new Vec2(position.x, position.y + 0.5f), new Vec2(1, 0.1f));
-            img = new Image(collider.getPosition(), new Vec2(1,0.1f), path);
-            isten.getRenderer().addRenderable(img);
-            ownerRoom.addCollider(collider);
+            top = createWallWithCollider(isten, new Vec2(position.x, position.y + 0.5f), new Vec2(1, 0.1f), path);
         }
         if(!hasBottom) {
-            bottom = new Wall();
-            collider = new Collider(new Vec2(position.x, position.y - 0.9f + 0.4f), new Vec2(1, 0.1f));
-            img = new Image(collider.getPosition(), new Vec2(1,0.1f), path);
-            isten.getRenderer().addRenderable(img);
-            ownerRoom.addCollider(collider);
+            bottom = createWallWithCollider(isten, new Vec2(position.x, position.y - 0.9f + 0.4f), new Vec2(1, 0.1f), path);
         }
         if(!hasRight) {
-            right = new Wall();
-            collider = new Collider(new Vec2(position.x + 0.9f - 0.4f, position.y), new Vec2(0.1f, 1f));
-            img = new Image(collider.getPosition(), new Vec2(0.1f,1f), path);
-            isten.getRenderer().addRenderable(img);
-            ownerRoom.addCollider(collider);
+            right = createWallWithCollider(isten, new Vec2(position.x + 0.9f - 0.4f, position.y), new Vec2(0.1f, 1f), path);
         }
         if(!hasLeft) {
-            left = new Wall();
-            collider = new Collider(new Vec2(position.x - 0.5f, position.y), new Vec2(0.1f, 1f));
-            img = new Image(collider.getPosition(), collider.getScale(), path);
-            isten.getRenderer().addRenderable(img);
-            ownerRoom.addCollider(collider);
+            left = createWallWithCollider(isten, new Vec2(position.x - 0.5f, position.y), new Vec2(0.1f, 1f), path);
         }
+    }
 
-
+    private Wall createWallWithCollider(Isten isten, Vec2 pos, Vec2 scale, String imgPath) {
+        Collider collider = new Collider(pos, scale);
+        Image img = new Image(pos, scale, imgPath);
+        isten.getRenderer().addRenderable(img);
+        ownerRoom.addCollider(collider);
+        return new Wall();
     }
 }
