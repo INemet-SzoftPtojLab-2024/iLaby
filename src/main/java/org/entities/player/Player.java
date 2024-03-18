@@ -67,6 +67,7 @@ public class Player extends Entity {
 
         if(playerName != null){
             playerName.setVisibility(true);
+            playerName.setSortingLayer(-69);
             isten.getRenderer().addRenderable(playerName);
         }
 
@@ -123,7 +124,7 @@ public class Player extends Entity {
         for (int i = 0; i < 4; i++) {
             playerImage.get(i).setPosition(playerPosition);
         }
-        playerName.setPosition(Vec2.sum(playerPosition, new Vec2( 0,(float)0.8)));
+        playerName.setPosition(Vec2.sum(playerPosition, new Vec2( 0,(float)0.5)));
 
         //move camera
         isten.getCamera().setPosition(playerCollider.getPosition());

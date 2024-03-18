@@ -34,7 +34,9 @@ public class TimeCounter extends Updatable {
         timerBackgroundImage=new ImageUI(new Vec2((float)renderer.getWidth()/2,25),new Vec2(100,50),"./assets/timer_background.png");
 
         timeText.setVisibility(true);
+        timeText.setSortingLayer(-69);
         timerBackgroundImage.setVisibility(true);
+        timerBackgroundImage.setSortingLayer(-69);
         isten.getRenderer().addRenderable(timerBackgroundImage);
         isten.getRenderer().addRenderable(timeText);
     }
