@@ -4,7 +4,6 @@ import main.java.org.game.Camera.Camera;
 import main.java.org.game.Graphics.GameRenderer;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.Text;
-import main.java.org.game.Graphics.TextUI;
 import main.java.org.game.Isten;
 import main.java.org.game.physics.Collider;
 import main.java.org.linalg.Vec2;
@@ -17,7 +16,7 @@ public class Player extends Entity {
     ArrayList<Image> playerImage;
     int activeImage;
     float time;
-    TextUI playerName;
+    Text playerName;
 
     public Player() {
         playerCollider = null;
@@ -32,7 +31,7 @@ public class Player extends Entity {
         playerImage = null;
         activeImage = 0;
         time = 0.0f;
-        playerName = new TextUI(name, new Vec2(0,0), 15, 255,255,255);;
+        playerName = new Text(name, new Vec2(0,0), 15, 255,255,255);;
     }
 
     @Override
@@ -110,14 +109,10 @@ public class Player extends Entity {
         //the origin of the image is in its top right corner, therefore the imagePos looks like this: screenSpace(collider position) - 0.5*imageScale
 
         for (int i = 0; i < 4; i++) {
-            Camera cam = isten.getCamera();
-            GameRenderer gameRenderer = isten.getRenderer();
             Vec2 playerPosition = playerCollider.getPosition();
             playerImage.get(i).setPosition(playerPosition);
 
-            Vec2 namePositionInWorldCoords = Vec2.sum(playerPosition, new Vec2( 0,(float)0.8));
-            Vec2 namePositionInScreenCoords = gameRenderer.convertWorldToScreen(namePositionInWorldCoords, cam);
-            playerName.setPosition(namePositionInScreenCoords);
+            playerName.setPosition(Vec2.sum(playerPosition, new Vec2( 0,(float)0.8)));
         }
     }
 
@@ -126,7 +121,7 @@ public class Player extends Entity {
         //not implemented yet
     }
 
-    public void setPlayerName(TextUI playerName){
+    public void setPlayerName(Text playerName){
         this.playerName = playerName;
     }
 }
