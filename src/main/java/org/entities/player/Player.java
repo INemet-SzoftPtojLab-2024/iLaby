@@ -1,7 +1,11 @@
 package main.java.org.entities.player;
 
+
 import main.java.org.game.Camera.Camera;
 import main.java.org.game.Graphics.GameRenderer;
+
+import main.java.org.entities.Entity;
+
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.Text;
 import main.java.org.game.Isten;
@@ -38,15 +42,20 @@ public class Player extends Entity {
     public void onStart(Isten isten) {
         //called when the player is initialized
 
-        playerCollider = new Collider(new Vec2(0, 0), new Vec2(1, 1));
+        Vec2 playerScale = new Vec2(0.5f, 0.5f);
+
+        playerCollider = new Collider(new Vec2(0, 0), playerScale);
         playerCollider.setMovability(true);
         isten.getPhysicsEngine().addCollider(playerCollider);//register collider in the physics engine
 
         playerImage = new ArrayList<>();
-        playerImage.add(new Image(new Vec2(), new Vec2(1, 1), "./assets/character_right1.png"));
-        playerImage.add(new Image(new Vec2(), new Vec2(1, 1), "./assets/character_right2.png"));
-        playerImage.add(new Image(new Vec2(), new Vec2(1, 1), "./assets/character_left1.png"));
-        playerImage.add(new Image(new Vec2(), new Vec2(1, 1), "./assets/character_left2.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character_right1.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character_right2.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character_left1.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character_left2.png"));
+
+        for(Image i:playerImage)
+            i.setSortingLayer(-69);
 
         for (Image im : playerImage) {
             im.setVisibility(false);
@@ -61,6 +70,8 @@ public class Player extends Entity {
             isten.getRenderer().addRenderable(playerName);
         }
 
+        //adjust camera zoom
+        isten.getCamera().setPixelsPerUnit(100);
     }
 
     @Override
@@ -108,12 +119,15 @@ public class Player extends Entity {
         //move image
         //the origin of the image is in its top right corner, therefore the imagePos looks like this: screenSpace(collider position) - 0.5*imageScale
 
+        Vec2 playerPosition = playerCollider.getPosition();
         for (int i = 0; i < 4; i++) {
-            Vec2 playerPosition = playerCollider.getPosition();
             playerImage.get(i).setPosition(playerPosition);
-
-            playerName.setPosition(Vec2.sum(playerPosition, new Vec2( 0,(float)0.8)));
         }
+        playerName.setPosition(Vec2.sum(playerPosition, new Vec2( 0,(float)0.8)));
+
+        //move camera
+        isten.getCamera().setPosition(playerCollider.getPosition());
+
     }
 
     @Override

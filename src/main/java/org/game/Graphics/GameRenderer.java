@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.WritableRaster;
 import java.util.ArrayList;
 
 /**
@@ -53,6 +54,8 @@ public class GameRenderer extends JPanel implements ActionListener {
      * @param graphics The Graphics object to render on
      */
     public void paint(Graphics graphics) {
+
+        sortRenderables();//TODO: optimize
 
         //calculate renderable positions on screen
         for(int i=0;i<renderables.size();i++)
@@ -110,6 +113,22 @@ public class GameRenderer extends JPanel implements ActionListener {
         return coords;
     }
 
+
+    private void sortRenderables()
+    {
+        for(int i=0;i<renderables.size();i++)
+        {
+            for(int j=0;j<renderables.size()-1-i;j++)
+            {
+                if(renderables.get(j).getSortingLayer()<renderables.get(j+1).getSortingLayer())
+                {
+                    Renderable temp=renderables.get(j);
+                    renderables.set(j, renderables.get(j+1));
+                    renderables.set(j+1, temp);
+                }
+            }
+        }
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {

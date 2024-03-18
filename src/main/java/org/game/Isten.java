@@ -6,6 +6,7 @@ import main.java.org.game.Graphics.*;
 import main.java.org.entities.player.Player;
 
 import main.java.org.game.Input.Input;
+import main.java.org.game.Map.Map;
 import main.java.org.game.physics.PhysicsEngine;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
@@ -19,6 +20,7 @@ public class Isten {
     private final PhysicsEngine physicsEngine;
     private final GameRenderer renderer;
     private final ArrayList<Updatable> updatables;
+    private final ArrayList<Updatable> pendingUpdatables;
     private final Input inputHandler;
     private final Camera camera;
 
@@ -32,6 +34,7 @@ public class Isten {
         physicsEngine=new PhysicsEngine();
         renderer=new GameRenderer(camera, inputHandler);
         updatables=new ArrayList<>();
+        pendingUpdatables=new ArrayList<>();
     }
 
     /**
@@ -44,6 +47,13 @@ public class Isten {
         inputHandler.update();
 
         physicsEngine.step(deltaTime);
+
+        //add pending updatables to updatables
+        for(Updatable u : pendingUpdatables)
+        {
+            updatables.add(u);
+        }
+        pendingUpdatables.clear();
 
         //check if updatable has been initialized
         for(Updatable u : updatables)
@@ -79,9 +89,9 @@ public class Isten {
      */
     private void addUpdatables()
     {
-
         updatables.add(new Player("B"+(char)233+"la"));
         updatables.add(new TimeCounter(600));
+        updatables.add(new Map(15,15));
     }
 
     /**
@@ -101,4 +111,15 @@ public class Isten {
 
     /** returns the camera of the isten */
     public Camera getCamera(){return this.camera;}
+
+
+    public void addUpdatable(Updatable u)
+    {
+        pendingUpdatables.add(u);
+    }
+
+    public void removeUpdatable(Updatable u)
+    {
+        updatables.remove(u);
+    }
 }
