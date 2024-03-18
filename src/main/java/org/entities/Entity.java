@@ -1,4 +1,4 @@
-package main.java.org.entities.player;
+package main.java.org.entities;
 
 import main.java.org.game.Isten;
 import main.java.org.game.updatable.Updatable;
