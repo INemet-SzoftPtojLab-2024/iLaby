@@ -26,15 +26,17 @@ public class Player extends Entity {
     public void onStart(Isten isten) {
         //called when the player is initialized
 
-        playerCollider = new Collider(new Vec2(0, 0), new Vec2(0.2f, 0.2f));
+        Vec2 playerScale = new Vec2(0.5f, 0.5f);
+
+        playerCollider = new Collider(new Vec2(0, 0), playerScale);
         playerCollider.setMovability(true);
         isten.getPhysicsEngine().addCollider(playerCollider);//register collider in the physics engine
 
         playerImage = new ArrayList<>();
-        playerImage.add(new Image(new Vec2(), new Vec2(0.2f, 0.2f), "./assets/character_right1.png"));
-        playerImage.add(new Image(new Vec2(), new Vec2(0.2f, 0.2f), "./assets/character_right2.png"));
-        playerImage.add(new Image(new Vec2(), new Vec2(0.2f, 0.2f), "./assets/character_left1.png"));
-        playerImage.add(new Image(new Vec2(), new Vec2(0.2f, 0.2f), "./assets/character_left2.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character_right1.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character_right2.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character_left1.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character_left2.png"));
 
         for(Image i:playerImage)
             i.setSortingLayer(-69);
@@ -48,7 +50,7 @@ public class Player extends Entity {
         playerImage.get(activeImage).setVisibility(true);
 
         //adjust camera zoom
-        isten.getCamera().setPixelsPerUnit(400);
+        isten.getCamera().setPixelsPerUnit(100);
     }
 
     @Override

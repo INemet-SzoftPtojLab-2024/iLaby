@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 public class Room extends Updatable {
     int ID;
+    int maxDoorCount = 2;
+    int currDoorCount = 0;
     private ArrayList<UnitRoom> unitRooms;
     private ArrayList<Room> adjacentRooms;
     int playerCount;

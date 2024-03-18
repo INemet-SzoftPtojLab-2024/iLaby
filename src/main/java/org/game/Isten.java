@@ -91,7 +91,7 @@ public class Isten {
     private void addUpdatables()
     {
         updatables.add(new Player());
-        updatables.add(new Map(10,10));
+        updatables.add(new Map(15,15));
     }
 
     /**

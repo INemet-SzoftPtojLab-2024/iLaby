@@ -9,12 +9,11 @@ import java.awt.*;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
-
 
 public class Map extends Updatable {
     ArrayList<Room> rooms;
-
     private UnitRoom[][] unitRooms;
     private int mapRowSize;
     private int mapColumnSize;
@@ -42,16 +41,17 @@ public class Map extends Updatable {
 
        //merge some room to get bigger rooms
         //merge the rooms until every room has minimumm size of the given number
-        mergeRoomsUntilGivenSizeReached(30);
+        mergeRoomsUntilGivenSizeReached(15);
 
         //add the images to the unitrooms
         addImages(isten);
 
+
         //create the walls of the rooms
-        for(int i = 0;i<mapRowSize;i++) {
-            for (int j = 0; j < mapColumnSize; j++) {
-                unitRooms[i][j].createWalls(isten);
-            }
+        createWallsForMap(isten);
+
+        for(Room room: rooms) {
+            isten.addUpdatable(room);
         }
 
     }
@@ -67,6 +67,7 @@ public class Map extends Updatable {
         Image img;
         int i = 1;
         int j = 1;
+        int roomImageCount = 9;
         for(Room room: rooms) {
             String path = "./assets/rooms/" + j + ".png";
             for(UnitRoom unitRoom: room.getUnitRooms()) {
@@ -75,7 +76,7 @@ public class Map extends Updatable {
                 isten.getRenderer().addRenderable(img);
             }
             i++;
-            j = i % 10 + 1;
+            j = i % roomImageCount + 1;
         }
     }
 
@@ -109,7 +110,7 @@ public class Map extends Updatable {
         r2.getAdjacentRooms().remove(r1);
         for(Room adj : r2.getAdjacentRooms()){
             if(!r1.getAdjacentRooms().contains(adj) && !adj.equals(r1)){
-                System.out.println("adjroom added in r1: " + adj.getID());
+                //System.out.println("adjroom added in r1: " + adj.getID());
                 r1.getAdjacentRooms().add(adj);
             }
             adj.getAdjacentRooms().remove(r2);
@@ -119,7 +120,7 @@ public class Map extends Updatable {
         }
 
         for(Room room : r1.getAdjacentRooms())
-            System.out.println("adjroom r1: " + room.getID());
+            //System.out.println("adjroom r1: " + room.getID());
 
         r2.getAdjacentRooms().clear();
         //r1.setDiscovered(r2.isDiscovered());
@@ -207,20 +208,20 @@ public class Map extends Updatable {
         boolean merge = true;
         while(merge) {
             minSize = Integer.MAX_VALUE;
-            System.out.println("RoomNum befor merge: " + rooms.size());
+            //System.out.println("RoomNum befor merge: " + rooms.size());
             for (int i = 0; i < rooms.size(); i++) {
                 if (rooms.get(i).getUnitRooms().size() <= size) { //if smaller than 6 unitrooms --> merge
                     r1 = rooms.get(i);
                     //search the smallest adjacentroom
-                    System.out.println("adjroomsize:" + rooms.get(i).getAdjacentRooms().size());
+                    //System.out.println("adjroomsize:" + rooms.get(i).getAdjacentRooms().size());
                     for (int j = 0; j < rooms.get(i).getAdjacentRooms().size(); j++) {
                         if (rooms.get(i).getAdjacentRooms().get(j).getUnitRooms().size() < minSize) {
                             minSize = rooms.get(i).getAdjacentRooms().get(j).getUnitRooms().size();
                             r2 = rooms.get(i).getAdjacentRooms().get(j);
                         }
                     }
-                    System.out.println("minsize: " + minSize);
-                    System.out.println("merge: " + r1.getID() + " " + r2.getID());
+                    //System.out.println("minsize: " + minSize);
+                    //System.out.println("merge: " + r1.getID() + " " + r2.getID());
                     mergeRooms(r1,r2);
                     break; // we have found the two mergeable rooms
 
@@ -230,8 +231,8 @@ public class Map extends Updatable {
                     break;
                 }
             }
-            System.out.println("RoomNum after merge: " + rooms.size());
-            System.out.println();
+            //System.out.println("RoomNum after merge: " + rooms.size());
+            //System.out.println();
             //if(minSize == Integer.MAX_VALUE)merge = false;
 
         }
@@ -239,11 +240,34 @@ public class Map extends Updatable {
     private void printMap(){
         for(int i = 0;i < mapRowSize;i++){ //test
             for(int j = 0; j< mapColumnSize;j++){
-                if(unitRooms[i][j].getOwnerRoom().getID() < 10)
-                    System.out.print(unitRooms[i][j].getOwnerRoom().getID() + "  ");
-                else System.out.print(unitRooms[i][j].getOwnerRoom().getID() + " ");
+                if(unitRooms[i][j].getOwnerRoom().getID() < 10) {
+                    //System.out.print(unitRooms[i][j].getOwnerRoom().getID() + "  ");
+                }
+                else {
+                    //System.out.print(unitRooms[i][j].getOwnerRoom().getID() + " ");
+                }
             }
-            System.out.println();
+            //System.out.println();
+        }
+    }
+
+    private void createWallsForMap(Isten isten) {
+        ArrayList<Integer> randomizedMapRow = new ArrayList<>();
+        ArrayList<Integer> randomizedMapColumn = new ArrayList<>();
+        for(int i = 0; i < mapRowSize; i++) {
+            randomizedMapRow.add(i);
+        }
+        for(int i = 0; i < mapColumnSize; i++) {
+            randomizedMapColumn.add(i);
+        }
+        Collections.shuffle(randomizedMapRow);
+        Collections.shuffle(randomizedMapColumn);
+
+        for(int i: randomizedMapRow) {
+           // System.out.println("i: " + i);
+            for (int j: randomizedMapColumn) {
+                unitRooms[i][j].createWalls(isten);
+            }
         }
     }
 }
