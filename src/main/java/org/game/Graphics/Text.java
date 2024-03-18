@@ -10,7 +10,7 @@ import main.java.org.linalg.*;
  * Class for rendering text.
  */
 public class Text extends Renderable {
-    private final String text;
+    private String text;
     private Font font;
     private final Color color;
 
@@ -134,6 +134,10 @@ public class Text extends Renderable {
     public String getText() {
         return text;
     }
+
+     public void setText(String text){
+        this.text=text;
+     }
 
     @Override
     public boolean isUIElement()

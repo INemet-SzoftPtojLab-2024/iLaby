@@ -82,7 +82,6 @@ public class Isten {
      * Method to add renderable objects to the game renderer.
      */
     private void addRenderables() {
-
     }
 
     /**
@@ -90,7 +89,8 @@ public class Isten {
      */
     private void addUpdatables()
     {
-        updatables.add(new Player());
+        updatables.add(new Player("B"+(char)233+"la"));
+        updatables.add(new TimeCounter(600));
         updatables.add(new Map(15,15));
     }
 
