@@ -80,8 +80,8 @@ public class Isten {
     private void addUpdatables()
     {
 
-        updatables.add(new Player("Béla"));
-        updatables.add(new TimeCounter(500));
+        updatables.add(new Player("B"+(char)233+"la"));
+        updatables.add(new TimeCounter(600));
     }
 
     /**

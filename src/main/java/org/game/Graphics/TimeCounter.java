@@ -5,13 +5,13 @@ import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 
 public class TimeCounter extends Updatable {
-    private double timeRemaining;//mértékegység:sec
-    private Image timerBackgroundImage;
+    private double timeRemaining; //Unit:sec
+    private ImageUI timerBackgroundImage;
     private TextUI timeText;
     GameRenderer renderer;
 
     /**
-     * @param time ennyitol szamol vissza, mertekegyseg:sec
+     * @param time the available time, unit:sec
      */
     public TimeCounter(double time){
         timeRemaining=time;
@@ -29,8 +29,9 @@ public class TimeCounter extends Updatable {
     public void onStart(Isten isten) {
         renderer=isten.getRenderer();
         //valamiért az Imagenak a koordinatait vilag-koordinatarendszerben, a TextUI koordinatait pedig eszkoz-koordinatarendszerben kell megadni
+        //azért mert az User Interface(UI) dolgok a képernyő megfelelő helyére fixáltak, a szimplák meg nem
         timeText=new TextUI(secondsToMMSS(timeRemaining),new Vec2(renderer.getWidth()/2.0f+5.0f,10),"./assets/Monocraft.ttf",13,255,255,0);
-        timerBackgroundImage=new Image(new Vec2(0,-renderer.convertScreenToWorld(new Vec2(0,renderer.getHeight()),isten.getCamera()).y-0.5f),new Vec2(2,1),"./assets/timer_background.png");
+        timerBackgroundImage=new ImageUI(new Vec2((float)renderer.getWidth()/2,25),new Vec2(100,50),"./assets/timer_background.png");
 
         timeText.setVisibility(true);
         timerBackgroundImage.setVisibility(true);
@@ -42,10 +43,9 @@ public class TimeCounter extends Updatable {
     public void onUpdate(Isten isten, double deltaTime) {
         timeRemaining-=deltaTime;
         if(!timeText.getText().equals(secondsToMMSS(timeRemaining))){
-            timeText.setVisibility(false);
-            timeText=new TextUI(secondsToMMSS(timeRemaining),new Vec2(renderer.getWidth()/2.0f+5.0f,10),"./assets/Monocraft.ttf",13,255,255,0);
-            isten.getRenderer().addRenderable(timeText);
-            timeText.setVisibility(true);
+            timeText.setText(secondsToMMSS(timeRemaining));
+            timeText.setPosition(new Vec2(renderer.getWidth()/2.0f+5.0f,10));
+            timerBackgroundImage.setPosition(new Vec2((float)renderer.getWidth()/2,25));
         }
     }
 
