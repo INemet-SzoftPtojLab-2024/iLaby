@@ -119,7 +119,7 @@ public class Text extends Renderable {
 
         //Shadow
         graphics.setColor(Color.black);
-        graphics.drawString(text, (int)(tempPos.x+2.5), (int)(tempPos.y+2.5));
+        graphics.drawString(text, (int)(tempPos.x+2), (int)(tempPos.y+2.5));
 
         //Text with its color
         graphics.setColor(color);
