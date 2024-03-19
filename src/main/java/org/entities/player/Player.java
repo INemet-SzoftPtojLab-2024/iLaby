@@ -35,7 +35,7 @@ public class Player extends Entity {
         playerImage = null;
         activeImage = 0;
         time = 0.0f;
-        playerName = new Text(name, new Vec2(0,0), 15, 255,255,255);;
+        playerName = new Text(name, new Vec2(0,0), 15, 255,255,255);
     }
 
     @Override
@@ -138,5 +138,29 @@ public class Player extends Entity {
 
     public void setPlayerName(Text playerName){
         this.playerName = playerName;
+    }
+
+    public Collider getPlayerCollider() {
+        return playerCollider;
+    }
+
+    public ArrayList<Image> getPlayerImage() {
+        return playerImage;
+    }
+
+    public float getTime() {
+        return time;
+    }
+
+    public int getActiveImage() {
+        return activeImage;
+    }
+
+    public Text getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerCollider(Collider collider) {
+        this.playerCollider = collider;
     }
 }
