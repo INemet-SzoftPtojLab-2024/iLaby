@@ -1,34 +1,40 @@
 package main.java.org.game;
 
-import main.java.org.game.Graphics.GameRenderer;
-import main.java.org.game.Graphics.Image;
-import main.java.org.game.Graphics.Text;
+import main.java.org.game.Camera.Camera;
+import main.java.org.game.Graphics.*;
+
+import main.java.org.entities.player.Player;
+
+import main.java.org.game.Input.Input;
 import main.java.org.game.Map.Map;
 import main.java.org.game.physics.PhysicsEngine;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Timer;
 
 /**
  * The main class representing the game part of the program.
  */
 public class Isten {
-    private PhysicsEngine physicsEngine;
-    private GameRenderer renderer;
-    private ArrayList<Updatable> updatables;
+    private final PhysicsEngine physicsEngine;
+    private final GameRenderer renderer;
+    private final ArrayList<Updatable> updatables;
+    private final ArrayList<Updatable> pendingUpdatables;
+    private final Input inputHandler;
+    private final Camera camera;
 
     /**
      * Constructor for Isten.
      * Initializes the physics engine, game renderer, and list of updatables.
      */
     public Isten() {
+        inputHandler=new Input();
+        camera=new Camera();
         physicsEngine=new PhysicsEngine();
-        renderer=new GameRenderer();
+        renderer=new GameRenderer(camera, inputHandler);
         updatables=new ArrayList<>();
-        updatables.add(new Map());
+        pendingUpdatables=new ArrayList<>();
     }
 
     /**
@@ -38,7 +44,16 @@ public class Isten {
      */
     public void update(double deltaTime) {
 
+        inputHandler.update();
+
         physicsEngine.step(deltaTime);
+
+        //add pending updatables to updatables
+        for(Updatable u : pendingUpdatables)
+        {
+            updatables.add(u);
+        }
+        pendingUpdatables.clear();
 
         //check if updatable has been initialized
         for(Updatable u : updatables)
@@ -67,11 +82,6 @@ public class Isten {
      * Method to add renderable objects to the game renderer.
      */
     private void addRenderables() {
-
-        String imagePath = "./assets/cube.jpg";
-
-        renderer.addRenderable(new Text("Hello!", new Vec2(150, 100), "./assets/Monocraft.ttf", 68, 255, 255, 255));
-        renderer.addRenderable(new Image(new Vec2(200,200), 1, 1, new Vec2(100,100), imagePath));
     }
 
     /**
@@ -79,7 +89,9 @@ public class Isten {
      */
     private void addUpdatables()
     {
-
+        updatables.add(new Player("B"+(char)233+"la"));
+        updatables.add(new TimeCounter(600));
+        updatables.add(new Map(15,15));
     }
 
     /**
@@ -91,24 +103,23 @@ public class Isten {
         return renderer;
     }
 
-    /** returns the physics engine if the isten */
+    /** returns the physics engine of the isten */
     public PhysicsEngine getPhysicsEngine(){return physicsEngine;}
 
-    /**
-     * Method to convert world coordinates to screen coordinates.
-     *
-     * @param worldSpaceCoords The world space coordinates to convert
-     * @param centerOfScreenInWorldSpace The center of the screen in world space coordinates
-     * @param pixelsPerWorldSpaceUnit The scale factor for converting world space to screen space
-     * @return The screen space coordinates
-     */
-    public Vec2 convertWorldToScreen(Vec2 worldSpaceCoords,Vec2 centerOfScreenInWorldSpace, float pixelsPerWorldSpaceUnit)
+    /** returns the inputhandler of the isten */
+    public Input getInputHandler(){return inputHandler;}
+
+    /** returns the camera of the isten */
+    public Camera getCamera(){return this.camera;}
+
+
+    public void addUpdatable(Updatable u)
     {
-        Vec2 coords=Vec2.subtract(worldSpaceCoords,centerOfScreenInWorldSpace);
-        coords.scale(pixelsPerWorldSpaceUnit);
-        coords.x+=0.5f*this.renderer.getWidth();
-        coords.y+=0.5f*this.renderer.getHeight();
-        coords.y=this.renderer.getHeight()-coords.y;
-        return coords;
+        pendingUpdatables.add(u);
+    }
+
+    public void removeUpdatable(Updatable u)
+    {
+        updatables.remove(u);
     }
 }
