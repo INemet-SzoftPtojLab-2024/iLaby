@@ -82,4 +82,91 @@ public class PlayerTest {
         assertEquals(255, player.getPlayerName().getColor().getGreen());
         assertEquals(255, player.getPlayerName().getColor().getBlue());
     }
+    @Test
+    public void testOnStart() {
+        player.onStart(mockIsten);
+
+        verify(mockIsten.getPhysicsEngine()).addCollider(any(Collider.class));
+        verify(mockCamera).setPixelsPerUnit(100);
+    }
+    @Test
+    public void testMovementAndAnimationW() {
+        player.onStart(mockIsten);
+        when(mockInputHandler.isKeyDown('W')).thenReturn(true);
+        when(mockInputHandler.isKeyDown('A')).thenReturn(false);
+        when(mockInputHandler.isKeyDown('S')).thenReturn(false);
+        when(mockInputHandler.isKeyDown('D')).thenReturn(false);
+        when(mockInputHandler.isKeyDown(16)).thenReturn(false);
+
+        player.onUpdate(mockIsten, 0.1);
+
+        assertEquals(0, player.getPlayerCollider().getVelocity().x);
+        assertEquals(2, player.getPlayerCollider().getVelocity().y);
+    }
+    @Test
+    public void testMovementAndAnimationA() {
+
+        player.onStart(mockIsten);
+        when(mockInputHandler.isKeyDown('W')).thenReturn(false);
+        when(mockInputHandler.isKeyDown('A')).thenReturn(true);
+        when(mockInputHandler.isKeyDown('S')).thenReturn(false);
+        when(mockInputHandler.isKeyDown('D')).thenReturn(false);
+        when(mockInputHandler.isKeyDown(16)).thenReturn(false);
+
+        player.onUpdate(mockIsten, 0.1);
+
+        assertEquals(-2, player.getPlayerCollider().getVelocity().x);
+        assertEquals(0, player.getPlayerCollider().getVelocity().y);
+    }
+    @Test
+    public void testMovementAndAnimationS() {
+
+        player.onStart(mockIsten);
+        when(mockInputHandler.isKeyDown('W')).thenReturn(false);
+        when(mockInputHandler.isKeyDown('A')).thenReturn(false);
+        when(mockInputHandler.isKeyDown('S')).thenReturn(true);
+        when(mockInputHandler.isKeyDown('D')).thenReturn(false);
+        when(mockInputHandler.isKeyDown(16)).thenReturn(false);
+
+        player.onUpdate(mockIsten, 0.1);
+
+        assertEquals(0, player.getPlayerCollider().getVelocity().x);
+        assertEquals(-2, player.getPlayerCollider().getVelocity().y);
+
+    }
+    @Test
+    public void testMovementAndAnimationD() {
+
+        player.onStart(mockIsten);
+        when(mockInputHandler.isKeyDown('W')).thenReturn(false);
+        when(mockInputHandler.isKeyDown('A')).thenReturn(false);
+        when(mockInputHandler.isKeyDown('S')).thenReturn(false);
+        when(mockInputHandler.isKeyDown('D')).thenReturn(true);
+        when(mockInputHandler.isKeyDown(16)).thenReturn(false);
+
+        player.onUpdate(mockIsten, 0.1);
+
+        assertEquals(2, player.getPlayerCollider().getVelocity().x);
+        assertEquals(0, player.getPlayerCollider().getVelocity().y);
+
+    }
+    @Test
+    public void testAnimationChange(){
+        player.setPlayerImage(new ArrayList<>());
+        for (int i = 0; i < 4; i++) {
+            player.getPlayerImage().add(mock(Image.class));
+            player.getPlayerImage().get(i).setVisibility(false);
+        }
+
+        player.setActiveImage(0);
+        player.setTime(0.0f);
+
+        when(mockCollider.getVelocity()).thenReturn(new Vec2(2,0));
+        player.onUpdate(mockIsten, 0.3);
+        assertEquals(1, player.getActiveImage());
+
+        when(mockCollider.getVelocity()).thenReturn(new Vec2(-2,0));
+        player.onUpdate(mockIsten, 0.3);
+        assertEquals(1, player.getActiveImage());
+    }
 }

@@ -163,4 +163,10 @@ public class Player extends Entity {
     public void setPlayerCollider(Collider collider) {
         this.playerCollider = collider;
     }
+    public void setActiveImage(int activeImage){this.activeImage = activeImage;}
+    public void setTime(float time){this.time=time;}
+    public void setPlayerImage( ArrayList<Image> playerImage)
+    {
+        this.playerImage=playerImage;
+    }
 }
