@@ -58,7 +58,12 @@ public class UnitRoom {
         boolean hasTop = false, hasBottom = false, hasLeft = false, hasRight = false;
         for(UnitRoom neighbour: adjacentUnitRooms) {
             if(neighbour.getOwnerRoom().getID() != ownerRoom.getID()) {
-                if(!ownerRoom.hasDoorWith(neighbour.getOwnerRoom().getID())) {
+                if(!ownerRoom.hasDoorWith(neighbour.getOwnerRoom().getID())
+                        && !topIsDoor
+                        && !bottomIsDoor
+                        && !leftIsDoor
+                        && !rightIsDoor
+                ) {
                     if(neighbour.getPosition().x < position.x) {
                         leftIsDoor = true;
                         neighbour.setRightIsDoor(true);
