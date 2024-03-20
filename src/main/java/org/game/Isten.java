@@ -91,7 +91,7 @@ public class Isten {
     {
         updatables.add(new Player("B"+(char)233+"la"));
         updatables.add(new TimeCounter(600));
-        updatables.add(new Map(15,15));
+        updatables.add(new Map(20,15));
     }
 
     /**

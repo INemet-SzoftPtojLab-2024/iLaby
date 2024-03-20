@@ -14,9 +14,17 @@ public class Room extends Updatable {
     private ArrayList<UnitRoom> unitRooms;
     private ArrayList<Room> adjacentRooms;
     int playerCount;
+    private int maxPlayerCount = 5;
+
+
+
     //ArrayList<Player> players;
-    boolean discovered;
+    boolean discovered = false;
+
     RoomType roomType;
+
+
+
     private ArrayList<Integer> hasDoorWith;
 
     ColliderGroup roomColliders;
@@ -27,7 +35,11 @@ public class Room extends Updatable {
         adjacentRooms = new ArrayList<>();
         roomColliders=new ColliderGroup();
         hasDoorWith = new ArrayList<>();
+        roomType = RoomType.getRandomRoomtype();
+
     }
+
+
 
     @Override
     public void onStart(Isten isten) {
@@ -76,4 +88,11 @@ public class Room extends Updatable {
     public boolean hasDoor() {
         return (!hasDoorWith.isEmpty());
     }
+    public int getMaxPlayerCount() {return maxPlayerCount;}
+
+    public void setMaxPlayerCount(int maxPlayerCount) {this.maxPlayerCount = maxPlayerCount;}
+    public RoomType getRoomType() {return roomType;}
+
+
+
 }

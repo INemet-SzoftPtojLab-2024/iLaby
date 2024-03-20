@@ -1,6 +1,12 @@
 
 9
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+<<<<<<< HEAD
+Z
+*src/main/java/org/manager/GameManager.java,f\3\f3f597a99c4455ba3bdb1e37b732d2c3fde6ba3d
+K
+src/main/java/org/Main.java,8\5\8562f6886f731299c0b6925e0dca2ed59ddafa0c
+=======
 a
 1src/main/java/org/game/Graphics/GameRenderer.java,e\7\e763fabaa9cd1afdce83be59a8d59870f441e139
 U
@@ -19,3 +25,4 @@ X
 (src/main/java/org/game/Map/UnitRoom.java,9\3\933c10faafd44b7f4f2d1678304c648f862e5581
 S
 #src/main/java/org/game/Map/Map.java,3\a\3a83602c799ded541811f282e2524ca707cc351b
+>>>>>>> main
