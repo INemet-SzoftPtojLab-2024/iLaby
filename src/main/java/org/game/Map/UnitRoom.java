@@ -177,4 +177,13 @@ public class UnitRoom {
     public void setRightIsDoor(boolean rightIsDoor) {
         this.rightIsDoor = rightIsDoor;
     }
+    public boolean isAdjacent(UnitRoom unitRoom){
+        for (UnitRoom adjacentUnitRoom :this.getAdjacentUnitRooms()){
+            if(adjacentUnitRoom.equals(unitRoom)){
+                return true;
+            }
+
+        }
+        return false;
+    }
 }

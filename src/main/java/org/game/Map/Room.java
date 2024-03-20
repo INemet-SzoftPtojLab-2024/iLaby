@@ -76,4 +76,15 @@ public class Room extends Updatable {
     public boolean hasDoor() {
         return (!hasDoorWith.isEmpty());
     }
+    public void setAdjacentRooms(){
+        adjacentRooms.clear();
+        for(UnitRoom unitRoom : unitRooms){
+            for(UnitRoom neighbourUnitRoom: unitRoom.getAdjacentUnitRooms()){
+                if(!neighbourUnitRoom.getOwnerRoom().isAdjacent(this) && !neighbourUnitRoom.getOwnerRoom().equals(this)){
+                    adjacentRooms.add(neighbourUnitRoom.getOwnerRoom());
+                    neighbourUnitRoom.getOwnerRoom().getAdjacentRooms().add(this);
+                }
+            }
+        }
+    }
 }

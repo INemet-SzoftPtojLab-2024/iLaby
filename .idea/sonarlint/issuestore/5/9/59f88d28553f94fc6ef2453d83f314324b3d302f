@@ -1,0 +1,12 @@
+
+n	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš
+—
+java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(„”€Í
+r
+java:S1450"WRemove the "collider" field and declare it as a local variable in the relevant methods.(ò‰‘ üÿÿÿÿ
+o
+java:S1450	"TRemove the "image" field and declare it as a local variable in the relevant methods.(“Æ²²ýÿÿÿÿ
+G
+java:S1068",Remove this unused "collider" private field.(ò‰‘ üÿÿÿÿ
+D
+java:S1068	")Remove this unused "image" private field.(“Æ²²ýÿÿÿÿ

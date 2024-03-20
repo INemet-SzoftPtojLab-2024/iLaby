@@ -1,18 +1,43 @@
 
-u	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš8§¿Ş¥ã1
+v	java:S135†"YReduce the total number of break and continue statements in this loop to use at most one.(ß…·š8¡ä¨Âå1
+M
+java:S1066±"/Merge this if statement with the enclosing one.(ÆÈƒü8¡ä¨Âå1
+u	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš8£ä¨Âå1
+e
+java:S3973|"HUse indentation to denote the code conditionally executed by this "for".(¥¹8¤ä¨Âå1
 
-java:S11865"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(í®8ª¿Ş¥ã1
+java:S1186W"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(í®8Ÿæ¨Âå1
 £
-java:S1186:"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(İßéàúÿÿÿÿ8ª¿Ş¥ã1
-
-java:S1186>"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ç‰â"8ª¿Ş¥ã1
-£
-java:S1186B"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Á†°”üÿÿÿÿ8ª¿Ş¥ã1
-Z
-java:S1117"=Rename "unitRooms" which hides the field declared at line 14.(öĞÛ8¬¿Ş¥ã1
-N
-java:S1068"1Remove this unused "mapColumnSize" private field.(ÚŸ¶”8±¿Ş¥ã1
-K
-java:S1144>"/Remove this unused private "mergeRooms" method.(ç‰â"8±¿Ş¥ã1
+java:S1186\"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(İßéàúÿÿÿÿ8Ÿæ¨Âå1
+H
+java:S1905%"&Remove this unnecessary cast to "int".(µ•ÿÜøÿÿÿÿ8¢æ¨Âå1
+L	java:S106b"+Replace this use of System.err by a logger.(•ªËßûÿÿÿÿ8¤æ¨Âå1
+X	java:S125s"<This block of commented-out lines of code should be removed.(ŒÆÊı8¥æ¨Âå1
+F
+java:S1481|")Remove this unused "room" local variable.(¥¹8¦æ¨Âå1
+]	java:S125}"<This block of commented-out lines of code should be removed.(éòº üÿÿÿÿ8¦æ¨Âå1
+Y	java:S125€"<This block of commented-out lines of code should be removed.(É¥¤º8¦æ¨Âå1
+Y	java:S125Ó"<This block of commented-out lines of code should be removed.(ĞğşË8«æ¨Âå1
+Y	java:S125Ø"<This block of commented-out lines of code should be removed.(¾†¾°8«æ¨Âå1
+^	java:S125İ"<This block of commented-out lines of code should be removed.(×îÀ£úÿÿÿÿ8¬æ¨Âå1
+X	java:S125ê"<This block of commented-out lines of code should be removed.(¹‚„8¬æ¨Âå1
+G
+java:S1197ğ"*Move the array designators [] to the type.(¼Ùÿ8¬æ¨Âå1
+A
+java:S2119ô"Save and re-use this "Random".(šŸ«íøÿÿÿÿ8­æ¨Âå1
+Y	java:S125…"<This block of commented-out lines of code should be removed.(·–¿…8®æ¨Âå1
+^	java:S125Š"<This block of commented-out lines of code should be removed.(ùö£Àûÿÿÿÿ8®æ¨Âå1
+^	java:S125‘"<This block of commented-out lines of code should be removed.(ßáÇ¶ûÿÿÿÿ8¯æ¨Âå1
+^	java:S125œ"<This block of commented-out lines of code should be removed.(Ï¯†Äùÿÿÿÿ8¯æ¨Âå1
+H	java:S106¦"+Replace this use of System.out by a logger.(–ÉÎÒ8ÿ»ÊÂå1
+H	java:S106©"+Replace this use of System.out by a logger.(–ÉÎÒ8€¼ÊÂå1
+M	java:S106¬"+Replace this use of System.out by a logger.(ªÓ¼áşÿÿÿÿ8€¼ÊÂå1
+M	java:S106®"+Replace this use of System.out by a logger.(ªÓ¼áşÿÿÿÿ8ÅÁÕÂå1
+M	java:S106¯"+Replace this use of System.out by a logger.(ªÓ¼áşÿÿÿÿ8ñëÕÂå1
+^	java:S125¿"<This block of commented-out lines of code should be removed.(áª´üıÿÿÿÿ8±æ¨Âå1
+B
+java:S1128"%Remove this unused import 'java.awt'.(ï´µ©8“ÆÂå1
 Q
-java:S1144B"/Remove this unused private "splitRooms" method.(Á†°”üÿÿÿÿ8±¿Ş¥ã1
+java:S1128	"/Remove this unused import 'java.sql.SQLOutput'.(ê¤òÃùÿÿÿÿ8“ÆÂå1
+O
+java:S1128"-Remove this unused import 'java.util.Arrays'.(î–˜Éüÿÿÿÿ8“ÆÂå1

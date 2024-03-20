@@ -1,11 +1,9 @@
 
 o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(¸“¤¿
-B
-java:S3010"'Remove this assignment of "keyHandler".(¨Ó›Ÿùÿÿÿÿ
-P
-java:S11617":Add the "@Override" annotation above this method signature(¤™–Å
-Q	java:S125;"<This block of commented-out lines of code should be removed.(ñ¬Í
-U
-java:S1161T":Add the "@Override" annotation above this method signature(˜Â½€øÿÿÿÿ
 O
-java:S1161]":Add the "@Override" annotation above this method signature(Ý¼õA
+java:S1948"-Make "renderables" transient or serializable.(ßÜŽ¹ÿÿÿÿÿ8·âÜ¼å1
+P
+java:S11618":Add the "@Override" annotation above this method signature(¤™–Å
+T
+java:S1135:"2Complete the task associated to this TODO comment.(­ƒ²çüÿÿÿÿ8ÂâÜ¼å1
+Q	java:S125N"<This block of commented-out lines of code should be removed.(ñ¬Í
