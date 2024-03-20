@@ -144,4 +144,9 @@ public class Text extends Renderable {
     {
         return false;
     }
+
+
+    public Color getColor() {
+        return color;
+    }
 }
