@@ -67,7 +67,7 @@ public class Room extends Updatable {
         adjacentRooms.clear();
         for(UnitRoom unitRoom : unitRooms){
             for(UnitRoom neighbourUnitRoom: unitRoom.getAdjacentUnitRooms()){
-                if(!neighbourUnitRoom.getOwnerRoom().isAdjacent(this) && !neighbourUnitRoom.getOwnerRoom().equals(this)){
+                if(!neighbourUnitRoom.getOwnerRoom().getAdjacentRooms().contains(this) && !neighbourUnitRoom.getOwnerRoom().equals(this)){
                     adjacentRooms.add(neighbourUnitRoom.getOwnerRoom());
                     neighbourUnitRoom.getOwnerRoom().getAdjacentRooms().add(this);
                 }

@@ -159,7 +159,7 @@ public class Mapgenerator {
             //System.out.println();
         }
     }
-    private void addImages() {
+    public void addImages() {
         Image img;
         int roomImageCount = 9;
         int j;
@@ -207,7 +207,7 @@ public class Mapgenerator {
         r2.getAdjacentRooms().clear();
         rooms.remove(r2);
     }
-    private void createWallsForMap() {
+    public void createWallsForMap() {
         ArrayList<Integer> randomizedMapRow = new ArrayList<>();
         ArrayList<Integer> randomizedMapColumn = new ArrayList<>();
         for(int i = 0; i < mapRowSize; i++) {

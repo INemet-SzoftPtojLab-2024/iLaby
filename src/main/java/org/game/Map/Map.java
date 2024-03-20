@@ -1,12 +1,8 @@
 package main.java.org.game.Map;
 
-import main.java.org.game.Graphics.Image;
 import main.java.org.game.Isten;
 import main.java.org.game.updatable.Updatable;
-import main.java.org.linalg.Vec2;
 
-import java.awt.*;
-import java.sql.SQLOutput;
 import java.util.*;
 
 
@@ -16,6 +12,7 @@ public class Map extends Updatable {
     private UnitRoom[][] unitRooms;
     private int mapRowSize;
     private int mapColumnSize;
+    //private boolean
 
     @Override
     public void onStart(Isten isten) {
@@ -23,6 +20,15 @@ public class Map extends Updatable {
         mapgenerator.generate();
         unitRooms = mapgenerator.getUnitRooms();
         rooms = mapgenerator.getRooms();
+        printMap();
+        splitRooms(rooms.get(0));
+        //mergeRooms(rooms.get(0), rooms.get(2));
+        System.out.println();
+        System.out.println();
+        printMap();
+
+        mapgenerator.addImages();
+        mapgenerator.createWallsForMap();
     }
 
     public Map(int rowNumber, int columnNumber){
@@ -54,12 +60,12 @@ public class Map extends Updatable {
         int lowestRowIdx = getRoomWithLowestRowIdx(r1);
         ArrayList<UnitRoom> addableUnitRooms = new ArrayList<>();
         int distance = 0;
-        ArrayList<UnitRoom> roomsWithDistanceXFromLowestRow;
+        ArrayList<UnitRoom> UnitRoomsWithDistanceXFromLowestRow;
         //addig, amíg az új szoba a méret fele nem lesz
         while(addableUnitRooms.size()<r1.getUnitRooms().size()/2){
-            roomsWithDistanceXFromLowestRow=getUnitRoomsWithXDistanceFromLowestRowIdxInOrderByColumn(r1,lowestRowIdx,distance++); //tavolsag novelese, es igy soronkent egyesevel balrol jobbra az osszes unitroom hozzaadasa, amig kell
-            for(UnitRoom addableUnitRoom:roomsWithDistanceXFromLowestRow){
-                if(addableUnitRooms.size()<r1.getUnitRooms().size()/2 ) //&& addableUnitRooms.contains(addableUnitRoom) lehet kell
+            UnitRoomsWithDistanceXFromLowestRow=getUnitRoomsWithXDistanceFromLowestRowIdxInOrderByColumn(r1,lowestRowIdx,distance++); //tavolsag novelese, es igy soronkent egyesevel balrol jobbra az osszes unitroom hozzaadasa, amig kell
+            for(UnitRoom addableUnitRoom:UnitRoomsWithDistanceXFromLowestRow){
+                if(addableUnitRooms.size()<r1.getUnitRooms().size()/2 )
                 {
                     addableUnitRooms.add(addableUnitRoom);
                 }
@@ -68,10 +74,12 @@ public class Map extends Updatable {
         }
         ArrayList<UnitRoom> oldRoomWithoutNewRoom = getDifference(r1.getUnitRooms(),addableUnitRooms);
         //ellenorzom, hogy osszefuggoek lennének-e: ha igen:
-        if( wouldNewRoomBeCoherent(oldRoomWithoutNewRoom) && wouldNewRoomBeCoherent(addableUnitRooms)) {
+        if( wouldRoomBeCoherent(oldRoomWithoutNewRoom) && wouldRoomBeCoherent(addableUnitRooms)) {
             for (UnitRoom addUnitRoomToNewRoom : addableUnitRooms) {
+                //kivesszük az előző szobából a  aunitroomot
                 addUnitRoomToNewRoom.getOwnerRoom().getUnitRooms().remove(addUnitRoomToNewRoom);
                 addUnitRoomToNewRoom.setOwnerRoom(newRoom);
+                //hozzáadjuk az új szobához a unitroomot
                 newRoom.getUnitRooms().add(addUnitRoomToNewRoom);
             }
             rooms.add(newRoom);
@@ -94,7 +102,7 @@ public class Map extends Updatable {
         return difference;
     }
     //nem biztos hogy így a legjobb
-    private boolean wouldNewRoomBeCoherent(ArrayList<UnitRoom> newRoomUnits)
+    private boolean wouldRoomBeCoherent(ArrayList<UnitRoom> newRoomUnits)
     {
         UnitRoom starterRoom = newRoomUnits.get(0);
         ArrayList<UnitRoom> coherentGraph = new ArrayList<>();
@@ -197,13 +205,17 @@ public class Map extends Updatable {
         for(int i = 0;i < mapRowSize;i++){ //test
             for(int j = 0; j< mapColumnSize;j++){
                 if(unitRooms[i][j].getOwnerRoom().getID() < 10) {
-                    //System.out.print(unitRooms[i][j].getOwnerRoom().getID() + "  ");
+                    System.out.print(unitRooms[i][j].getOwnerRoom().getID() + "     ");
                 }
-                else {
-                    //System.out.print(unitRooms[i][j].getOwnerRoom().getID() + " ");
+                else if(unitRooms[i][j].getOwnerRoom().getID() >= 10 && unitRooms[i][j].getOwnerRoom().getID() < 100) {
+                    System.out.print(unitRooms[i][j].getOwnerRoom().getID() + "    ");
+                }
+                else if(unitRooms[i][j].getOwnerRoom().getID() >= 100) {
+                    System.out.print(unitRooms[i][j].getOwnerRoom().getID() + "   ");
                 }
             }
-            //System.out.println();
+            System.out.println();
+            System.out.println();
         }
     }
 
