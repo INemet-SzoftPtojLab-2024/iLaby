@@ -153,6 +153,15 @@ public class UnitRoom {
         isten.getRenderer().addRenderable(img);
         return new Door();
     }
+    public boolean isAdjacent(UnitRoom unitRoom){
+        for (UnitRoom adjacentUnitRoom :this.getAdjacentUnitRooms()){
+            if(adjacentUnitRoom.equals(unitRoom)){
+                return true;
+            }
+
+        }
+        return false;
+    }
 
     public boolean isTopIsDoor() {
         return topIsDoor;
