@@ -87,7 +87,7 @@ public class Image extends Renderable {
                 break;
         }
 
-        graphics.drawImage(image, (int)tempPos.x, (int)tempPos.y, (int)(renderedScale.x), (int)(renderedScale.y), null, null);
+        graphics.drawImage(image, Math.round(tempPos.x), Math.round(tempPos.y), (int)(renderedScale.x), (int)(renderedScale.y), null, null);
     }
 
 
