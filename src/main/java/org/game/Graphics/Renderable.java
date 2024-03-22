@@ -13,6 +13,8 @@ public abstract class Renderable {
     protected Vec2 renderedPosition=new Vec2();//the pixel position of the position
     protected Vec2 renderedScale=new Vec2();//the pixel scale of the scale
 
+    protected int sortingLayer=0;//sorting layer
+
     protected int hOrigin=CENTER;
     protected int vOrigin=CENTER;
 
@@ -49,6 +51,9 @@ public abstract class Renderable {
     {
         this.visible=visible;
     }
+
+    public final int getSortingLayer(){return sortingLayer;}
+    public final void setSortingLayer(int sortingLayer){this.sortingLayer=sortingLayer;}
 
     /**
      * sets the origin of the renderable <br>

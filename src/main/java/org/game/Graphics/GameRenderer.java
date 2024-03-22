@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.WritableRaster;
 import java.util.ArrayList;
 
 /**
@@ -53,6 +54,8 @@ public class GameRenderer extends JPanel implements ActionListener {
      * @param graphics The Graphics object to render on
      */
     public void paint(Graphics graphics) {
+
+        sortRenderables();//TODO: optimize
 
         //calculate renderable positions on screen
         for(int i=0;i<renderables.size();i++)
@@ -99,6 +102,32 @@ public class GameRenderer extends JPanel implements ActionListener {
         coords.y+=0.5f*this.getHeight();
         coords.y=this.getHeight()-coords.y;
         return coords;
+    }
+    public Vec2 convertScreenToWorld(Vec2 screenSpaceCoords, Camera cam)
+    {
+        Vec2 coords = new Vec2();
+
+        coords.x = (screenSpaceCoords.x - 0.5f * this.getWidth()) / cam.getPixelsPerUnit() + cam.getPosition().x;
+        coords.y = (this.getHeight() - screenSpaceCoords.y - 0.5f * this.getHeight()) / cam.getPixelsPerUnit() + cam.getPosition().y;
+
+        return coords;
+    }
+
+
+    private void sortRenderables()
+    {
+        for(int i=0;i<renderables.size();i++)
+        {
+            for(int j=0;j<renderables.size()-1-i;j++)
+            {
+                if(renderables.get(j).getSortingLayer()<renderables.get(j+1).getSortingLayer())
+                {
+                    Renderable temp=renderables.get(j);
+                    renderables.set(j, renderables.get(j+1));
+                    renderables.set(j+1, temp);
+                }
+            }
+        }
     }
 
     @Override

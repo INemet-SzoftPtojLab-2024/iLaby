@@ -10,7 +10,7 @@ import main.java.org.linalg.*;
  * Class for rendering text.
  */
 public class Text extends Renderable {
-    private final String text;
+    private String text;
     private Font font;
     private final Color color;
 
@@ -22,7 +22,6 @@ public class Text extends Renderable {
         font = new Font("Dialog", Font.PLAIN, 14);
         color = Color.WHITE;
         text = "Basic Text";
-        this.visible = true;
     }
 
     /**
@@ -36,7 +35,7 @@ public class Text extends Renderable {
      * @param g The green component of the text color
      * @param b The blue component of the text color
      */
-    public Text(String text, Vec2 pos, String fontPath, int fontSize, int r, int g, int b, boolean visible) {
+    public Text(String text, Vec2 pos, String fontPath, int fontSize, int r, int g, int b) {
 
         this.position = pos;
         try {
@@ -48,7 +47,6 @@ public class Text extends Renderable {
         }
         color = new Color(r,g,b);
         this.text = text;
-        this.visible = visible;
     }
 
     /**
@@ -121,7 +119,7 @@ public class Text extends Renderable {
 
         //Shadow
         graphics.setColor(Color.black);
-        graphics.drawString(text, (int)tempPos.x+5, (int)tempPos.y+5);
+        graphics.drawString(text, (int)(tempPos.x+2), (int)(tempPos.y+2.5));
 
         //Text with its color
         graphics.setColor(color);
@@ -137,9 +135,18 @@ public class Text extends Renderable {
         return text;
     }
 
+     public void setText(String text){
+        this.text=text;
+     }
+
     @Override
     public boolean isUIElement()
     {
         return false;
+    }
+
+
+    public Color getColor() {
+        return color;
     }
 }

@@ -109,7 +109,6 @@ public class Input implements KeyListener, MouseListener {
     {
         if(keyCode>=256)
             return false;
-
         if(keyDown[keyCode]&&!previousKeyDown[keyCode])
             return true;
         return false;
