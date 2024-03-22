@@ -15,10 +15,24 @@ public abstract class Renderable {
 
     protected int sortingLayer=0;//sorting layer
 
-    protected int hOrigin=CENTER;
-    protected int vOrigin=CENTER;
+    protected char hOrigin=CENTER;
+    protected char vOrigin=CENTER;
 
     private boolean visible=true;
+
+    //ui things
+    /** possible values: Renderable.LEFT, Renderable.CENTER, Renderable.RIGHT <br>
+     * for example a value of Renderable.LEFT means that the position of the x=0 abscissa is the left side of the screen <br>
+     * in the case of LEFT and CENTER, the positive direction is from left to right, in the case of RIGHT, the positive direction is from right to left <br>
+     * the default value is Renderable.LEFT <br>
+     * ignored for non-ui renderables */
+    private char hAlignment=LEFT;
+    /** possible values: Renderable.TOP, Renderable.CENTER, Renderable.BOTTOM <br>
+     * for example a value of Renderable.BOTTOM means that the position of the y=0 ordinate is the bottom side of the screen <br>
+     * in the case of TOP and CENTER, the positive direction is from top to bottom, in the cas of BOTTOM, the positive direction is from bottom to top <br>
+     * the default value is Renderable.TOP <br>
+     * ignored for non-ui renderables */
+    private char vAlignment=TOP;
 
     /**
      * Abstract method to render the object.
@@ -59,14 +73,28 @@ public abstract class Renderable {
      * sets the origin of the renderable <br>
      * for example hOrigin=LEFT, vOrigin=BOTTOM means that the position value of the renderable gives us the position of the bottom left corner
      * @param hOrigin the horizontal position of the origin, possible values are Renderable.LEFT, Renderable.CENTER, Renderable.RIGHT
-     * @param vOrigin the horizontal position of the origin, possible values are Renderable.BOTTOM, Renderable.CENTER, Renderable.TOP
+     * @param vOrigin the vertical position of the origin, possible values are Renderable.BOTTOM, Renderable.CENTER, Renderable.TOP
      */
     public final void setOrigin(int hOrigin, int vOrigin)
     {
         if(hOrigin==LEFT||hOrigin==CENTER||hOrigin==RIGHT)
-            this.hOrigin=hOrigin;
+            this.hOrigin=(char)hOrigin;
         if(vOrigin==BOTTOM||vOrigin==CENTER|| vOrigin==TOP)
-            this.vOrigin=vOrigin;
+            this.vOrigin=(char)vOrigin;
+    }
+
+    /**
+     * sets the alignment of the renderable <br>
+     * for example hAlignment=LEFT, vAlignment=BOTTOM means that the position value of the renderable means the distance from the bottom left side of the screen
+     * @param hAlignment the horizontal alignment of the renderable, possible values are Renderable.LEFT, Renderable.CENTER, Renderable.RIGHT
+     * @param vAlignment the vertical alignment of the renderable, possible values are Renderable.BOTTOM, Renderable.CENTER, Renderable.TOP
+     */
+    public final void setAlignment(int hAlignment, int vAlignment)
+    {
+        if(hAlignment==LEFT||hAlignment==CENTER||hAlignment==RIGHT)
+            this.hAlignment=(char)hAlignment;
+        if(vAlignment==BOTTOM||vAlignment==CENTER|| vAlignment==TOP)
+            this.vAlignment=(char)vAlignment;
     }
 
     public final void setRenderedPosition(Vec2 renderedPosition)
@@ -86,4 +114,56 @@ public abstract class Renderable {
     public static final int TOP=3;
     public static final int LEFT=1;
     public static final int RIGHT=3;
+
+    /**
+     * helper function for the ui position calculation <br>
+     * it converts the position value of the renderable of whatever alignment to a position value with top-left alignment <br>
+     * do not call it for non-ui renderables, it will do nothing <br>
+     * @return the position value converted to the top-left alignment
+     */
+    public static Vec2 convertUIPositionToTopLeft(final Renderable morbius, final Vec2 screenSize)
+    {
+        if(!morbius.isUIElement())
+            return morbius.position.clone();
+
+        Vec2 converted=new Vec2();
+
+        switch(morbius.hAlignment)
+        {
+            case LEFT:
+                converted.x=morbius.position.x;
+                break;
+
+            case CENTER:
+                converted.x=morbius.position.x+screenSize.x/2;
+                break;
+
+            case RIGHT:
+                converted.x=screenSize.x-morbius.position.x;
+                break;
+
+            default:
+                return morbius.position.clone();
+        }
+
+        switch(morbius.vAlignment)
+        {
+            case TOP:
+                converted.y=morbius.position.y;
+                break;
+
+            case CENTER:
+                converted.y=morbius.position.y+screenSize.y/2;
+                break;
+
+            case BOTTOM:
+                converted.y=screenSize.y-morbius.position.y;
+                break;
+
+            default:
+                return morbius.position.clone();
+        }
+
+        return converted;
+    }
 }

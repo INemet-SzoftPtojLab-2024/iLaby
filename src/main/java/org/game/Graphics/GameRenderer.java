@@ -58,11 +58,12 @@ public class GameRenderer extends JPanel implements ActionListener {
         sortRenderables();//TODO: optimize
 
         //calculate renderable positions on screen
+        Vec2 screenSize=new Vec2(this.getWidth(),this.getHeight());
         for(int i=0;i<renderables.size();i++)
         {
             if(renderables.get(i).isUIElement())
             {
-                renderables.get(i).setRenderedPosition(renderables.get(i).getPosition());
+                renderables.get(i).setRenderedPosition(Renderable.convertUIPositionToTopLeft(renderables.get(i),screenSize));
                 renderables.get(i).setRenderedScale(renderables.get(i).getScale());
                 continue;
             }
