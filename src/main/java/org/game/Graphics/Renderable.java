@@ -3,6 +3,7 @@ package main.java.org.game.Graphics;
 import main.java.org.linalg.Vec2;
 
 import java.awt.*;
+import java.util.Comparator;
 
 /**
  * Abstract class for objects that can be rendered.
@@ -97,11 +98,18 @@ public abstract class Renderable {
             this.vAlignment=(char)vAlignment;
     }
 
+    public final Vec2 getRenderedPosition()
+    {
+        return this.renderedPosition;
+    }
     public final void setRenderedPosition(Vec2 renderedPosition)
     {
         this.renderedPosition=renderedPosition;
     }
-
+    public final Vec2 getRenderedScale()
+    {
+        return this.renderedScale;
+    }
     public final void setRenderedScale(Vec2 renderedScale)
     {
         this.renderedScale=renderedScale;
@@ -165,5 +173,12 @@ public abstract class Renderable {
         }
 
         return converted;
+    }
+
+    public static class SortingLayerComparator implements Comparator<Renderable>{
+        public int compare(Renderable a, Renderable b)
+        {
+            return b.sortingLayer - a.sortingLayer;
+        }
     }
 }

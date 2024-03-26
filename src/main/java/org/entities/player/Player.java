@@ -35,7 +35,8 @@ public class Player extends Entity {
         playerImage = null;
         activeImage = 0;
         time = 0.0f;
-        playerName = new Text(name, new Vec2(0,0), 15, 255,255,255);
+        playerName = new Text(name, new Vec2(0,0), "./assets/Monocraft.ttf",15, 0,0,255);
+        playerName.setShadowOn(false);
     }
 
     @Override

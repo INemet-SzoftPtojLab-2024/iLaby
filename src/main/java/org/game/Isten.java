@@ -46,7 +46,9 @@ public class Isten {
 
         inputHandler.update();
 
+
         physicsEngine.step(deltaTime);
+
 
         //add pending updatables to updatables
         for(Updatable u : pendingUpdatables)
@@ -91,7 +93,7 @@ public class Isten {
     {
         updatables.add(new Player("B"+(char)233+"la"));
         updatables.add(new TimeCounter(600));
-        updatables.add(new Map(20,15));
+        updatables.add(new Map(100,100));
     }
 
     /**

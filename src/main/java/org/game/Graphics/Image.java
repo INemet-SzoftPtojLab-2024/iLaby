@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * Class for storing images.
@@ -35,13 +36,7 @@ public class Image extends Renderable {
         this.position = pos;
         this.scale = scale;
 
-        try {
-            image = ImageIO.read(new File(imagePath));
-        }
-        catch(IOException e) {
-            System.err.println(e.getMessage());
-        }
-
+        image = loadImage_internal(imagePath);
     }
     /**
      * Method to render the image.
@@ -99,5 +94,53 @@ public class Image extends Renderable {
     public boolean isUIElement()
     {
         return false;
+    }
+
+
+    //resource management
+    /** a hashmap for the already loaded images */
+    private static HashMap<String, BufferedImage> loadedImages=new HashMap<>();
+
+    /**
+     * load an image with a specified path. if it has already been loaded, no import is done
+     * @param imagePath the path of the image
+     * @return the loaded image or null, if the loading was unsuccessful
+     */
+    private static BufferedImage loadImage_internal(String imagePath)
+    {
+        if(imagePath==null)
+            return null;
+
+        File file=new File(imagePath);
+
+        if(!file.exists()||!file.canRead())//if the file cannot be opened, there is nothing we can do
+        {
+            System.out.println(file.getAbsolutePath()+" could not be loaded");
+            return null;
+        }
+
+        if(loadedImages.containsKey(file.getAbsolutePath()))//if the image is already loaded, return it
+        {
+            return loadedImages.get(file.getAbsolutePath());
+        }
+
+        //if the image is not yet loaded, try to do so and then return the value
+        BufferedImage image=null;
+
+        try{
+            image=ImageIO.read(file);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        if(image==null)
+        {
+            System.out.println(file.getAbsolutePath()+" could not be loaded");
+            return null;
+        }
+
+        loadedImages.put(file.getAbsolutePath(), image);
+        return image;
     }
 }

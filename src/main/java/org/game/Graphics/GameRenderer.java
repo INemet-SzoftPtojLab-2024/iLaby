@@ -12,6 +12,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.WritableRaster;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * GameRenderer class handles rendering of game elements.
@@ -81,10 +83,21 @@ public class GameRenderer extends JPanel implements ActionListener {
         graphics.fillRect(0,0,this.getWidth(), this.getHeight());
 
         if(renderables.isEmpty()) return;
-        for(int i = 0; i < renderables.size(); i++) {
-            if(!renderables.get(i).getVisibility())
+        for(Renderable renderable : renderables) {
+            //if it is not visible, yeet
+            if(!renderable.getVisibility())
                 continue;
-            renderables.get(i).render(graphics);
+
+            //if it is not on the screen, yeet
+            Vec2 tempPos=renderable.getRenderedPosition();
+            Vec2 tempScale=renderable.getRenderedScale();
+            if(tempPos.x-tempScale.x>screenSize.x||tempPos.y-tempScale.y>screenSize.y)
+                continue;
+            if(tempPos.x+tempScale.x<0||tempPos.y+tempScale.y<0)
+                continue;
+
+            //if not yet yeeten, render
+            renderable.render(graphics);
         }
     }
 
@@ -117,18 +130,7 @@ public class GameRenderer extends JPanel implements ActionListener {
 
     private void sortRenderables()
     {
-        for(int i=0;i<renderables.size();i++)
-        {
-            for(int j=0;j<renderables.size()-1-i;j++)
-            {
-                if(renderables.get(j).getSortingLayer()<renderables.get(j+1).getSortingLayer())
-                {
-                    Renderable temp=renderables.get(j);
-                    renderables.set(j, renderables.get(j+1));
-                    renderables.set(j+1, temp);
-                }
-            }
-        }
+        Collections.sort(renderables,new Renderable.SortingLayerComparator());
     }
 
     @Override
