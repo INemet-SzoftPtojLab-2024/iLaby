@@ -7,9 +7,9 @@ import main.java.org.entities.player.Player;
 
 import main.java.org.game.Input.Input;
 import main.java.org.game.Map.Map;
+import main.java.org.game.Timer.TimeCounter;
 import main.java.org.game.physics.PhysicsEngine;
 import main.java.org.game.updatable.Updatable;
-import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 
@@ -46,7 +46,9 @@ public class Isten {
 
         inputHandler.update();
 
+
         physicsEngine.step(deltaTime);
+
 
         //add pending updatables to updatables
         for(Updatable u : pendingUpdatables)
@@ -91,7 +93,7 @@ public class Isten {
     {
         updatables.add(new Player("B"+(char)233+"la"));
         updatables.add(new TimeCounter(600));
-        updatables.add(new Map(15,15));
+        updatables.add(new Map(100,100));
     }
 
     /**
