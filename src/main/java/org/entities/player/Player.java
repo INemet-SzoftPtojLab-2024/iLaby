@@ -78,9 +78,6 @@ public class Player extends Entity {
 
         //adjust camera zoom
         isten.getCamera().setPixelsPerUnit(100);
-
-        //preload playersound to make the playback as immediate as possible
-        //AudioManager.preloadSound("./assets/audio/playersound.wav");
     }
 
     @Override
