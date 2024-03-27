@@ -1,6 +1,8 @@
 package main.java.org.entities.player;
 
 
+import main.java.org.game.Audio.AudioManager;
+import main.java.org.game.Audio.Sound;
 import main.java.org.game.Camera.Camera;
 import main.java.org.game.Graphics.GameRenderer;
 
@@ -21,6 +23,8 @@ public class Player extends Entity {
     int activeImage;
     float time;
     Text playerName;
+
+    Sound playerSound=null;
 
     public Player() {
         playerCollider = null;
@@ -74,6 +78,9 @@ public class Player extends Entity {
 
         //adjust camera zoom
         isten.getCamera().setPixelsPerUnit(100);
+
+        //preload playersound to make the playback as immediate as possible
+        //AudioManager.preloadSound("./assets/audio/playersound.wav");
     }
 
     @Override
@@ -130,6 +137,9 @@ public class Player extends Entity {
         //move camera
         isten.getCamera().setPosition(playerCollider.getPosition());
 
+        //play sound
+        if(!AudioManager.isPlaying(playerSound))
+            playerSound=AudioManager.playSound("./assets/audio/playersound.wav");
     }
 
     @Override
