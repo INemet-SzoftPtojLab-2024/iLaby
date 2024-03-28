@@ -1,4 +1,4 @@
-package main.java.org.game.Timer;
+package main.java.org.game.UI;
 
 import main.java.org.game.Graphics.GameRenderer;
 import main.java.org.game.Graphics.ImageUI;
@@ -17,23 +17,28 @@ public class TimeCounter extends Updatable {
     /**
      * @param time the available time, unit:sec
      */
-    public TimeCounter(double time){
-        timeRemaining=time;
-        timerBackgroundImage=null;
-        timeText=null;
-        renderer=null;
+    public TimeCounter(double time) {
+        timeRemaining = time;
+        timerBackgroundImage = null;
+        timeText = null;
+        renderer = null;
     }
+
     public String secondsToMMSS(double seconds) {
         long minutes = (long) (seconds / 60);
         seconds = seconds % 60;
         return String.format("%02d:%02d", minutes, (long) seconds);
     }
 
+    public double getTimeRemaining(){
+        return timeRemaining;
+    }
+
     @Override
     public void onStart(Isten isten) {
-        renderer=isten.getRenderer();
-        timeText=new TextUI(secondsToMMSS(timeRemaining),new Vec2(5,10),"./assets/Monocraft.ttf",13,255,255,0);
-        timerBackgroundImage=new ImageUI(new Vec2(0,25),new Vec2(100,50),"./assets/timer_background.png");
+        renderer = isten.getRenderer();
+        timeText = new TextUI(secondsToMMSS(timeRemaining), new Vec2(5, 10), "./assets/Monocraft.ttf", 13, 255, 255, 0);
+        timerBackgroundImage = new ImageUI(new Vec2(0, 25), new Vec2(100, 50), "./assets/ui/timer_background.png");
 
         timeText.setVisibility(true);
         timeText.setSortingLayer(-69);
@@ -47,9 +52,11 @@ public class TimeCounter extends Updatable {
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-        timeRemaining-=deltaTime;
-        if(!timeText.getText().equals(secondsToMMSS(timeRemaining))){
-            timeText.setText(secondsToMMSS(timeRemaining));
+        if (timeRemaining > 0) {
+            timeRemaining -= deltaTime;
+            if (!timeText.getText().equals(secondsToMMSS(timeRemaining))) {
+                timeText.setText(secondsToMMSS(timeRemaining));
+            }
         }
     }
 

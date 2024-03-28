@@ -7,7 +7,7 @@ import main.java.org.entities.player.Player;
 
 import main.java.org.game.Input.Input;
 import main.java.org.game.Map.Map;
-import main.java.org.game.Timer.TimeCounter;
+import main.java.org.game.UI.*;
 import main.java.org.game.physics.PhysicsEngine;
 import main.java.org.game.updatable.Updatable;
 
@@ -67,7 +67,7 @@ public class Isten {
 
         //call onUpdates
         for(Updatable u : updatables)
-            u.onUpdate(this,deltaTime);
+            u.onUpdate(this, deltaTime);
 
         renderer.repaint();
     }
@@ -92,8 +92,9 @@ public class Isten {
     private void addUpdatables()
     {
         updatables.add(new Player("B"+(char)233+"la"));
-        updatables.add(new TimeCounter(600));
+        updatables.add(new TimeCounter(10));
         updatables.add(new Map(100,100));
+        updatables.add(new Help());
     }
 
     /**

@@ -15,13 +15,14 @@ public class GameManager {
 
     public GameManager() {
         //Create frame
-        frame = new JFrame();
+        frame = new JFrame("iLaby");
+        frame.setIconImage(Toolkit.getDefaultToolkit().getImage("assets/ui/logo.png"));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
+        frame.setSize(new Dimension(800,800));
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setBackground(new Color(50,50,50));
-
     }
 
     public void changePanel(JPanel panel) {
@@ -53,6 +54,9 @@ public class GameManager {
         {
             switch (stage)
             {
+                case MAIN_MENU:
+
+
                 case INGAME:
                     Isten isten=new Isten();
                     changePanel(isten.getRenderer());//ez az isten.init elott fusson
