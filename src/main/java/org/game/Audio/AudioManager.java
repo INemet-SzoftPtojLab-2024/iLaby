@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 /**
  * A class full of static functions to manage audio<br>
- * Currently it only supports .wav
+ * Currently it supports WAV and OGG (Vorbis for sure, but I'm not convinced about FLAC)
  */
 public final class AudioManager {
     /** helper variable to generate ids */
@@ -21,7 +21,8 @@ public final class AudioManager {
 
     /**
      * plays a sound with the specified path <br>
-     * if the sound has been pre-loaded, no import occurs (to pre-load audio, use the preloadSound function)
+     * if the sound has been pre-loaded, no import occurs (to pre-load audio, use the preloadSound function) <br>
+     * if something isn't quite right, <b>null</b> will be returned
      * @param path the path of the sound
      * @return a Sound object that is unique to every played sound. If a sound with the same path is played multiple times, a new Sound object will be generated every time.
      */
@@ -41,7 +42,8 @@ public final class AudioManager {
 
         int id=currentSoundId++;
         final Sound sond=new Sound(id);
-        Clip clip;
+        Clip clip=null;
+        AudioInputStream aids=null, aids2=null;
         try{
             if(preloadedSounds.containsKey(file.getAbsolutePath()))//get preloaded data
             {
@@ -51,15 +53,47 @@ public final class AudioManager {
             }
             else //get audio line
             {
-                AudioInputStream aids2= AudioSystem.getAudioInputStream(file);
+                //https://github.com/Trilarion/java-vorbis-support
+                aids2= AudioSystem.getAudioInputStream(file);
+                if(aids2==null)
+                {
+                    System.err.println("Something went wong while playing the file "+path);
+                    return null;
+                }
+
+                AudioFormat format = aids2.getFormat();
+                format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, format.getSampleRate(), 16, format.getChannels(), format.getChannels() * 2, format.getSampleRate(), false);
+
+                aids=AudioSystem.getAudioInputStream(format, aids2);
+                if(aids==null)
+                {
+                    System.err.println("Something went wong while playing the file "+path);
+                    return null;
+                }
+
                 clip=AudioSystem.getClip();
-                clip.open(aids2);
+                clip.open(aids);
             }
         }
-        catch(Exception ex)
+        catch(IOException | LineUnavailableException ex)
         {
             System.err.println("Something went wong while playing the file "+path);
             return null;
+        }
+        catch(UnsupportedAudioFileException ex)
+        {
+            System.err.println("The format of "+path+" is not supported");
+            return null;
+        }
+        finally
+        {
+            try{
+                if(aids!=null)
+                    aids.close();
+                if(aids2!=null)
+                    aids2.close();
+            }
+            catch(Exception ex){}
         }
 
         //add listener that closes the line after the playback stopped
@@ -176,19 +210,54 @@ public final class AudioManager {
             System.err.println("The file "+path+" cannot be read");
             return;
         }
+        if(preloadedSounds.containsKey(file.getAbsolutePath()))
+            return;
 
         SoundPreloaded sp=new SoundPreloaded();
-        try(AudioInputStream aids = AudioSystem.getAudioInputStream(file))
+        AudioInputStream aids=null, aids2=null;
+        try
         {
-            sp.data = new byte[(int) aids.getFrameLength() * aids.getFormat().getFrameSize()];
-            aids.read(sp.data);
-            sp.format=aids.getFormat();
+            //https://github.com/Trilarion/java-vorbis-support
+            aids = AudioSystem.getAudioInputStream(file);
+            if(aids==null)
+            {
+                System.err.println("Something went wong while pre-loading the file "+path);
+                return;
+            }
+
+            AudioFormat format = aids.getFormat();
+            format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, format.getSampleRate(), 16, format.getChannels(), format.getChannels() * 2, format.getSampleRate(), false);
+
+            aids2=AudioSystem.getAudioInputStream(format, aids);
+            if(aids2==null)
+            {
+                System.err.println("Something went wong while pre-loading the file "+path);
+                return;
+            }
+
+            sp.data = aids2.readAllBytes();
+            sp.format=aids2.getFormat();
             sp.info=new DataLine.Info(Clip.class,sp.format);
         }
-        catch(Exception ex)
+        catch(IOException ex)
         {
-            System.err.println("Something went wong while preloading the file "+path);
+            System.err.println("Something went wong while pre-loading the file "+path);
             return;
+        }
+        catch(UnsupportedAudioFileException ex)
+        {
+            System.err.println("The format of "+path+" is not supported");
+            return;
+        }
+        finally
+        {
+            try{
+                if(aids!=null)
+                    aids.close();
+                if(aids2!=null)
+                    aids2.close();
+            }
+            catch(Exception ex){}
         }
 
         preloadedSounds.put(file.getAbsolutePath(), sp);
