@@ -125,7 +125,7 @@ public class Player extends Entity {
             //the origin of the image is in its top right corner, therefore the imagePos looks like this: screenSpace(collider position) - 0.5*imageScale
 
             Vec2 playerPosition = playerCollider.getPosition();
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < playerImage.size(); i++) {
                 playerImage.get(i).setPosition(playerPosition);
             }
             playerName.setPosition(Vec2.sum(playerPosition, new Vec2(0, (float) 0.5)));
