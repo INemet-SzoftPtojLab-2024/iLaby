@@ -136,7 +136,7 @@ public class Player extends Entity {
 
         //play sound
         if(!AudioManager.isPlaying(playerSound))
-            playerSound=AudioManager.playSound("./assets/audio/playersound.wav");
+            playerSound=AudioManager.playSound("./assets/audio/playersound.ogg");
     }
 
     @Override
