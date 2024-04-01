@@ -8,7 +8,7 @@ import main.java.org.linalg.Vec2;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
-public class UnitRoom {
+public class UnitRoom implements Graph<UnitRoom>{
 
     private Vec2 position;
     private Wall top,left,right,bottom;
