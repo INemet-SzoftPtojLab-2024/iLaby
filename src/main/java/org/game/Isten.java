@@ -10,6 +10,7 @@ import main.java.org.game.Map.Map;
 import main.java.org.game.UI.*;
 import main.java.org.game.physics.PhysicsEngine;
 import main.java.org.game.updatable.Updatable;
+import main.java.org.items.ChestManager;
 
 import java.util.ArrayList;
 
@@ -23,6 +24,8 @@ public class Isten {
     private final ArrayList<Updatable> pendingUpdatables;
     private final Input inputHandler;
     private final Camera camera;
+    private final Map map;
+    private final Player player;
 
     /**
      * Constructor for Isten.
@@ -35,6 +38,8 @@ public class Isten {
         renderer=new GameRenderer(camera, inputHandler);
         updatables=new ArrayList<>();
         pendingUpdatables=new ArrayList<>();
+        map=new Map(100,100);
+        player=new Player("B"+(char)233+"la");
     }
 
     /**
@@ -91,9 +96,10 @@ public class Isten {
      */
     private void addUpdatables()
     {
-        updatables.add(new Player("B"+(char)233+"la"));
+        updatables.add(player);
         updatables.add(new TimeCounter(10));
-        updatables.add(new Map(100,100));
+        updatables.add(map);
+        updatables.add(new ChestManager(500));//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
         updatables.add(new Help());
     }
 
@@ -114,7 +120,10 @@ public class Isten {
 
     /** returns the camera of the isten */
     public Camera getCamera(){return this.camera;}
-
+    /** returns the map of the isten */
+    public Map getMap(){return this.map;}
+    /** returns the player of the isten */
+    public Player getPlayer(){return this.player;}
 
     public void addUpdatable(Updatable u)
     {
