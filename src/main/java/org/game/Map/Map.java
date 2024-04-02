@@ -17,18 +17,18 @@ public class Map extends Updatable {
     @Override
     public void onStart(Isten isten) {
         mapgenerator = new Mapgenerator(rooms,unitRooms, mapRowSize, mapColumnSize, isten);
-        mapgenerator.generate();
+        mapgenerator.generate(15);
         unitRooms = mapgenerator.getUnitRooms();
         rooms = mapgenerator.getRooms();
         printMap();
-        splitRooms(rooms.get(0));
+        //splitRooms(rooms.get(0));
         //mergeRooms(rooms.get(0), rooms.get(2));
         System.out.println();
         System.out.println();
         printMap();
 
-        mapgenerator.addImages();
-        mapgenerator.createWallsForMap();
+        //mapgenerator.addImages();
+        //mapgenerator.createWallsForMap();
     }
 
     public Map(int rowNumber, int columnNumber){

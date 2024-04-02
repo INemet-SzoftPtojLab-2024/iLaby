@@ -8,7 +8,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+/**
+ * this class is only used at the beginning of a game, when a map needs to be generated
+ */
 public class Mapgenerator {
+
     ArrayList<Room> rooms;
     private UnitRoom[][] unitRooms;
     private int mapRowSize;
@@ -26,7 +30,7 @@ public class Mapgenerator {
 
     public UnitRoom[][] getUnitRooms() {return unitRooms;}
 
-    public void generate(){
+    public void generate(int minRoomSize){
 
         for(int i = 0; i<mapRowSize;i++)
         {
@@ -39,8 +43,13 @@ public class Mapgenerator {
             }
         }
 
-        int[] randomNums = shuffleUnitRooms();
-        for(int number : randomNums ){
+        ArrayList<Integer> shuffledNums = new ArrayList<>();
+        for(int i = 0; i < mapRowSize * mapColumnSize; i++){
+            shuffledNums.add(i);
+        }
+        Collections.shuffle(shuffledNums);
+
+        for(int number : shuffledNums ){
             int i = (int)(number / mapColumnSize);
             int j = (number % mapColumnSize);
             chosenUnitRoom(unitRooms[i][j]);
@@ -48,7 +57,7 @@ public class Mapgenerator {
 
         //merge some room to get bigger rooms
         //merge the rooms until every room has minimumm size of the given number
-        mergeRoomsUntilGivenSizeReached(15);
+        mergeRoomsUntilGivenSizeReached(minRoomSize);
         //add the images to the unitrooms
         addImages();
         //create the walls of the rooms
@@ -68,21 +77,7 @@ public class Mapgenerator {
             }
         }
     }
-    public int[] shuffleUnitRooms(){
-        int n = mapRowSize * mapColumnSize;
-        int numbers[] = new int[n];
-        for(int i = 0; i < n; i++){
-            numbers[i] = i;
-        }
-        Random rand = new Random();
-        for (int i = n - 1; i >= 0; i--) {
-            int j = rand.nextInt(i + 1);
-            int temp = numbers[j];
-            numbers[j] = numbers[i];
-            numbers[i] = temp;
-        }
-        return numbers;
-    }
+
     public void chosenUnitRoom(UnitRoom unitRoom){
         int minimalRoomSize  = Integer.MAX_VALUE;
         Room minimalRoom = new Room(1);

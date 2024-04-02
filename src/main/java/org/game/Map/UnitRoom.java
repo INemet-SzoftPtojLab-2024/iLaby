@@ -111,7 +111,7 @@ public class UnitRoom {
         Vec2 midColliderScale = new Vec2(1, 0.1f);
         Vec2 outerColliderScale = new Vec2(0.1f, 1);
         Vec2 wallTopPos = new Vec2(position.x, position.y + 0.5f);
-        Vec2 wallBottomPos = new Vec2(position.x, position.y - (1 - midColliderScale.y) + (0.5f - midColliderScale.y));
+        Vec2 wallBottomPos = new Vec2(position.x, position.y - 0.5f);
         Vec2 wallRightPos = new Vec2(position.x + 0.5f, position.y);
         Vec2 wallLeftPos = new Vec2(position.x - 0.5f, position.y);
         if(topIsDoor) {
