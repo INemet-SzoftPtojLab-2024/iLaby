@@ -258,4 +258,20 @@ public class UnitRoom implements Graph<UnitRoom>{
     public void setRightNeigbour(UnitRoom rightNeigbour) {
         RightNeigbour = rightNeigbour;
     }
+
+    public UnitRoom getTopNeigbour() {
+        return TopNeigbour;
+    }
+
+    public UnitRoom getBottomNeigbour() {
+        return BottomNeigbour;
+    }
+
+    public UnitRoom getLeftNeigbour() {
+        return LeftNeigbour;
+    }
+
+    public UnitRoom getRightNeigbour() {
+        return RightNeigbour;
+    }
 }

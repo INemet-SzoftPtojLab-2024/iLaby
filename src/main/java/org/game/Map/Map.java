@@ -15,6 +15,7 @@ public class Map extends Updatable {
     private UnitRoom[][] unitRooms;
     private int mapRowSize;
     private int mapColumnSize;
+    private EdgeManager edgeManager;
     //private boolean
 
     @Override
@@ -23,6 +24,8 @@ public class Map extends Updatable {
         mapgenerator.generate(15);
         unitRooms = mapgenerator.getUnitRooms();
         rooms = mapgenerator.getRooms();
+        mapgenerator.defineEdges();
+        edgeManager = mapgenerator.getEdgeManager();
         printMap();
     }
 

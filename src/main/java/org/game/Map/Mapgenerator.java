@@ -14,6 +14,7 @@ import java.util.Random;
 public class Mapgenerator {
 
     ArrayList<Room> rooms;
+    private EdgeManager edgeManager;
     private UnitRoom[][] unitRooms;
     private int mapRowSize;
     private int mapColumnSize;
@@ -24,6 +25,20 @@ public class Mapgenerator {
         this.mapColumnSize = mapColumnSize;
         this.mapRowSize = mapRowSize;
         generateUnitRooms();
+    }
+
+    public EdgeManager getEdgeManager() {
+        return edgeManager;
+    }
+
+    public void defineEdges(){
+        for(Room r1: rooms) {
+            for (Room r2 : rooms) {
+                if(r1.isAdjacent(r2) && edgeManager.getRoomEdges().contains(edgeManager.getEdgeBetweenRooms(r1,r2))){
+                    edgeManager.getRoomEdges().add(new EdgeBetweenRooms(r1,r2));
+                }
+            }
+        }
     }
 
     public ArrayList<Room> getRooms() {return rooms;}
@@ -238,4 +253,27 @@ public class Mapgenerator {
             }
         }
     }
+    public void fillUpEdgesBetweenRooms(){
+
+        for(EdgeBetweenRooms edgesBetweenRoom: edgeManager.getRoomEdges()){
+            Room r1 = edgesBetweenRoom.getNodeRooms().get(0);
+            Room r2 = edgesBetweenRoom.getNodeRooms().get(1);
+            for(UnitRoom wallFinderUnitRoom: r1.getUnitRooms()){
+                if(wallFinderUnitRoom.getTopNeigbour().getOwnerRoom().equals(r2)){
+                    //implementélni ezt, vagy egy másikat a helyére rakni
+                    edgesBetweenRoom.addWall();
+                }
+                if(wallFinderUnitRoom.getBottomNeigbour().getOwnerRoom().equals(r2)){
+                    edgesBetweenRoom.addWall();
+                }
+                if(wallFinderUnitRoom.getLeftNeigbour().getOwnerRoom().equals(r2)){
+                    edgesBetweenRoom.addWall();
+                }
+                if(wallFinderUnitRoom.getRightNeigbour().getOwnerRoom().equals(r2)){
+                    edgesBetweenRoom.addWall();
+                }
+            }
+        }
+    }
+
 }
