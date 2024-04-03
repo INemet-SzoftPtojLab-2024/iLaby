@@ -50,15 +50,9 @@ public class GameRenderer extends JPanel implements ActionListener {
         renderables.add(r);
     }
 
-    /**
-     * Method to paint/render the graphics.
-     *
-     * @param graphics The Graphics object to render on
-     */
-    public void paint(Graphics graphics) {
-
-        sortRenderables();//TODO: optimize
-
+    /** this function calculates the rendered positions and scales of the Renderables */
+    public void calculateRenderedPositions()
+    {
         //calculate renderable positions on screen
         Vec2 screenSize=new Vec2(this.getWidth(),this.getHeight());
         for(int i=0;i<renderables.size();i++)
@@ -74,11 +68,36 @@ public class GameRenderer extends JPanel implements ActionListener {
             renderables.get(i).setRenderedPosition(temp);
             renderables.get(i).setRenderedScale(Vec2.scale(renderables.get(i).getScale(),camera.getPixelsPerUnit()));
         }
+    }
+
+    public void processUIInputs(Input input)
+    {
+        Vec2 mousePos=input.getMousePosition();
+        boolean mousePressed=input.isMouseButtonPressed(Input.MOUSE_LEFT);
+        boolean mouseHeld=input.isMouseButtonDown(Input.MOUSE_LEFT);
+        boolean mouseReleased=input.isMouseButtonReleased(Input.MOUSE_LEFT);
+        boolean mouseClicked=input.isMouseButtonClicked(Input.MOUSE_LEFT);
+
+        for(Renderable roblox : renderables)
+        {
+            if(roblox.isUIElement())
+                roblox.processInput(mousePos,mousePressed,mouseHeld,mouseReleased,mouseClicked);
+        }
+    }
+
+    /**
+     * Method to paint/render the graphics.
+     *
+     * @param graphics The Graphics object to render on
+     */
+    public void paint(Graphics graphics) {
+
+        sortRenderables();//TODO: optimize
 
         //actual render
-        setBackground(new Color(50,50,50));
+        Vec2 screenSize=new Vec2(this.getWidth(),this.getHeight());
 
-        //graphics.dispose();
+        setBackground(new Color(50,50,50));
 
         graphics.fillRect(0,0,this.getWidth(), this.getHeight());
 

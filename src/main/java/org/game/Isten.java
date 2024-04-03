@@ -69,6 +69,9 @@ public class Isten {
         for(Updatable u : updatables)
             u.onUpdate(this,deltaTime);
 
+        //calculate render positions, check for UI inputs and then render
+        renderer.calculateRenderedPositions();
+        renderer.processUIInputs(inputHandler);
         renderer.repaint();
     }
 

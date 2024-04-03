@@ -16,6 +16,7 @@ public abstract class Renderable {
 
     protected int sortingLayer=0;//sorting layer
 
+
     protected char hOrigin=CENTER;
     protected char vOrigin=CENTER;
 
@@ -72,7 +73,8 @@ public abstract class Renderable {
 
     /**
      * sets the origin of the renderable <br>
-     * for example hOrigin=LEFT, vOrigin=BOTTOM means that the position value of the renderable gives us the position of the bottom left corner
+     * for example hOrigin=LEFT, vOrigin=BOTTOM means that the position value of the renderable gives us the position of the bottom left corner<br>
+     * the default values for both horizontal and vertical are Renderable.CENTER
      * @param hOrigin the horizontal position of the origin, possible values are Renderable.LEFT, Renderable.CENTER, Renderable.RIGHT
      * @param vOrigin the vertical position of the origin, possible values are Renderable.BOTTOM, Renderable.CENTER, Renderable.TOP
      */
@@ -83,6 +85,7 @@ public abstract class Renderable {
         if(vOrigin==BOTTOM||vOrigin==CENTER|| vOrigin==TOP)
             this.vOrigin=(char)vOrigin;
     }
+
 
     /**
      * sets the alignment of the renderable <br>
@@ -97,6 +100,20 @@ public abstract class Renderable {
         if(vAlignment==BOTTOM||vAlignment==CENTER|| vAlignment==TOP)
             this.vAlignment=(char)vAlignment;
     }
+
+    /** returns the horizontal alignment of the renderable */
+    public final int getHorizontalAlignment()
+    {
+        return (int)this.hAlignment;
+    }
+
+    /** returns the vertical alignment of the renderable */
+    public final int getVerticalAlignment()
+    {
+        return (int)this.vAlignment;
+    }
+
+
 
     public final Vec2 getRenderedPosition()
     {
@@ -122,6 +139,17 @@ public abstract class Renderable {
     public static final int TOP=3;
     public static final int LEFT=1;
     public static final int RIGHT=3;
+
+
+    /**a function that is called by the Isten <br>
+     * Renderables have the opportunity to override it if necessary
+     * @param mousePos the current position of the mouse on the screen, calculated from the top left corner
+     * @param mousePressed has the left mouse button just been pressed
+     * @param mouseHeld is the left mouse button being held down
+     * @param mouseReleased has the left mouse button just been released
+     * @param mouseClicked has the left mouse button just been clicked (pressed and released in a quick manner)
+     */
+    public void processInput(Vec2 mousePos, boolean mousePressed, boolean mouseHeld, boolean mouseReleased, boolean mouseClicked){}
 
     /**
      * helper function for the ui position calculation <br>
