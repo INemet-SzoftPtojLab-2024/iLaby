@@ -82,7 +82,7 @@ public class Map extends Updatable {
         }
         ArrayList<UnitRoom> oldRoomWithoutNewRoom = getDifference(r1.getUnitRooms(),addableUnitRooms);
         //ellenorzom, hogy osszefuggoek lennének-e: ha igen:
-        if( wouldRoomBeCoherent(oldRoomWithoutNewRoom) && wouldRoomBeCoherent(addableUnitRooms)) {
+        if( kruskalAlgoImplementation(oldRoomWithoutNewRoom) && kruskalAlgoImplementation(addableUnitRooms)) {
             for (UnitRoom addUnitRoomToNewRoom : addableUnitRooms) {
                 //kivesszük az előző szobából a  aunitroomot
                 addUnitRoomToNewRoom.getOwnerRoom().getUnitRooms().remove(addUnitRoomToNewRoom);
@@ -138,6 +138,38 @@ public class Map extends Updatable {
         }
         //mivel minden indexen vegig tudtunk menni ezert tudunk truet returnolni, azert biztonsag kedveert meg egy kontrollt bennhagyok
         if(coherentGraph.size() == newRoomUnits.size()) return true;
+            //hogyha nem egyenlok akkor false menjen ki, bar egyenloknek kene lenniuk
+        else return false;
+    }
+    //elozo fv, vagyis wouldRoomBeCoherent atirasa generikusra, es akkor egy wouldMapBeCoherent fv-t is helyettesit.
+    private<T extends Graph> boolean kruskalAlgoImplementation(ArrayList<T> newCoherentElements)
+    {
+        T starterRoom = newCoherentElements.get(0);
+        ArrayList<T> coherentGraph = new ArrayList<>();
+        coherentGraph.add(starterRoom);
+        for(int i = 0;i<newCoherentElements.size();i++){
+            for(T ElementToBeAddedToGraph : newCoherentElements){
+                 /*ha a size i-vel egyenlő, vagy kisebb nála, akkor tudjuk, hogy nem alkotnak összefüggő gráfot a UnitRoomok a Roomban,
+                    mert különben az előző körhöz képest legalább 1-et fel kellett volna tuidjak venni, vagy pedig már előtte többet kellett volna tudjak felvenni,
+                    rekurzív gondolat, mukodik (remelem)*/
+                if(coherentGraph.size()> i)
+                {
+                    if (!ElementToBeAddedToGraph.equals(coherentGraph.get(i))
+                            && !coherentGraph.contains(ElementToBeAddedToGraph)
+                            && ElementToBeAddedToGraph.isAdjacent(coherentGraph.get(i)))
+                    {
+                        coherentGraph.add(ElementToBeAddedToGraph);
+                        //break; ezzel valszeg effektivebb
+                    }
+                }
+                else{
+                    System.out.println("Nem lennenek koherensek a szobak");
+                    return false;
+                }
+            }
+        }
+        //mivel minden indexen vegig tudtunk menni ezert tudunk truet returnolni, azert biztonsag kedveert meg egy kontrollt bennhagyok
+        if(coherentGraph.size() == newCoherentElements.size()) return true;
             //hogyha nem egyenlok akkor false menjen ki, bar egyenloknek kene lenniuk
         else return false;
     }

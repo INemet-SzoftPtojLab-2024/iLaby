@@ -11,7 +11,7 @@ import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 
-public class Room extends Updatable {
+public class Room extends Updatable implements Graph<Room>{
     int ID;
     int maxDoorCount = 2;
     int currDoorCount = 0;
@@ -56,7 +56,7 @@ public class Room extends Updatable {
 
     }
 
-    boolean isAdjacent(Room room) {
+    public boolean isAdjacent(Room room) {
         // if(this.equals(room)) return false; egynelore nem kell lekezelni
         for(Room checkRoom : adjacentRooms) {
             if (room.equals(checkRoom)) return true;
