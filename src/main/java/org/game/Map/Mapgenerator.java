@@ -14,6 +14,7 @@ import java.util.Random;
 public class Mapgenerator {
 
     ArrayList<Room> rooms;
+    private EdgeManager edgeManager;
     private UnitRoom[][] unitRooms;
     private int mapRowSize;
     private int mapColumnSize;
@@ -26,6 +27,20 @@ public class Mapgenerator {
         generateUnitRooms();
     }
 
+    public EdgeManager getEdgeManager() {
+        return edgeManager;
+    }
+
+    public void defineEdges(){
+        for(Room r1: rooms) {
+            for (Room r2 : rooms) {
+                if(r1.isAdjacent(r2) && edgeManager.getRoomEdges().contains(edgeManager.getEdgeBetweenRooms(r1,r2))){
+                    edgeManager.getRoomEdges().add(new EdgeBetweenRooms(r1,r2));
+                }
+            }
+        }
+    }
+
     public ArrayList<Room> getRooms() {return rooms;}
 
     public UnitRoom[][] getUnitRooms() {return unitRooms;}
@@ -36,10 +51,22 @@ public class Mapgenerator {
         {
             for(int j = 0;j<mapColumnSize;j++)
             {
-                if(i>0) unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i-1][j]);
-                if(j>0) unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i][j-1]);
-                if(i<mapRowSize-1) unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i+1][j]);
-                if(j<mapColumnSize-1) unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i][j+1]);
+                if(i>0){
+                    unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i-1][j]);
+                    unitRooms[i][j].setBottomNeigbour(unitRooms[i-1][j]);
+                }
+                if(j>0){
+                    unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i][j-1]);
+                    unitRooms[i][j].setLeftNeigbour(unitRooms[i][j - 1]);
+                }
+                if(i<mapRowSize-1){
+                    unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i+1][j]);
+                    unitRooms[i][j].setTopNeigbour(unitRooms[i + 1][j]);
+                }
+                if(j<mapColumnSize-1) {
+                    unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i][j+1]);
+                    unitRooms[i][j].setRightNeigbour(unitRooms[i][j + 1]);
+                }
             }
         }
 
@@ -80,7 +107,7 @@ public class Mapgenerator {
 
     public void chosenUnitRoom(UnitRoom unitRoom){
         int minimalRoomSize  = Integer.MAX_VALUE;
-        Room minimalRoom = new Room(1);
+        Room minimalRoom = new Room(1, mapRowSize, mapColumnSize);
         ArrayList<Room> unitRoomNeighbourRooms = new ArrayList<>(); // itt taroljuk majd azokat, amik a unitroom szomszedos, de nem kerultek kivalasztasra
         for(UnitRoom neighbour : unitRoom.getAdjacentUnitRooms()){
             if(neighbour.isInRoom()){
@@ -94,7 +121,7 @@ public class Mapgenerator {
         }
         if(unitRoomNeighbourRooms.isEmpty()){
             //System.out.println("Új szoba kerül felvételre ID-val:" + unitRoom.getRowNum()*mapRowSize+unitRoom.getColNum());
-            Room newRoom = new Room(unitRoom.getRowNum()*mapRowSize+unitRoom.getColNum());
+            Room newRoom = new Room(unitRoom.getRowNum()*mapRowSize+unitRoom.getColNum(), mapRowSize, mapColumnSize);
             unitRoom.setOwnerRoom(newRoom);
             newRoom.getUnitRooms().add(unitRoom);
             rooms.add(newRoom);
@@ -226,4 +253,27 @@ public class Mapgenerator {
             }
         }
     }
+    public void fillUpEdgesBetweenRooms(){
+
+        for(EdgeBetweenRooms edgesBetweenRoom: edgeManager.getRoomEdges()){
+            Room r1 = edgesBetweenRoom.getNodeRooms().get(0);
+            Room r2 = edgesBetweenRoom.getNodeRooms().get(1);
+            for(UnitRoom wallFinderUnitRoom: r1.getUnitRooms()){
+                if(wallFinderUnitRoom.getTopNeigbour().getOwnerRoom().equals(r2)){
+                    //implementélni ezt, vagy egy másikat a helyére rakni
+                    edgesBetweenRoom.addWall();
+                }
+                if(wallFinderUnitRoom.getBottomNeigbour().getOwnerRoom().equals(r2)){
+                    edgesBetweenRoom.addWall();
+                }
+                if(wallFinderUnitRoom.getLeftNeigbour().getOwnerRoom().equals(r2)){
+                    edgesBetweenRoom.addWall();
+                }
+                if(wallFinderUnitRoom.getRightNeigbour().getOwnerRoom().equals(r2)){
+                    edgesBetweenRoom.addWall();
+                }
+            }
+        }
+    }
+
 }
