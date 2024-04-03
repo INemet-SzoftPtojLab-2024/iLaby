@@ -1,7 +1,10 @@
 package main.java.org.game.Map;
 
+import main.java.org.game.Graphics.Image;
 import main.java.org.game.Isten;
+import main.java.org.game.physics.Collider;
 import main.java.org.game.updatable.Updatable;
+import main.java.org.linalg.Vec2;
 
 import java.util.*;
 
@@ -21,14 +24,6 @@ public class Map extends Updatable {
         unitRooms = mapgenerator.getUnitRooms();
         rooms = mapgenerator.getRooms();
         printMap();
-        //splitRooms(rooms.get(0));
-        //mergeRooms(rooms.get(0), rooms.get(2));
-        System.out.println();
-        System.out.println();
-        printMap();
-
-        //mapgenerator.addImages();
-        //mapgenerator.createWallsForMap();
     }
 
     public Map(int rowNumber, int columnNumber){
@@ -39,9 +34,22 @@ public class Map extends Updatable {
 
     }
 
+    //for testing
+    boolean merged = false;
+    double delta = 0;
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
 
+        //for testing
+        delta += deltaTime;
+        if(delta > 3 && !merged) {
+            mergeRooms(rooms.get(0), rooms.get(2), isten);
+            System.out.println();
+            System.out.println();
+            printMap();
+
+            merged = true;
+        }
     }
 
     @Override
@@ -161,20 +169,34 @@ public class Map extends Updatable {
     }
 
     //ez a fv a mapgenerátorban is hasonlóan szerepel
-    private void mergeRooms(Room r1, Room r2) {
+    private void mergeRooms(Room r1, Room r2, Isten isten) {
         if(!r1.isAdjacent(r2) || r1.getID() == r2.getID()){
             System.err.println("cant be merged");
             return;
         }
-        //remove r2 and keep r1
-        for(UnitRoom unitroom : r2.getUnitRooms()){
-            r1.getUnitRooms().add(unitroom);
-            unitroom.setOwnerRoom(r1);
-            //image update!!
-            //update the Walls!!
+        System.out.println(r2.getID() + "(r2) is merged to (r1)" + r1.getID());
+        //remove r2 and keep r1;
 
+        //set colliders
+        for(Collider c : r2.roomColliders.getColliders()){
+            r1.roomColliders.addCollider(c);
         }
-        r2.getUnitRooms().clear();
+        //r2.roomColliders.getColliders().clear(); //does not matter
+        r1.deleteCommonWallsWith(isten, r2.getID());
+        isten.getPhysicsEngine().removeColliderGroup(r2.roomColliders.id);
+
+        for(UnitRoom unitRoom : r2.getUnitRooms()){
+            //r1.getUnitRooms().add(unitroom);
+            unitRoom.setOwnerRoom(r1);
+
+            //setting the new images of the deleted room
+            isten.getRenderer().deleteRenderable(unitRoom.image);
+            unitRoom.image = null;
+            unitRoom.addImages(isten, r1.getRoomType());
+        }
+        System.out.println(r1.getRoomType());
+        System.out.println(r2.getRoomType());
+        r1.getUnitRooms().addAll(r2.getUnitRooms()); //insted of this: r1.getUnitRooms().add(unitroom);
 
         r1.getAdjacentRooms().remove(r2);
         r2.getAdjacentRooms().remove(r1);
@@ -190,11 +212,15 @@ public class Map extends Updatable {
         }
 
         r2.getAdjacentRooms().clear();
+        r2.getUnitRooms().clear();
+
         //r1.setDiscovered(r2.isDiscovered());
         //r1.setPlayerCount(r1.getPlayerCount() + r2.getPlayerCount());
         //r1.setRoomType(r2.getRoomType());
         r1.setMaxPlayerCount(r1.getMaxPlayerCount() + r2.getMaxPlayerCount());
         rooms.remove(r2);
+
+
     }
 
 

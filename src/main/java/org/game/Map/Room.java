@@ -1,9 +1,13 @@
 package main.java.org.game.Map;
 
+import lombok.Setter;
+import lombok.Getter;
+import main.java.org.game.Graphics.Image;
 import main.java.org.game.Isten;
 import main.java.org.game.physics.Collider;
 import main.java.org.game.physics.ColliderGroup;
 import main.java.org.game.updatable.Updatable;
+import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 
@@ -17,14 +21,12 @@ public class Room extends Updatable {
     private int maxPlayerCount = 5;
 
 
-
     //ArrayList<Player> players;
     boolean discovered = false;
 
     RoomType roomType;
 
-
-
+    //for generating the doors
     private ArrayList<Integer> hasDoorWith;
 
     ColliderGroup roomColliders;
@@ -38,8 +40,6 @@ public class Room extends Updatable {
         roomType = RoomType.getRandomRoomtype();
 
     }
-
-
 
     @Override
     public void onStart(Isten isten) {
@@ -70,6 +70,66 @@ public class Room extends Updatable {
                 if(!neighbourUnitRoom.getOwnerRoom().getAdjacentRooms().contains(this) && !neighbourUnitRoom.getOwnerRoom().equals(this)){
                     adjacentRooms.add(neighbourUnitRoom.getOwnerRoom());
                     neighbourUnitRoom.getOwnerRoom().getAdjacentRooms().add(this);
+                }
+            }
+        }
+    }
+    public void deleteCommonWallsWith(Isten isten, int deletedRoomID){
+        for(UnitRoom unitRoom : unitRooms){
+            for(UnitRoom neigbourUnitRoom : unitRoom.getAdjacentUnitRooms()){
+                //hogyha egy szobán beluli unitRoomokrol van szo
+                // es van koztuk collider vagy fal
+                if(neigbourUnitRoom.getOwnerRoom().getID() == deletedRoomID){
+                    if(unitRoom.getTopWall() != null){
+                        roomColliders.removeCollider(unitRoom.getTopWall().getCollider());
+                        unitRoom.setTopIsDoor(false);
+                        isten.getRenderer().deleteRenderable(unitRoom.getTopWall().image);
+                        unitRoom.setTopWall(null);
+                    }
+                    if(unitRoom.getLeftWall() != null){
+                        roomColliders.removeCollider(unitRoom.getLeftWall().getCollider());
+                        unitRoom.setLeftIsDoor(false);
+                        isten.getRenderer().deleteRenderable(unitRoom.getLeftWall().image);
+                        unitRoom.setLeftWall(null);
+                    }
+                    if(unitRoom.getRightWall() != null){
+                        roomColliders.removeCollider(unitRoom.getRightWall().getCollider());
+                        unitRoom.setRightIsDoor(false);
+                        isten.getRenderer().deleteRenderable(unitRoom.getRightWall().image);
+                        unitRoom.setRightWall(null);
+                    }
+                    if(unitRoom.getBottomWall() != null){
+                        roomColliders.removeCollider(unitRoom.getBottomWall().getCollider());
+                        unitRoom.setBottomIsDoor(false);
+                        isten.getRenderer().deleteRenderable(unitRoom.getBottomWall().image);
+                        unitRoom.setBottomWall(null);
+                    }
+
+                    //delete the neigbours wall and collider
+                    if(neigbourUnitRoom.getTopWall() != null){
+                        roomColliders.removeCollider(neigbourUnitRoom.getTopWall().getCollider());
+                        neigbourUnitRoom.setTopIsDoor(false);
+                        isten.getRenderer().deleteRenderable(neigbourUnitRoom.getTopWall().image);
+                        neigbourUnitRoom.setTopWall(null);
+                    }
+                    if(neigbourUnitRoom.getLeftWall() != null) {
+                        roomColliders.removeCollider(neigbourUnitRoom.getLeftWall().getCollider());
+                        neigbourUnitRoom.setLeftIsDoor(false);
+                        isten.getRenderer().deleteRenderable(neigbourUnitRoom.getLeftWall().image);
+                        neigbourUnitRoom.setLeftWall(null);
+                    }
+                    if(neigbourUnitRoom.getRightWall() != null){
+                        roomColliders.removeCollider(neigbourUnitRoom.getRightWall().getCollider());
+                        neigbourUnitRoom.setRightIsDoor(false);
+                        isten.getRenderer().deleteRenderable(neigbourUnitRoom.getRightWall().image);
+                        neigbourUnitRoom.setRightWall(null);
+                    }
+                    if(neigbourUnitRoom.getBottomWall() != null){
+                        roomColliders.removeCollider(neigbourUnitRoom.getBottomWall().getCollider());
+                        neigbourUnitRoom.setBottomIsDoor(false);
+                        isten.getRenderer().deleteRenderable(neigbourUnitRoom.getBottomWall().image);
+                        neigbourUnitRoom.setBottomWall(null);
+                    }
                 }
             }
         }

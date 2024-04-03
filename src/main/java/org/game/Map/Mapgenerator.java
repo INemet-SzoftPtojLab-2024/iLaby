@@ -158,6 +158,7 @@ public class Mapgenerator {
         Image img;
         int roomImageCount = 9;
         int j;
+        int i = 0;
         for(Room room: rooms) {
             switch (room.getRoomType()){
                 case GAS -> j = 1;
@@ -166,10 +167,14 @@ public class Mapgenerator {
                 case BASIC -> j = 4;
                 default -> j = 0;
             }
+            //j = (i % 5) + 1; //test rooms with more roomcolors to see better the borders
+            //i++;
+            //if(room.getID() == 999) j = 5; //for testing the split algo the new gets a different color
             String path = "./assets/rooms/" + j + ".png";
             for(UnitRoom unitRoom: room.getUnitRooms()) {
 
                 img = new Image(unitRoom.getPosition(), new Vec2(1,1), path);
+                unitRoom.setImage(img);
                 isten.getRenderer().addRenderable(img);
             }
         }
