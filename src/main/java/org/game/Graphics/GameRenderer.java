@@ -80,7 +80,7 @@ public class GameRenderer extends JPanel implements ActionListener {
 
         for(Renderable roblox : renderables)
         {
-            if(roblox.isUIElement())
+            if(roblox.isUIElement()&&roblox.getVisibility())
                 roblox.processInput(mousePos,mousePressed,mouseHeld,mouseReleased,mouseClicked);
         }
     }

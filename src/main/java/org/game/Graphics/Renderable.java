@@ -8,7 +8,7 @@ import java.util.Comparator;
 /**
  * Abstract class for objects that can be rendered.
  */
-public abstract class Renderable {
+public abstract class Renderable implements Cloneable{
     protected Vec2 position=new Vec2();
     protected Vec2 scale=new Vec2();
     protected Vec2 renderedPosition=new Vec2();//the pixel position of the position
@@ -150,6 +150,25 @@ public abstract class Renderable {
      * @param mouseClicked has the left mouse button just been clicked (pressed and released in a quick manner)
      */
     public void processInput(Vec2 mousePos, boolean mousePressed, boolean mouseHeld, boolean mouseReleased, boolean mouseClicked){}
+
+
+    @Override
+    public Renderable clone() {
+        try {
+            Renderable clone = (Renderable) super.clone();
+            clone.position=position.clone();
+            clone.scale=scale.clone();
+            clone.hAlignment=hAlignment;
+            clone.vAlignment=vAlignment;
+            clone.hOrigin=hOrigin;
+            clone.vOrigin=vOrigin;
+            clone.visible=visible;
+            clone.sortingLayer=sortingLayer;
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 
     /**
      * helper function for the ui position calculation <br>

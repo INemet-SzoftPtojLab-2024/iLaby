@@ -10,6 +10,7 @@ public class ButtonUI extends Renderable{
     private ImageUI image=null;
     private TextUI text=null;
     private ClickListener onClick=null;
+    private boolean isHovered=false, isHeld=false;
 
     public ButtonUI(Vec2 pos, Vec2 scale)
     {
@@ -31,6 +32,12 @@ public class ButtonUI extends Renderable{
 
     @Override
     public void render(Graphics graphics) {
+
+        if(isHovered)
+            ((Graphics2D)graphics).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.8f));
+        else if(isHeld)
+            ((Graphics2D)graphics).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.6f));
+
         if(image!=null)
         {
             image.setRenderedPosition(this.renderedPosition);
@@ -43,12 +50,18 @@ public class ButtonUI extends Renderable{
             text.setRenderedScale(this.renderedScale);
             text.render(graphics);
         }
+
+        if(isHovered||isHeld)
+            ((Graphics2D)graphics).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1.0f));
     }
 
     @Override
     public void processInput(Vec2 mousePos, boolean mousePressed, boolean mouseHeld, boolean mouseReleased, boolean mouseClicked)
     {
         Vec2 tempPos=new Vec2();
+
+        isHovered=false;
+        isHeld=false;
 
         switch (hOrigin) {
             case Renderable.LEFT -> tempPos.x = renderedPosition.x;
@@ -70,6 +83,11 @@ public class ButtonUI extends Renderable{
             return;
         if(tempPos.y+renderedScale.y<mousePos.y)
             return;
+
+        if(!mouseHeld)
+            isHovered=true;
+        else
+            isHeld=true;
 
         if(mouseClicked&&onClick!=null)
             onClick.onClick();
