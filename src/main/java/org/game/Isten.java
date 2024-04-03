@@ -101,6 +101,7 @@ public class Isten {
         updatables.add(map);
         updatables.add(new ChestManager(500));//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
         updatables.add(new Help());
+        updatables.add(new Inventory(5));
     }
 
     /**
