@@ -80,7 +80,7 @@ public class Mapgenerator {
 
     public void chosenUnitRoom(UnitRoom unitRoom){
         int minimalRoomSize  = Integer.MAX_VALUE;
-        Room minimalRoom = new Room(1);
+        Room minimalRoom = new Room(1, mapRowSize, mapColumnSize);
         ArrayList<Room> unitRoomNeighbourRooms = new ArrayList<>(); // itt taroljuk majd azokat, amik a unitroom szomszedos, de nem kerultek kivalasztasra
         for(UnitRoom neighbour : unitRoom.getAdjacentUnitRooms()){
             if(neighbour.isInRoom()){
@@ -94,7 +94,7 @@ public class Mapgenerator {
         }
         if(unitRoomNeighbourRooms.isEmpty()){
             //System.out.println("Új szoba kerül felvételre ID-val:" + unitRoom.getRowNum()*mapRowSize+unitRoom.getColNum());
-            Room newRoom = new Room(unitRoom.getRowNum()*mapRowSize+unitRoom.getColNum());
+            Room newRoom = new Room(unitRoom.getRowNum()*mapRowSize+unitRoom.getColNum(), mapRowSize, mapColumnSize);
             unitRoom.setOwnerRoom(newRoom);
             newRoom.getUnitRooms().add(unitRoom);
             rooms.add(newRoom);

@@ -64,7 +64,7 @@ public class Map extends Updatable {
             neighbourRoom.getAdjacentRooms().remove(r1);
         }
         //egyenlőre minden szoba ami splittel lesz createlve ilyen type-val rendelkezik
-        Room newRoom = new Room(999);
+        Room newRoom = new Room(999, mapRowSize, mapColumnSize);
         int lowestRowIdx = getRoomWithLowestRowIdx(r1);
         ArrayList<UnitRoom> addableUnitRooms = new ArrayList<>();
         int distance = 0;
@@ -226,8 +226,7 @@ public class Map extends Updatable {
             unitRoom.image = null;
             unitRoom.addImages(isten, r1.getRoomType());
         }
-        System.out.println(r1.getRoomType());
-        System.out.println(r2.getRoomType());
+
         r1.getUnitRooms().addAll(r2.getUnitRooms()); //insted of this: r1.getUnitRooms().add(unitroom);
 
         r1.getAdjacentRooms().remove(r2);

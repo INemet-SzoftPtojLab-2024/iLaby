@@ -19,6 +19,8 @@ public class Room extends Updatable implements Graph<Room>{
     private ArrayList<Room> adjacentRooms;
     int playerCount;
     private int maxPlayerCount = 5;
+    private int mapRowSize;
+    private int mapColSize;
 
 
     //ArrayList<Player> players;
@@ -31,18 +33,21 @@ public class Room extends Updatable implements Graph<Room>{
 
     ColliderGroup roomColliders;
 
-    public Room(int ID){
+    public Room(int ID, int mapRowSize, int mapColSize){
         this.ID = ID;
         unitRooms = new ArrayList<>();
         adjacentRooms = new ArrayList<>();
         roomColliders=new ColliderGroup();
         hasDoorWith = new ArrayList<>();
         roomType = RoomType.getRandomRoomtype();
+        this.mapRowSize = mapRowSize;
+        this.mapColSize = mapColSize;
 
     }
 
     @Override
     public void onStart(Isten isten) {
+
         isten.getPhysicsEngine().addColliderGroup(roomColliders);
     }
 
@@ -80,25 +85,26 @@ public class Room extends Updatable implements Graph<Room>{
                 //hogyha egy szobán beluli unitRoomokrol van szo
                 // es van koztuk collider vagy fal
                 if(neigbourUnitRoom.getOwnerRoom().getID() == deletedRoomID){
-                    if(unitRoom.getTopWall() != null){
+                    System.out.println(unitRoom.getColNum() + "," + unitRoom.getRowNum());
+                    if(unitRoom.getTopWall() != null && unitRoom.getRowNum() != mapRowSize -1){
                         roomColliders.removeCollider(unitRoom.getTopWall().getCollider());
                         unitRoom.setTopIsDoor(false);
                         isten.getRenderer().deleteRenderable(unitRoom.getTopWall().image);
                         unitRoom.setTopWall(null);
                     }
-                    if(unitRoom.getLeftWall() != null){
+                    if(unitRoom.getLeftWall() != null && unitRoom.getColNum() != 0){
                         roomColliders.removeCollider(unitRoom.getLeftWall().getCollider());
                         unitRoom.setLeftIsDoor(false);
                         isten.getRenderer().deleteRenderable(unitRoom.getLeftWall().image);
                         unitRoom.setLeftWall(null);
                     }
-                    if(unitRoom.getRightWall() != null){
+                    if(unitRoom.getRightWall() != null && unitRoom.getColNum() != mapColSize-1){
                         roomColliders.removeCollider(unitRoom.getRightWall().getCollider());
                         unitRoom.setRightIsDoor(false);
                         isten.getRenderer().deleteRenderable(unitRoom.getRightWall().image);
                         unitRoom.setRightWall(null);
                     }
-                    if(unitRoom.getBottomWall() != null){
+                    if(unitRoom.getBottomWall() != null && unitRoom.getRowNum() != 0){
                         roomColliders.removeCollider(unitRoom.getBottomWall().getCollider());
                         unitRoom.setBottomIsDoor(false);
                         isten.getRenderer().deleteRenderable(unitRoom.getBottomWall().image);
@@ -106,25 +112,25 @@ public class Room extends Updatable implements Graph<Room>{
                     }
 
                     //delete the neigbours wall and collider
-                    if(neigbourUnitRoom.getTopWall() != null){
+                    if(neigbourUnitRoom.getTopWall() != null && unitRoom.getRowNum() != mapRowSize-1){
                         roomColliders.removeCollider(neigbourUnitRoom.getTopWall().getCollider());
                         neigbourUnitRoom.setTopIsDoor(false);
                         isten.getRenderer().deleteRenderable(neigbourUnitRoom.getTopWall().image);
                         neigbourUnitRoom.setTopWall(null);
                     }
-                    if(neigbourUnitRoom.getLeftWall() != null) {
+                    if(neigbourUnitRoom.getLeftWall() != null  && unitRoom.getColNum() != 0) {
                         roomColliders.removeCollider(neigbourUnitRoom.getLeftWall().getCollider());
                         neigbourUnitRoom.setLeftIsDoor(false);
                         isten.getRenderer().deleteRenderable(neigbourUnitRoom.getLeftWall().image);
                         neigbourUnitRoom.setLeftWall(null);
                     }
-                    if(neigbourUnitRoom.getRightWall() != null){
+                    if(neigbourUnitRoom.getRightWall() != null  && unitRoom.getColNum() != mapColSize-1){
                         roomColliders.removeCollider(neigbourUnitRoom.getRightWall().getCollider());
                         neigbourUnitRoom.setRightIsDoor(false);
                         isten.getRenderer().deleteRenderable(neigbourUnitRoom.getRightWall().image);
                         neigbourUnitRoom.setRightWall(null);
                     }
-                    if(neigbourUnitRoom.getBottomWall() != null){
+                    if(neigbourUnitRoom.getBottomWall() != null && unitRoom.getRowNum() != 0){
                         roomColliders.removeCollider(neigbourUnitRoom.getBottomWall().getCollider());
                         neigbourUnitRoom.setBottomIsDoor(false);
                         isten.getRenderer().deleteRenderable(neigbourUnitRoom.getBottomWall().image);
