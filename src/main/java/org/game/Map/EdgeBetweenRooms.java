@@ -21,4 +21,8 @@ public class EdgeBetweenRooms {
     public void addWall(){
 
     }
+
+    public ArrayList<Room> getNodeRooms() {
+        return nodeRooms;
+    }
 }

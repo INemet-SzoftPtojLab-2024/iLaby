@@ -22,4 +22,9 @@ public class EdgeManager {
         }
         return null;
     }
+
+    public ArrayList<EdgeBetweenRooms> getRoomEdges() {
+        return roomEdges;
+    }
+
 }

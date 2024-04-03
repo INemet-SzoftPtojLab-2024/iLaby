@@ -24,6 +24,7 @@ public class Mapgenerator {
         this.rooms = rooms;
         this.mapColumnSize = mapColumnSize;
         this.mapRowSize = mapRowSize;
+        edgeManager = new EdgeManager();
         generateUnitRooms();
     }
 
@@ -34,7 +35,7 @@ public class Mapgenerator {
     public void defineEdges(){
         for(Room r1: rooms) {
             for (Room r2 : rooms) {
-                if(r1.isAdjacent(r2) && edgeManager.getRoomEdges().contains(edgeManager.getEdgeBetweenRooms(r1,r2))){
+                if(r1.isAdjacent(r2) && !edgeManager.getRoomEdges().contains(edgeManager.getEdgeBetweenRooms(r1,r2))){
                     edgeManager.getRoomEdges().add(new EdgeBetweenRooms(r1,r2));
                 }
             }
