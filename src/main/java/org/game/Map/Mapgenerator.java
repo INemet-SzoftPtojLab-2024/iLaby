@@ -36,10 +36,22 @@ public class Mapgenerator {
         {
             for(int j = 0;j<mapColumnSize;j++)
             {
-                if(i>0) unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i-1][j]);
-                if(j>0) unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i][j-1]);
-                if(i<mapRowSize-1) unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i+1][j]);
-                if(j<mapColumnSize-1) unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i][j+1]);
+                if(i>0){
+                    unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i-1][j]);
+                    unitRooms[i][j].setBottomNeigbour(unitRooms[i-1][j]);
+                }
+                if(j>0){
+                    unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i][j-1]);
+                    unitRooms[i][j].setLeftNeigbour(unitRooms[i][j - 1]);
+                }
+                if(i<mapRowSize-1){
+                    unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i+1][j]);
+                    unitRooms[i][j].setTopNeigbour(unitRooms[i + 1][j]);
+                }
+                if(j<mapColumnSize-1) {
+                    unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i][j+1]);
+                    unitRooms[i][j].setRightNeigbour(unitRooms[i][j + 1]);
+                }
             }
         }
 

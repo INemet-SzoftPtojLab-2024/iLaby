@@ -112,25 +112,25 @@ public class Room extends Updatable implements Graph<Room>{
                     }
 
                     //delete the neigbours wall and collider
-                    if(neigbourUnitRoom.getTopWall() != null && unitRoom.getRowNum() != mapRowSize-1){
+                    if(neigbourUnitRoom.getTopWall() != null && neigbourUnitRoom.getRowNum() != mapRowSize-1){
                         roomColliders.removeCollider(neigbourUnitRoom.getTopWall().getCollider());
                         neigbourUnitRoom.setTopIsDoor(false);
                         isten.getRenderer().deleteRenderable(neigbourUnitRoom.getTopWall().image);
                         neigbourUnitRoom.setTopWall(null);
                     }
-                    if(neigbourUnitRoom.getLeftWall() != null  && unitRoom.getColNum() != 0) {
+                    if(neigbourUnitRoom.getLeftWall() != null  && neigbourUnitRoom.getColNum() != 0) {
                         roomColliders.removeCollider(neigbourUnitRoom.getLeftWall().getCollider());
                         neigbourUnitRoom.setLeftIsDoor(false);
                         isten.getRenderer().deleteRenderable(neigbourUnitRoom.getLeftWall().image);
                         neigbourUnitRoom.setLeftWall(null);
                     }
-                    if(neigbourUnitRoom.getRightWall() != null  && unitRoom.getColNum() != mapColSize-1){
+                    if(neigbourUnitRoom.getRightWall() != null  && neigbourUnitRoom.getColNum() != mapColSize-1){
                         roomColliders.removeCollider(neigbourUnitRoom.getRightWall().getCollider());
                         neigbourUnitRoom.setRightIsDoor(false);
                         isten.getRenderer().deleteRenderable(neigbourUnitRoom.getRightWall().image);
                         neigbourUnitRoom.setRightWall(null);
                     }
-                    if(neigbourUnitRoom.getBottomWall() != null && unitRoom.getRowNum() != 0){
+                    if(neigbourUnitRoom.getBottomWall() != null && neigbourUnitRoom.getRowNum() != 0){
                         roomColliders.removeCollider(neigbourUnitRoom.getBottomWall().getCollider());
                         neigbourUnitRoom.setBottomIsDoor(false);
                         isten.getRenderer().deleteRenderable(neigbourUnitRoom.getBottomWall().image);

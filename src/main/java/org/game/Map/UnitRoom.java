@@ -19,6 +19,10 @@ public class UnitRoom implements Graph<UnitRoom>{
     private Item item;
     public Image image;
     private ArrayList<UnitRoom> adjacentUnitRooms;
+    private UnitRoom TopNeigbour;
+    private UnitRoom BottomNeigbour;
+    private UnitRoom LeftNeigbour;
+    private UnitRoom RightNeigbour;
     private Room  ownerRoom;
     //this stores information only for generating
     private boolean inRoom;
@@ -130,10 +134,10 @@ public class UnitRoom implements Graph<UnitRoom>{
             topWall = createWallWithCollider(isten, wallTopPos, midColliderScale, wallPath);
         }
         if(bottomIsDoor) {
-            bottomWall = createDoorWithoutCollider(isten, wallBottomPos, midColliderScale, doorPath);
+            //bottomWall = createDoorWithoutCollider(isten, wallBottomPos, midColliderScale, doorPath);
         }
         else if(!hasBottom) {
-            bottomWall = createWallWithCollider(isten, wallBottomPos, midColliderScale, wallPath);
+            //bottomWall = createWallWithCollider(isten, wallBottomPos, midColliderScale, wallPath);
         }
         if(rightIsDoor) {
             rightWall = createDoorWithoutCollider(isten, wallRightPos, outerColliderScale, doorPath);
@@ -142,10 +146,10 @@ public class UnitRoom implements Graph<UnitRoom>{
             rightWall = createWallWithCollider(isten, wallRightPos, outerColliderScale, wallPath);
         }
         if(leftIsDoor) {
-            leftWall = createDoorWithoutCollider(isten, wallLeftPos, outerColliderScale, doorPath);
+            //leftWall = createDoorWithoutCollider(isten, wallLeftPos, outerColliderScale, doorPath);
         }
         else if(!hasLeft) {
-            leftWall = createWallWithCollider(isten, wallLeftPos, outerColliderScale, wallPath);
+            //leftWall = createWallWithCollider(isten, wallLeftPos, outerColliderScale, wallPath);
         }
     }
 
@@ -238,4 +242,20 @@ public class UnitRoom implements Graph<UnitRoom>{
     public void setRightWall(Wall rightWall) {this.rightWall = rightWall;}
 
     public void setBottomWall(Wall bottomWall) {this.bottomWall = bottomWall;}
+
+    public void setTopNeigbour(UnitRoom topNeigbour) {
+        TopNeigbour = topNeigbour;
+    }
+
+    public void setBottomNeigbour(UnitRoom bottomNeigbour) {
+        BottomNeigbour = bottomNeigbour;
+    }
+
+    public void setLeftNeigbour(UnitRoom leftNeigbour) {
+        LeftNeigbour = leftNeigbour;
+    }
+
+    public void setRightNeigbour(UnitRoom rightNeigbour) {
+        RightNeigbour = rightNeigbour;
+    }
 }

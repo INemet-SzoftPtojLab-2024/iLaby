@@ -42,8 +42,8 @@ public class Map extends Updatable {
 
         //for testing
         delta += deltaTime;
-        if(delta > 3 && !merged) {
-            mergeRooms(rooms.get(0), rooms.get(2), isten);
+        if(delta > 30 && !merged) {
+            mergeRooms(rooms.get(0), rooms.get(0).getAdjacentRooms().get(0), isten);
             System.out.println();
             System.out.println();
             printMap();
