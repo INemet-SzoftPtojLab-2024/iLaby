@@ -93,11 +93,7 @@ public class Isten {
     {
         updatables.add(new Player("II. Németh Szilárd"));
         updatables.add(new TimeCounter(600));
-<<<<<<< HEAD
         updatables.add(new Map(10,10));
-=======
-        updatables.add(new Map(100,100));
->>>>>>> main
     }
 
     /**
