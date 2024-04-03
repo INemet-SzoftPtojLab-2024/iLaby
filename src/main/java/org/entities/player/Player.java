@@ -1,6 +1,8 @@
 package main.java.org.entities.player;
 
 
+import main.java.org.game.Audio.AudioManager;
+import main.java.org.game.Audio.Sound;
 import main.java.org.game.Camera.Camera;
 import main.java.org.game.Graphics.GameRenderer;
 
@@ -22,6 +24,8 @@ public class Player extends Entity {
     float time;
     Text playerName;
 
+    Sound playerSound=null;
+
     public Player() {
         playerCollider = null;
         playerImage = null;
@@ -35,7 +39,8 @@ public class Player extends Entity {
         playerImage = null;
         activeImage = 0;
         time = 0.0f;
-        playerName = new Text(name, new Vec2(0,0), 15, 255,255,255);
+        playerName = new Text(name, new Vec2(0,0), "./assets/Monocraft.ttf",15, 0,0,255);
+        playerName.setShadowOn(false);
     }
 
     @Override
@@ -129,6 +134,9 @@ public class Player extends Entity {
         //move camera
         isten.getCamera().setPosition(playerCollider.getPosition());
 
+        //play sound
+        if(!AudioManager.isPlaying(playerSound))
+            playerSound=AudioManager.playSound("./assets/audio/playersound.ogg");
     }
 
     @Override
