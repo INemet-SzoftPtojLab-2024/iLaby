@@ -3,17 +3,22 @@ package main.java.org.items;
 import main.java.org.game.Isten;
 import main.java.org.game.Map.Map;
 import main.java.org.game.Map.UnitRoom;
+import main.java.org.game.Map.Wall;
 import main.java.org.game.physics.Collider;
 import main.java.org.game.physics.ColliderGroup;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
 
+import static java.lang.Math.sqrt;
+
 /**
  * This class generates chests around the map randomly.
- * Rules: There arent any chests in front of doors.
+ * Rules: There aren't any chests in front of doors.
  * Every chest is next to a wall and headed against the wall.
  */
 public class ChestManager extends Updatable {
@@ -53,15 +58,15 @@ public class ChestManager extends Updatable {
             while(isThereChest.get(randomUnitRoom)){
                 randomUnitRoom=rand.nextInt(placeableUnitRooms.size());
             }
-            int wall=wallInUnitRoomPicker(placeableUnitRooms.get(randomUnitRoom));
+            WallLocation wall= wallInUnitRoomPicker(placeableUnitRooms.get(randomUnitRoom));
             Vec2 chestPos=null;
             switch (wall) {//0=left, 1=top, 2=right, 3=bottom
-                case 0 : chestPos=new Vec2(placeableUnitRooms.get(randomUnitRoom).getPosition().x - 0.3f, placeableUnitRooms.get(randomUnitRoom).getPosition().y);break;
-                case 1 :chestPos=new Vec2(placeableUnitRooms.get(randomUnitRoom).getPosition().x, placeableUnitRooms.get(randomUnitRoom).getPosition().y + 0.3f);break;
-                case 2: chestPos=new Vec2(placeableUnitRooms.get(randomUnitRoom).getPosition().x + 0.3f, placeableUnitRooms.get(randomUnitRoom).getPosition().y);break;
-                case 3: chestPos=new Vec2(placeableUnitRooms.get(randomUnitRoom).getPosition().x, placeableUnitRooms.get(randomUnitRoom).getPosition().y - 0.3f);break;
+                case LEFT: chestPos=new Vec2(placeableUnitRooms.get(randomUnitRoom).getPosition().x - 0.3f, placeableUnitRooms.get(randomUnitRoom).getPosition().y);break;
+                case TOP :chestPos=new Vec2(placeableUnitRooms.get(randomUnitRoom).getPosition().x, placeableUnitRooms.get(randomUnitRoom).getPosition().y + 0.3f);break;
+                case RIGHT: chestPos=new Vec2(placeableUnitRooms.get(randomUnitRoom).getPosition().x + 0.3f, placeableUnitRooms.get(randomUnitRoom).getPosition().y);break;
+                case BOTTOM: chestPos=new Vec2(placeableUnitRooms.get(randomUnitRoom).getPosition().x, placeableUnitRooms.get(randomUnitRoom).getPosition().y - 0.3f);break;
             };
-            chests.add( new Chest(chestPos,isten,wall));
+            chests.add( new Chest(chestPos,isten, wall.ordinal()));
             isThereChest.set(randomUnitRoom,true);
         }
         ColliderGroup chestColliders=new ColliderGroup();
@@ -74,41 +79,67 @@ public class ChestManager extends Updatable {
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-
+        if(isten.getInputHandler().isKeyDown(KeyEvent.VK_E)){
+            Vec2 playerPostion = isten.getPlayer().getPlayerCollider().getPosition();
+            for(var chest : chests){
+                Vec2 playerChestVector = Vec2.subtract(playerPostion,chest.getPosition());
+                double playerChestDistance = sqrt(Vec2.dot(playerChestVector,playerChestVector));
+                if(playerChestDistance <= 0.5 && !chest.isOpened()){
+                    chest.open();
+                    break;
+                }
+            }
+        }
     }
 
     @Override
     public void onDestroy() {
 
     }
-    private int wallInUnitRoomPicker(UnitRoom unitRoom ){
+    private WallLocation wallInUnitRoomPicker(UnitRoom unitRoom ){
 
-        int wall;//0=left, 1=top, 2=right, 3=bottom
-        if(unitRoom.getOwnerRoom().getID()%4==0){
-            if(unitRoom.getLeftIsWall())wall=0;
-            else if(unitRoom.getTopIsWall())wall=1;
-            else if(unitRoom.getRightIsWall())wall=2;
-            else wall=3;
-        }
-        else if(unitRoom.getOwnerRoom().getID()%4==1){
-            if(unitRoom.getTopIsWall())wall=1;
-            else if(unitRoom.getRightIsWall())wall=2;
-            else if(unitRoom.getBottomIsWall())wall=3;
-            else wall=0;
-        }
-        else if(unitRoom.getOwnerRoom().getID()%4==2){
-            if(unitRoom.getRightIsWall())wall=2;
-            else if(unitRoom.getBottomIsWall())wall=3;
-            else if(unitRoom.getLeftIsWall())wall=0;
-            else wall=1;
-        }
-        else{
-            if(unitRoom.getBottomIsWall())wall=3;
-            else if(unitRoom.getLeftIsWall())wall=0;
-            else if(unitRoom.getTopIsWall())wall=1;
-            else wall=2;
-        }
-        return wall;
+        WallLocation wall;//0=left, 1=top, 2=right, 3=bottom
+        ArrayList<WallLocation> walls = new ArrayList<>();
+        if(unitRoom.getLeftIsWall())walls.add(WallLocation.LEFT);
+        if(unitRoom.getTopIsWall())walls.add(WallLocation.TOP);
+        if(unitRoom.getRightIsWall())walls.add(WallLocation.RIGHT);
+        if(unitRoom.getBottomIsWall()) walls.add(WallLocation.BOTTOM);
 
+        Random random = new Random();
+        return walls.get(random.nextInt(walls.size()));
+
+//        if(unitRoom.getOwnerRoom().getID()%4==0){
+//            if(unitRoom.getLeftIsWall())wall= WallLocation.LEFT;
+//            else if(unitRoom.getTopIsWall())wall=WallLocation.TOP;
+//            else if(unitRoom.getRightIsWall())wall=WallLocation.RIGHT;
+//            else wall= WallLocation.BOTTOM;
+//        }
+//        else if(unitRoom.getOwnerRoom().getID()%4==1){
+//            if(unitRoom.getTopIsWall())wall=WallLocation.TOP;
+//            else if(unitRoom.getRightIsWall())wall=WallLocation.RIGHT;
+//            else if(unitRoom.getBottomIsWall())wall=WallLocation.BOTTOM;
+//            else wall= WallLocation.LEFT;
+//        }
+//        else if(unitRoom.getOwnerRoom().getID()%4==2){
+//            if(unitRoom.getRightIsWall())wall=WallLocation.RIGHT;
+//            else if(unitRoom.getBottomIsWall())wall=WallLocation.BOTTOM;
+//            else if(unitRoom.getLeftIsWall())wall= WallLocation.LEFT;
+//            else wall=WallLocation.TOP;
+//        }
+//        else{
+//            if(unitRoom.getBottomIsWall())wall=WallLocation.BOTTOM;
+//            else if(unitRoom.getLeftIsWall())wall= WallLocation.LEFT;
+//            else if(unitRoom.getTopIsWall())wall= WallLocation.TOP;
+//            else wall=WallLocation.RIGHT;
+//        }
+
+
+    }
+
+    public enum WallLocation {
+        LEFT,
+        TOP,
+        RIGHT,
+        BOTTOM
     }
 }
