@@ -5,6 +5,8 @@ import main.java.org.game.Graphics.ImageUI;
 import main.java.org.game.Isten;
 import main.java.org.linalg.Vec2;
 
+import java.time.LocalDateTime;
+
 /*TVSZ denevérbőrre nyomtatott példányai
 Gasmask
 Transistor
@@ -23,9 +25,12 @@ public abstract class Item {
     protected Image image;
     protected final Isten isten;
     protected String imagePath;
+
+    private LocalDateTime droppedAt;
     public Item(Isten isten){
         location=Location.CHEST;
         position=null;
+        droppedAt = null;
         this.isten=isten;
         isten.getItemManager().addItem(this);
     }
@@ -33,13 +38,15 @@ public abstract class Item {
         if(!location.equals(Location.GROUND)){
             location = Location.GROUND;
             position = pos;
-            image = new Image(position, scale, imagePath);
-            isten.getRenderer().addRenderable(image);
+            image.setPosition(pos);
             image.setVisibility(true);
+            droppedAt = LocalDateTime.now();
         }
     }
     public void pickUpInInventory(){
-        if(!location.equals(Location.INVENTORY)) {
+        //Pics up an item if it is not in the inventory, and it has been dropped for more than 200 millisec
+        //1 ms = 1000000 ns
+        if((!location.equals(Location.INVENTORY) && droppedAt.isBefore((LocalDateTime.now()).minusNanos(200000000)))) {
             location = Location.INVENTORY;
             image.setVisibility(false);
             isten.getInventory().addItem(this);

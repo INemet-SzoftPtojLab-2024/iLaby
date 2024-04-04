@@ -44,11 +44,6 @@ public class Chest {
         isten.getRenderer().addRenderable(chestImage);
     }
     public void open() {
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         chestImage.setVisibility(false);
         switch(heading){
             case RIGHT: {
