@@ -16,8 +16,8 @@ import javax.imageio.ImageIO;
 public class Text extends Renderable {
     private String text;
     private Font font;
-    private final Color color;
     private boolean shadowOn=true;//is the shadow of the text rendered
+    private Color color=Color.white;
 
     /**
      * Default constructor for Text.
@@ -25,7 +25,7 @@ public class Text extends Renderable {
      */
     public Text() {
         font = new Font("Dialog", Font.PLAIN, 14);
-        color = Color.WHITE;
+        setColor(Color.WHITE);
         text = "Basic Text";
     }
 
@@ -44,7 +44,7 @@ public class Text extends Renderable {
 
         this.position = pos;
         this.font=loadFont_internal(fontPath, Font.BOLD, fontSize);
-        color = new Color(r,g,b);
+        setColor(new Color(r,g,b));
         this.text = text;
     }
 
@@ -62,7 +62,7 @@ public class Text extends Renderable {
 
         this.position = pos;
         font = new Font("Dialog", Font.BOLD, fontSize);
-        color = new Color(r,g,b);
+        setColor(new Color(r,g,b));
         this.text = text;
     }
 
@@ -124,7 +124,7 @@ public class Text extends Renderable {
         }
 
         //Text with its color
-        graphics.setColor(color);
+        graphics.setColor(this.getColor());
         graphics.drawString(text, (int)tempPos.x, (int)tempPos.y);
     }
 
@@ -140,15 +140,17 @@ public class Text extends Renderable {
         this.text=text;
      }
 
+    public final Color getColor(){
+        return color;
+    }
+    public final void setColor(Color color){
+        this.color=color;
+    }
+
     @Override
     public boolean isUIElement()
     {
         return false;
-    }
-
-
-    public Color getColor() {
-        return color;
     }
 
     /** is the shadow of the text rendered <br>
