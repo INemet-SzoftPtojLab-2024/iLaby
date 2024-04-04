@@ -26,12 +26,12 @@ public class ItemManager extends Updatable {
     public void onUpdate(Isten isten, double deltaTime) {
         if(isten.getInputHandler().isKeyDown(KeyEvent.VK_E)){
             Vec2 playerPostion = isten.getPlayer().getPlayerCollider().getPosition();
-            for(var item : items){
-                if(item.location== Item.Location.GROUND) {
-                    Vec2 playerItemVector = Vec2.subtract(playerPostion, item.getPosition());
+            for(int i = 0; i < items.size(); i++){
+                if(items.get(i).location== Item.Location.GROUND) {
+                    Vec2 playerItemVector = Vec2.subtract(playerPostion, items.get(i).getPosition());
                     double playerItemDistance = sqrt(Vec2.dot(playerItemVector, playerItemVector));
                     if (playerItemDistance <= 0.3) {
-                        item.pickUpInInventory();
+                        items.get(i).pickUpInInventory();
                         break;
                     }
                 }
