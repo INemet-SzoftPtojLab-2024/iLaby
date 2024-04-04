@@ -97,9 +97,10 @@ public class Inventory extends Updatable {
             itemIcons.add(tmp);
         }
         else {
+            storedItems.get(selectedSlot-1).dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
             storedItems.set(selectedSlot - 1, item);
-             tmp=new ImageUI(getSlotLocation(selectedSlot),new Vec2(iconSize,iconSize),item.getImagePath());
-             itemIcons.get(selectedSlot-1).setVisibility(false);
+            tmp=new ImageUI(getSlotLocation(selectedSlot),new Vec2(iconSize,iconSize),item.getImagePath());
+            itemIcons.get(selectedSlot-1).setVisibility(false);
             itemIcons.set(selectedSlot - 1,tmp);
         }
         tmp.setAlignment(Renderable.CENTER,Renderable.BOTTOM);
