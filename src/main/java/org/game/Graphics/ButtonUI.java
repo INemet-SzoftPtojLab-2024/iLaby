@@ -8,7 +8,14 @@ import java.awt.image.BufferedImage;
 public class ButtonUI extends Renderable{
 
     private ImageUI image=null;
+    private String imagePath=null;
+
     private TextUI text=null;
+    private String textText="";
+    private String textFontPath=null;
+    private int textFontSize=24;
+    private int textColorR=255, textColorG=255, textColorB=255;
+
     private ClickListener onClick=null;
     private boolean isHovered=false, isHeld=false;
 
@@ -16,6 +23,9 @@ public class ButtonUI extends Renderable{
     {
         this.setPosition(pos);
         this.setScale(scale);
+
+        refreshImageInternal();
+        refreshTextInternal();
     }
 
     public ButtonUI(Vec2 pos, Vec2 scale, String imagePath, String text, String fontPath, int fontSize)
@@ -23,11 +33,13 @@ public class ButtonUI extends Renderable{
         this.setPosition(pos);
         this.setScale(scale);
 
-        this.image=new ImageUI(pos, scale,imagePath);
-        this.image.setAlignment(this.getHorizontalAlignment(),this.getVerticalAlignment());
+        this.imagePath=imagePath;
+        refreshImageInternal();
 
-        this.text=new TextUI(text,pos, fontPath, fontSize,255,255,255);
-        this.text.setAlignment(this.getHorizontalAlignment(),this.getVerticalAlignment());
+        this.textText=text;
+        this.textFontPath=fontPath;
+        this.textFontSize=fontSize;
+        refreshTextInternal();
     }
 
     @Override
@@ -42,12 +54,13 @@ public class ButtonUI extends Renderable{
         {
             image.setRenderedPosition(this.renderedPosition);
             image.setRenderedScale(this.renderedScale);
+            image.setAlignment(this.getHorizontalAlignment(),this.getVerticalAlignment());
             image.render(graphics);
         }
         if(text!=null)
         {
             text.setRenderedPosition(this.renderedPosition);
-            text.setRenderedScale(this.renderedScale);
+            text.setAlignment(this.getHorizontalAlignment(),this.getVerticalAlignment());
             text.render(graphics);
         }
 
@@ -105,5 +118,71 @@ public class ButtonUI extends Renderable{
     public void addClickListener(ClickListener clk_amg)
     {
         onClick=clk_amg;
+    }
+
+    /** sets the text in the button  */
+    public void setText(String text)
+    {
+        this.textText=text;
+        refreshTextInternal();
+    }
+
+    /** sets the font size of the text in the button */
+    public void setFontSize(int fontSize)
+    {
+        this.textFontSize=fontSize;
+        refreshTextInternal();
+    }
+
+    /** sets the font of the text in the button */
+    public void setFont(String fontPath)
+    {
+        this.textFontPath=fontPath;
+        refreshTextInternal();
+    }
+
+    /** sets the colour of the text in the button */
+    public void setTextColor(int r, int g, int b)
+    {
+        this.textColorR=r;
+        this.textColorG=g;
+        this.textColorB=b;
+        if(this.text!=null)
+            this.text.setColor(new Color(this.textColorR, this.textColorG, this.textColorB));
+    }
+
+
+    /** sets the background image of the button */
+    public void setImage(String imagePath)
+    {
+        this.imagePath=imagePath;
+        refreshImageInternal();
+    }
+
+
+    private void refreshTextInternal()
+    {
+        if(textText==null||textText.isBlank())
+        {
+            this.text=null;
+            return;
+        }
+
+        if(this.textFontPath==null)
+            this.text=new TextUI(this.textText,new Vec2(), this.textFontSize,this.textColorR,this.textColorG,this.textColorB);
+        else
+            this.text=new TextUI(this.textText,new Vec2(), this.textFontPath, this.textFontSize,this.textColorR,this.textColorG,this.textColorB);
+        this.text.setShadowOn(false);
+    }
+
+    private void refreshImageInternal()
+    {
+        if(this.imagePath==null||this.imagePath.isBlank())
+        {
+            this.image=null;
+            return;
+        }
+
+        this.image=new ImageUI(new Vec2(), new Vec2(),this.imagePath);
     }
 }

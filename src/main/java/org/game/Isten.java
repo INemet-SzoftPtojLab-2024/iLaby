@@ -18,10 +18,15 @@ import java.util.ArrayList;
  */
 public class Isten {
     private final PhysicsEngine physicsEngine;
+
     private final GameRenderer renderer;
+
     private final ArrayList<Updatable> updatables;
-    private final ArrayList<Updatable> pendingUpdatables;
+    private final ArrayList<Updatable> pendingAddedUpdatables;
+    private final ArrayList<Updatable> pendingRemovedUpdatables;
+
     private final Input inputHandler;
+
     private final Camera camera;
 
     /**
@@ -34,7 +39,8 @@ public class Isten {
         physicsEngine=new PhysicsEngine();
         renderer=new GameRenderer(camera, inputHandler);
         updatables=new ArrayList<>();
-        pendingUpdatables=new ArrayList<>();
+        pendingAddedUpdatables=new ArrayList<>();
+        pendingRemovedUpdatables=new ArrayList<>();
     }
 
     /**
@@ -50,12 +56,19 @@ public class Isten {
         physicsEngine.step(deltaTime);
 
 
+        //remove pending updatables from updatables
+        for(Updatable u : pendingRemovedUpdatables)
+            if(!u.isDestroyed())
+            {
+                u.setDestroyedTrue();
+                u.onDestroy();
+            }
+        updatables.removeAll(pendingRemovedUpdatables);
+        pendingRemovedUpdatables.clear();
+
         //add pending updatables to updatables
-        for(Updatable u : pendingUpdatables)
-        {
-            updatables.add(u);
-        }
-        pendingUpdatables.clear();
+        updatables.addAll(pendingAddedUpdatables);
+        pendingAddedUpdatables.clear();
 
         //check if updatable has been initialized
         for(Updatable u : updatables)
@@ -120,11 +133,11 @@ public class Isten {
 
     public void addUpdatable(Updatable u)
     {
-        pendingUpdatables.add(u);
+        pendingAddedUpdatables.add(u);
     }
 
     public void removeUpdatable(Updatable u)
     {
-        updatables.remove(u);
+        pendingRemovedUpdatables.add(u);
     }
 }
