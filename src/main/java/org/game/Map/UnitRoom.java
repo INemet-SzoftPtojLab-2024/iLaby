@@ -134,10 +134,10 @@ public class UnitRoom implements Graph<UnitRoom>{
             topWall = createWallWithCollider(isten, wallTopPos, midColliderScale, wallPath);
         }
         if(bottomIsDoor) {
-            //bottomWall = createDoorWithoutCollider(isten, wallBottomPos, midColliderScale, doorPath);
+            bottomWall = createDoorWithoutCollider(isten, wallBottomPos, midColliderScale, doorPath);
         }
         else if(!hasBottom) {
-            //bottomWall = createWallWithCollider(isten, wallBottomPos, midColliderScale, wallPath);
+            bottomWall = createWallWithCollider(isten, wallBottomPos, midColliderScale, wallPath);
         }
         if(rightIsDoor) {
             rightWall = createDoorWithoutCollider(isten, wallRightPos, outerColliderScale, doorPath);
@@ -146,10 +146,10 @@ public class UnitRoom implements Graph<UnitRoom>{
             rightWall = createWallWithCollider(isten, wallRightPos, outerColliderScale, wallPath);
         }
         if(leftIsDoor) {
-            //leftWall = createDoorWithoutCollider(isten, wallLeftPos, outerColliderScale, doorPath);
+            leftWall = createDoorWithoutCollider(isten, wallLeftPos, outerColliderScale, doorPath);
         }
         else if(!hasLeft) {
-            //leftWall = createWallWithCollider(isten, wallLeftPos, outerColliderScale, wallPath);
+            leftWall = createWallWithCollider(isten, wallLeftPos, outerColliderScale, wallPath);
         }
     }
 
@@ -190,6 +190,7 @@ public class UnitRoom implements Graph<UnitRoom>{
 
             if(image == null){
                 img = new Image(position, new Vec2(1,1), path);
+                img.setSortingLayer(40);
                 setImage(img);
                 isten.getRenderer().addRenderable(img);
             }

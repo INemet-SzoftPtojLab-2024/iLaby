@@ -13,27 +13,30 @@ public class Map extends Updatable {
     private Mapgenerator mapgenerator;
     ArrayList<Room> rooms;
     private UnitRoom[][] unitRooms;
-    private int mapRowSize;
-    private int mapColumnSize;
+    private final int mapRowSize;
+    private final int mapColumnSize;
     private EdgeManager edgeManager;
+    private final int minRoomSize;
     //private boolean
 
     @Override
     public void onStart(Isten isten) {
-        mapgenerator = new Mapgenerator(rooms,unitRooms, mapRowSize, mapColumnSize, isten);
-        mapgenerator.generate(15);
-        unitRooms = mapgenerator.getUnitRooms();
-        rooms = mapgenerator.getRooms();
+        //mapgenerator = new Mapgenerator(rooms,unitRooms, mapRowSize, mapColumnSize, isten);
+        mapgenerator = new Mapgenerator(this, isten);
+        mapgenerator.generate(minRoomSize);
+
         mapgenerator.defineEdges();
-        edgeManager = mapgenerator.getEdgeManager();
         printMap();
     }
 
-    public Map(int rowNumber, int columnNumber){
+    public Map(int rowNumber, int columnNumber, int minRoomSize){
         this.mapRowSize = rowNumber;
         this.mapColumnSize = columnNumber;
+        this.minRoomSize = minRoomSize;
         //unitrooms is set in the generator --> onstart
         this.rooms = new ArrayList<>();
+        this.edgeManager = new EdgeManager();
+        initUnitRooms();
 
     }
 
@@ -45,7 +48,7 @@ public class Map extends Updatable {
 
         //for testing
         delta += deltaTime;
-        if(delta > 30 && !merged) {
+        if(delta > 10 && !merged) {
             mergeRooms(rooms.get(0), rooms.get(0).getAdjacentRooms().get(0), isten);
             System.out.println();
             System.out.println();
@@ -58,6 +61,16 @@ public class Map extends Updatable {
     @Override
     public void onDestroy() {
 
+    }
+    public void initUnitRooms(){
+        unitRooms = new UnitRoom[mapRowSize][mapColumnSize];
+        for(int i = 0; i<mapRowSize;i++)
+        {
+            for(int j = 0;j<mapColumnSize;j++)
+            {
+                unitRooms[i][j] = new UnitRoom(new Vec2(i,j));
+            }
+        }
     }
 
     private boolean splitRooms(Room r1)
@@ -203,7 +216,7 @@ public class Map extends Updatable {
         return ret;
     }
 
-    //ez a fv a mapgenerátorban is hasonlóan szerepel
+    //ez a fv a mapgenerátorban is hasonlóan szerepel (colliderek és imagek nélkül)
     private void mergeRooms(Room r1, Room r2, Isten isten) {
         if(!r1.isAdjacent(r2) || r1.getID() == r2.getID()){
             System.err.println("cant be merged");
@@ -257,9 +270,6 @@ public class Map extends Updatable {
 
     }
 
-
-
-
     //merge the rooms until every room has minimumm size of the given number
     private void printMap(){
         for(int i = 0;i < mapRowSize;i++){ //test
@@ -294,4 +304,13 @@ public class Map extends Updatable {
     public UnitRoom[][] getUnitRooms() {
         return unitRooms;
     }
+
+    public int getMapRowSize() {
+        return mapRowSize;
+    }
+
+    public int getMapColumnSize() {
+        return mapColumnSize;
+    }
+    public EdgeManager getEdgeManager(){ return edgeManager;}
 }
