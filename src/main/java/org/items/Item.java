@@ -45,7 +45,7 @@ public abstract class Item {
     }
     public void pickUpInInventory(){
         //Pics up an item if it is not in the inventory, and it has been dropped for more than 200 millisec
-        //1 ms = 1000000 ns
+        //1 ms = 1000000 ns :)
         if((!location.equals(Location.INVENTORY) && droppedAt.isBefore((LocalDateTime.now()).minusNanos(200000000)))) {
             location = Location.INVENTORY;
             image.setVisibility(false);
