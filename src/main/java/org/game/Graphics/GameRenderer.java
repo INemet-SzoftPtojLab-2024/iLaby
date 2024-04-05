@@ -78,8 +78,9 @@ public class GameRenderer extends JPanel implements ActionListener {
         boolean mouseReleased=input.isMouseButtonReleased(Input.MOUSE_LEFT);
         boolean mouseClicked=input.isMouseButtonClicked(Input.MOUSE_LEFT);
 
-        for(Renderable roblox : renderables)
+        for(int i=0;i<renderables.size();i++)
         {
+            Renderable roblox=renderables.get(i);
             if(roblox.isUIElement()&&roblox.getVisibility())
                 roblox.processInput(mousePos,mousePressed,mouseHeld,mouseReleased,mouseClicked);
         }
