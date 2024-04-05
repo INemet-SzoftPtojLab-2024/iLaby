@@ -157,4 +157,14 @@ public class GameRenderer extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         //Needed for implementation
     }
+    public void deleteRenderable(Renderable r){
+        for(int i=0;i<renderables.size();i++)
+        {
+            if(renderables.get(i).equals(r))
+            {
+                renderables.remove(i);
+                break;
+            }
+        }
+    }
 }

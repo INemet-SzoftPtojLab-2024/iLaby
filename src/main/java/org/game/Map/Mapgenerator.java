@@ -1,91 +1,121 @@
 package main.java.org.game.Map;
 
-import main.java.org.game.Graphics.Image;
 import main.java.org.game.Isten;
+import main.java.org.game.physics.Collider;
+import main.java.org.game.physics.ColliderGroup;
 import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 
+/**
+ * this class is only used at the beginning of a game, when a map needs to be generated
+ */
 public class Mapgenerator {
-    ArrayList<Room> rooms;
-    private UnitRoom[][] unitRooms;
-    private int mapRowSize;
-    private int mapColumnSize;
+    private Map map;
     private Isten isten;
-    public Mapgenerator(ArrayList<Room> rooms, UnitRoom[][] unitRooms, int mapRowSize, int mapColumnSize, Isten isten){
+    public Mapgenerator(Map map, Isten isten){
         this.isten = isten;
-        this.rooms = rooms;
-        this.mapColumnSize = mapColumnSize;
-        this.mapRowSize = mapRowSize;
-        generateUnitRooms();
+        this.map = map;
     }
 
-    public ArrayList<Room> getRooms() {return rooms;}
 
-    public UnitRoom[][] getUnitRooms() {return unitRooms;}
-
-    public void generate(){
-
-        for(int i = 0; i<mapRowSize;i++)
+    public void generate(int minRoomSize){
+        //collidergroup for the sideWalls
+        ColliderGroup sideWallColliders = new ColliderGroup();
+        Vec2 horizontalScale = new Vec2(1f, 0.1f); //vizszintes
+        Vec2 verticalScale = new Vec2(0.1f, 1f); //fuggoleges
+        String wallPath = "./assets/rooms/11.png";
+        for(int i = 0; i< map.getMapRowSize(); i++)
         {
-            for(int j = 0;j<mapColumnSize;j++)
+            for(int j = 0;j<map.getMapColumnSize();j++)
             {
-                if(i>0) unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i-1][j]);
-                if(j>0) unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i][j-1]);
-                if(i<mapRowSize-1) unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i+1][j]);
-                if(j<mapColumnSize-1) unitRooms[i][j].getAdjacentUnitRooms().add(unitRooms[i][j+1]);
+                UnitRoom actualUnitRoom = map.getUnitRooms()[i][j];
+                if(i>0){
+                    actualUnitRoom.getAdjacentUnitRooms().add(map.getUnitRooms()[i-1][j]);
+                    map.getUnitRooms()[i][j].setBottomNeighbor(map.getUnitRooms()[i-1][j]);
+                }
+                if(j>0){
+                    actualUnitRoom.getAdjacentUnitRooms().add(map.getUnitRooms()[i][j-1]);
+                    actualUnitRoom.setLeftNeighbor(map.getUnitRooms()[i][j - 1]);
+                }
+                if(i< map.getMapRowSize() -1){
+                    actualUnitRoom.getAdjacentUnitRooms().add(map.getUnitRooms()[i+1][j]);
+                    actualUnitRoom.setTopNeighbor(map.getUnitRooms()[i + 1][j]);
+                }
+                if(j<map.getMapColumnSize()-1) {
+                    actualUnitRoom.getAdjacentUnitRooms().add(map.getUnitRooms()[i][j+1]);
+                    actualUnitRoom.setRightNeighbor(map.getUnitRooms()[i][j + 1]);
+                }
+
+
+                //let's generate also the sideWalls, because they are fix
+                //note: that the corner unitrooms can fulfill two conditions
+                if(actualUnitRoom.getRightNeighbor() == null){ //if the unitroom hasn't got right neigbour
+                    Vec2 wallRightPos = new Vec2(actualUnitRoom.getColNum() + 0.5f, actualUnitRoom.getRowNum());
+                    Collider wallCollider = new Collider(wallRightPos, verticalScale);
+                    sideWallColliders.addCollider(wallCollider);
+                    Wall newWall = new Wall(wallCollider,wallRightPos , actualUnitRoom);
+                    newWall.setNewImage(wallPath, verticalScale, isten);
+                }
+                if(actualUnitRoom.getLeftNeighbor() == null){ //if the unitroom hasn't got left neigbour
+                    Vec2 wallLeftPos = new Vec2(actualUnitRoom.getColNum() - 0.5f, actualUnitRoom.getRowNum());
+                    Collider wallCollider = new Collider(wallLeftPos, verticalScale);
+                    sideWallColliders.addCollider(wallCollider);
+                    Wall newWall = new Wall(wallCollider,wallLeftPos , actualUnitRoom);
+                    newWall.setNewImage(wallPath, verticalScale, isten);
+                }
+                if(actualUnitRoom.getTopNeighbor() == null){ //if the unitroom hasn't got top neigbour
+                    Vec2 wallTopPos = new Vec2(actualUnitRoom.getColNum(), actualUnitRoom.getRowNum() + 0.5f);
+                    Collider wallCollider = new Collider(wallTopPos, horizontalScale);
+                    sideWallColliders.addCollider(wallCollider);
+                    Wall newWall = new Wall(wallCollider,wallTopPos , actualUnitRoom);
+                    newWall.setNewImage(wallPath, horizontalScale, isten);
+                }
+                if(actualUnitRoom.getBottomNeighbor() == null){ //if the unitroom hasn't got bottom neigbour
+                    Vec2 wallBottomPos = new Vec2(actualUnitRoom.getColNum(), actualUnitRoom.getRowNum() - 0.5f);
+                    Collider wallCollider = new Collider(wallBottomPos, horizontalScale);
+                    sideWallColliders.addCollider(wallCollider);
+                    Wall newWall = new Wall(wallCollider,wallBottomPos , actualUnitRoom);
+                    newWall.setNewImage(wallPath, horizontalScale, isten);
+                }
+
             }
         }
+        //add the collidergroup to the system
+        isten.getPhysicsEngine().addColliderGroup(sideWallColliders);
 
-        int[] randomNums = shuffleUnitRooms();
-        for(int number : randomNums ){
-            int i = (int)(number / mapColumnSize);
-            int j = (number % mapColumnSize);
-            chosenUnitRoom(unitRooms[i][j]);
+        ArrayList<Integer> shuffledNums = new ArrayList<>();
+        for(int i = 0; i < map.getMapRowSize() * map.getMapColumnSize(); i++){
+            shuffledNums.add(i);
+        }
+        Collections.shuffle(shuffledNums);
+
+        for(int number : shuffledNums ){
+            int i = (int)(number / map.getMapColumnSize());
+            int j = (number % map.getMapColumnSize());
+            chosenUnitRoom(map.getUnitRooms()[i][j]);
         }
 
         //merge some room to get bigger rooms
         //merge the rooms until every room has minimumm size of the given number
-        mergeRoomsUntilGivenSizeReached(15);
+        mergeRoomsUntilGivenSizeReached(minRoomSize);
         //add the images to the unitrooms
         addImages();
         //create the walls of the rooms
-        createWallsForMap();
+        defineEdges();
 
-        for(Room room: rooms) {
+        map.getEdgeManager().initDoors(isten);
+
+        for(Room room: map.getRooms()) {
             isten.addUpdatable(room);
         }
     }
-    public void generateUnitRooms(){
-        unitRooms = new UnitRoom[mapRowSize][mapColumnSize];
-        for(int i = 0; i<mapRowSize;i++)
-        {
-            for(int j = 0;j<mapColumnSize;j++)
-            {
-                unitRooms[i][j] = new UnitRoom(new Vec2(i,j));
-            }
-        }
-    }
-    public int[] shuffleUnitRooms(){
-        int n = mapRowSize * mapColumnSize;
-        int numbers[] = new int[n];
-        for(int i = 0; i < n; i++){
-            numbers[i] = i;
-        }
-        Random rand = new Random();
-        for (int i = n - 1; i >= 0; i--) {
-            int j = rand.nextInt(i + 1);
-            int temp = numbers[j];
-            numbers[j] = numbers[i];
-            numbers[i] = temp;
-        }
-        return numbers;
-    }
+
+
     public void chosenUnitRoom(UnitRoom unitRoom){
         int minimalRoomSize  = Integer.MAX_VALUE;
-        Room minimalRoom = new Room(1);
+        Room minimalRoom = new Room();
         ArrayList<Room> unitRoomNeighbourRooms = new ArrayList<>(); // itt taroljuk majd azokat, amik a unitroom szomszedos, de nem kerultek kivalasztasra
         for(UnitRoom neighbour : unitRoom.getAdjacentUnitRooms()){
             if(neighbour.isInRoom()){
@@ -99,10 +129,10 @@ public class Mapgenerator {
         }
         if(unitRoomNeighbourRooms.isEmpty()){
             //System.out.println("Új szoba kerül felvételre ID-val:" + unitRoom.getRowNum()*mapRowSize+unitRoom.getColNum());
-            Room newRoom = new Room(unitRoom.getRowNum()*mapRowSize+unitRoom.getColNum());
+            Room newRoom = new Room(unitRoom.getRowNum()* map.getMapRowSize() +unitRoom.getColNum());
             unitRoom.setOwnerRoom(newRoom);
             newRoom.getUnitRooms().add(unitRoom);
-            rooms.add(newRoom);
+            map.getRooms().add(newRoom);
             //System.out.println("A szoba tömb mérete: " + rooms.size());
         }
         else{
@@ -128,20 +158,20 @@ public class Mapgenerator {
     void mergeRoomsUntilGivenSizeReached(int size){
         int minSize;
         Room r1;
-        Room r2 = rooms.get(0);
+        Room r2 = map.getRooms().get(0);
         boolean merge = true;
         while(merge) {
             minSize = Integer.MAX_VALUE;
             //System.out.println("RoomNum befor merge: " + rooms.size());
-            for (int i = 0; i < rooms.size(); i++) {
-                if (rooms.get(i).getUnitRooms().size() <= size) { //if smaller than 6 unitrooms --> merge
-                    r1 = rooms.get(i);
+            for (int i = 0; i < map.getRooms().size(); i++) {
+                if (map.getRooms().get(i).getUnitRooms().size() <= size) { //if smaller than 6 unitrooms --> merge
+                    r1 = map.getRooms().get(i);
                     //search the smallest adjacentroom
                     //System.out.println("adjroomsize:" + rooms.get(i).getAdjacentRooms().size());
-                    for (int j = 0; j < rooms.get(i).getAdjacentRooms().size(); j++) {
-                        if (rooms.get(i).getAdjacentRooms().get(j).getUnitRooms().size() < minSize) {
-                            minSize = rooms.get(i).getAdjacentRooms().get(j).getUnitRooms().size();
-                            r2 = rooms.get(i).getAdjacentRooms().get(j);
+                    for (int j = 0; j < map.getRooms().get(i).getAdjacentRooms().size(); j++) {
+                        if (map.getRooms().get(i).getAdjacentRooms().get(j).getUnitRooms().size() < minSize) {
+                            minSize = map.getRooms().get(i).getAdjacentRooms().get(j).getUnitRooms().size();
+                            r2 = map.getRooms().get(i).getAdjacentRooms().get(j);
                         }
                     }
                     //System.out.println("minsize: " + minSize);
@@ -150,7 +180,7 @@ public class Mapgenerator {
                     break; // we have found the two mergeable rooms
 
                 }
-                if (i == rooms.size() - 1) {
+                if (i == map.getRooms().size() - 1) {
                     merge = false;
                     break;
                 }
@@ -159,23 +189,10 @@ public class Mapgenerator {
             //System.out.println();
         }
     }
-    private void addImages() {
-        Image img;
-        int roomImageCount = 9;
-        int j;
-        for(Room room: rooms) {
-            switch (room.getRoomType()){
-                case GAS -> j = 1;
-                case SHADOW -> j = 2;
-                case CURSED -> j = 3;
-                case BASIC -> j = 4;
-                default -> j = 0;
-            }
-            String path = "./assets/rooms/" + j + ".png";
+    public void addImages() {
+        for(Room room: map.getRooms()) {
             for(UnitRoom unitRoom: room.getUnitRooms()) {
-
-                img = new Image(unitRoom.getPosition(), new Vec2(1,1), path);
-                isten.getRenderer().addRenderable(img);
+                unitRoom.addRightImage(isten);
             }
         }
     }
@@ -205,15 +222,17 @@ public class Mapgenerator {
         }
 
         r2.getAdjacentRooms().clear();
-        rooms.remove(r2);
+        map.getRooms().remove(r2);
     }
-    private void createWallsForMap() {
+
+    /*
+    public void createWallsForMap() {
         ArrayList<Integer> randomizedMapRow = new ArrayList<>();
         ArrayList<Integer> randomizedMapColumn = new ArrayList<>();
-        for(int i = 0; i < mapRowSize; i++) {
+        for(int i = 0; i < map.getMapRowSize(); i++) {
             randomizedMapRow.add(i);
         }
-        for(int i = 0; i < mapColumnSize; i++) {
+        for(int i = 0; i < map.getMapColumnSize(); i++) {
             randomizedMapColumn.add(i);
         }
         Collections.shuffle(randomizedMapRow);
@@ -222,8 +241,55 @@ public class Mapgenerator {
         for(int i: randomizedMapRow) {
             // System.out.println("i: " + i);
             for (int j: randomizedMapColumn) {
-                unitRooms[i][j].createWalls(isten);
+                map.getUnitRooms()[i][j].createWalls(isten);
             }
         }
     }
+
+     */
+
+    public void defineEdges(){
+        for(Room r1: map.getRooms()) {
+            for (Room r2 : map.getRooms()) {
+                //ha szomszédosak, és még nincs a két szoba kozott definialva az edge (vagyis a falak)
+                if(r1.isAdjacent(r2) && !map.getEdgeManager().getRoomEdges().contains(map.getEdgeManager().getEdgeBetweenRooms(r1,r2))){
+                    EdgeBetweenRooms newEdge = new EdgeBetweenRooms(r1,r2);
+                    map.getEdgeManager().getRoomEdges().add(newEdge);
+                    // this collidergroup will be filled up, when the walls are created
+                    isten.getPhysicsEngine().addColliderGroup(newEdge.getColliderGroup());
+                }
+            }
+        }
+        fillUpEdgesBetweenRooms();
+    }
+    public void fillUpEdgesBetweenRooms(){
+        Vec2 horizontalScale = new Vec2(1f, 0.1f); //vizszintes
+        Vec2 verticalScale = new Vec2(0.1f, 1f); //fuggoleges
+        for(EdgeBetweenRooms edgeBetweenRoom: map.getEdgeManager().getRoomEdges()){
+            Room r1 = edgeBetweenRoom.getNodeRooms().get(0);
+            Room r2 = edgeBetweenRoom.getNodeRooms().get(1);
+            for(UnitRoom wallFinderUnitRoom: r1.getUnitRooms()){
+                if(wallFinderUnitRoom.getTopNeighbor() != null && wallFinderUnitRoom.getTopNeighbor().getOwnerRoom().equals(r2)){
+                    Vec2 wallTopPos = new Vec2(wallFinderUnitRoom.getColNum(), wallFinderUnitRoom.getRowNum() + 0.5f);
+                    edgeBetweenRoom.addNewWall(wallTopPos, horizontalScale, wallFinderUnitRoom ,wallFinderUnitRoom.getTopNeighbor(), isten);
+                }
+                if(wallFinderUnitRoom.getBottomNeighbor() != null && wallFinderUnitRoom.getBottomNeighbor().getOwnerRoom().equals(r2)){
+                    Vec2 wallBottomPos = new Vec2(wallFinderUnitRoom.getColNum(), wallFinderUnitRoom.getRowNum() - 0.5f);
+                    edgeBetweenRoom.addNewWall(wallBottomPos, horizontalScale, wallFinderUnitRoom, wallFinderUnitRoom.getBottomNeighbor(),isten);
+                }
+                if(wallFinderUnitRoom.getLeftNeighbor() != null && wallFinderUnitRoom.getLeftNeighbor().getOwnerRoom().equals(r2)){
+                    Vec2 wallLeftPos = new Vec2(wallFinderUnitRoom.getColNum() - 0.5f, wallFinderUnitRoom.getRowNum());
+                    edgeBetweenRoom.addNewWall(wallLeftPos, verticalScale, wallFinderUnitRoom, wallFinderUnitRoom.getLeftNeighbor() ,isten);
+                }
+                if(wallFinderUnitRoom.getRightNeighbor() != null && wallFinderUnitRoom.getRightNeighbor().getOwnerRoom().equals(r2)){
+                    Vec2 wallRightPos = new Vec2(wallFinderUnitRoom.getColNum() + 0.5f, wallFinderUnitRoom.getRowNum());
+                    edgeBetweenRoom.addNewWall(wallRightPos, verticalScale, wallFinderUnitRoom, wallFinderUnitRoom.getRightNeighbor(),isten);
+                }
+            }
+        }
+    }
+
+
+
+
 }
