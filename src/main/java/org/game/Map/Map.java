@@ -46,8 +46,9 @@ public class Map extends Updatable {
 
         //for testing
         delta += deltaTime;
-        if(delta > 10 && !merged) {
-            mergeRooms(rooms.get(0), rooms.get(0).getAdjacentRooms().get(0), isten);
+        if(delta > 5 && !merged) {
+            //mergeRooms(rooms.get(0), rooms.get(0).getAdjacentRooms().get(0), isten);
+            splitRooms(rooms.get(0), isten);
             System.out.println();
             System.out.println();
             //printMap();
@@ -71,7 +72,8 @@ public class Map extends Updatable {
         }
     }
 
-    private boolean splitRooms(Room r1)
+    //csak akkor ha minden ajto nyitva van!!
+    private boolean splitRooms(Room r1, Isten isten)
     {
         // removeoljuk a szomszedos roomok szomszedossagi listaibol a szobat, es a func vegen hozzaadjuk a ket szetvalasztott szoba egyiket/mindekettot
         for(Room neighbourRoom : r1.getAdjacentRooms()){
@@ -107,6 +109,16 @@ public class Map extends Updatable {
             rooms.add(newRoom);
             newRoom.setAdjacentRooms();
             r1.setAdjacentRooms();
+
+            //set the images
+            for(UnitRoom unitRoom : newRoom.getUnitRooms()) {
+                unitRoom.addRightImage(isten);
+            }
+            //update nodeRooms and generate the new ones
+            //also updates the images and colliders
+            edgeManager.updateEdgesAfterSplit(r1, newRoom, isten);
+
+
             return true;
         }
         return false;
@@ -226,7 +238,7 @@ public class Map extends Updatable {
         //set colliders
 
         edgeManager.deleteEdge(r1,r2,isten);
-        edgeManager.updateEdges(r1,r2);
+        edgeManager.updateEdgesAfterMerge(r1,r2);
 
         for(UnitRoom unitRoom : r2.getUnitRooms()){
             //r1.getUnitRooms().add(unitroom);

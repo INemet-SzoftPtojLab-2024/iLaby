@@ -45,7 +45,6 @@ public class Wall {
         isten.getRenderer().deleteRenderable(image);
         isten.getPhysicsEngine().getColliderGroup(colliderGroup.id).removeCollider(collider);
         image = null;
-        collider = null;
         position = null;
 
     }
@@ -67,5 +66,9 @@ public class Wall {
 
     public Vec2 getPosition() {
         return position;
+    }
+
+    public ArrayList<UnitRoom> getUnitRoomsBetween() {
+        return unitRoomsBetween;
     }
 }
