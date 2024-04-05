@@ -48,7 +48,7 @@ public class Map extends Updatable {
         delta += deltaTime;
         if(delta > 5 && !merged) {
             //mergeRooms(rooms.get(0), rooms.get(0).getAdjacentRooms().get(0), isten);
-            splitRooms(rooms.get(0), isten);
+            //splitRooms(rooms.get(0), isten);
             System.out.println();
             System.out.println();
             //printMap();
@@ -117,8 +117,6 @@ public class Map extends Updatable {
             //update nodeRooms and generate the new ones
             //also updates the images and colliders
             edgeManager.updateEdgesAfterSplit(r1, newRoom, isten);
-
-
             return true;
         }
         return false;
