@@ -57,5 +57,10 @@ public class Transistor extends Item {
         }
 
     }
+    @Override
+    public void dropOnGround(Vec2 pos){
+        super.dropOnGround(pos);
+        countText.setVisibility(false);
+    }
 
 }

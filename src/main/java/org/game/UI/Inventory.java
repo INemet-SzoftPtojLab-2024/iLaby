@@ -29,6 +29,8 @@ public class Inventory extends Updatable {
         inventoryIcons = new ArrayList<>();
         itemIcons=new ArrayList<>();
         storedItems=new ArrayList<>();
+        for (int i = 0; i < 5; i++) {storedItems.add(null);}
+        for (int i = 0; i < 5; i++) {itemIcons.add(null);}
         selectedSlot=1;
     }
 
@@ -86,6 +88,18 @@ public class Inventory extends Updatable {
         if(isten.getInputHandler().isKeyDown(KeyEvent.VK_F)){
             useSelectedItem();
         }
+        if(isten.getInputHandler().isKeyDown(KeyEvent.VK_R)&&storedItems.get(selectedSlot-1)!=null){
+            storedItems.get(selectedSlot-1).dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
+            storedItems.set(selectedSlot-1,null);
+            tmp = new ImageUI(getSlotLocation(selectedSlot ), new Vec2(iconSize), "./assets/ui/inventorySlot_Selected.png");
+            inventoryIcons.set(selectedSlot - 1, tmp);
+            tmp.setAlignment(Renderable.CENTER, Renderable.BOTTOM);
+            tmp.setVisibility(true);
+            tmp.setSortingLayer(-68);
+            isten.getRenderer().addRenderable(tmp);
+            itemIcons.get(selectedSlot-1).setVisibility(false);
+
+        }
     }
 
     @Override
@@ -93,17 +107,20 @@ public class Inventory extends Updatable {
 
     }
     public void addItem(Item item){
-        ImageUI tmp;
-        if(storedItems.size()<size){
-            storedItems.add(item);
-             tmp=new ImageUI(getSlotLocation(storedItems.size()),new Vec2(iconSize-10,iconSize-10),item.getImagePath());
-            itemIcons.add(tmp);
+        ImageUI tmp=null;
+        for (int i = 0; i < 5; i++) {
+            if(storedItems.get(i)==null){
+                storedItems.set(i,item);
+                tmp=new ImageUI(getSlotLocation(i+1),new Vec2(iconSize-10,iconSize-10),item.getImagePath());
+                itemIcons.set(i,tmp);
+                break;
+            }
         }
-        else {
+        if(tmp==null) {
             storedItems.get(selectedSlot-1).dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
             storedItems.set(selectedSlot - 1, item);
-            tmp=new ImageUI(getSlotLocation(selectedSlot),new Vec2(iconSize-10,iconSize-10),item.getImagePath());
             itemIcons.get(selectedSlot-1).setVisibility(false);
+            tmp=new ImageUI(getSlotLocation(selectedSlot),new Vec2(iconSize-10,iconSize-10),item.getImagePath());
             itemIcons.set(selectedSlot - 1,tmp);
         }
         tmp.setAlignment(Renderable.CENTER,Renderable.BOTTOM);

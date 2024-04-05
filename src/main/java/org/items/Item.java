@@ -53,6 +53,7 @@ public abstract class Item {
             isten.getInventory().addItem(this);
         }
     }
+
     public void use(){
 
     }
