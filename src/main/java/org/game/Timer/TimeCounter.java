@@ -1,9 +1,6 @@
 package main.java.org.game.Timer;
 
-import main.java.org.game.Graphics.GameRenderer;
-import main.java.org.game.Graphics.ImageUI;
-import main.java.org.game.Graphics.Renderable;
-import main.java.org.game.Graphics.TextUI;
+import main.java.org.game.Graphics.*;
 import main.java.org.game.Isten;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
