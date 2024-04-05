@@ -19,10 +19,10 @@ public class UnitRoom implements Graph<UnitRoom>{
     private Item item;
     public Image image;
     private ArrayList<UnitRoom> adjacentUnitRooms;
-    private UnitRoom TopNeigbour;
-    private UnitRoom BottomNeigbour;
-    private UnitRoom LeftNeigbour;
-    private UnitRoom RightNeigbour;
+    private UnitRoom TopNeigbour = null;
+    private UnitRoom BottomNeigbour = null;
+    private UnitRoom LeftNeigbour = null;
+    private UnitRoom RightNeigbour = null;
     private Room  ownerRoom;
     //this stores information only for generating
     private boolean inRoom;

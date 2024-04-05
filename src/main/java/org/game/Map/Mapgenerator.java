@@ -2,6 +2,7 @@ package main.java.org.game.Map;
 
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Isten;
+import main.java.org.game.physics.Collider;
 import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class Mapgenerator {
         //add the images to the unitrooms
         addImages();
         //create the walls of the rooms
-        createWallsForMap();
+        defineEdges();
 
         for(Room room: map.getRooms()) {
             isten.addUpdatable(room);
@@ -163,7 +164,6 @@ public class Mapgenerator {
             //if(room.getID() == 999) j = 5; //for testing the split algo the new gets a different color
             String path = "./assets/rooms/" + j + ".png";
             for(UnitRoom unitRoom: room.getUnitRooms()) {
-
                 img = new Image(unitRoom.getPosition(), new Vec2(1,1), path);
                 img.setSortingLayer(40);
                 unitRoom.setImage(img);
@@ -199,6 +199,8 @@ public class Mapgenerator {
         r2.getAdjacentRooms().clear();
         map.getRooms().remove(r2);
     }
+
+    /*
     public void createWallsForMap() {
         ArrayList<Integer> randomizedMapRow = new ArrayList<>();
         ArrayList<Integer> randomizedMapColumn = new ArrayList<>();
@@ -219,34 +221,44 @@ public class Mapgenerator {
         }
     }
 
+     */
+
     public void defineEdges(){
         for(Room r1: map.getRooms()) {
             for (Room r2 : map.getRooms()) {
+                //ha szomszédosak, és még nincs a két szoba kozott definialva az edge (vagyis a falak)
                 if(r1.isAdjacent(r2) && !map.getEdgeManager().getRoomEdges().contains(map.getEdgeManager().getEdgeBetweenRooms(r1,r2))){
-                    map.getEdgeManager().getRoomEdges().add(new EdgeBetweenRooms(r1,r2));
+                    EdgeBetweenRooms newEdge = new EdgeBetweenRooms(r1,r2);
+                    map.getEdgeManager().getRoomEdges().add(newEdge);
+                    // this collidergroup will be filled up, when the walls are created
+                    isten.getPhysicsEngine().addColliderGroup(newEdge.getColliderGroup());
                 }
             }
         }
         fillUpEdgesBetweenRooms();
     }
     public void fillUpEdgesBetweenRooms(){
-
-        for(EdgeBetweenRooms edgesBetweenRoom: map.getEdgeManager().getRoomEdges()){
-            Room r1 = edgesBetweenRoom.getNodeRooms().get(0);
-            Room r2 = edgesBetweenRoom.getNodeRooms().get(1);
+        Vec2 horizontalScale = new Vec2(1f, 0.1f); //vizszintes
+        Vec2 verticalScale = new Vec2(0.1f, 1f); //fuggoleges
+        for(EdgeBetweenRooms edgeBetweenRoom: map.getEdgeManager().getRoomEdges()){
+            Room r1 = edgeBetweenRoom.getNodeRooms().get(0);
+            Room r2 = edgeBetweenRoom.getNodeRooms().get(1);
             for(UnitRoom wallFinderUnitRoom: r1.getUnitRooms()){
-                if(wallFinderUnitRoom.getTopNeigbour().getOwnerRoom().equals(r2)){
-                    //implementélni ezt, vagy egy másikat a helyére rakni
-                    edgesBetweenRoom.addWall();
+                if(wallFinderUnitRoom.getTopNeigbour() != null && wallFinderUnitRoom.getTopNeigbour().getOwnerRoom().equals(r2)){
+                    Vec2 wallTopPos = new Vec2(wallFinderUnitRoom.getColNum(), wallFinderUnitRoom.getRowNum() + 0.5f);
+                    edgeBetweenRoom.addNewWall(wallTopPos, horizontalScale, wallFinderUnitRoom ,wallFinderUnitRoom.getTopNeigbour(), isten);
                 }
-                if(wallFinderUnitRoom.getBottomNeigbour().getOwnerRoom().equals(r2)){
-                    edgesBetweenRoom.addWall();
+                if(wallFinderUnitRoom.getBottomNeigbour() != null && wallFinderUnitRoom.getBottomNeigbour().getOwnerRoom().equals(r2)){
+                    Vec2 wallBottomPos = new Vec2(wallFinderUnitRoom.getColNum(), wallFinderUnitRoom.getRowNum() - 0.5f);
+                    edgeBetweenRoom.addNewWall(wallBottomPos, horizontalScale, wallFinderUnitRoom, wallFinderUnitRoom.getBottomNeigbour(),isten);
                 }
-                if(wallFinderUnitRoom.getLeftNeigbour().getOwnerRoom().equals(r2)){
-                    edgesBetweenRoom.addWall();
+                if(wallFinderUnitRoom.getLeftNeigbour() != null && wallFinderUnitRoom.getLeftNeigbour().getOwnerRoom().equals(r2)){
+                    Vec2 wallLeftPos = new Vec2(wallFinderUnitRoom.getColNum() - 0.5f, wallFinderUnitRoom.getRowNum());
+                    edgeBetweenRoom.addNewWall(wallLeftPos, verticalScale, wallFinderUnitRoom, wallFinderUnitRoom.getLeftNeigbour() ,isten);
                 }
-                if(wallFinderUnitRoom.getRightNeigbour().getOwnerRoom().equals(r2)){
-                    edgesBetweenRoom.addWall();
+                if(wallFinderUnitRoom.getRightNeigbour() != null && wallFinderUnitRoom.getRightNeigbour().getOwnerRoom().equals(r2)){
+                    Vec2 wallRightPos = new Vec2(wallFinderUnitRoom.getColNum() + 0.5f, wallFinderUnitRoom.getRowNum());
+                    edgeBetweenRoom.addNewWall(wallRightPos, verticalScale, wallFinderUnitRoom, wallFinderUnitRoom.getRightNeigbour(),isten);
                 }
             }
         }

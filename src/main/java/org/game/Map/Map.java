@@ -25,8 +25,8 @@ public class Map extends Updatable {
         mapgenerator = new Mapgenerator(this, isten);
         mapgenerator.generate(minRoomSize);
 
-        mapgenerator.defineEdges();
         printMap();
+        printMapByPositions();
     }
 
     public Map(int rowNumber, int columnNumber, int minRoomSize){
@@ -49,10 +49,10 @@ public class Map extends Updatable {
         //for testing
         delta += deltaTime;
         if(delta > 10 && !merged) {
-            mergeRooms(rooms.get(0), rooms.get(0).getAdjacentRooms().get(0), isten);
+            //mergeRooms(rooms.get(0), rooms.get(0).getAdjacentRooms().get(0), isten);
             System.out.println();
             System.out.println();
-            printMap();
+            //printMap();
 
             merged = true;
         }
@@ -68,7 +68,7 @@ public class Map extends Updatable {
         {
             for(int j = 0;j<mapColumnSize;j++)
             {
-                unitRooms[i][j] = new UnitRoom(new Vec2(i,j));
+                unitRooms[i][j] = new UnitRoom(new Vec2(j,i));
             }
         }
     }
@@ -289,6 +289,19 @@ public class Map extends Updatable {
         }
     }
 
+    private void printMapByPositions(){
+        for(int i = 0; i < mapRowSize; i++){
+            for(int j = 0; j < mapColumnSize; j++){
+                System.out.print(unitRooms[i][j].getColNum());
+                if(unitRooms[i][j].getColNum() < 10) System.out.print(" ");
+                System.out.print(", " + unitRooms[i][j].getRowNum());
+                if(unitRooms[i][j].getRowNum() < 10) System.out.print(" ");
+                System.out.print("   ");
+            }
+            System.out.println();
+            System.out.println();
+        }
+    }
 
 
     public void setRooms(ArrayList<Room> rooms) {this.rooms = rooms;}
