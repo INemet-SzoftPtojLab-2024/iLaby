@@ -1,28 +1,24 @@
 package main.java.org.game.Map;
 
-import lombok.Getter;
-import lombok.Setter;
 import main.java.org.game.Graphics.Image;
-import main.java.org.game.Graphics.Renderable;
 import main.java.org.game.Isten;
-import main.java.org.game.physics.Collider;
 import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 
 public class UnitRoom implements Graph<UnitRoom>{
-
+//sorting layer: 40
     private Vec2 position;
 
     private Wall topWall = null, leftWall = null, rightWall = null, bottomWall = null;
 
     private Item item;
-    public Image image;
+    public Image image = null;
     private ArrayList<UnitRoom> adjacentUnitRooms;
-    private UnitRoom TopNeigbour = null;
-    private UnitRoom BottomNeigbour = null;
-    private UnitRoom LeftNeigbour = null;
-    private UnitRoom RightNeigbour = null;
+    private UnitRoom TopNeighbor = null;
+    private UnitRoom BottomNeighbor = null;
+    private UnitRoom LeftNeighbor = null;
+    private UnitRoom RightNeighbor = null;
     private Room  ownerRoom;
     //this stores information only for generating
     private boolean inRoom;
@@ -34,9 +30,7 @@ public class UnitRoom implements Graph<UnitRoom>{
         this.inRoom = false;
         adjacentUnitRooms = new ArrayList<>();
     }
-    public void setImage(Image image) {
-        this.image = image;
-    }
+
 
     public void setOwnerRoom(Room ownerRoom){
         this.ownerRoom = ownerRoom;
@@ -63,7 +57,7 @@ public class UnitRoom implements Graph<UnitRoom>{
         return position;
     }
 
-
+/*
     public void createWalls(Isten isten) {
         boolean hasTop = false, hasBottom = false, hasLeft = false, hasRight = false;
         for(UnitRoom neighbour: adjacentUnitRooms) {
@@ -166,6 +160,7 @@ public class UnitRoom implements Graph<UnitRoom>{
         isten.getRenderer().addRenderable(img);
         return new Door(img);
     }
+*/
     public boolean isAdjacent(UnitRoom unitRoom){
         for (UnitRoom adjacentUnitRoom :this.getAdjacentUnitRooms()){
             if(adjacentUnitRoom.equals(unitRoom)){
@@ -175,10 +170,20 @@ public class UnitRoom implements Graph<UnitRoom>{
         }
         return false;
     }
-    public void addImages(Isten isten, RoomType t){
+    public void setNewImage(String imgPath, Isten isten) {
+        Image newImage = new Image(position, new Vec2(1,1), imgPath);
+        //ha ki akajuk cserélni a képet akkor ki kell venni  a renderablek kozol
+        if(image != null){
+            isten.getRenderer().deleteRenderable(image);
+        }
+        this.image = newImage;
+        //this is under a lot of things
+        newImage.setSortingLayer(40);
+        isten.getRenderer().addRenderable(newImage);
+    }
+    public void addRightImage(Isten isten){
         int j;
-        Image img;
-
+        //TODO EVIKE
         switch (ownerRoom.roomType){
             case GAS -> j = 1;
             case SHADOW -> j = 2;
@@ -187,14 +192,9 @@ public class UnitRoom implements Graph<UnitRoom>{
             default -> j = 0;
         }
         String path = "./assets/rooms/" + j + ".png";
-
-            if(image == null){
-                img = new Image(position, new Vec2(1,1), path);
-                img.setSortingLayer(40);
-                setImage(img);
-                isten.getRenderer().addRenderable(img);
-            }
+        setNewImage(path, isten);
     }
+
 
 
     public boolean isTopIsDoor() {
@@ -244,35 +244,35 @@ public class UnitRoom implements Graph<UnitRoom>{
 
     public void setBottomWall(Wall bottomWall) {this.bottomWall = bottomWall;}
 
-    public void setTopNeigbour(UnitRoom topNeigbour) {
-        TopNeigbour = topNeigbour;
+    public void setTopNeighbor(UnitRoom topNeighbor) {
+        TopNeighbor = topNeighbor;
     }
 
-    public void setBottomNeigbour(UnitRoom bottomNeigbour) {
-        BottomNeigbour = bottomNeigbour;
+    public void setBottomNeighbor(UnitRoom bottomNeighbor) {
+        BottomNeighbor = bottomNeighbor;
     }
 
-    public void setLeftNeigbour(UnitRoom leftNeigbour) {
-        LeftNeigbour = leftNeigbour;
+    public void setLeftNeighbor(UnitRoom leftNeighbor) {
+        LeftNeighbor = leftNeighbor;
     }
 
-    public void setRightNeigbour(UnitRoom rightNeigbour) {
-        RightNeigbour = rightNeigbour;
+    public void setRightNeighbor(UnitRoom rightNeighbor) {
+        RightNeighbor = rightNeighbor;
     }
 
-    public UnitRoom getTopNeigbour() {
-        return TopNeigbour;
+    public UnitRoom getTopNeighbor() {
+        return TopNeighbor;
     }
 
-    public UnitRoom getBottomNeigbour() {
-        return BottomNeigbour;
+    public UnitRoom getBottomNeighbor() {
+        return BottomNeighbor;
     }
 
-    public UnitRoom getLeftNeigbour() {
-        return LeftNeigbour;
+    public UnitRoom getLeftNeighbor() {
+        return LeftNeighbor;
     }
 
-    public UnitRoom getRightNeigbour() {
-        return RightNeigbour;
+    public UnitRoom getRightNeighbor() {
+        return RightNeighbor;
     }
 }

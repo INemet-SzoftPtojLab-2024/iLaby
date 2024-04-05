@@ -49,7 +49,7 @@ public class Map extends Updatable {
         //for testing
         delta += deltaTime;
         if(delta > 10 && !merged) {
-            //mergeRooms(rooms.get(0), rooms.get(0).getAdjacentRooms().get(0), isten);
+            mergeRooms(rooms.get(0), rooms.get(0).getAdjacentRooms().get(0), isten);
             System.out.println();
             System.out.println();
             //printMap();
@@ -240,7 +240,7 @@ public class Map extends Updatable {
             //setting the new images of the deleted room
             isten.getRenderer().deleteRenderable(unitRoom.image);
             unitRoom.image = null;
-            unitRoom.addImages(isten, r1.getRoomType());
+            unitRoom.addRightImage(isten);
         }
 
         r1.getUnitRooms().addAll(r2.getUnitRooms()); //insted of this: r1.getUnitRooms().add(unitroom);

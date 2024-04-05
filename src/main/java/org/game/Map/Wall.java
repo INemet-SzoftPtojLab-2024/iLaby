@@ -11,6 +11,7 @@ import main.java.org.linalg.Vec2;
 import java.util.ArrayList;
 
 public class Wall {
+    //sorting layer: 39
 
     protected Collider collider;
 
@@ -26,16 +27,19 @@ public class Wall {
         unitRoomsBetween = new ArrayList<>();
 
     }
-    public Wall(Collider collider,Vec2 position ,Image image, UnitRoom ur1, UnitRoom ur2) {
+    public Wall(Collider collider,Vec2 position , UnitRoom ur1, UnitRoom ur2) { //does not set the image!!!!!
         this.collider = collider;
-        this.image = image;
         this.position = position;
         unitRoomsBetween = new ArrayList<>();
         unitRoomsBetween.add(ur1);
         unitRoomsBetween.add(ur2);
     }
-    public Wall() {
-
+    // this c'tor if responsible for the sideWalls only
+    public Wall(Collider collider,Vec2 position ,UnitRoom ur1) { // does not set the image!!!!
+        this.collider = collider;
+        this.position = position;
+        unitRoomsBetween = new ArrayList<>();
+        unitRoomsBetween.add(ur1);
     }
     public void removeWall(Isten isten, ColliderGroup colliderGroup){
         isten.getRenderer().deleteRenderable(image);
@@ -50,6 +54,16 @@ public class Wall {
 
     public Collider getCollider() {return collider;}
 
-    public void setImage(Image i) {image = i;}
+    public void setNewImage(String imgPath, Vec2 scale,  Isten isten) {
+        Image newImage = new Image(position, scale, imgPath);
+        //ha ki akajuk cserélni a képet akkor ki kell venni  a renderablek kozol
+        if(image != null){
+            isten.getRenderer().deleteRenderable(image);
+        }
+        this.image = newImage;
+        //this is under a lot of things, but over the unitrooms(40)
+        newImage.setSortingLayer(39);
+        isten.getRenderer().addRenderable(newImage);
+    }
 
 }

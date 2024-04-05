@@ -31,9 +31,8 @@ public class EdgeBetweenRooms {
         String wallPath = "./assets/rooms/11.png";
         Collider wallCollider = new Collider(position,scale);
         colliderGroup.addCollider(wallCollider);
-        Image image = new Image(position, scale, wallPath);
-        isten.getRenderer().addRenderable(image);
-        Wall newWall = new Wall(wallCollider, position, image, ur1, ur2);
+        Wall newWall = new Wall(wallCollider, position, ur1, ur2);
+        newWall.setNewImage(wallPath, scale, isten);
         walls.add(newWall);
 
     }
