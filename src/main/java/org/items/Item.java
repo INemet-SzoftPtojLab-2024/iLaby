@@ -53,6 +53,9 @@ public abstract class Item {
             isten.getInventory().addItem(this);
         }
     }
+    public void use(){
+
+    }
     public String getImagePath(){return imagePath;}
     public Vec2 getPosition(){return position;}
     public Location getLocation(){return location;}

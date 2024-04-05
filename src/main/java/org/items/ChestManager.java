@@ -122,31 +122,6 @@ public class ChestManager extends Updatable {
         Random random = new Random();
         return walls.get(random.nextInt(walls.size()));
 
-//        if(unitRoom.getOwnerRoom().getID()%4==0){
-//            if(unitRoom.getLeftIsWall())wall= WallLocation.LEFT;
-//            else if(unitRoom.getTopIsWall())wall=WallLocation.TOP;
-//            else if(unitRoom.getRightIsWall())wall=WallLocation.RIGHT;
-//            else wall= WallLocation.BOTTOM;
-//        }
-//        else if(unitRoom.getOwnerRoom().getID()%4==1){
-//            if(unitRoom.getTopIsWall())wall=WallLocation.TOP;
-//            else if(unitRoom.getRightIsWall())wall=WallLocation.RIGHT;
-//            else if(unitRoom.getBottomIsWall())wall=WallLocation.BOTTOM;
-//            else wall= WallLocation.LEFT;
-//        }
-//        else if(unitRoom.getOwnerRoom().getID()%4==2){
-//            if(unitRoom.getRightIsWall())wall=WallLocation.RIGHT;
-//            else if(unitRoom.getBottomIsWall())wall=WallLocation.BOTTOM;
-//            else if(unitRoom.getLeftIsWall())wall= WallLocation.LEFT;
-//            else wall=WallLocation.TOP;
-//        }
-//        else{
-//            if(unitRoom.getBottomIsWall())wall=WallLocation.BOTTOM;
-//            else if(unitRoom.getLeftIsWall())wall= WallLocation.LEFT;
-//            else if(unitRoom.getTopIsWall())wall= WallLocation.TOP;
-//            else wall=WallLocation.RIGHT;
-//        }
-
 
     }
 

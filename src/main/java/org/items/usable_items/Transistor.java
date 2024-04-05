@@ -10,16 +10,21 @@ import main.java.org.linalg.Vec2;
 
 public class Transistor extends Item {
 
-    private int count;
     private TextUI countText;
+    private Image activatedImage;
+
+    boolean used = false;
     public Transistor(Isten isten){
         super(isten,new Vec2(0.4f,0.5f));
         imagePath="./assets/items/item_transistor.png";
         image = new Image(new Vec2(-10,-10), scale, imagePath);
+        activatedImage = new Image(new Vec2(-10,-10), scale, "./assets/items/item_transistor.png");
         isten.getRenderer().addRenderable(image);
+        isten.getRenderer().addRenderable(activatedImage);
         image.setVisibility(false);
-        count = 2;
-        countText = new TextUI(String.valueOf(count), new Vec2(0,0), "./assets/Monocraft.ttf", 15, 255, 255, 255);
+        activatedImage.setVisibility(false);
+
+        countText = new TextUI("2", new Vec2(0,0), "./assets/Monocraft.ttf", 15, 255, 255, 255);
         countText.setVisibility(false);
         countText.setAlignment(Renderable.CENTER, Renderable.BOTTOM);
         countText.setSortingLayer(-80);
@@ -37,4 +42,20 @@ public class Transistor extends Item {
         countText.setPosition(textPosition);
         countText.setVisibility(true);
     }
+
+    @Override
+    public void use(){
+        if(!used){
+            countText.setVisibility(false);
+            Vec2 playerPosition = isten.getPlayer().getPlayerCollider().getPosition();
+            activatedImage.setPosition(playerPosition);
+            activatedImage.setVisibility(true);
+            used=true;
+        }
+        else{
+            isten.getPlayer().getPlayerCollider().setPosition(activatedImage.getPosition());
+        }
+
+    }
+
 }

@@ -83,6 +83,9 @@ public class Inventory extends Updatable {
             tmp.setSortingLayer(-68);
             isten.getRenderer().addRenderable(tmp);
         }
+        if(isten.getInputHandler().isKeyDown(KeyEvent.VK_F)){
+            useSelectedItem();
+        }
     }
 
     @Override
@@ -127,5 +130,12 @@ public class Inventory extends Updatable {
             }
         }
         return new Vec2();
+    }
+
+    public void useSelectedItem(){
+        Item selectedItem = storedItems.get(selectedSlot-1);
+        if(selectedItem instanceof Item){
+            selectedItem.use();
+        }
     }
 }
