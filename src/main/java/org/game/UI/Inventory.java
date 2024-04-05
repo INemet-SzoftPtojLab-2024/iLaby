@@ -134,7 +134,7 @@ public class Inventory extends Updatable {
 
     public void useSelectedItem(){
         Item selectedItem = storedItems.get(selectedSlot-1);
-        if(selectedItem instanceof Item){
+        if(selectedSlot <= storedItems.size() ){
             selectedItem.use();
         }
     }
