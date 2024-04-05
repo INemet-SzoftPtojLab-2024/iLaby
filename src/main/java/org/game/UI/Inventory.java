@@ -116,7 +116,16 @@ public class Inventory extends Updatable {
     private Vec2 getSlotLocation(int slot){
         int spacing = 25;
         int firstIconXOffset = -((size*iconSize + (size-1)*spacing)/2) + iconSize/2;
-        int xOffset = firstIconXOffset + (iconSize + spacing)*slot;
+        int xOffset = firstIconXOffset + (iconSize + spacing)*(slot-1);
         return new Vec2(xOffset, 50);
+    }
+
+    public Vec2 getStoringSlotPosition(Item item){
+        for(int i = 0; i < storedItems.size(); i++){
+            if(storedItems.get(i) == item){
+                return inventoryIcons.get(i).getPosition();
+            }
+        }
+        return new Vec2();
     }
 }
