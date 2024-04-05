@@ -7,7 +7,7 @@ import main.java.org.linalg.Vec2;
 
 public class Gasmask extends Item {
     public Gasmask(Isten isten){
-        super(isten);
+        super(isten,new Vec2(0.4f,0.45f));
         imagePath="./assets/items/item_gasmask.png";
         image = new Image(new Vec2(-10,-10), scale, imagePath);
         isten.getRenderer().addRenderable(image);

@@ -19,7 +19,7 @@ public abstract class Item {
         GROUND,
         INVENTORY
     };
-    protected final Vec2 scale=new Vec2(0.4f,0.4f);
+    protected final Vec2 scale;
     protected Location location;
     protected Vec2 position;
     protected Image image;
@@ -27,7 +27,8 @@ public abstract class Item {
     protected String imagePath;
 
     private LocalDateTime droppedAt;
-    public Item(Isten isten){
+    public Item(Isten isten,Vec2 scale){
+        this.scale=scale;
         location=Location.CHEST;
         position=null;
         droppedAt = null;

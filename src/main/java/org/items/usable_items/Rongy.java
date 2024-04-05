@@ -7,7 +7,7 @@ import main.java.org.linalg.Vec2;
 
 public class Rongy extends Item {
     public Rongy(Isten isten){
-        super(isten);
+        super(isten,new Vec2(0.5f,0.4f));
         imagePath="./assets/items/item_rongy.png";
         image = new Image(new Vec2(-10,-10), scale, imagePath);
         isten.getRenderer().addRenderable(image);

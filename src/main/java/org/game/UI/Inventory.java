@@ -93,13 +93,13 @@ public class Inventory extends Updatable {
         ImageUI tmp;
         if(storedItems.size()<size){
             storedItems.add(item);
-             tmp=new ImageUI(getSlotLocation(storedItems.size()),new Vec2(iconSize,iconSize),item.getImagePath());
+             tmp=new ImageUI(getSlotLocation(storedItems.size()),new Vec2(iconSize-10,iconSize-10),item.getImagePath());
             itemIcons.add(tmp);
         }
         else {
             storedItems.get(selectedSlot-1).dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
             storedItems.set(selectedSlot - 1, item);
-            tmp=new ImageUI(getSlotLocation(selectedSlot),new Vec2(iconSize,iconSize),item.getImagePath());
+            tmp=new ImageUI(getSlotLocation(selectedSlot),new Vec2(iconSize-10,iconSize-10),item.getImagePath());
             itemIcons.get(selectedSlot-1).setVisibility(false);
             itemIcons.set(selectedSlot - 1,tmp);
         }

@@ -7,16 +7,11 @@ import main.java.org.game.Map.Wall;
 import main.java.org.game.physics.Collider;
 import main.java.org.game.physics.ColliderGroup;
 import main.java.org.game.updatable.Updatable;
-import main.java.org.items.usable_items.Camambert;
-import main.java.org.items.usable_items.Gasmask;
-import main.java.org.items.usable_items.Transistor;
+import main.java.org.items.usable_items.*;
 import main.java.org.linalg.Vec2;
 
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.Vector;
+import java.util.*;
 
 import static java.lang.Math.sqrt;
 
@@ -71,8 +66,21 @@ public class ChestManager extends Updatable {
                 case RIGHT: chestPos=new Vec2(placeableUnitRooms.get(randomUnitRoom).getPosition().x + 0.3f, placeableUnitRooms.get(randomUnitRoom).getPosition().y);break;
                 case BOTTOM: chestPos=new Vec2(placeableUnitRooms.get(randomUnitRoom).getPosition().x, placeableUnitRooms.get(randomUnitRoom).getPosition().y - 0.3f);break;
             };
-
-            chests.add( new Chest(chestPos,isten, wall.ordinal(),new ArrayList<Item>(Arrays.asList(new Gasmask(isten),new Camambert(isten),new Transistor(isten)))));
+            int random;
+            switch (random= rand.nextInt(3)){//TODO: ezt meg ki kene talalni hogy milyen valoszinuseggel dobjak a chestek az itemeket
+                case 0: {
+                    chests.add(new Chest(chestPos, isten, wall.ordinal(), new ArrayList<Item>(Arrays.asList(new Gasmask(isten), new Camambert(isten), new Transistor(isten)))));
+                    break;
+                }
+                case 1: {
+                    chests.add(new Chest(chestPos, isten, wall.ordinal(), new ArrayList<Item>(Arrays.asList(new Logarlec(isten), new Rongy(isten), new Sorospohar(isten)))));
+                    break;
+                }
+                case 2: {
+                    chests.add(new Chest(chestPos, isten, wall.ordinal(), new ArrayList<Item>(List.of(new Tvsz(isten)))));
+                    break;
+                }
+            }
             isThereChest.set(randomUnitRoom,true);
         }
         ColliderGroup chestColliders=new ColliderGroup();
