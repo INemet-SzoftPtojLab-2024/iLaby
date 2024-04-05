@@ -21,12 +21,11 @@ public class Map extends Updatable {
 
     @Override
     public void onStart(Isten isten) {
-        //mapgenerator = new Mapgenerator(rooms,unitRooms, mapRowSize, mapColumnSize, isten);
-        mapgenerator = new Mapgenerator(this, isten);
+        this.edgeManager = new EdgeManager();
+        this.mapgenerator = new Mapgenerator(this, isten);
         mapgenerator.generate(minRoomSize);
 
         printMap();
-        printMapByPositions();
     }
 
     public Map(int rowNumber, int columnNumber, int minRoomSize){
@@ -35,7 +34,6 @@ public class Map extends Updatable {
         this.minRoomSize = minRoomSize;
         //unitrooms is set in the generator --> onstart
         this.rooms = new ArrayList<>();
-        this.edgeManager = new EdgeManager();
         initUnitRooms();
 
     }
@@ -80,7 +78,7 @@ public class Map extends Updatable {
             neighbourRoom.getAdjacentRooms().remove(r1);
         }
         //egyenlőre minden szoba ami splittel lesz createlve ilyen type-val rendelkezik
-        Room newRoom = new Room(999, mapRowSize, mapColumnSize);
+        Room newRoom = new Room(999);
         int lowestRowIdx = getRoomWithLowestRowIdx(r1);
         ArrayList<UnitRoom> addableUnitRooms = new ArrayList<>();
         int distance = 0;
@@ -226,20 +224,16 @@ public class Map extends Updatable {
         //remove r2 and keep r1;
 
         //set colliders
-        for(Collider c : r2.roomColliders.getColliders()){
-            r1.roomColliders.addCollider(c);
-        }
-        //r2.roomColliders.getColliders().clear(); //does not matter
-        r1.deleteCommonWallsWith(isten, r2.getID());
-        isten.getPhysicsEngine().removeColliderGroup(r2.roomColliders.id);
+
+        edgeManager.deleteEdge(r1,r2,isten);
+        edgeManager.updateEdges(r1,r2);
 
         for(UnitRoom unitRoom : r2.getUnitRooms()){
             //r1.getUnitRooms().add(unitroom);
             unitRoom.setOwnerRoom(r1);
 
             //setting the new images of the deleted room
-            isten.getRenderer().deleteRenderable(unitRoom.image);
-            unitRoom.image = null;
+            //this method cares about the renderable items too
             unitRoom.addRightImage(isten);
         }
 
@@ -283,20 +277,6 @@ public class Map extends Updatable {
                 else if(unitRooms[i][j].getOwnerRoom().getID() >= 100) {
                     System.out.print(unitRooms[i][j].getOwnerRoom().getID() + "   ");
                 }
-            }
-            System.out.println();
-            System.out.println();
-        }
-    }
-
-    private void printMapByPositions(){
-        for(int i = 0; i < mapRowSize; i++){
-            for(int j = 0; j < mapColumnSize; j++){
-                System.out.print(unitRooms[i][j].getColNum());
-                if(unitRooms[i][j].getColNum() < 10) System.out.print(" ");
-                System.out.print(", " + unitRooms[i][j].getRowNum());
-                if(unitRooms[i][j].getRowNum() < 10) System.out.print(" ");
-                System.out.print("   ");
             }
             System.out.println();
             System.out.println();

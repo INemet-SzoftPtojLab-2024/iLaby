@@ -50,10 +50,6 @@ public class Wall {
 
     }
 
-    public void setCollider(Collider c) {collider = c;}
-
-    public Collider getCollider() {return collider;}
-
     public void setNewImage(String imgPath, Vec2 scale,  Isten isten) {
         Image newImage = new Image(position, scale, imgPath);
         //ha ki akajuk cserélni a képet akkor ki kell venni  a renderablek kozol
@@ -65,5 +61,11 @@ public class Wall {
         newImage.setSortingLayer(39);
         isten.getRenderer().addRenderable(newImage);
     }
+    public void setCollider(Collider c) {collider = c;}
 
+    public Collider getCollider() {return collider;}
+
+    public Vec2 getPosition() {
+        return position;
+    }
 }

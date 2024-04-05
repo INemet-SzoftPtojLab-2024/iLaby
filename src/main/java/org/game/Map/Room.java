@@ -13,15 +13,12 @@ import java.util.ArrayList;
 
 public class Room extends Updatable implements Graph<Room>{
     int ID;
-    int maxDoorCount = 2;
-    int currDoorCount = 0;
+    //int maxDoorCount = 2;
+    //int currDoorCount = 0;
     private ArrayList<UnitRoom> unitRooms;
     private ArrayList<Room> adjacentRooms;
     int playerCount;
     private int maxPlayerCount = 5;
-    private int mapRowSize;
-    private int mapColSize;
-
 
     //ArrayList<Player> players;
     boolean discovered = false;
@@ -29,26 +26,23 @@ public class Room extends Updatable implements Graph<Room>{
     RoomType roomType;
 
     //for generating the doors
-    private ArrayList<Integer> hasDoorWith;
+    //private ArrayList<Integer> hasDoorWith;
 
-    ColliderGroup roomColliders;
 
-    public Room(int ID, int mapRowSize, int mapColSize){
+    public Room(int ID){
         this.ID = ID;
         unitRooms = new ArrayList<>();
         adjacentRooms = new ArrayList<>();
-        roomColliders=new ColliderGroup();
-        hasDoorWith = new ArrayList<>();
+        //hasDoorWith = new ArrayList<>();
         roomType = RoomType.getRandomRoomtype();
-        this.mapRowSize = mapRowSize;
-        this.mapColSize = mapColSize;
 
     }
+    public  Room(){}
 
     @Override
     public void onStart(Isten isten) {
 
-        isten.getPhysicsEngine().addColliderGroup(roomColliders);
+        //isten.getPhysicsEngine().addColliderGroup(roomColliders);
     }
 
     @Override
@@ -79,6 +73,7 @@ public class Room extends Updatable implements Graph<Room>{
             }
         }
     }
+/*
     public void deleteCommonWallsWith(Isten isten, int deletedRoomID){
         for(UnitRoom unitRoom : unitRooms){
             for(UnitRoom neigbourUnitRoom : unitRoom.getAdjacentUnitRooms()){
@@ -140,7 +135,7 @@ public class Room extends Updatable implements Graph<Room>{
             }
         }
     }
-
+*/
 
     public ArrayList<UnitRoom> getUnitRooms() {
         return unitRooms;
@@ -152,9 +147,7 @@ public class Room extends Updatable implements Graph<Room>{
     public int getID() {
         return ID;
     }
-
-    public void addCollider(Collider c){roomColliders.addCollider(c);}
-
+/*
     public void addHasDoorWith(int i) {
         hasDoorWith.add(i);
     }
@@ -166,6 +159,8 @@ public class Room extends Updatable implements Graph<Room>{
     public boolean hasDoor() {
         return (!hasDoorWith.isEmpty());
     }
+
+ */
     public int getMaxPlayerCount() {return maxPlayerCount;}
 
     public void setMaxPlayerCount(int maxPlayerCount) {this.maxPlayerCount = maxPlayerCount;}

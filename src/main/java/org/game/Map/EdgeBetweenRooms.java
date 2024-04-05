@@ -36,6 +36,27 @@ public class EdgeBetweenRooms {
         walls.add(newWall);
 
     }
+    public void switchWallToDoor(Wall wallToSwitch, Isten isten){
+        wallToSwitch.collider.setSolidity(false);
+        //chnage image
+        String wallPath = "./assets/rooms/10.png";
+        wallToSwitch.setNewImage(wallPath, wallToSwitch.getCollider().getScale(), isten);
+    }
+    public void switchDoorToWall(Door doorToSwitch, Isten isten){
+        doorToSwitch.collider.setSolidity(true);
+        //chenge image
+        String doorPath = "./assets/rooms/11.png";
+        doorToSwitch.setNewImage(doorPath, doorToSwitch.getCollider().getScale(), isten);
+    }
+    public void removeWallPiece(Wall wallToRemove, Isten isten){
+        for(int i = 0; i < walls.size();i++){
+            if(wallToRemove.equals(walls.get(i))){
+                walls.get(i).removeWall(isten, colliderGroup);
+                walls.remove(i);
+                return;
+            }
+        }
+    }
 
     public ArrayList<Room> getNodeRooms() {
         return nodeRooms;

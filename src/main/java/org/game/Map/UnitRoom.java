@@ -182,6 +182,7 @@ public class UnitRoom implements Graph<UnitRoom>{
         isten.getRenderer().addRenderable(newImage);
     }
     public void addRightImage(Isten isten){
+
         int j;
         //TODO EVIKE
         switch (ownerRoom.roomType){
