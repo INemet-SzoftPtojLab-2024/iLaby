@@ -103,11 +103,10 @@ public class EdgeManager {
                             if (checkEdgeWall.getUnitRoomsBetween().get(0).getOwnerRoom().getID() == newRoomID
                                     || checkEdgeWall.getUnitRoomsBetween().get(1).getOwnerRoom().getID() == newRoomID) {
 
-                                if (!checkEdgeWall.getCollider().isSolid())//ha ajtot torlunk
+                                if (checkEdgeWall.isDoor())//ha ajtot torlunk
                                     doorRemoved = true;
                                 wallsToRemoveFromCheckEdge.add(checkEdgeWall);
                                 checkEdgeWall.removeWall(isten, checkEdge.getColliderGroup());
-
                             }
                         }
                         checkEdge.getWalls().removeAll(wallsToRemoveFromCheckEdge);
@@ -184,12 +183,10 @@ public class EdgeManager {
     public void initDoors(Isten isten){
         //TODO
         //optimalizaljuk hogy ne legyen egy unitroomhoz tobb ajto
-        //egyelore a door is wall csak az imageben kulonbozik es a colliderje solidra van allitva
         Random rand = new Random();
         for(EdgeBetweenRooms edge : roomEdges){
             int randomIndex = rand.nextInt(edge.getWalls().size());
-            //ha ki akarjuk cserelni ténylegesen door objektumra én(Áron) megcsinalom, csak a switchWallToDoort kell atirni egy kicsit
-            //szolj nekem, ha ez probléma, addig nem kell külön Door objektum
+            //informaciowasztes?!
             edge.switchWallToDoor(edge.getWalls().get(randomIndex), isten);
         }
     }

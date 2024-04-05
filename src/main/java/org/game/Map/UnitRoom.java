@@ -22,8 +22,12 @@ public class UnitRoom implements Graph<UnitRoom>{
     private Room  ownerRoom;
     //this stores information only for generating
     private boolean inRoom;
-
+/*
+lehet jol jon majd
+    private boolean topIsWall = false, bottomIsWall = false, leftIsWall = false, rightIsWall = false;
     private boolean topIsDoor = false, bottomIsDoor = false, leftIsDoor = false, rightIsDoor = false;
+
+ */
 
     public UnitRoom(Vec2 pos) {
         this.position = pos;
@@ -93,7 +97,7 @@ public class UnitRoom implements Graph<UnitRoom>{
         setNewImage(path, isten);
     }
 
-
+/*
 
     public boolean isTopIsDoor() {
         return topIsDoor;
@@ -126,6 +130,7 @@ public class UnitRoom implements Graph<UnitRoom>{
     public void setRightIsDoor(boolean rightIsDoor) {
         this.rightIsDoor = rightIsDoor;
     }
+    */
     public Wall getTopWall() {return topWall;}
 
     public Wall getLeftWall() {return leftWall;}

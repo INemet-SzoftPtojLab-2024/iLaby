@@ -37,16 +37,29 @@ public class EdgeBetweenRooms {
 
     }
     public void switchWallToDoor(Wall wallToSwitch, Isten isten){
+        String doorPath = "./assets/rooms/10.png";
         wallToSwitch.collider.setSolidity(false);
-        //chnage image
-        String wallPath = "./assets/rooms/10.png";
-        wallToSwitch.setNewImage(wallPath, wallToSwitch.getCollider().getScale(), isten);
+        isten.getRenderer().deleteRenderable(wallToSwitch.image);
+
+        Door newDoor = new Door(wallToSwitch.getCollider(), wallToSwitch.getPosition(),
+                wallToSwitch.unitRoomsBetween.get(0), wallToSwitch.unitRoomsBetween.get(1));
+        newDoor.setNewImage(doorPath, wallToSwitch.getCollider().getScale(), isten);
+
+        walls.add(newDoor);//informaciovesztes!?
+        walls.remove(wallToSwitch);
     }
     public void switchDoorToWall(Door doorToSwitch, Isten isten){
+        String wallPath = "./assets/rooms/11.png";
         doorToSwitch.collider.setSolidity(true);
-        //chenge image
-        String doorPath = "./assets/rooms/11.png";
-        doorToSwitch.setNewImage(doorPath, doorToSwitch.getCollider().getScale(), isten);
+        isten.getRenderer().deleteRenderable(doorToSwitch.image);
+
+        Wall newWall = new Wall(doorToSwitch.getCollider(), doorToSwitch.getPosition(),
+                doorToSwitch.unitRoomsBetween.get(0), doorToSwitch.unitRoomsBetween.get(1));
+        newWall.setNewImage(wallPath, doorToSwitch.getCollider().getScale(), isten);
+
+        walls.add(newWall);
+        walls.remove(doorToSwitch);
+
     }
     public void removeWallPiece(Wall wallToRemove, Isten isten){
         for(int i = 0; i < walls.size();i++){
