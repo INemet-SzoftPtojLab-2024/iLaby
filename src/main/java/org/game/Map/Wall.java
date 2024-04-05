@@ -45,6 +45,7 @@ public class Wall {
         isten.getRenderer().deleteRenderable(image);
         isten.getPhysicsEngine().getColliderGroup(colliderGroup.id).removeCollider(collider);
         image = null;
+        collider = null;
         position = null;
 
     }

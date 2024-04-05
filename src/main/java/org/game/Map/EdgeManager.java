@@ -102,10 +102,12 @@ public class EdgeManager {
                             //a maradek lesz az oldroom edge-e
                             if (checkEdgeWall.getUnitRoomsBetween().get(0).getOwnerRoom().getID() == newRoomID
                                     || checkEdgeWall.getUnitRoomsBetween().get(1).getOwnerRoom().getID() == newRoomID) {
-                                checkEdgeWall.removeWall(isten, checkEdge.getColliderGroup());
-                                wallsToRemoveFromCheckEdge.add(checkEdgeWall);
+
                                 if (!checkEdgeWall.getCollider().isSolid())//ha ajtot torlunk
                                     doorRemoved = true;
+                                wallsToRemoveFromCheckEdge.add(checkEdgeWall);
+                                checkEdgeWall.removeWall(isten, checkEdge.getColliderGroup());
+
                             }
                         }
                         checkEdge.getWalls().removeAll(wallsToRemoveFromCheckEdge);

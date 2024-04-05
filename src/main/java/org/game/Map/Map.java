@@ -48,7 +48,7 @@ public class Map extends Updatable {
         delta += deltaTime;
         if(delta > 5 && !merged) {
             //mergeRooms(rooms.get(0), rooms.get(0).getAdjacentRooms().get(0), isten);
-            //splitRooms(rooms.get(0), isten);
+            splitRooms(rooms.get(0), isten);
             System.out.println();
             System.out.println();
             //printMap();
@@ -80,7 +80,9 @@ public class Map extends Updatable {
             neighbourRoom.getAdjacentRooms().remove(r1);
         }
         //egyenlőre minden szoba ami splittel lesz createlve ilyen type-val rendelkezik
-        Room newRoom = new Room(999);
+        //int newID = generateNewRoomID(); //már kész van, teszt miatt nincs hasznalva
+        int newId = 999;
+        Room newRoom = new Room(newId);
         int lowestRowIdx = getRoomWithLowestRowIdx(r1);
         ArrayList<UnitRoom> addableUnitRooms = new ArrayList<>();
         int distance = 0;
@@ -291,6 +293,25 @@ public class Map extends Updatable {
             System.out.println();
             System.out.println();
         }
+    }
+    private int generateNewRoomID(){
+        int newID = 0;
+        while(true){
+            int roomCnt = 0;
+            for(Room room : rooms){
+                if(room.getID() == newID){
+                    newID++;
+                    break; //not found, try the next ID
+                }
+                roomCnt++;
+            }
+            if(roomCnt == rooms.size()){
+                return newID;
+            }
+
+
+        }
+
     }
 
 
