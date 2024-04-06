@@ -39,8 +39,11 @@ public class Transistor extends Item {
         Inventory inv = isten.getInventory();
         Vec2 slotPosition = inv.getStoringSlotPosition(this);
         Vec2 textPosition = new Vec2(slotPosition.x -10, slotPosition.y-7);
-        countText.setPosition(textPosition);
-        countText.setVisibility(true);
+        if(!used){
+            countText.setPosition(textPosition);
+            countText.setVisibility(true);
+        }
+
     }
 
     @Override
