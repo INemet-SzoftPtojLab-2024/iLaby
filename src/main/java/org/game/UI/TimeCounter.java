@@ -9,7 +9,6 @@ public class TimeCounter extends Updatable {
     private double timeRemaining; //Unit:sec
     private ImageUI timerBackgroundImage;
     private TextUI timeText;
-    GameRenderer renderer;
 
     /**
      * @param time the available time, unit:sec
@@ -18,7 +17,6 @@ public class TimeCounter extends Updatable {
         timeRemaining = time;
         timerBackgroundImage = null;
         timeText = null;
-        renderer = null;
     }
 
     public String secondsToMMSS(double seconds) {
@@ -33,7 +31,6 @@ public class TimeCounter extends Updatable {
 
     @Override
     public void onStart(Isten isten) {
-        renderer = isten.getRenderer();
         timeText = new TextUI(secondsToMMSS(timeRemaining), new Vec2(5, 10), "./assets/Monocraft.ttf", 13, 255, 255, 0);
         timerBackgroundImage = new ImageUI(new Vec2(0, 25), new Vec2(100, 50), "./assets/ui/timer_background.png");
 
