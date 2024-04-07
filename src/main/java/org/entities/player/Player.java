@@ -1,5 +1,11 @@
 package main.java.org.entities.player;
 
+
+import main.java.org.game.Audio.AudioManager;
+import main.java.org.game.Audio.Sound;
+import main.java.org.game.Camera.Camera;
+import main.java.org.game.Graphics.GameRenderer;
+
 import main.java.org.entities.Entity;
 
 import main.java.org.game.Graphics.Image;
@@ -21,6 +27,8 @@ public class Player extends Entity {
     float time;
     Text playerName;
     boolean alive;  //Bool variable, to store status of player: ded or alive
+
+    Sound playerSound=null;
 
     public Player() {
         playerCollider = null;
@@ -77,6 +85,9 @@ public class Player extends Entity {
 
         //adjust camera zoom
         isten.getCamera().setPixelsPerUnit(100);
+
+        //preload player sound
+        AudioManager.preloadSound("./assets/audio/playersound.ogg");
     }
 
     @Override
@@ -139,6 +150,22 @@ public class Player extends Entity {
                 playerImage.get(activeImage).setVisibility(true);
             }
         }
+
+        //move image
+        //the origin of the image is in its top right corner, therefore the imagePos looks like this: screenSpace(collider position) - 0.5*imageScale
+
+        Vec2 playerPosition = playerCollider.getPosition();
+        for (int i = 0; i < 4; i++) {
+            playerImage.get(i).setPosition(playerPosition);
+        }
+        playerName.setPosition(Vec2.sum(playerPosition, new Vec2( 0,(float)0.5)));
+
+        //move camera
+        isten.getCamera().setPosition(playerCollider.getPosition());
+
+        //play sound
+        if(!AudioManager.isPlaying(playerSound))
+            playerSound=AudioManager.playSound("./assets/audio/playersound.ogg");
     }
 
     @Override
