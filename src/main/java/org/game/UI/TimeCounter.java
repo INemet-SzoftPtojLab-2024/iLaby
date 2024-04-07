@@ -6,15 +6,12 @@ import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 
 public class TimeCounter extends Updatable {
-    private double timeRemaining; //Unit:sec
+    private static double timeRemaining; //Unit:sec
     private ImageUI timerBackgroundImage;
     private TextUI timeText;
 
-    /**
-     * @param time the available time, unit:sec
-     */
-    public TimeCounter(double time) {
-        timeRemaining = time;
+
+    public TimeCounter() {
         timerBackgroundImage = null;
         timeText = null;
     }
@@ -25,6 +22,9 @@ public class TimeCounter extends Updatable {
         return String.format("%02d:%02d", minutes, (long) seconds);
     }
 
+    public static void setTime(double time){
+        timeRemaining=time;
+    }
     public double getTimeRemaining(){
         return timeRemaining;
     }

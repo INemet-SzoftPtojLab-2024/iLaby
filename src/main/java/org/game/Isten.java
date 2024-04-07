@@ -105,7 +105,7 @@ public class Isten {
     protected void addUpdatables() {
         updatables.add(new Help());
         updatables.add(new Player("II. Németh Szilárd"));
-        updatables.add(new TimeCounter(600));
+        updatables.add(new TimeCounter());
         updatables.add(new Map(10, 10, 15));
     }
 
