@@ -39,6 +39,7 @@ public class Map extends Updatable {
     }
 
     //for testing
+    boolean merged = false;
     double delta = 0;
     int cnt = 0;
     int r = 0;
@@ -46,7 +47,7 @@ public class Map extends Updatable {
     public void onUpdate(Isten isten, double deltaTime) {
         //for testing
         delta += deltaTime;
-        if (delta > 30 && cnt < 4) {
+        if (delta > 3 && cnt < 4 && !merged) {
             mergeRooms(rooms.get(0), rooms.get(0).getAdjacentRooms().get(0), isten);
             /*if (!splitRooms(rooms.get(r), isten)) r++;
             else {
@@ -56,9 +57,10 @@ public class Map extends Updatable {
              */
             System.out.println();
             System.out.println();
-            //printMap();
+            printMap();
             cnt++;
             delta = 0;
+            merged = true;
         }
     }
 

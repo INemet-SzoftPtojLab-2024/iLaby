@@ -68,11 +68,15 @@ public class EdgeManager {
                     // get the other indexNodeRoomINdex
                     Room RDAdjacent = edgeBetweenRoom.getNodeRooms().get(index);//szoba amia remainingnek es a deletednek is szomszadja
                     EdgeBetweenRooms edgeBetweenRAndRDAdjacent = getEdgeBetweenRooms(remaining, RDAdjacent);
-                    edgeBetweenRAndRDAdjacent.getWalls().addAll(getEdgeBetweenRooms(deleted, RDAdjacent).getWalls());
-                    for(int i = 0; i < edgeBetweenRoom.getColliderGroup().getColliders().size(); i++){
-                        edgeBetweenRAndRDAdjacent.getColliderGroup().addCollider(edgeBetweenRoom.getColliderGroup().getColliders().get(0));
+
+                    for(int i = 0; i < edgeBetweenRoom.getWalls().size(); i++){
+                        //ha ajto akkor kicsereljuk falra
+                        //TODO ha megvan az abstrakt os wallnak es a doornak at kell irni, igy infromaciovestes van a kazstolasnal
+                        if(edgeBetweenRoom.getWalls().get(i).isDoor()) edgeBetweenRoom.switchDoorToWall((Door)edgeBetweenRoom.getWalls().get(i), isten);
+                        edgeBetweenRAndRDAdjacent.getWalls().add(edgeBetweenRoom.getWalls().get(i));
+                        edgeBetweenRAndRDAdjacent.getColliderGroup().addCollider(edgeBetweenRoom.getWalls().get(i).collider);
                     }
-                    isten.getPhysicsEngine().removeColliderGroup(edgeBetweenRoom.getColliderGroup());
+                    isten.getPhysicsEngine().removeColliderGroup(edgeBetweenRoom.getColliderGroup().id);
                     edgeBetweenRoom.getColliderGroup().getColliders().clear();
 
                 }
