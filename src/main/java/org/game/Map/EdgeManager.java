@@ -60,6 +60,7 @@ public class EdgeManager {
         for(EdgeBetweenRooms edgeBetweenRoom : roomEdges){
             if(edgeBetweenRoom.getNodeRooms().contains(removed)){
                 edgeBetweenRoom.getNodeRooms().remove(removed);
+
                 edgeBetweenRoom.getNodeRooms().add(remaining);
             }
         }
