@@ -3,6 +3,7 @@ package main.java.org.game.Map;
 import lombok.Getter;
 import lombok.Setter;
 import main.java.org.game.Isten;
+import main.java.org.game.physics.Collider;
 import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
@@ -54,16 +55,34 @@ public class EdgeManager {
 
     //sets new neighbor to r1
     //ahol r2 van oda r1-et állítunk (merge miatt)
-    public void updateEdgesAfterMerge(Room remaining, Room removed){ //mergenel hasznaljuk csak
+    public void updateEdgesAfterMerge(Room remaining, Room deleted, Isten isten){ //mergenel hasznaljuk csak
         //r1 szoba marad
         //r2 torlodik (ahol szerepl, ki kell cserelni r1-re)
         for(EdgeBetweenRooms edgeBetweenRoom : roomEdges){
-            if(edgeBetweenRoom.getNodeRooms().contains(removed)){
-                edgeBetweenRoom.getNodeRooms().remove(removed);
+            if(edgeBetweenRoom.getNodeRooms().contains(deleted)){
 
-                edgeBetweenRoom.getNodeRooms().add(remaining);
+                int indexOfDeletedNode = edgeBetweenRoom.getNodeRooms().indexOf(deleted);
+                int index = 0;
+                if(indexOfDeletedNode == 0) index = 1;
+                if(remaining.isAdjacent(edgeBetweenRoom.getNodeRooms().get(index))){//itt mar csak egy eleme lesz(az a szoba ami ramovednak is meg a remainignek is szomszedja)
+                    // get the other indexNodeRoomINdex
+                    Room RDAdjacent = edgeBetweenRoom.getNodeRooms().get(index);//szoba amia remainingnek es a deletednek is szomszadja
+                    EdgeBetweenRooms edgeBetweenRAndRDAdjacent = getEdgeBetweenRooms(remaining, RDAdjacent);
+                    edgeBetweenRAndRDAdjacent.getWalls().addAll(getEdgeBetweenRooms(deleted, RDAdjacent).getWalls());
+                    for(int i = 0; i < edgeBetweenRoom.getColliderGroup().getColliders().size(); i++){
+                        edgeBetweenRAndRDAdjacent.getColliderGroup().addCollider(edgeBetweenRoom.getColliderGroup().getColliders().get(0));
+                    }
+                    isten.getPhysicsEngine().removeColliderGroup(edgeBetweenRoom.getColliderGroup());
+                    edgeBetweenRoom.getColliderGroup().getColliders().clear();
+
+                }
+                else{
+                    edgeBetweenRoom.getNodeRooms().remove(deleted);
+                    edgeBetweenRoom.getNodeRooms().add(remaining);
+                }
             }
         }
+
     }
     public void updateEdgesAfterSplit(Room oldRoom, Room newRoom, Isten isten){
         //and colliders(walls and edges)

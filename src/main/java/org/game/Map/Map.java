@@ -39,7 +39,6 @@ public class Map extends Updatable {
     }
 
     //for testing
-    boolean merged = false;
     double delta = 0;
     int cnt = 0;
     int r = 0;
@@ -47,12 +46,14 @@ public class Map extends Updatable {
     public void onUpdate(Isten isten, double deltaTime) {
         //for testing
         delta += deltaTime;
-        if (delta > 30 && cnt < 10) {
-            //mergeRooms(rooms.get(0), rooms.get(0).getAdjacentRooms().get(0), isten);
-            if (!splitRooms(rooms.get(r), isten)) r++;
+        if (delta > 30 && cnt < 4) {
+            mergeRooms(rooms.get(0), rooms.get(0).getAdjacentRooms().get(0), isten);
+            /*if (!splitRooms(rooms.get(r), isten)) r++;
             else {
                 r = 0;
             }
+
+             */
             System.out.println();
             System.out.println();
             //printMap();
@@ -244,7 +245,7 @@ public class Map extends Updatable {
         //set colliders
 
         edgeManager.deleteEdge(r1,r2,isten);
-        edgeManager.updateEdgesAfterMerge(r1,r2);
+        edgeManager.updateEdgesAfterMerge(r1,r2,isten);
 
         for(UnitRoom unitRoom : r2.getUnitRooms()){
             //r1.getUnitRooms().add(unitroom);
