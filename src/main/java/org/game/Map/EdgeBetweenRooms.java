@@ -39,13 +39,15 @@ public class EdgeBetweenRooms {
     public void switchWallToDoor(Wall wallToSwitch, Isten isten){
         String doorPath = "./assets/rooms/10.png";
         wallToSwitch.collider.setSolidity(false);
-        isten.getRenderer().deleteRenderable(wallToSwitch.image);
 
+        //wallToSwitch.setNewImage(doorPath, wallToSwitch.image.getScale(),isten);
+
+        isten.getRenderer().deleteRenderable(wallToSwitch.image);
         Door newDoor = new Door(wallToSwitch.getCollider(), wallToSwitch.getPosition(),
                 wallToSwitch.unitRoomsBetween.get(0), wallToSwitch.unitRoomsBetween.get(1));
         newDoor.setNewImage(doorPath, wallToSwitch.getCollider().getScale(), isten);
 
-        walls.add(newDoor);//informaciovesztes!?
+        walls.add(newDoor);
         walls.remove(wallToSwitch);
     }
     public void switchDoorToWall(Door doorToSwitch, Isten isten){
