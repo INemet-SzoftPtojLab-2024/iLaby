@@ -1,7 +1,6 @@
 package main.java.org.game.UI;
 
 import main.java.org.game.Graphics.ButtonUI;
-import main.java.org.game.Graphics.ClickListener;
 import main.java.org.game.Graphics.ImageUI;
 import main.java.org.game.Graphics.Renderable;
 import main.java.org.game.Isten;
@@ -22,12 +21,12 @@ public class MainMenu extends Updatable {
         images.add(new ImageUI(new Vec2(0, -300), new Vec2(600, 150), "./assets/ui/logo.png"));
         images.add(new ImageUI(new Vec2(0, 375), new Vec2(300, 50), "./assets/ui/developer_logo.png"));
         images.add(new ImageUI(new Vec2(0, 0), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/ui/menu_background.jpg"));
-        buttons.add(new ButtonUI(new Vec2(0, -100), new Vec2(350, 100), "./assets/ui/button_background.jpg", "Solo", "./assets/Monocraft.ttf", 50));
-        buttons.add(new ButtonUI(new Vec2(0, 50), new Vec2(350, 100), "./assets/ui/button_background.jpg", "Multi", "./assets/Monocraft.ttf", 50));
-        buttons.add(new ButtonUI(new Vec2(0, 200), new Vec2(350, 100), "./assets/ui/button_background.jpg", "Exit", "./assets/Monocraft.ttf", 50));
-        buttons.add(new ButtonUI(new Vec2(0, -100), new Vec2(350, 100), "./assets/ui/button_background.jpg", "Easy-peasy", "./assets/Monocraft.ttf", 50));
-        buttons.add(new ButtonUI(new Vec2(0, 50), new Vec2(350, 100), "./assets/ui/button_background.jpg", "Casual", "./assets/Monocraft.ttf", 50));
-        buttons.add(new ButtonUI(new Vec2(0, 200), new Vec2(350, 100), "./assets/ui/button_background.jpg", "Nope", "./assets/Monocraft.ttf", 50));
+        buttons.add(new ButtonUI(new Vec2(0, -100), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Solo", "./assets/Monocraft.ttf", 50));
+        buttons.add(new ButtonUI(new Vec2(0, 50), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Multi", "./assets/Monocraft.ttf", 50));
+        buttons.add(new ButtonUI(new Vec2(0, 200), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Exit", "./assets/Monocraft.ttf", 50));
+        buttons.add(new ButtonUI(new Vec2(0, -100), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Easy-peasy", "./assets/Monocraft.ttf", 50));
+        buttons.add(new ButtonUI(new Vec2(0, 50), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Casual", "./assets/Monocraft.ttf", 50));
+        buttons.add(new ButtonUI(new Vec2(0, 200), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Never", "./assets/Monocraft.ttf", 50));
 
         for (Renderable r : images) {
             r.setAlignment(Renderable.CENTER, Renderable.CENTER);
@@ -58,7 +57,7 @@ public class MainMenu extends Updatable {
             GameManager.setStage(GameManager.GameStage.INGAME);
         });
         buttons.get(5).addClickListener(() -> {
-            TimeCounter.setTime(301);
+            TimeCounter.setTime(11);
             GameManager.setStage(GameManager.GameStage.INGAME);
         });
 

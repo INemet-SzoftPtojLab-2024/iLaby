@@ -22,10 +22,11 @@ public class TimeCounter extends Updatable {
         return String.format("%02d:%02d", minutes, (long) seconds);
     }
 
-    public static void setTime(double time){
-        timeRemaining=time;
+    public static void setTime(double time) {
+        timeRemaining = time;
     }
-    public double getTimeRemaining(){
+
+    public static double getTimeRemaining() {
         return timeRemaining;
     }
 

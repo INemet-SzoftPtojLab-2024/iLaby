@@ -103,9 +103,10 @@ public class Isten {
      * Method to add updatable objects to the game.
      */
     protected void addUpdatables() {
-        updatables.add(new Help());
         updatables.add(new Player("II. Németh Szilárd"));
         updatables.add(new TimeCounter());
+        updatables.add(new Help());
+        updatables.add(new GameMenu());
         updatables.add(new Map(10, 10, 15));
     }
 

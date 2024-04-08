@@ -1,5 +1,6 @@
 package main.java.org.manager;
 
+import main.java.org.game.Audio.AudioManager;
 import main.java.org.game.Graphics.GameRenderer;
 import main.java.org.game.Isten;
 import main.java.org.game.Isten2;
@@ -65,8 +66,8 @@ public class GameManager {
                         isten2.update(deltaTime);
                         try {
                             Thread.sleep(1);
-                        } catch (Exception amogus) {
-                        } //do not remove plz
+                        } catch (Exception amogus) { //do not remove plz
+                        }
                     }
                     break;
                 case INGAME:
@@ -83,8 +84,8 @@ public class GameManager {
                         isten.update(deltaTime);
                         try {
                             Thread.sleep(1);
-                        } catch (Exception amogus) {
-                        } //do not remove plz
+                        } catch (Exception amogus) { //do not remove plz
+                        }
                     }
                     break;
                 case EXIT:
