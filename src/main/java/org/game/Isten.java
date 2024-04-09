@@ -1,5 +1,6 @@
 package main.java.org.game;
 
+import main.java.org.entities.villain.Villain;
 import main.java.org.game.Camera.Camera;
 import main.java.org.game.Graphics.*;
 
@@ -10,6 +11,7 @@ import main.java.org.game.Map.Map;
 import main.java.org.game.UI.*;
 import main.java.org.game.physics.PhysicsEngine;
 import main.java.org.game.updatable.Updatable;
+import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 
@@ -103,6 +105,9 @@ public class Isten {
      */
     protected void addUpdatables() {
         updatables.add(new Player("II. Németh Szilárd"));
+        updatables.add(new Villain("Gonosz1", new Vec2(8,7), "./assets/villain/villain1.png"));
+        updatables.add(new Villain("Gonosz2", new Vec2(5,5), "./assets/villain/villain2.png"));
+        updatables.add(new Villain("Gonosz3", new Vec2(3,3), "./assets/villain/villain3.png"));
         updatables.add(new TimeCounter());
         updatables.add(new Help());
         updatables.add(new GameMenu());
