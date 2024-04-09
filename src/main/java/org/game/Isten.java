@@ -10,6 +10,7 @@ import main.java.org.game.Map.Map;
 import main.java.org.game.Timer.TimeCounter;
 import main.java.org.game.physics.PhysicsEngine;
 import main.java.org.game.updatable.Updatable;
+import main.java.org.linalg.Vec2;
 import main.java.org.networking.GameClient;
 import main.java.org.networking.GameServer;
 import main.java.org.networking.Packet00Login;
@@ -104,15 +105,16 @@ public class Isten {
     public void init() {
         player = new PlayerMP(JOptionPane.showInputDialog(this.getRenderer(),"Username"),null,-1);
 
+        player.localPlayer = true;
+
         addUpdatables();
         addRenderables();
 
-
         Packet00Login loginPacket = new Packet00Login(player.getUsername());
+
         if(socketServer != null) {
             socketServer.addConnection(player,loginPacket);
         }
-
 
         if(JOptionPane.showConfirmDialog(this.getRenderer(), "Server?") == 0) {
             socketServer = new GameServer(this);
@@ -173,5 +175,29 @@ public class Isten {
     public void removeUpdatable(Updatable u)
     {
         pendingRemovedUpdatables.add(u);
+    }
+
+    public GameClient getSocketClient() {
+        return socketClient;
+    }
+
+    public void movePlayer(String username, float x, float y) {
+        int index = getPlayerMPIndex(username);
+        ((PlayerMP)this.updatables.get(index)).getPlayerCollider().setPosition(new Vec2(x,y));
+    }
+
+    private int getPlayerMPIndex(String username) {
+        int index = 0;
+        for(int i = 0; i < updatables.size(); i++) {
+            Updatable u = updatables.get(i);
+            if(u instanceof PlayerMP) {
+                if(((PlayerMP)u).getUsername().equalsIgnoreCase(username)) {
+                    break;
+                }
+
+            }
+            index++;
+        }
+        return index;
     }
 }

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 public class Player extends Entity {
 
+    public boolean localPlayer = false;
     Collider playerCollider;
     ArrayList<Image> playerImage;
     int activeImage;
@@ -46,6 +47,7 @@ public class Player extends Entity {
     @Override
     public void onStart(Isten isten) {
         //called when the player is initialized
+
 
         Vec2 playerScale = new Vec2(0.5f, 0.5f);
 
@@ -96,18 +98,23 @@ public class Player extends Entity {
 
         if (isten.getInputHandler().isKeyDown(16)) run *= 2;//Shift is run
 
-        if (w) {
-            playerCollider.getVelocity().y = 2 * run;
-        } else if (!w) playerCollider.getVelocity().y = 0;
-        if (a) {
-            playerCollider.getVelocity().x = -2 * run;
-        } else if (!a) playerCollider.getVelocity().x = 0;
-        if (s) {
-            playerCollider.getVelocity().y = -2 * run;
-        } else if (!s && !w) playerCollider.getVelocity().y = 0;
-        if (d) {
-            playerCollider.getVelocity().x = 2 * run;
-        } else if (!d && !a) playerCollider.getVelocity().x = 0;
+        if(localPlayer) {
+            if (w) {
+                playerCollider.getVelocity().y = 2 * run;
+            } else if (!w) playerCollider.getVelocity().y = 0;
+            if (a) {
+                playerCollider.getVelocity().x = -2 * run;
+            } else if (!a) playerCollider.getVelocity().x = 0;
+            if (s) {
+                playerCollider.getVelocity().y = -2 * run;
+            } else if (!s && !w) playerCollider.getVelocity().y = 0;
+            if (d) {
+                playerCollider.getVelocity().x = 2 * run;
+            } else if (!d && !a) playerCollider.getVelocity().x = 0;
+        }
+
+
+
 
         //animation
 
@@ -135,7 +142,7 @@ public class Player extends Entity {
         playerName.setPosition(Vec2.sum(playerPosition, new Vec2( 0,(float)0.5)));
 
         //move camera
-        isten.getCamera().setPosition(playerCollider.getPosition());
+        if(localPlayer) isten.getCamera().setPosition(playerCollider.getPosition());
 
         //play sound
         if(!AudioManager.isPlaying(playerSound))
