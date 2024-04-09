@@ -25,7 +25,7 @@ public class Map extends Updatable {
         this.mapgenerator = new Mapgenerator(this, isten);
         mapgenerator.generate(minRoomSize);
 
-        printMap();
+       // printMap();
     }
 
     public Map(int rowNumber, int columnNumber, int minRoomSize){
@@ -57,7 +57,7 @@ public class Map extends Updatable {
              */
             System.out.println();
             System.out.println();
-            printMap();
+            //printMap();
             cnt++;
             delta = 0;
             merged = true;

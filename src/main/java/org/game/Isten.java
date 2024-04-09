@@ -10,7 +10,12 @@ import main.java.org.game.Map.Map;
 import main.java.org.game.Timer.TimeCounter;
 import main.java.org.game.physics.PhysicsEngine;
 import main.java.org.game.updatable.Updatable;
+import main.java.org.networking.GameClient;
+import main.java.org.networking.GameServer;
+import main.java.org.networking.Packet00Login;
+import main.java.org.networking.PlayerMP;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 /**
@@ -28,6 +33,11 @@ public class Isten {
     private final Input inputHandler;
 
     private final Camera camera;
+
+    private GameClient socketClient;
+    private GameServer socketServer;
+
+    private PlayerMP player;
 
     /**
      * Constructor for Isten.
@@ -92,9 +102,32 @@ public class Isten {
      * Method to initialize the game.
      */
     public void init() {
+        player = new PlayerMP(JOptionPane.showInputDialog(this.getRenderer(),"Username"),null,-1);
+
         addUpdatables();
         addRenderables();
+
+
+        Packet00Login loginPacket = new Packet00Login(player.getUsername());
+        if(socketServer != null) {
+            socketServer.addConnection(player,loginPacket);
+        }
+
+
+        if(JOptionPane.showConfirmDialog(this.getRenderer(), "Server?") == 0) {
+            socketServer = new GameServer(this);
+            socketServer.start();
+
+        }
+
+        socketClient = new GameClient(this, "localhost");
+        socketClient.start();
+
+
+        loginPacket.writeData(socketClient);
+
     }
+
 
     /**
      * Method to add renderable objects to the game renderer.
@@ -107,7 +140,8 @@ public class Isten {
      */
     private void addUpdatables()
     {
-        updatables.add(new Player("II. Németh Szilárd"));
+        //updatables.add(new Player("II. Németh Szilárd"))
+        updatables.add(player);
         updatables.add(new TimeCounter(600));
         updatables.add(new Map(10,10, 15));
     }
