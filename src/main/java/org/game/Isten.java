@@ -45,10 +45,10 @@ public class Isten {
         physicsEngine=new PhysicsEngine();
         renderer=new GameRenderer(camera, inputHandler);
         updatables=new ArrayList<>();
-        pendingUpdatables=new ArrayList<>();
         map=new Map(10, 10, 15);
-        player=new Player("B"+(char)233+"la");
+        player=new Player("II. Németh Szilárd császár");
         itemManager=new ItemManager();
+        pendingAddedUpdatables=new ArrayList<>();
         pendingRemovedUpdatables = new ArrayList<>();
     }
 
@@ -117,7 +117,7 @@ public class Isten {
         updatables.add(player);
         updatables.add(itemManager);
         updatables.add(inventory);
-        updatables.add(new TimeCounter(10));
+        updatables.add(new TimeCounter());
         updatables.add(map);
         updatables.add(new ChestManager(500));//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
         updatables.add(new Help());
