@@ -69,7 +69,7 @@ public class Vec2 implements Cloneable{
         return new Vec2(a.x-b.x, a.y-b.y);
     }
 
-    public float dot(Vec2 a, Vec2 b)
+    public static float dot(Vec2 a, Vec2 b)
     {
         return a.x*b.x+a.y*b.y;
     }

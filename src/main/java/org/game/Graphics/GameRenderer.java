@@ -103,7 +103,8 @@ public class GameRenderer extends JPanel implements ActionListener {
         graphics.fillRect(0,0,this.getWidth(), this.getHeight());
 
         if(renderables.isEmpty()) return;
-        for(Renderable renderable : renderables) {
+        for(int i=0;i<renderables.size();i++) {
+            Renderable renderable = renderables.get(i);
             //if it is not visible, yeet
             if(!renderable.getVisibility())
                 continue;
@@ -137,16 +138,6 @@ public class GameRenderer extends JPanel implements ActionListener {
         coords.y=this.getHeight()-coords.y;
         return coords;
     }
-    public Vec2 convertScreenToWorld(Vec2 screenSpaceCoords, Camera cam)
-    {
-        Vec2 coords = new Vec2();
-
-        coords.x = (screenSpaceCoords.x - 0.5f * this.getWidth()) / cam.getPixelsPerUnit() + cam.getPosition().x;
-        coords.y = (this.getHeight() - screenSpaceCoords.y - 0.5f * this.getHeight()) / cam.getPixelsPerUnit() + cam.getPosition().y;
-
-        return coords;
-    }
-
 
     private void sortRenderables()
     {

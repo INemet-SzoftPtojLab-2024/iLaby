@@ -130,6 +130,21 @@ lehet jol jon majd
     public void setRightIsDoor(boolean rightIsDoor) {
         this.rightIsDoor = rightIsDoor;
     }
+    public boolean getTopIsWall(){
+        if(this.top==null)return false;
+        return !(this.top instanceof Door);
+    }
+    public boolean getBottomIsWall(){
+        if(this.bottom==null)return false;
+        return !(this.bottom instanceof Door);
+    }
+    public boolean getRightIsWall(){
+        if(this.right==null)return false;
+        return !(this.right instanceof Door);
+    }
+    public boolean getLeftIsWall(){
+        if(this.left==null)return false;
+        return !(this.left instanceof Door);
     */
     public Wall getTopWall() {return topWall;}
 
