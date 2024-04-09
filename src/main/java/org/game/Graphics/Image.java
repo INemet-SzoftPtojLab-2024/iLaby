@@ -144,5 +144,4 @@ public class Image extends Renderable {
         loadedImages.put(file.getAbsolutePath(), image);
         return image;
     }
-
 }
