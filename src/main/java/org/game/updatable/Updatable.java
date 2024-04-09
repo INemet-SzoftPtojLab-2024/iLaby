@@ -6,6 +6,7 @@ public abstract class Updatable {
 
     private String tag="";
     private boolean isInitialized=false;
+    private boolean isDestroyed=false;
 
     /** az elso update hivas elott hivodik.*/
     public abstract void onStart(Isten isten);
@@ -16,4 +17,6 @@ public abstract class Updatable {
     public final void setTag(String tag){this.tag=tag;}
     public final boolean isInitialized(){return this.isInitialized;}
     public final void setInitializedTrue(){this.isInitialized=true;}
+    public final boolean isDestroyed(){return this.isDestroyed;}
+    public final void setDestroyedTrue(){this.isDestroyed=true;}
 }

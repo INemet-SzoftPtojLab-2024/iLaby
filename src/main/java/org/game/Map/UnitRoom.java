@@ -2,32 +2,39 @@ package main.java.org.game.Map;
 
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Isten;
-import main.java.org.game.physics.Collider;
 import main.java.org.linalg.Vec2;
 
-import java.nio.file.Files;
 import java.util.ArrayList;
 
-public class UnitRoom {
-
+public class UnitRoom implements Graph<UnitRoom>{
+//sorting layer: 40
     private Vec2 position;
-    private Wall top,left,right,bottom;
-    private Item item;
-    public Image image;
-    private ArrayList<UnitRoom> adjacentUnitRooms;
-    private Room  ownerRoom;
-    private boolean inRoom;
 
+    private Wall topWall = null, leftWall = null, rightWall = null, bottomWall = null;
+
+    private Item item;
+    public Image image = null;
+    private ArrayList<UnitRoom> adjacentUnitRooms;
+    private UnitRoom TopNeighbor = null;
+    private UnitRoom BottomNeighbor = null;
+    private UnitRoom LeftNeighbor = null;
+    private UnitRoom RightNeighbor = null;
+    private Room  ownerRoom;
+    //this stores information only for generating
+    private boolean inRoom;
+/*
+lehet jol jon majd
+    private boolean topIsWall = false, bottomIsWall = false, leftIsWall = false, rightIsWall = false;
     private boolean topIsDoor = false, bottomIsDoor = false, leftIsDoor = false, rightIsDoor = false;
+
+ */
 
     public UnitRoom(Vec2 pos) {
         this.position = pos;
         this.inRoom = false;
         adjacentUnitRooms = new ArrayList<>();
     }
-    public void setImage(Image image) {
-        this.image = image;
-    }
+
 
     public void setOwnerRoom(Room ownerRoom){
         this.ownerRoom = ownerRoom;
@@ -54,105 +61,43 @@ public class UnitRoom {
         return position;
     }
 
-    public void createWalls(Isten isten) {
-        boolean hasTop = false, hasBottom = false, hasLeft = false, hasRight = false;
-        for(UnitRoom neighbour: adjacentUnitRooms) {
-            if(neighbour.getOwnerRoom().getID() != ownerRoom.getID()) {
-                if(!ownerRoom.hasDoorWith(neighbour.getOwnerRoom().getID())
-                        && !topIsDoor
-                        && !bottomIsDoor
-                        && !leftIsDoor
-                        && !rightIsDoor
-                        && !neighbour.isTopIsDoor()
-                        && !neighbour.isBottomIsDoor()
-                        && !neighbour.isLeftIsDoor()
-                        && !neighbour.isRightIsDoor()
-                ) {
-                    if(neighbour.getPosition().x < position.x) {
-                        leftIsDoor = true;
-                        neighbour.setRightIsDoor(true);
-                    }
-                    else if(neighbour.getPosition().x > position.x) {
-                        rightIsDoor = true;
-                        neighbour.setLeftIsDoor(true);
-                    }
-                    else if(neighbour.getPosition().y > position.y) {
-                        topIsDoor = true;
-                        neighbour.setBottomIsDoor(true);
-                    }
-                    else if(neighbour.getPosition().y < position.y) {
-                        bottomIsDoor = true;
-                        neighbour.setTopIsDoor(true);
-                    }
-                    ownerRoom.addHasDoorWith(neighbour.getOwnerRoom().getID());
-                    neighbour.getOwnerRoom().addHasDoorWith(ownerRoom.getID());
-                    ownerRoom.currDoorCount++;
-                    neighbour.getOwnerRoom().currDoorCount++;
-                }
-                continue;
+    public boolean isAdjacent(UnitRoom unitRoom){
+        for (UnitRoom adjacentUnitRoom :this.getAdjacentUnitRooms()){
+            if(adjacentUnitRoom.equals(unitRoom)){
+                return true;
             }
 
-            if(neighbour.getPosition().x < position.x) {
-                hasLeft = true;
-            }
-            if(neighbour.getPosition().x > position.x) {
-                hasRight = true;
-            }
-            if(neighbour.getPosition().y > position.y) {
-                hasTop = true;
-            }
-            if(neighbour.getPosition().y < position.y) {
-                hasBottom = true;
-            }
         }
+        return false;
+    }
+    public void setNewImage(String imgPath, Isten isten) {
+        Image newImage = new Image(position, new Vec2(1,1), imgPath);
+        //ha ki akajuk cserélni a képet akkor ki kell venni  a renderablek kozol
+        if(image != null){
+            isten.getRenderer().deleteRenderable(image);
+        }
+        this.image = newImage;
+        //this is under a lot of things
+        newImage.setSortingLayer(40);
+        isten.getRenderer().addRenderable(newImage);
+    }
+    public void addRightImage(Isten isten){
 
-        String wallPath = "./assets/rooms/11.png";
-        String doorPath = "./assets/rooms/10.png";
-        Vec2 midColliderScale = new Vec2(1, 0.1f);
-        Vec2 outerColliderScale = new Vec2(0.1f, 1);
-        Vec2 wallTopPos = new Vec2(position.x, position.y + 0.5f);
-        Vec2 wallBottomPos = new Vec2(position.x, position.y - (1 - midColliderScale.y) + (0.5f - midColliderScale.y));
-        Vec2 wallRightPos = new Vec2(position.x + 0.5f, position.y);
-        Vec2 wallLeftPos = new Vec2(position.x - 0.5f, position.y);
-        if(topIsDoor) {
-            top = createDoorWithoutCollider(isten, wallTopPos, midColliderScale, doorPath);
+        int j;
+        //TODO EVIKE
+        switch (ownerRoom.roomType){
+            case GAS -> j = 1;
+            case SHADOW -> j = 2;
+            case CURSED -> j = 3;
+            case BASIC -> j = 4;
+            default -> j = 0;
         }
-        else if(!hasTop) {
-            top = createWallWithCollider(isten, wallTopPos, midColliderScale, wallPath);
-        }
-        if(bottomIsDoor) {
-            bottom = createDoorWithoutCollider(isten, wallBottomPos, midColliderScale, doorPath);
-        }
-        else if(!hasBottom) {
-            bottom = createWallWithCollider(isten, wallBottomPos, midColliderScale, wallPath);
-        }
-        if(rightIsDoor) {
-            right = createDoorWithoutCollider(isten, wallRightPos, outerColliderScale, doorPath);
-        }
-        else if(!hasRight) {
-            right = createWallWithCollider(isten, wallRightPos, outerColliderScale, wallPath);
-        }
-        if(leftIsDoor) {
-            left = createDoorWithoutCollider(isten, wallLeftPos, outerColliderScale, doorPath);
-        }
-        else if(!hasLeft) {
-            left = createWallWithCollider(isten, wallLeftPos, outerColliderScale, wallPath);
-        }
+        if(ownerRoom.getID() == 999) j = 5;
+        String path = "./assets/rooms/" + j + ".png";
+        setNewImage(path, isten);
     }
 
-    private Wall createWallWithCollider(Isten isten, Vec2 pos, Vec2 scale, String imgPath) {
-        Collider collider = new Collider(pos, scale);
-        Image img = new Image(pos, scale, imgPath);
-        isten.getRenderer().addRenderable(img);
-        ownerRoom.addCollider(collider);
-        return new Wall();
-    }
-
-    private Door createDoorWithoutCollider(Isten isten, Vec2 pos, Vec2 scale, String imgPath) {
-        Image img = new Image(pos, scale, imgPath);
-        isten.getRenderer().addRenderable(img);
-        return new Door();
-    }
+/*
 
     public boolean isTopIsDoor() {
         return topIsDoor;
@@ -200,5 +145,52 @@ public class UnitRoom {
     public boolean getLeftIsWall(){
         if(this.left==null)return false;
         return !(this.left instanceof Door);
+    */
+    public Wall getTopWall() {return topWall;}
+
+    public Wall getLeftWall() {return leftWall;}
+
+    public Wall getRightWall() {return rightWall;}
+
+    public Wall getBottomWall() {return bottomWall;}
+
+    public void setTopWall(Wall topWall) {this.topWall = topWall;}
+
+    public void setLeftWall(Wall leftWall) {this.leftWall = leftWall;}
+
+    public void setRightWall(Wall rightWall) {this.rightWall = rightWall;}
+
+    public void setBottomWall(Wall bottomWall) {this.bottomWall = bottomWall;}
+
+    public void setTopNeighbor(UnitRoom topNeighbor) {
+        TopNeighbor = topNeighbor;
+    }
+
+    public void setBottomNeighbor(UnitRoom bottomNeighbor) {
+        BottomNeighbor = bottomNeighbor;
+    }
+
+    public void setLeftNeighbor(UnitRoom leftNeighbor) {
+        LeftNeighbor = leftNeighbor;
+    }
+
+    public void setRightNeighbor(UnitRoom rightNeighbor) {
+        RightNeighbor = rightNeighbor;
+    }
+
+    public UnitRoom getTopNeighbor() {
+        return TopNeighbor;
+    }
+
+    public UnitRoom getBottomNeighbor() {
+        return BottomNeighbor;
+    }
+
+    public UnitRoom getLeftNeighbor() {
+        return LeftNeighbor;
+    }
+
+    public UnitRoom getRightNeighbor() {
+        return RightNeighbor;
     }
 }

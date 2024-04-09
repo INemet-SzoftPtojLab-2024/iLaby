@@ -1,13 +1,19 @@
 package main.java.org.entities.player;
 
+
+import main.java.org.game.Audio.AudioManager;
+import main.java.org.game.Audio.Sound;
+import main.java.org.game.Camera.Camera;
+import main.java.org.game.Graphics.*;
+
 import main.java.org.entities.Entity;
 
-import main.java.org.game.Graphics.Image;
-import main.java.org.game.Graphics.Text;
 import main.java.org.game.Isten;
+import main.java.org.game.UI.TimeCounter;
 import main.java.org.game.physics.Collider;
 import main.java.org.linalg.Vec2;
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 /**
@@ -17,14 +23,18 @@ public class Player extends Entity {
 
     Collider playerCollider;
     ArrayList<Image> playerImage;
+    ImageUI death;
     int activeImage;
     float time;
     Text playerName;
     boolean alive;  //Bool variable, to store status of player: ded or alive
 
+    Sound playerSound = null;
+
     public Player() {
         playerCollider = null;
         playerImage = null;
+        death = null;
         activeImage = 0;
         time = 0.0f;
         playerName = null;
@@ -34,6 +44,7 @@ public class Player extends Entity {
     public Player(String name) {
         playerCollider = null;
         playerImage = null;
+        death = null;
         activeImage = 0;
         time = 0.0f;
         playerName = new Text(name, new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 0, 0, 255);
@@ -58,10 +69,14 @@ public class Player extends Entity {
         playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_left2.png"));
         playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_ded.png"));
 
-        for (Image i : playerImage)
-            i.setSortingLayer(-69);
+        death = new ImageUI(new Vec2(0, 0), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/character/ded.png");
+        death.setSortingLayer(-70);
+        death.setVisibility(false);
+        death.setAlignment(Renderable.CENTER, Renderable.CENTER);
+        isten.getRenderer().addRenderable(death);
 
         for (Image im : playerImage) {
+            im.setSortingLayer(-69);
             im.setVisibility(false);
             isten.getRenderer().addRenderable(im);//register images in the renderer
         }
@@ -77,6 +92,10 @@ public class Player extends Entity {
 
         //adjust camera zoom
         isten.getCamera().setPixelsPerUnit(100);
+
+        //preload player sound
+        AudioManager.preloadSound("./assets/audio/playersound.ogg");
+        AudioManager.preloadSound("./assets/audio/died.ogg");
     }
 
     @Override
@@ -85,12 +104,12 @@ public class Player extends Entity {
         if (alive) {
             //move the character
             int run = 1;
-            boolean w = isten.getInputHandler().isKeyDown('W');
-            boolean a = isten.getInputHandler().isKeyDown('A');
-            boolean s = isten.getInputHandler().isKeyDown('S');
-            boolean d = isten.getInputHandler().isKeyDown('D');
+            boolean w = isten.getInputHandler().isKeyDown(KeyEvent.VK_W);
+            boolean a = isten.getInputHandler().isKeyDown(KeyEvent.VK_A);
+            boolean s = isten.getInputHandler().isKeyDown(KeyEvent.VK_S);
+            boolean d = isten.getInputHandler().isKeyDown(KeyEvent.VK_D);
 
-            if (isten.getInputHandler().isKeyDown(16)) run *= 2;//Shift is run
+            if (isten.getInputHandler().isKeyDown(KeyEvent.VK_SHIFT)) run *= 2;//Shift is run
 
             if (w) {
                 playerCollider.getVelocity().y = 2 * run;
@@ -132,13 +151,28 @@ public class Player extends Entity {
 
             //move camera
             isten.getCamera().setPosition(playerCollider.getPosition());
+
+            //play sound
+            if (!AudioManager.isPlaying(playerSound))
+                playerSound = AudioManager.playSound("./assets/audio/playersound.ogg");
+
+            if (TimeCounter.getTimeRemaining() < 0 && alive) {
+                alive = false;
+                AudioManager.closeSound(playerSound);
+            }
+
         } else {
+            if (!AudioManager.isPlaying(playerSound))
+                playerSound = AudioManager.playSound("./assets/audio/died.ogg");
+
             if (activeImage != 4) {
                 playerImage.get(activeImage).setVisibility(false);
                 activeImage = 4;
                 playerImage.get(activeImage).setVisibility(true);
+                death.setVisibility(true);
             }
         }
+        death.setScale(new Vec2(isten.getRenderer().getWidth(),isten.getRenderer().getHeight()));
     }
 
     @Override

@@ -1,27 +1,19 @@
 package main.java.org.game.UI;
 
-import main.java.org.game.Graphics.GameRenderer;
-import main.java.org.game.Graphics.ImageUI;
-import main.java.org.game.Graphics.Renderable;
-import main.java.org.game.Graphics.TextUI;
+import main.java.org.game.Graphics.*;
 import main.java.org.game.Isten;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 
 public class TimeCounter extends Updatable {
-    private double timeRemaining; //Unit:sec
+    private static double timeRemaining; //Unit:sec
     private ImageUI timerBackgroundImage;
     private TextUI timeText;
-    GameRenderer renderer;
 
-    /**
-     * @param time the available time, unit:sec
-     */
-    public TimeCounter(double time) {
-        timeRemaining = time;
+
+    public TimeCounter() {
         timerBackgroundImage = null;
         timeText = null;
-        renderer = null;
     }
 
     public String secondsToMMSS(double seconds) {
@@ -30,13 +22,16 @@ public class TimeCounter extends Updatable {
         return String.format("%02d:%02d", minutes, (long) seconds);
     }
 
-    public double getTimeRemaining(){
+    public static void setTime(double time) {
+        timeRemaining = time;
+    }
+
+    public static double getTimeRemaining() {
         return timeRemaining;
     }
 
     @Override
     public void onStart(Isten isten) {
-        renderer = isten.getRenderer();
         timeText = new TextUI(secondsToMMSS(timeRemaining), new Vec2(5, 10), "./assets/Monocraft.ttf", 13, 255, 255, 0);
         timerBackgroundImage = new ImageUI(new Vec2(0, 25), new Vec2(100, 50), "./assets/ui/timer_background.png");
 
