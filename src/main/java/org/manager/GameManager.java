@@ -41,6 +41,7 @@ public class GameManager {
             frame.add(panel);
 
         frame.setContentPane(panel);
+        panel.setPreferredSize(frame.getSize());
         panel.requestFocusInWindow();
         frame.revalidate();
         frame.pack();
@@ -69,6 +70,8 @@ public class GameManager {
                         } catch (Exception amogus) { //do not remove plz
                         }
                     }
+                    AudioManager.closeAllSounds();
+                    AudioManager.unloadPreloadedSounds();
                     break;
                 case INGAME:
                     Isten isten = new Isten();
@@ -87,6 +90,8 @@ public class GameManager {
                         } catch (Exception amogus) { //do not remove plz
                         }
                     }
+                    AudioManager.closeAllSounds();
+                    AudioManager.unloadPreloadedSounds();
                     break;
                 case EXIT:
                     frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));

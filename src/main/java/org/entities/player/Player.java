@@ -69,7 +69,7 @@ public class Player extends Entity {
         playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_left2.png"));
         playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_ded.png"));
 
-        death = new ImageUI(new Vec2(0, -250), new Vec2(isten.getRenderer().getWidth(), 400), "./assets/character/ded.png");
+        death = new ImageUI(new Vec2(0, 0), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/character/ded.png");
         death.setSortingLayer(-70);
         death.setVisibility(false);
         death.setAlignment(Renderable.CENTER, Renderable.CENTER);
@@ -172,6 +172,7 @@ public class Player extends Entity {
                 death.setVisibility(true);
             }
         }
+        death.setScale(new Vec2(isten.getRenderer().getWidth(),isten.getRenderer().getHeight()));
     }
 
     @Override

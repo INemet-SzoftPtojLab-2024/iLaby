@@ -19,7 +19,7 @@ public class GameMenu extends Updatable {
 
     @Override
     public void onStart(Isten isten) {
-        escape = new ButtonUI(new Vec2(0, 0), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Escape", "./assets/Monocraft.ttf", 50);
+        escape = new ButtonUI(new Vec2(0, 100), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Escape", "./assets/Monocraft.ttf", 50);
         //ded = new ImageUI(new Vec2(0, 0), new Vec2(375, 100), "./assets/ui/character/ded.png");
 
         escape.setAlignment(Renderable.CENTER,Renderable.CENTER);
