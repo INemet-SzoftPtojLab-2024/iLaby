@@ -10,7 +10,6 @@ import main.java.org.game.Map.Map;
 import main.java.org.game.UI.*;
 import main.java.org.game.physics.PhysicsEngine;
 import main.java.org.game.updatable.Updatable;
-import main.java.org.manager.GameManager;
 
 import java.util.ArrayList;
 
