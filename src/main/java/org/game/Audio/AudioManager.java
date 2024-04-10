@@ -139,8 +139,8 @@ public final class AudioManager {
         {
             si.clip.stop();
             si.clip.close();
-            activeSounds.remove(si);
         }
+        activeSounds.clear();
     }
 
     /**
