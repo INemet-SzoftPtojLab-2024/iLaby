@@ -9,10 +9,6 @@ import java.util.ArrayList;
 public class UnitRoom implements Graph<UnitRoom>{
 //sorting layer: 40
     private Vec2 position;
-
-    private Wall topWall = null, leftWall = null, rightWall = null, bottomWall = null;
-
-    private Item item;
     public Image image = null;
     private ArrayList<UnitRoom> adjacentUnitRooms;
     private UnitRoom TopNeighbor = null;
@@ -22,6 +18,7 @@ public class UnitRoom implements Graph<UnitRoom>{
     private Room  ownerRoom;
     //this stores information only for generating
     private boolean inRoom;
+    private boolean hasDoor = false;
 /*
 lehet jol jon majd
     private boolean topIsWall = false, bottomIsWall = false, leftIsWall = false, rightIsWall = false;
@@ -97,6 +94,35 @@ lehet jol jon majd
         setNewImage(path, isten);
     }
 
+    //akkor is igaz ha ajto!!
+    public boolean isTopWall(){
+        if(TopNeighbor == null) return true;
+        else return ownerRoom.getID() != TopNeighbor.getOwnerRoom().getID();
+    }
+    //akkor is igaz ha ajto!!
+    public boolean isBottomWall(){
+        if(BottomNeighbor == null) return true;
+        else return ownerRoom.getID() != BottomNeighbor.getOwnerRoom().getID();
+    }
+    //akkor is igaz ha ajto!!
+    public boolean isLeftWall(){
+        if(LeftNeighbor == null) return true;
+        else return ownerRoom.getID() != LeftNeighbor.getOwnerRoom().getID();
+    }
+    //akkor is igaz ha ajto!!
+    public boolean isRightWall(){
+        if(RightNeighbor == null) return true;
+        else return ownerRoom.getID() != RightNeighbor.getOwnerRoom().getID();
+    }
+
+    public boolean hasDoor(){
+        return hasDoor;
+    }
+    public void setHasDoor(boolean hasDoor){
+        this.hasDoor = hasDoor;
+    }
+
+
 /*
 
     public boolean isTopIsDoor() {
@@ -131,21 +157,6 @@ lehet jol jon majd
         this.rightIsDoor = rightIsDoor;
     }
     */
-    public Wall getTopWall() {return topWall;}
-
-    public Wall getLeftWall() {return leftWall;}
-
-    public Wall getRightWall() {return rightWall;}
-
-    public Wall getBottomWall() {return bottomWall;}
-
-    public void setTopWall(Wall topWall) {this.topWall = topWall;}
-
-    public void setLeftWall(Wall leftWall) {this.leftWall = leftWall;}
-
-    public void setRightWall(Wall rightWall) {this.rightWall = rightWall;}
-
-    public void setBottomWall(Wall bottomWall) {this.bottomWall = bottomWall;}
 
     public void setTopNeighbor(UnitRoom topNeighbor) {
         TopNeighbor = topNeighbor;

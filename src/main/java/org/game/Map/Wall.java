@@ -43,6 +43,10 @@ public class Wall {
         collider = null;
         position = null;
 
+        //itt kulonbozik az ajto es a faltol!!
+        //overridolni kell az abstrakt osnel
+        unitRoomsBetween.get(0).setHasDoor(false);
+        unitRoomsBetween.get(1).setHasDoor(false);
     }
 
     public void setNewImage(String imgPath, Vec2 scale,  Isten isten) {
@@ -69,5 +73,5 @@ public class Wall {
     }
     public boolean isDoor(){
         return !collider.isSolid();
-    }
+    } // abstract osnel nem a collidert kell nezni!
 }

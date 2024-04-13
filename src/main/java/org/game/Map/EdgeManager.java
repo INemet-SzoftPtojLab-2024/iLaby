@@ -7,6 +7,7 @@ import main.java.org.game.physics.Collider;
 import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 @Getter
@@ -16,6 +17,7 @@ import java.util.Random;
  */
 //otlet: minden roomba a hozza tartozo edget eltarolni(lehet folosleges), vagy ez mar atvenne az edge manager szerepet?!
 public class EdgeManager {
+    Isten isten;
     private ArrayList<EdgeBetweenRooms> roomEdges;
     public EdgeManager(){
         roomEdges = new ArrayList<>();
@@ -204,14 +206,34 @@ public class EdgeManager {
         int randomIndex = rand.nextInt(edge.getWalls().size());
         edge.switchWallToDoor(edge.getWalls().get(randomIndex), isten);
     }
+
+    //elofordolhat hogy egy edge nem kap ajtot!!
     public void initDoors(Isten isten){
+        for(EdgeBetweenRooms edge : roomEdges){
+            if(edge.getWalls().size() == 1){
+                edge.switchWallToDoor(edge.getWalls().get(0), isten);
+            }
+        }
+
         //TODO
         //optimalizaljuk hogy ne legyen egy unitroomhoz tobb ajto
-        Random rand = new Random();
+        ArrayList<Integer> random = new ArrayList<>();
         for(EdgeBetweenRooms edge : roomEdges){
-            int randomIndex = rand.nextInt(edge.getWalls().size());
-            //informaciowasztes?!
-            edge.switchWallToDoor(edge.getWalls().get(randomIndex), isten);
+            random.clear();
+            if(edge.doorNum() < 1) {
+                for(int i = 0; i < edge.getWalls().size(); i++){
+                    random.add(i);
+                }
+                Collections.shuffle(random);
+                for(Integer randomIndex : random)
+                {
+                    if(!edge.getWalls().get(randomIndex).getUnitRoomsBetween().get(0).hasDoor()
+                            && !edge.getWalls().get(randomIndex).getUnitRoomsBetween().get(1).hasDoor()) {
+                        edge.switchWallToDoor(edge.getWalls().get(randomIndex), isten);
+                        break;
+                    }
+                }
+            }
         }
     }
     public ArrayList<EdgeBetweenRooms> getRoomEdges() {

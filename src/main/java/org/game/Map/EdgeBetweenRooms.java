@@ -48,6 +48,8 @@ public class EdgeBetweenRooms {
         newDoor.setNewImage(doorPath, wallToSwitch.getCollider().getScale(), isten);
 
         walls.add(newDoor);
+        newDoor.getUnitRoomsBetween().get(0).setHasDoor(true);
+        newDoor.getUnitRoomsBetween().get(1).setHasDoor(true);
         walls.remove(wallToSwitch);
     }
     public void switchDoorToWall(Door doorToSwitch, Isten isten){
@@ -60,10 +62,14 @@ public class EdgeBetweenRooms {
         newWall.setNewImage(wallPath, doorToSwitch.getCollider().getScale(), isten);
 
         walls.add(newWall);
+        newWall.getUnitRoomsBetween().get(0).setHasDoor(false);
+        newWall.getUnitRoomsBetween().get(1).setHasDoor(false);
         walls.remove(doorToSwitch);
 
     }
     public void removeWallPiece(Wall wallToRemove, Isten isten){
+        wallToRemove.getUnitRoomsBetween().get(0).setHasDoor(false);
+        wallToRemove.getUnitRoomsBetween().get(1).setHasDoor(false);
         for(int i = 0; i < walls.size();i++){
             if(wallToRemove.equals(walls.get(i))){
                 walls.get(i).removeWall(isten, colliderGroup);
@@ -71,6 +77,13 @@ public class EdgeBetweenRooms {
                 return;
             }
         }
+    }
+    public int doorNum(){
+        int cnt = 0;
+        for(Wall wall : walls){
+            if(wall.isDoor()) cnt++;
+        }
+        return cnt;
     }
 
     public ArrayList<Room> getNodeRooms() {

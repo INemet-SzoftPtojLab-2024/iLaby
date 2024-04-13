@@ -7,6 +7,7 @@ import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 /**
  * this class is only used at the beginning of a game, when a map needs to be generated
@@ -164,7 +165,7 @@ public class Mapgenerator {
             minSize = Integer.MAX_VALUE;
             //System.out.println("RoomNum befor merge: " + rooms.size());
             for (int i = 0; i < map.getRooms().size(); i++) {
-                if (map.getRooms().get(i).getUnitRooms().size() <= size) { //if smaller than 6 unitrooms --> merge
+                if (map.getRooms().get(i).getUnitRooms().size() <= size) { //if smaller than "size" unitrooms --> merge
                     r1 = map.getRooms().get(i);
                     //search the smallest adjacentroom
                     //System.out.println("adjroomsize:" + rooms.get(i).getAdjacentRooms().size());
@@ -176,7 +177,7 @@ public class Mapgenerator {
                     }
                     //System.out.println("minsize: " + minSize);
                     //System.out.println("merge: " + r1.getID() + " " + r2.getID());
-                    mergeRooms(r1,r2);
+                    mergeRooms(r1, r2);
                     break; // we have found the two mergeable rooms
 
                 }
@@ -188,6 +189,27 @@ public class Mapgenerator {
             //System.out.println("RoomNum after merge: " + rooms.size());
             //System.out.println();
         }
+    }
+
+    private Room getLongestEdgeNeighbour(Room r, int size){
+        //ebbe a listaba taroljuk hogy mejk szomszednak milyen hosszu a szomszedja
+        int[] edgeLengths = new int[r.getAdjacentRooms().size()];
+        for(Integer edgelen : edgeLengths) edgelen = 0;
+        for(UnitRoom ur : r.getUnitRooms()){
+            for(UnitRoom neighbour : ur.getAdjacentUnitRooms()){
+                if(neighbour.getOwnerRoom().getID() != r.getID()){
+                    edgeLengths[r.getAdjacentRooms().indexOf(neighbour.getOwnerRoom())]++;
+                }
+            }
+        }
+        int longestIdx = 0;
+        for(int i = 0; i < edgeLengths.length; i++){
+            if(edgeLengths[i] > edgeLengths[longestIdx] && /*r.getAdjacentRooms().get(i).getUnitRooms().size() < 15*/
+             edgeLengths[i] < 4){ // ezen meg kell tokeletesiteni ha hasznalni akarjuk!!
+                longestIdx = i;
+            }
+        }
+        return r.getAdjacentRooms().get(longestIdx);
     }
     public void addImages() {
         for(Room room: map.getRooms()) {

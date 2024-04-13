@@ -9,5 +9,11 @@ public class Door extends Wall {
     public Door(Collider collider, Vec2 position , UnitRoom ur1, UnitRoom ur2){ //does not set the image!!!!
         super(collider, position, ur1, ur2);
     }
+    //TODO AKOS
+    //implement open and close (set the colliers)
+    //and implement isOpened
+    //isDoor funktion that return true (if it has abstract base class)
+    //mineden mas ami a wallban van, mehet az abstrakt osben
+    // a remove Wallban van kulonbseg
 
 }
