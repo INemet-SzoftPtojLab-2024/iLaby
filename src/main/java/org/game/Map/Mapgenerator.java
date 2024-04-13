@@ -225,29 +225,6 @@ public class Mapgenerator {
         map.getRooms().remove(r2);
     }
 
-    /*
-    public void createWallsForMap() {
-        ArrayList<Integer> randomizedMapRow = new ArrayList<>();
-        ArrayList<Integer> randomizedMapColumn = new ArrayList<>();
-        for(int i = 0; i < map.getMapRowSize(); i++) {
-            randomizedMapRow.add(i);
-        }
-        for(int i = 0; i < map.getMapColumnSize(); i++) {
-            randomizedMapColumn.add(i);
-        }
-        Collections.shuffle(randomizedMapRow);
-        Collections.shuffle(randomizedMapColumn);
-
-        for(int i: randomizedMapRow) {
-            // System.out.println("i: " + i);
-            for (int j: randomizedMapColumn) {
-                map.getUnitRooms()[i][j].createWalls(isten);
-            }
-        }
-    }
-
-     */
-
     public void defineEdges(){
         for(Room r1: map.getRooms()) {
             for (Room r2 : map.getRooms()) {

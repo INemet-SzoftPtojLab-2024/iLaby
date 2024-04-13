@@ -3,6 +3,7 @@ package main.java.org.game.Map;
 import lombok.Getter;
 import lombok.Setter;
 import main.java.org.game.Isten;
+import main.java.org.game.physics.Collider;
 import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
@@ -54,15 +55,38 @@ public class EdgeManager {
 
     //sets new neighbor to r1
     //ahol r2 van oda r1-et állítunk (merge miatt)
-    public void updateEdgesAfterMerge(Room remaining, Room removed){ //mergenel hasznaljuk csak
+    public void updateEdgesAfterMerge(Room remaining, Room deleted, Isten isten){ //mergenel hasznaljuk csak
         //r1 szoba marad
         //r2 torlodik (ahol szerepl, ki kell cserelni r1-re)
         for(EdgeBetweenRooms edgeBetweenRoom : roomEdges){
-            if(edgeBetweenRoom.getNodeRooms().contains(removed)){
-                edgeBetweenRoom.getNodeRooms().remove(removed);
-                edgeBetweenRoom.getNodeRooms().add(remaining);
+            if(edgeBetweenRoom.getNodeRooms().contains(deleted)){
+
+                int indexOfDeletedNode = edgeBetweenRoom.getNodeRooms().indexOf(deleted);
+                int index = 0;
+                if(indexOfDeletedNode == 0) index = 1;
+                if(remaining.isAdjacent(edgeBetweenRoom.getNodeRooms().get(index))){//itt mar csak egy eleme lesz(az a szoba ami ramovednak is meg a remainignek is szomszedja)
+                    // get the other indexNodeRoomINdex
+                    Room RDAdjacent = edgeBetweenRoom.getNodeRooms().get(index);//szoba amia remainingnek es a deletednek is szomszadja
+                    EdgeBetweenRooms edgeBetweenRAndRDAdjacent = getEdgeBetweenRooms(remaining, RDAdjacent);
+
+                    for(int i = 0; i < edgeBetweenRoom.getWalls().size(); i++){
+                        //ha ajto akkor kicsereljuk falra
+                        //TODO ha megvan az abstrakt os wallnak es a doornak at kell irni, igy infromaciovestes van a kazstolasnal
+                        if(edgeBetweenRoom.getWalls().get(i).isDoor()) edgeBetweenRoom.switchDoorToWall((Door)edgeBetweenRoom.getWalls().get(i), isten);
+                        edgeBetweenRAndRDAdjacent.getWalls().add(edgeBetweenRoom.getWalls().get(i));
+                        edgeBetweenRAndRDAdjacent.getColliderGroup().addCollider(edgeBetweenRoom.getWalls().get(i).collider);
+                    }
+                    isten.getPhysicsEngine().removeColliderGroup(edgeBetweenRoom.getColliderGroup().id);
+                    edgeBetweenRoom.getColliderGroup().getColliders().clear();
+
+                }
+                else{
+                    edgeBetweenRoom.getNodeRooms().remove(deleted);
+                    edgeBetweenRoom.getNodeRooms().add(remaining);
+                }
             }
         }
+
     }
     public void updateEdgesAfterSplit(Room oldRoom, Room newRoom, Isten isten){
         //and colliders(walls and edges)
@@ -102,10 +126,11 @@ public class EdgeManager {
                             //a maradek lesz az oldroom edge-e
                             if (checkEdgeWall.getUnitRoomsBetween().get(0).getOwnerRoom().getID() == newRoomID
                                     || checkEdgeWall.getUnitRoomsBetween().get(1).getOwnerRoom().getID() == newRoomID) {
-                                checkEdgeWall.removeWall(isten, checkEdge.getColliderGroup());
-                                wallsToRemoveFromCheckEdge.add(checkEdgeWall);
-                                if (!checkEdgeWall.getCollider().isSolid())//ha ajtot torlunk
+
+                                if (checkEdgeWall.isDoor())//ha ajtot torlunk
                                     doorRemoved = true;
+                                wallsToRemoveFromCheckEdge.add(checkEdgeWall);
+                                checkEdgeWall.removeWall(isten, checkEdge.getColliderGroup());
                             }
                         }
                         checkEdge.getWalls().removeAll(wallsToRemoveFromCheckEdge);
@@ -182,12 +207,10 @@ public class EdgeManager {
     public void initDoors(Isten isten){
         //TODO
         //optimalizaljuk hogy ne legyen egy unitroomhoz tobb ajto
-        //egyelore a door is wall csak az imageben kulonbozik es a colliderje solidra van allitva
         Random rand = new Random();
         for(EdgeBetweenRooms edge : roomEdges){
             int randomIndex = rand.nextInt(edge.getWalls().size());
-            //ha ki akarjuk cserelni ténylegesen door objektumra én(Áron) megcsinalom, csak a switchWallToDoort kell atirni egy kicsit
-            //szolj nekem, ha ez probléma, addig nem kell külön Door objektum
+            //informaciowasztes?!
             edge.switchWallToDoor(edge.getWalls().get(randomIndex), isten);
         }
     }

@@ -22,8 +22,12 @@ public class UnitRoom implements Graph<UnitRoom>{
     private Room  ownerRoom;
     //this stores information only for generating
     private boolean inRoom;
-
+/*
+lehet jol jon majd
+    private boolean topIsWall = false, bottomIsWall = false, leftIsWall = false, rightIsWall = false;
     private boolean topIsDoor = false, bottomIsDoor = false, leftIsDoor = false, rightIsDoor = false;
+
+ */
 
     public UnitRoom(Vec2 pos) {
         this.position = pos;
@@ -57,110 +61,6 @@ public class UnitRoom implements Graph<UnitRoom>{
         return position;
     }
 
-/*
-    public void createWalls(Isten isten) {
-        boolean hasTop = false, hasBottom = false, hasLeft = false, hasRight = false;
-        for(UnitRoom neighbour: adjacentUnitRooms) {
-            if(neighbour.getOwnerRoom().getID() != ownerRoom.getID()) {
-                if(!ownerRoom.hasDoorWith(neighbour.getOwnerRoom().getID())
-                        && !topIsDoor
-                        && !bottomIsDoor
-                        && !leftIsDoor
-                        && !rightIsDoor
-                        && !neighbour.isTopIsDoor()
-                        && !neighbour.isBottomIsDoor()
-                        && !neighbour.isLeftIsDoor()
-                        && !neighbour.isRightIsDoor()
-                ) {
-                    if(neighbour.getPosition().x < position.x) {
-                        leftIsDoor = true;
-                        neighbour.setRightIsDoor(true);
-                    }
-                    else if(neighbour.getPosition().x > position.x) {
-                        rightIsDoor = true;
-                        neighbour.setLeftIsDoor(true);
-                    }
-                    else if(neighbour.getPosition().y > position.y) {
-                        topIsDoor = true;
-                        neighbour.setBottomIsDoor(true);
-                    }
-                    else if(neighbour.getPosition().y < position.y) {
-                        bottomIsDoor = true;
-                        neighbour.setTopIsDoor(true);
-                    }
-                    ownerRoom.addHasDoorWith(neighbour.getOwnerRoom().getID());
-                    neighbour.getOwnerRoom().addHasDoorWith(ownerRoom.getID());
-                    ownerRoom.currDoorCount++;
-                    neighbour.getOwnerRoom().currDoorCount++;
-                }
-                continue;
-            }
-
-            if(neighbour.getPosition().x < position.x) {
-                hasLeft = true;
-            }
-            if(neighbour.getPosition().x > position.x) {
-                hasRight = true;
-            }
-            if(neighbour.getPosition().y > position.y) {
-                hasTop = true;
-            }
-            if(neighbour.getPosition().y < position.y) {
-                hasBottom = true;
-            }
-        }
-
-
-        String wallPath = "./assets/rooms/11.png";
-        String doorPath = "./assets/rooms/10.png";
-        Vec2 midColliderScale = new Vec2(1, 0.1f);
-        Vec2 outerColliderScale = new Vec2(0.1f, 1);
-        Vec2 wallTopPos = new Vec2(position.x, position.y + 0.5f);
-        Vec2 wallBottomPos = new Vec2(position.x, position.y - 0.5f);
-        Vec2 wallRightPos = new Vec2(position.x + 0.5f, position.y);
-        Vec2 wallLeftPos = new Vec2(position.x - 0.5f, position.y);
-
-        if(topIsDoor) {
-
-            topWall = createDoorWithoutCollider(isten, wallTopPos, midColliderScale, doorPath);
-        }
-        else if(!hasTop) {
-            topWall = createWallWithCollider(isten, wallTopPos, midColliderScale, wallPath);
-        }
-        if(bottomIsDoor) {
-            bottomWall = createDoorWithoutCollider(isten, wallBottomPos, midColliderScale, doorPath);
-        }
-        else if(!hasBottom) {
-            bottomWall = createWallWithCollider(isten, wallBottomPos, midColliderScale, wallPath);
-        }
-        if(rightIsDoor) {
-            rightWall = createDoorWithoutCollider(isten, wallRightPos, outerColliderScale, doorPath);
-        }
-        else if(!hasRight) {
-            rightWall = createWallWithCollider(isten, wallRightPos, outerColliderScale, wallPath);
-        }
-        if(leftIsDoor) {
-            leftWall = createDoorWithoutCollider(isten, wallLeftPos, outerColliderScale, doorPath);
-        }
-        else if(!hasLeft) {
-            leftWall = createWallWithCollider(isten, wallLeftPos, outerColliderScale, wallPath);
-        }
-    }
-
-    private Wall createWallWithCollider(Isten isten, Vec2 pos, Vec2 scale, String imgPath) {
-        Collider collider = new Collider(pos, scale);
-        Image img = new Image(pos, scale, imgPath);
-        isten.getRenderer().addRenderable(img);
-        ownerRoom.addCollider(collider);
-        return new Wall(collider, img);
-    }
-
-    private Door createDoorWithoutCollider(Isten isten, Vec2 pos, Vec2 scale, String imgPath) {
-        Image img = new Image(pos, scale, imgPath);
-        isten.getRenderer().addRenderable(img);
-        return new Door(img);
-    }
-*/
     public boolean isAdjacent(UnitRoom unitRoom){
         for (UnitRoom adjacentUnitRoom :this.getAdjacentUnitRooms()){
             if(adjacentUnitRoom.equals(unitRoom)){
@@ -197,7 +97,7 @@ public class UnitRoom implements Graph<UnitRoom>{
         setNewImage(path, isten);
     }
 
-
+/*
 
     public boolean isTopIsDoor() {
         return topIsDoor;
@@ -230,6 +130,7 @@ public class UnitRoom implements Graph<UnitRoom>{
     public void setRightIsDoor(boolean rightIsDoor) {
         this.rightIsDoor = rightIsDoor;
     }
+    */
     public Wall getTopWall() {return topWall;}
 
     public Wall getLeftWall() {return leftWall;}

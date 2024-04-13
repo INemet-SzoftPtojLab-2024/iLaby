@@ -25,6 +25,8 @@ public class Input implements KeyListener, MouseListener {
     private final boolean[] mouseButtonDown;
     private final boolean[] previousMouseButtonDown;
     private final boolean[] nextMouseButtonDown;
+    private final long[] mouseButtonPressStart;//to help determine whether it was a click or the button has been held down
+    private final long MOUSE_CLICK_THRESHOLD_NANO=200000000;
     public final static int MOUSE_LEFT=0, MOUSE_MIDDLE=1, MOUSE_RIGHT=2;
 
     public Input()
@@ -49,6 +51,7 @@ public class Input implements KeyListener, MouseListener {
         mouseButtonDown=new boolean[3];
         previousMouseButtonDown=new boolean[3];
         nextMouseButtonDown=new boolean[3];
+        mouseButtonPressStart=new long[3];
 
         Arrays.fill(mouseButtonDown, false);
         Arrays.fill(previousMouseButtonDown, false);
@@ -81,6 +84,8 @@ public class Input implements KeyListener, MouseListener {
         {
             previousMouseButtonDown[i]=mouseButtonDown[i];
             mouseButtonDown[i]=nextMouseButtonDown[i];
+            if(isMouseButtonPressed(MOUSE_LEFT+i))
+                mouseButtonPressStart[i]=System.nanoTime();
         }
     }
 
@@ -196,6 +201,20 @@ public class Input implements KeyListener, MouseListener {
         return false;
     }
 
+    /** true if the mouse button has been clicked <br>
+     * (pressed and released in a short time)
+     * @param mouseButton either Input.MOUSE_LEFT, Input.MOUSE_MIDDLE or Input.MOUSE_RIGHT
+     */
+    public boolean isMouseButtonClicked(int mouseButton)
+    {
+        if(mouseButton!=MOUSE_LEFT&&mouseButton!=MOUSE_MIDDLE&&mouseButton!=MOUSE_RIGHT)
+            return false;
+
+        if(!mouseButtonDown[mouseButton]&&previousMouseButtonDown[mouseButton]&&System.nanoTime()-mouseButtonPressStart[mouseButton]<MOUSE_CLICK_THRESHOLD_NANO)
+            return true;
+
+        return false;
+    }
 
 
 

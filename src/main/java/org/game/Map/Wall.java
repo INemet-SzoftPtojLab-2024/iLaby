@@ -21,12 +21,6 @@ public class Wall {
     //has maximal two elements, it contains the unitrooms between the wallpiece is
     protected ArrayList<UnitRoom> unitRoomsBetween;
 
-    public Wall(Collider collider, Image image) { //old
-        this.collider = collider;
-        this.image = image;
-        unitRoomsBetween = new ArrayList<>();
-
-    }
     public Wall(Collider collider,Vec2 position , UnitRoom ur1, UnitRoom ur2) { //does not set the image!!!!!
         this.collider = collider;
         this.position = position;
@@ -44,7 +38,9 @@ public class Wall {
     public void removeWall(Isten isten, ColliderGroup colliderGroup){
         isten.getRenderer().deleteRenderable(image);
         isten.getPhysicsEngine().getColliderGroup(colliderGroup.id).removeCollider(collider);
+        //colliderGroup.removeCollider(collider); //its the same
         image = null;
+        collider = null;
         position = null;
 
     }
@@ -70,5 +66,8 @@ public class Wall {
 
     public ArrayList<UnitRoom> getUnitRoomsBetween() {
         return unitRoomsBetween;
+    }
+    public boolean isDoor(){
+        return !collider.isSolid();
     }
 }
