@@ -40,6 +40,9 @@ public class ChestManager extends Updatable {
         for (int i = 0; i < map.getUnitRooms().length; i++) {
             for (int j = 0; j < map.getUnitRooms()[i].length; j++) {
                 UnitRoom unitRoomTmp=map.getUnitRooms()[i][j];
+                //megcsinaltam a unitroomot: van egy hasdoor valtozoja, es mindegyik uniroomrol le lehet kerdezni hogy melyik oldala fall
+                //fontos az ajtot is falnak veszi!!
+                //ezek a valtoztatasok a mapdrawing branchen elerhetoek(nem tudtam jol összrakni, nem vagyok jo git kezeko :) )
                 if((!(unitRoomTmp.isBottomIsDoor()||unitRoomTmp.isTopIsDoor()||unitRoomTmp.isRightIsDoor()||unitRoomTmp.isLeftIsDoor()))//ha egyik fal sem ajtó
                         &&(unitRoomTmp.getTopIsWall()|| unitRoomTmp.getRightIsWall()|| unitRoomTmp.getBottomIsWall()|| unitRoomTmp.getLeftIsWall()))//ha egyik oldalán legalább fal van
                 {
