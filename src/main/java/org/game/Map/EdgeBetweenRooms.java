@@ -2,7 +2,6 @@ package main.java.org.game.Map;
 
 import lombok.Getter;
 import lombok.Setter;
-import main.java.org.game.Graphics.Image;
 import main.java.org.game.Isten;
 import main.java.org.game.physics.Collider;
 import main.java.org.game.physics.ColliderGroup;
@@ -16,7 +15,7 @@ public class EdgeBetweenRooms {
     //the two room, between the edge is.
     private ArrayList<Room> nodeRooms;
     //the wall pieces
-    private ArrayList<Wall> walls;
+    private ArrayList<EdgePiece> walls;
     private ColliderGroup colliderGroup;
 
     public EdgeBetweenRooms(Room r1, Room r2){
@@ -36,7 +35,7 @@ public class EdgeBetweenRooms {
         walls.add(newWall);
 
     }
-    public void switchWallToDoor(Wall wallToSwitch, Isten isten){
+    public void switchWallToDoor(EdgePiece wallToSwitch, Isten isten){
         String doorPath = "./assets/rooms/10.png";
         wallToSwitch.collider.setSolidity(false);
 
@@ -52,7 +51,7 @@ public class EdgeBetweenRooms {
         newDoor.getUnitRoomsBetween().get(1).setHasDoor(true);
         walls.remove(wallToSwitch);
     }
-    public void switchDoorToWall(Door doorToSwitch, Isten isten){
+    public void switchDoorToWall(EdgePiece doorToSwitch, Isten isten){
         String wallPath = "./assets/rooms/11.png";
         doorToSwitch.collider.setSolidity(true);
         isten.getRenderer().deleteRenderable(doorToSwitch.image);
@@ -72,7 +71,7 @@ public class EdgeBetweenRooms {
         wallToRemove.getUnitRoomsBetween().get(1).setHasDoor(false);
         for(int i = 0; i < walls.size();i++){
             if(wallToRemove.equals(walls.get(i))){
-                walls.get(i).removeWall(isten, colliderGroup);
+                walls.get(i).removeEdgePiece(isten, colliderGroup);
                 walls.remove(i);
                 return;
             }
@@ -80,7 +79,7 @@ public class EdgeBetweenRooms {
     }
     public int doorNum(){
         int cnt = 0;
-        for(Wall wall : walls){
+        for(EdgePiece wall : walls){
             if(wall.isDoor()) cnt++;
         }
         return cnt;
@@ -90,7 +89,7 @@ public class EdgeBetweenRooms {
         return nodeRooms;
     }
 
-    public ArrayList<Wall> getWalls() {
+    public ArrayList<EdgePiece> getWalls() {
         return walls;
     }
 

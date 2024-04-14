@@ -3,7 +3,6 @@ package main.java.org.game.Map;
 import lombok.Getter;
 import lombok.Setter;
 import main.java.org.game.Isten;
-import main.java.org.game.physics.Collider;
 import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
@@ -41,8 +40,8 @@ public class EdgeManager {
         for(int i = 0; i < roomEdges.size(); i++){
             if(edgeToDelete.equals(roomEdges.get(i))){
                 //remove all the wallpiece from the edge.
-                for(Wall wallsToDelete : edgeToDelete.getWalls()){
-                    wallsToDelete.removeWall(isten, edgeToDelete.getColliderGroup());
+                for(EdgePiece wallsToDelete : edgeToDelete.getWalls()){
+                    wallsToDelete.removeEdgePiece(isten, edgeToDelete.getColliderGroup());
                 }
                 //edgeToDelete.getNodeRooms().clear(); //it's not required
                 //edgeToDelete.getWalls().clear(); //it's not required
@@ -74,8 +73,7 @@ public class EdgeManager {
 
                     for(int i = 0; i < edgeBetweenRoom.getWalls().size(); i++){
                         //ha ajto akkor kicsereljuk falra
-                        //TODO ha megvan az abstrakt os wallnak es a doornak at kell irni, igy infromaciovestes van a kazstolasnal
-                        if(edgeBetweenRoom.getWalls().get(i).isDoor()) edgeBetweenRoom.switchDoorToWall((Door)edgeBetweenRoom.getWalls().get(i), isten);
+                        if(edgeBetweenRoom.getWalls().get(i).isDoor()) edgeBetweenRoom.switchDoorToWall(edgeBetweenRoom.getWalls().get(i), isten);
                         edgeBetweenRAndRDAdjacent.getWalls().add(edgeBetweenRoom.getWalls().get(i));
                         edgeBetweenRAndRDAdjacent.getColliderGroup().addCollider(edgeBetweenRoom.getWalls().get(i).collider);
                     }
@@ -110,7 +108,7 @@ public class EdgeManager {
                 //ha az edge a ket vizsgalt szoba kozott van, akkor nem kell tovabb vizsgalodni, mert ezt mar beallitottuk az addolasnal
                 if (!getEdgeBetweenRooms(newRoom, oldRoom).equals(checkEdge)) {
                     //az edge falainak a unitroomjaitnak az ownerroomjait nezzuk
-                    for (Wall checkEdgeWall : checkEdge.getWalls()) {
+                    for (EdgePiece checkEdgeWall : checkEdge.getWalls()) {
                         if (checkEdgeWall.getUnitRoomsBetween().get(0).getOwnerRoom().getID() == oldRoomID
                                 || checkEdgeWall.getUnitRoomsBetween().get(1).getOwnerRoom().getID() == oldRoomID)
                             wasInOldRoom = true;
@@ -122,9 +120,9 @@ public class EdgeManager {
                     //melyik szobaban jartunk
                     if (wasInOldRoom && wasInNewRoom) { // ha mindkettoben jartunk akkor --> split the edge
                         //delete from the edge the walls, that are between newroom and the other room
-                        ArrayList<Wall> wallsToRemoveFromCheckEdge = new ArrayList<>();
+                        ArrayList<EdgePiece> wallsToRemoveFromCheckEdge = new ArrayList<>();
                         boolean doorRemoved = false;
-                        for (Wall checkEdgeWall : checkEdge.getWalls()) {
+                        for (EdgePiece checkEdgeWall : checkEdge.getWalls()) {
                             //the wall is between the newRoom and the other one --> delete wall from checkEdge
                             //a maradek lesz az oldroom edge-e
                             if (checkEdgeWall.getUnitRoomsBetween().get(0).getOwnerRoom().getID() == newRoomID
@@ -133,7 +131,7 @@ public class EdgeManager {
                                 if (checkEdgeWall.isDoor())//ha ajtot torlunk
                                     doorRemoved = true;
                                 wallsToRemoveFromCheckEdge.add(checkEdgeWall);
-                                checkEdgeWall.removeWall(isten, checkEdge.getColliderGroup());
+                                checkEdgeWall.removeEdgePiece(isten, checkEdge.getColliderGroup());
                             }
                         }
                         checkEdge.getWalls().removeAll(wallsToRemoveFromCheckEdge);
