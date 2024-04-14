@@ -35,7 +35,11 @@ public class EdgeBetweenRooms {
         walls.add(newWall);
 
     }
-    public void switchWallToDoor(EdgePiece wallToSwitch, Isten isten){
+    public boolean switchWallToDoor(EdgePiece wallToSwitch, Isten isten){
+        //check if door is addable
+        //egy unitroomba csak az egyik iranyba nyilhat ajto
+        if(wallToSwitch.getUnitRoomsBetween().get(0).hasDoor() || wallToSwitch.getUnitRoomsBetween().get(1).hasDoor()) return false;
+
         String doorPath = "./assets/rooms/10.png";
         wallToSwitch.collider.setSolidity(false);
 
@@ -50,6 +54,7 @@ public class EdgeBetweenRooms {
         newDoor.getUnitRoomsBetween().get(0).setHasDoor(true);
         newDoor.getUnitRoomsBetween().get(1).setHasDoor(true);
         walls.remove(wallToSwitch);
+        return true;
     }
     public void switchDoorToWall(EdgePiece doorToSwitch, Isten isten){
         String wallPath = "./assets/rooms/11.png";
