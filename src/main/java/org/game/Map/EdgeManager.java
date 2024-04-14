@@ -226,6 +226,7 @@ public class EdgeManager {
                 Collections.shuffle(random);
                 for(Integer randomIndex : random)
                 {
+                    //egy unitroomban csek egyik iranyba nyilhat ajto!
                     if(!edge.getWalls().get(randomIndex).getUnitRoomsBetween().get(0).hasDoor()
                             && !edge.getWalls().get(randomIndex).getUnitRoomsBetween().get(1).hasDoor()) {
                         edge.switchWallToDoor(edge.getWalls().get(randomIndex), isten);

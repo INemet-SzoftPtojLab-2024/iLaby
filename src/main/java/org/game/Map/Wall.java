@@ -20,5 +20,5 @@ public class Wall extends EdgePiece{
     @Override
     public  boolean isDoor(){
         return false;
-    } // abstract osnel nem a collidert kell nezni!
+    }
 }
