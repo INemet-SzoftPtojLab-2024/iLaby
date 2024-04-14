@@ -106,7 +106,7 @@ public class Mapgenerator {
         //create the walls of the rooms
         defineEdges();
 
-        map.getEdgeManager().initDoors(isten);
+        map.getEdgeManager().initDoors();
 
         for(Room room: map.getRooms()) {
             isten.addUpdatable(room);
