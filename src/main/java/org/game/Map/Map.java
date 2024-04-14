@@ -25,7 +25,7 @@ public class Map extends Updatable {
         this.mapgenerator = new Mapgenerator(this, isten);
         mapgenerator.generate(minRoomSize);
 
-        printMap();
+        //printMap();
     }
 
     public Map(int rowNumber, int columnNumber, int minRoomSize){
@@ -48,7 +48,7 @@ public class Map extends Updatable {
         //for testing
         delta += deltaTime;
         if (delta > 3 && cnt < 4 && !merged) {
-            mergeRooms(rooms.get(0), rooms.get(0).getAdjacentRooms().get(0), isten);
+            //mergeRooms(rooms.get(0), rooms.get(0).getAdjacentRooms().get(0), isten);
             /*if (!splitRooms(rooms.get(r), isten)) r++;
             else {
                 r = 0;
@@ -57,7 +57,7 @@ public class Map extends Updatable {
              */
             System.out.println();
             System.out.println();
-            printMap();
+            //printMap();
             cnt++;
             delta = 0;
             merged = true;

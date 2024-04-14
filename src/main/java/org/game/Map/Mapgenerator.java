@@ -159,25 +159,22 @@ public class Mapgenerator {
     void mergeRoomsUntilGivenSizeReached(int size){
         int minSize;
         Room r1;
-        Room r2 = map.getRooms().get(0);
+        Room r2;
         boolean merge = true;
         while(merge) {
-            minSize = Integer.MAX_VALUE;
+
             //System.out.println("RoomNum befor merge: " + rooms.size());
+            Collections.shuffle(map.getRooms());
             for (int i = 0; i < map.getRooms().size(); i++) {
                 if (map.getRooms().get(i).getUnitRooms().size() <= size) { //if smaller than "size" unitrooms --> merge
                     r1 = map.getRooms().get(i);
-                    //search the smallest adjacentroom
-                    //System.out.println("adjroomsize:" + rooms.get(i).getAdjacentRooms().size());
-                    for (int j = 0; j < map.getRooms().get(i).getAdjacentRooms().size(); j++) {
-                        if (map.getRooms().get(i).getAdjacentRooms().get(j).getUnitRooms().size() < minSize) {
-                            minSize = map.getRooms().get(i).getAdjacentRooms().get(j).getUnitRooms().size();
-                            r2 = map.getRooms().get(i).getAdjacentRooms().get(j);
-                        }
-                    }
-                    //System.out.println("minsize: " + minSize);
-                    //System.out.println("merge: " + r1.getID() + " " + r2.getID());
-                    mergeRooms(r1, r2);
+
+                    //search the smallest adjacentroom or the adjacentroomwith the longest edge
+                    //ezzel kevesbe lesznek elfajulo szobak
+                    r2 = getLongestEdgeNeighbour(r1);
+                    //r2 = getSmallestNeighbour(r1);
+
+                    mergeRooms(r1,r2);
                     break; // we have found the two mergeable rooms
 
                 }
@@ -191,7 +188,7 @@ public class Mapgenerator {
         }
     }
 
-    private Room getLongestEdgeNeighbour(Room r, int size){
+    private Room getLongestEdgeNeighbour(Room r){
         //ebbe a listaba taroljuk hogy mejk szomszednak milyen hosszu a szomszedja
         int[] edgeLengths = new int[r.getAdjacentRooms().size()];
         for(Integer edgelen : edgeLengths) edgelen = 0;
@@ -204,12 +201,23 @@ public class Mapgenerator {
         }
         int longestIdx = 0;
         for(int i = 0; i < edgeLengths.length; i++){
-            if(edgeLengths[i] > edgeLengths[longestIdx] && /*r.getAdjacentRooms().get(i).getUnitRooms().size() < 15*/
-             edgeLengths[i] < 4){ // ezen meg kell tokeletesiteni ha hasznalni akarjuk!!
+            if(edgeLengths[i] > edgeLengths[longestIdx]  /*&& r.getAdjacentRooms().get(i).getUnitRooms().size() < 20*/){ // ezen meg kell tokeletesiteni ha hasznalni akarjuk!!
                 longestIdx = i;
             }
         }
         return r.getAdjacentRooms().get(longestIdx);
+    }
+
+    private Room getSmallestNeighbour(Room r1){
+        Room r2 = map.getRooms().get(0);
+        int minSize = Integer.MAX_VALUE;
+        for (int j = 0; j < r1.getAdjacentRooms().size(); j++) {
+            if (r1.getAdjacentRooms().get(j).getUnitRooms().size() < minSize) {
+                minSize = r1.getAdjacentRooms().get(j).getUnitRooms().size();
+                r2 = r1.getAdjacentRooms().get(j);
+            }
+        }
+        return r2;
     }
     public void addImages() {
         for(Room room: map.getRooms()) {
