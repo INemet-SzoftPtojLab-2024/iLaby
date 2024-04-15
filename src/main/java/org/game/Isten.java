@@ -117,7 +117,7 @@ public class Isten {
         updatables.add(itemManager);
         updatables.add(inventory);
         updatables.add(map);
-        updatables.add(new ChestManager(500));//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
+        updatables.add(new ChestManager(10));//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
 
         updatables.add(new Player("II. Németh Szilárd"));
         updatables.add(new Villain("Gonosz1", new Vec2(8,7), "./assets/villain/villain1.png"));
