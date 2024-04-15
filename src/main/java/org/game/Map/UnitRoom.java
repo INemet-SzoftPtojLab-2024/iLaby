@@ -9,10 +9,6 @@ import java.util.ArrayList;
 public class UnitRoom implements Graph<UnitRoom>{
 //sorting layer: 40
     private Vec2 position;
-
-    private Wall topWall = null, leftWall = null, rightWall = null, bottomWall = null;
-
-    private Item item;
     public Image image = null;
     private ArrayList<UnitRoom> adjacentUnitRooms;
     private UnitRoom TopNeighbor = null;
@@ -22,12 +18,8 @@ public class UnitRoom implements Graph<UnitRoom>{
     private Room  ownerRoom;
     //this stores information only for generating
     private boolean inRoom;
-/*
-lehet jol jon majd
-    private boolean topIsWall = false, bottomIsWall = false, leftIsWall = false, rightIsWall = false;
-    private boolean topIsDoor = false, bottomIsDoor = false, leftIsDoor = false, rightIsDoor = false;
-
- */
+    //one unitroom can have maximum one door!
+    private boolean hasDoor = false;
 
     public UnitRoom(Vec2 pos) {
         this.position = pos;
@@ -97,70 +89,80 @@ lehet jol jon majd
         setNewImage(path, isten);
     }
 
-/*
 
-    public boolean isTopIsDoor() {
-        return topIsDoor;
+    public boolean isTopEdge(){
+        if(TopNeighbor == null) return true;
+        else return ownerRoom.getID() != TopNeighbor.getOwnerRoom().getID();
     }
 
-    public void setTopIsDoor(boolean topIsDoor) {
-        this.topIsDoor = topIsDoor;
+    public boolean isBottomEdge(){
+        if(BottomNeighbor == null) return true;
+        else return ownerRoom.getID() != BottomNeighbor.getOwnerRoom().getID();
     }
 
-    public boolean isBottomIsDoor() {
-        return bottomIsDoor;
+    public boolean isLeftEdge(){
+        if(LeftNeighbor == null) return true;
+        else return ownerRoom.getID() != LeftNeighbor.getOwnerRoom().getID();
     }
 
-    public void setBottomIsDoor(boolean bottomIsDoor) {
-        this.bottomIsDoor = bottomIsDoor;
+    public boolean isRightEdge(){
+        if(RightNeighbor == null) return true;
+        else return ownerRoom.getID() != RightNeighbor.getOwnerRoom().getID();
+    }
+    public boolean isTopWall(){
+        if(TopNeighbor == null) return true;
+        else if(isTopDoor()) return false;
+        else return ownerRoom.getID() != TopNeighbor.getOwnerRoom().getID();
     }
 
-    public boolean isLeftIsDoor() {
-        return leftIsDoor;
+    public boolean isBottomWall(){
+        if(BottomNeighbor == null) return true;
+        else if(isBottomDoor()) return false;
+        else return ownerRoom.getID() != BottomNeighbor.getOwnerRoom().getID();
     }
 
-    public void setLeftIsDoor(boolean leftIsDoor) {
-        this.leftIsDoor = leftIsDoor;
+    public boolean isLeftWall(){
+        if(LeftNeighbor == null) return true;
+        else if(isLeftDoor()) return false;
+        else return ownerRoom.getID() != LeftNeighbor.getOwnerRoom().getID();
     }
 
-    public boolean isRightIsDoor() {
-        return rightIsDoor;
+    public boolean isRightWall(){
+        if(RightNeighbor == null) return true;
+        else if(isRightDoor()) return false;
+        else return ownerRoom.getID() != RightNeighbor.getOwnerRoom().getID();
     }
 
-    public void setRightIsDoor(boolean rightIsDoor) {
-        this.rightIsDoor = rightIsDoor;
+    //ezek akkor hasznalhatoak ha egy unitroomhoz csak egy ajto tartozhat, ami a generalasnal teljesul
+    public boolean isTopDoor() {
+        if(!hasDoor) return false;
+        else if(TopNeighbor == null) return false;
+        else return TopNeighbor.hasDoor();
     }
-    public boolean getTopIsWall(){
-        if(this.top==null)return false;
-        return !(this.top instanceof Door);
+
+    public boolean isBottomDoor() {
+        if(!hasDoor) return false;
+        else if(BottomNeighbor == null) return false;
+        else return BottomNeighbor.hasDoor();
     }
-    public boolean getBottomIsWall(){
-        if(this.bottom==null)return false;
-        return !(this.bottom instanceof Door);
+
+    public boolean isLeftDoor() {
+        if(!hasDoor) return false;
+        else if(LeftNeighbor == null) return false;
+        else return LeftNeighbor.hasDoor();
     }
-    public boolean getRightIsWall(){
-        if(this.right==null)return false;
-        return !(this.right instanceof Door);
+    public boolean isRightDoor() {
+        if(!hasDoor) return false;
+        else if(RightNeighbor == null) return false;
+        else return RightNeighbor.hasDoor();
     }
-    public boolean getLeftIsWall(){
-        if(this.left==null)return false;
-        return !(this.left instanceof Door);
-    */
-    public Wall getTopWall() {return topWall;}
 
-    public Wall getLeftWall() {return leftWall;}
-
-    public Wall getRightWall() {return rightWall;}
-
-    public Wall getBottomWall() {return bottomWall;}
-
-    public void setTopWall(Wall topWall) {this.topWall = topWall;}
-
-    public void setLeftWall(Wall leftWall) {this.leftWall = leftWall;}
-
-    public void setRightWall(Wall rightWall) {this.rightWall = rightWall;}
-
-    public void setBottomWall(Wall bottomWall) {this.bottomWall = bottomWall;}
+    public boolean hasDoor(){
+        return hasDoor;
+    }
+    public void setHasDoor(boolean hasDoor){
+        this.hasDoor = hasDoor;
+    }
 
     public void setTopNeighbor(UnitRoom topNeighbor) {
         TopNeighbor = topNeighbor;

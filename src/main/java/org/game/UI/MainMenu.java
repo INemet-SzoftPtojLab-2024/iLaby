@@ -1,5 +1,7 @@
 package main.java.org.game.UI;
 
+import main.java.org.game.Audio.AudioManager;
+import main.java.org.game.Audio.Sound;
 import main.java.org.game.Graphics.ButtonUI;
 import main.java.org.game.Graphics.ImageUI;
 import main.java.org.game.Graphics.Renderable;
@@ -13,11 +15,13 @@ import java.util.ArrayList;
 public class MainMenu extends Updatable {
     private ArrayList<ImageUI> images = new ArrayList<>();
     private ArrayList<ButtonUI> buttons = new ArrayList<>();
+    private Sound click;
     private boolean diffChose;
 
     @Override
     public void onStart(Isten isten) {
         diffChose = false;
+        AudioManager.preloadSound("./assets/audio/click.ogg");
         images.add(new ImageUI(new Vec2(0, -300), new Vec2(600, 150), "./assets/ui/logo.png"));
         images.add(new ImageUI(new Vec2(0, 375), new Vec2(300, 50), "./assets/ui/developer_logo.png"));
         images.add(new ImageUI(new Vec2(0, 0), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/ui/menu_background.jpg"));
@@ -43,25 +47,31 @@ public class MainMenu extends Updatable {
             if (i > 2) buttons.get(i).setVisibility(false);
         }
         buttons.get(0).addClickListener(() -> {
+            AudioManager.playSound("./assets/audio/click.ogg");
             diffChose = true;
         });
+        buttons.get(1).addClickListener(()->{
+            AudioManager.playSound("./assets/audio/click.ogg");
+        });
         buttons.get(2).addClickListener(() -> {
+            AudioManager.playSound("./assets/audio/click.ogg");
             GameManager.setStage(GameManager.GameStage.EXIT);
         });
         buttons.get(3).addClickListener(() -> {
+            AudioManager.playSound("./assets/audio/click.ogg");
             TimeCounter.setTime(901);
             GameManager.setStage(GameManager.GameStage.INGAME);
         });
         buttons.get(4).addClickListener(() -> {
+            AudioManager.playSound("./assets/audio/click.ogg");
             TimeCounter.setTime(601);
             GameManager.setStage(GameManager.GameStage.INGAME);
         });
         buttons.get(5).addClickListener(() -> {
+            AudioManager.playSound("./assets/audio/click.ogg");
             TimeCounter.setTime(11);
             GameManager.setStage(GameManager.GameStage.INGAME);
         });
-
-
     }
 
     @Override

@@ -3,7 +3,6 @@ package main.java.org.entities.player;
 
 import main.java.org.game.Audio.AudioManager;
 import main.java.org.game.Audio.Sound;
-import main.java.org.game.Camera.Camera;
 import main.java.org.game.Graphics.*;
 
 import main.java.org.entities.Entity;
@@ -172,7 +171,7 @@ public class Player extends Entity {
                 death.setVisibility(true);
             }
         }
-        death.setScale(new Vec2(isten.getRenderer().getWidth(),isten.getRenderer().getHeight()));
+        death.setScale(new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()));
     }
 
     @Override

@@ -1,7 +1,6 @@
 package main.java.org.manager;
 
 import main.java.org.game.Audio.AudioManager;
-import main.java.org.game.Graphics.GameRenderer;
 import main.java.org.game.Isten;
 import main.java.org.game.Isten2;
 
@@ -41,7 +40,11 @@ public class GameManager {
             frame.add(panel);
 
         frame.setContentPane(panel);
-        panel.setPreferredSize(frame.getSize());
+
+        if (currentPanel != null) {
+            panel.setPreferredSize(currentPanel.getSize());
+        }
+
         panel.requestFocusInWindow();
         frame.revalidate();
         frame.pack();
