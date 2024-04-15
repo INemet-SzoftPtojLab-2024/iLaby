@@ -23,6 +23,7 @@ public class Player extends Entity {
     Collider playerCollider;
     ArrayList<Image> playerImage;
     ImageUI death;
+    TextUI motivational;
     int activeImage;
     float time;
     Text playerName;
@@ -34,6 +35,7 @@ public class Player extends Entity {
         playerCollider = null;
         playerImage = null;
         death = null;
+        motivational=null;
         activeImage = 0;
         time = 0.0f;
         playerName = null;
@@ -44,6 +46,7 @@ public class Player extends Entity {
         playerCollider = null;
         playerImage = null;
         death = null;
+        motivational=null;
         activeImage = 0;
         time = 0.0f;
         playerName = new Text(name, new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 0, 0, 255);
@@ -73,6 +76,12 @@ public class Player extends Entity {
         death.setVisibility(false);
         death.setAlignment(Renderable.CENTER, Renderable.CENTER);
         isten.getRenderer().addRenderable(death);
+
+        motivational=new TextUI("Try again loser.",new Vec2(0,-170),26,200,200,200);
+        motivational.setSortingLayer(-71);
+        motivational.setVisibility(false);
+        motivational.setAlignment(Renderable.CENTER,Renderable.CENTER);
+        isten.getRenderer().addRenderable(motivational);
 
         for (Image im : playerImage) {
             im.setSortingLayer(-69);
@@ -161,7 +170,7 @@ public class Player extends Entity {
             }
 
         } else {
-            if (!AudioManager.isPlaying(playerSound))
+            if (!AudioManager.isPlaying(playerSound) && activeImage!=4)
                 playerSound = AudioManager.playSound("./assets/audio/died.ogg");
 
             if (activeImage != 4) {
@@ -169,6 +178,7 @@ public class Player extends Entity {
                 activeImage = 4;
                 playerImage.get(activeImage).setVisibility(true);
                 death.setVisibility(true);
+                motivational.setVisibility(true);
             }
         }
         death.setScale(new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()));
