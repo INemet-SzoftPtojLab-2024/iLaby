@@ -1,13 +1,7 @@
 package main.java.org.game.Map;
 
-import lombok.Setter;
-import lombok.Getter;
-import main.java.org.game.Graphics.Image;
 import main.java.org.game.Isten;
-import main.java.org.game.physics.Collider;
-import main.java.org.game.physics.ColliderGroup;
 import main.java.org.game.updatable.Updatable;
-import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 

@@ -1,28 +1,23 @@
 
 9
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
-<<<<<<< HEAD
 Z
 *src/main/java/org/manager/GameManager.java,f\3\f3f597a99c4455ba3bdb1e37b732d2c3fde6ba3d
-K
-src/main/java/org/Main.java,8\5\8562f6886f731299c0b6925e0dca2ed59ddafa0c
-=======
-a
-1src/main/java/org/game/Graphics/GameRenderer.java,e\7\e763fabaa9cd1afdce83be59a8d59870f441e139
-U
-%src/main/java/org/game/Map/Floor.java,a\d\adb353a517033767ecabf2af2ee14587843cc562
-T
-$src/main/java/org/game/Map/Item.java,5\2\52cbef614c32616e4d10fba69e1eb02927d4f7a1
 Q
 !src/main/java/org/game/Isten.java,a\e\ae6b841d57349f3d394f98633de24bf000774d96
-X
-(src/main/java/org/game/Map/RoomType.java,0\9\098e2fb073f84303e4936b5215044c9bf5a18688
-]
--src/main/java/org/game/Map/UnitRoomFrame.java,e\2\e2f925972dabacd0854e1ec57d2fcf6446b52699
-T
-$src/main/java/org/game/Map/Room.java,c\6\c6f7b65f617fe34dc6a651a2bf566be4a0d2a975
-X
-(src/main/java/org/game/Map/UnitRoom.java,9\3\933c10faafd44b7f4f2d1678304c648f862e5581
+_
+/src/main/java/org/game/updatable/Updatable.java,3\3\33d588812e8ed7d5cdeb155a2be4d6058b304ae4
 S
 #src/main/java/org/game/Map/Map.java,3\a\3a83602c799ded541811f282e2524ca707cc351b
->>>>>>> main
+T
+$src/main/java/org/game/Map/Room.java,c\6\c6f7b65f617fe34dc6a651a2bf566be4a0d2a975
+]
+-src/main/java/org/game/Graphics/ButtonUI.java,9\0\90c4547c24cfdc7061e707667cfa007295fbba66
+\
+,src/main/java/org/game/Graphics/ImageUI.java,d\0\d008f0c64e224ddaf017312bc275c6bf636d29f6
+Y
+)src/main/java/org/game/Map/EdgePiece.java,3\2\32b4cbc356009b9e8f6511eeac1b9dfc5d01c561
+\
+,src/main/java/org/game/Map/Mapgenerator.java,4\f\4fdc75f760398ad335804099c4c2aad3b4db38bd
+K
+src/main/java/org/Main.java,8\5\8562f6886f731299c0b6925e0dca2ed59ddafa0c
