@@ -64,7 +64,16 @@ public class GameServer extends Thread {
                 packet = new Packet02Move(data);
                 handleMove(((Packet02Move)packet));
                 break;
+            case ANIMATION:
+                packet = new Packet03Animation(data);
+                handleAnimation((Packet03Animation) packet);
+                break;
         }
+    }
+
+    //handle Animation Packet
+    private void handleAnimation(Packet03Animation packet) {
+        packet.writeData(this);
     }
 
     //handle Login Packet

@@ -209,4 +209,5 @@ public class Isten {
     public GameClient getSocketClient() {
         return socketClient;
     }
+
 }

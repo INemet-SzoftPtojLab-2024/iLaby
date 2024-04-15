@@ -11,6 +11,7 @@ import main.java.org.game.Isten;
 import main.java.org.game.UI.TimeCounter;
 import main.java.org.game.physics.Collider;
 import main.java.org.linalg.Vec2;
+import main.java.org.networking.Packet03Animation;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -18,19 +19,19 @@ import java.util.ArrayList;
 /**
  * The player class, makes almost everything related to the player.
  */
-public class Player extends Entity {
+public abstract class Player extends Entity {
 
-    Collider playerCollider;
-    ArrayList<Image> playerImage;
-    ImageUI death;
-    int activeImage;
-    float time;
-    Text playerName;
+    protected Collider playerCollider;
+    protected ArrayList<Image> playerImage;
+    protected ImageUI death;
+    protected int activeImage;
+    protected float time;
+    protected Text playerName;
     boolean alive;  //Bool variable, to store status of player: ded or alive
 
     Sound playerSound = null;
-    private Vec2 spawnPosition;
-
+    protected Vec2 spawnPosition;
+    protected int run = 1;
     public boolean localPlayer = false;
     public Player() {
         playerCollider = null;
@@ -113,7 +114,7 @@ public class Player extends Entity {
         //called every frame
         if (alive) {
             //move the character
-            int run = 1;
+            run = 1;
             boolean w = isten.getInputHandler().isKeyDown(KeyEvent.VK_W);
             boolean a = isten.getInputHandler().isKeyDown(KeyEvent.VK_A);
             boolean s = isten.getInputHandler().isKeyDown(KeyEvent.VK_S);
@@ -151,6 +152,7 @@ public class Player extends Entity {
                 playerImage.get(prev).setVisibility(false);
                 playerImage.get(activeImage).setVisibility(true);
                 time = 0.0f;
+                sendAnimationData(isten);
             }
 
             //move image
@@ -235,5 +237,10 @@ public class Player extends Entity {
 
     public void setPlayerImage(ArrayList<Image> playerImage) {
         this.playerImage = playerImage;
+    }
+
+    //Needed for instant animation change
+    protected void sendAnimationData(Isten isten) {
+        //implemented in PlayerMP -> override
     }
 }

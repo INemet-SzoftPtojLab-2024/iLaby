@@ -1,7 +1,6 @@
 package main.java.org.networking;
 
 import main.java.org.entities.player.Player;
-import main.java.org.game.Graphics.Text;
 import main.java.org.game.Isten;
 import main.java.org.linalg.Vec2;
 
@@ -25,10 +24,19 @@ public class PlayerMP extends Player {
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
         super.onUpdate(isten, deltaTime);
-        sendDataToServer(isten);
+        sendDataToServer(isten, deltaTime);
     }
-    public void sendDataToServer(Isten isten) {
+    public void sendDataToServer(Isten isten, double deltaTime) {
         //movePacket
+        sendMoveData(isten);
+    }
+
+    @Override
+    protected void sendAnimationData(Isten isten) {
+        Packet03Animation animationPacket = new Packet03Animation(getPlayerName().getText(), activeImage);
+        animationPacket.writeData(isten.getSocketClient());
+    }
+    private void sendMoveData(Isten isten) {
         if(getPlayerCollider() == null) return;
         if(getPlayerCollider().getVelocity().x == 0 && getPlayerCollider().getVelocity().y == 0) return;
         Packet02Move movePacket = new Packet02Move(getUsername(), getPlayerCollider().getPosition().x, getPlayerCollider().getPosition().y);

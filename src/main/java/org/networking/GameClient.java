@@ -46,27 +46,44 @@ public class GameClient extends Thread {
         //System.out.println("Parse packet client");
         String message = new String(data).trim();
         Packet.PacketTypes type = Packet.lookupPacket(message.substring(0,2));
+        Packet packet = null;
         switch(type) {
             default:
                 break;
             case INVALID:
                 break;
             case LOGIN:
-                handleLogin(new Packet00Login(data), address, port);
+                packet = new Packet00Login(data);
+                handleLogin((Packet00Login) packet, address, port);
                 break;
             case DISCONNECT:
                 break;
             case MOVE:
-                handleMove(new Packet02Move(data));
+                packet = new Packet02Move(data);
+                handleMove((Packet02Move) packet);
+                break;
+            case ANIMATION:
+                packet = new Packet03Animation(data);
+                handleAnimation((Packet03Animation)packet);
                 break;
         }
     }
 
+    private void handleAnimation(Packet03Animation packet) {
+        int index = isten.getPlayerMPIndex(packet.getUsername());
+        PlayerMP player = (PlayerMP)isten.getUpdatable(index);
+        if(player == null || player.localPlayer) return;
+        for(int i = 0; i < player.getPlayerImage().size(); i++) {
+            player.getPlayerImage().get(i).setVisibility(false);
+        }
+        player.setActiveImage(packet.getActiveImage());
+        player.getPlayerImage().get(packet.getActiveImage()).setVisibility(true);
+    }
 
     private void handleLogin(Packet00Login packet, InetAddress address, int port) {
         PlayerMP player = null;
         Vec2 player_pos = new Vec2(packet.getX(), packet.getY());
-        player = new PlayerMP(((Packet00Login)packet).getUsername(), address, port, player_pos);
+        player = new PlayerMP(packet.getUsername(), address, port, player_pos);
         if(player != null) { isten.addUpdatable(player); }
     }
     private void handleMove(Packet02Move packet) {
