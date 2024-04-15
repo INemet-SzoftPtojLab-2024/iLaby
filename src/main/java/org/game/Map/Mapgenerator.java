@@ -7,7 +7,6 @@ import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 
 /**
  * this class is only used at the beginning of a game, when a map needs to be generated
@@ -26,7 +25,7 @@ public class Mapgenerator {
         ColliderGroup sideWallColliders = new ColliderGroup();
         Vec2 horizontalScale = new Vec2(1f, 0.1f); //vizszintes
         Vec2 verticalScale = new Vec2(0.1f, 1f); //fuggoleges
-        String wallPath = "./assets/rooms/11.png";
+        String wallPath = "./assets/wall_mid.png";
         for(int i = 0; i< map.getMapRowSize(); i++)
         {
             for(int j = 0;j<map.getMapColumnSize();j++)
