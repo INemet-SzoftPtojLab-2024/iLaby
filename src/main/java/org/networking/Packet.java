@@ -8,6 +8,7 @@ public abstract class Packet {
         DISCONNECT(01),
         MOVE(02);
 
+
         private int packetId;
         private PacketTypes(int packetId) {
             this.packetId = packetId;

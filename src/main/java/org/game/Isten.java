@@ -32,7 +32,6 @@ public class Isten {
     private final ArrayList<Updatable> pendingRemovedUpdatables;
 
     private final Input inputHandler;
-
     private final Camera camera;
 
     private GameClient socketClient;
