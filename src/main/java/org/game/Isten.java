@@ -111,7 +111,7 @@ public class Isten {
         updatables.add(new TimeCounter());
         updatables.add(new Help());
         updatables.add(new GameMenu());
-        updatables.add(new Map(10, 10, 15));
+        updatables.add(new Map(12, 12, 12));
     }
 
     /**

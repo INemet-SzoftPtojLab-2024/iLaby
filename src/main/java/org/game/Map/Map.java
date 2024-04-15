@@ -1,11 +1,10 @@
 package main.java.org.game.Map;
 
-import main.java.org.game.Graphics.Image;
 import main.java.org.game.Isten;
-import main.java.org.game.physics.Collider;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 
+import java.sql.SQLOutput;
 import java.util.*;
 
 
@@ -47,18 +46,8 @@ public class Map extends Updatable {
     public void onUpdate(Isten isten, double deltaTime) {
         //for testing
         delta += deltaTime;
-        if (delta > 3 && cnt < 4 && !merged) {
-            //mergeRooms(rooms.get(0), rooms.get(0).getAdjacentRooms().get(0), isten);
-            /*if (!splitRooms(rooms.get(r), isten)) r++;
-            else {
-                r = 0;
-            }
-
-             */
-            System.out.println();
-            System.out.println();
-            //printMap();
-            cnt++;
+        if (delta > 10) {
+            TakeOutDoorIfGraphWouldStayCoherent(isten);
             delta = 0;
             merged = true;
         }
@@ -105,10 +94,11 @@ public class Map extends Updatable {
         }
         ArrayList<UnitRoom> oldRoomWithoutNewRoom = getDifference(r1.getUnitRooms(),addableUnitRooms);
         //ellenorzom, hogy osszefuggoek lennének-e: ha igen:
-        if( kruskalAlgoImplementation(oldRoomWithoutNewRoom) && kruskalAlgoImplementation(addableUnitRooms)) {
+        //id mindegy micsoda, itt igazabol nem hasznalom
+        if( kruskalForCheckingIfGraphIsCoherent(oldRoomWithoutNewRoom) && kruskalForCheckingIfGraphIsCoherent(addableUnitRooms)) {
             // removeoljuk a szomszedos roomok szomszedossagi listaibol a szobat, es a func vegen hozzaadjuk a ket szetvalasztott szoba egyiket/mindekettot
-            for(Room neighbourRoom : r1.getAdjacentRooms()){
-                neighbourRoom.getAdjacentRooms().remove(r1);
+            for(Room neighbourRoom : r1.getPhysicallyAdjacentRooms()){
+                neighbourRoom.getPhysicallyAdjacentRooms().remove(r1);
             }
             for (UnitRoom addUnitRoomToNewRoom : addableUnitRooms) {
                 //kivesszük az előző szobából a  aunitroomot
@@ -144,40 +134,8 @@ public class Map extends Updatable {
         }
         return difference;
     }
-    //nem biztos hogy így a legjobb
-    private boolean wouldRoomBeCoherent(ArrayList<UnitRoom> newRoomUnits)
-    {
-        UnitRoom starterRoom = newRoomUnits.get(0);
-        ArrayList<UnitRoom> coherentGraph = new ArrayList<>();
-        coherentGraph.add(starterRoom);
-        for(int i = 0;i<newRoomUnits.size();i++){
-            for(UnitRoom unitRoomToBeAddedToGraph : newRoomUnits){
-                 /*ha a size i-vel egyenlő, vagy kisebb nála, akkor tudjuk, hogy nem alkotnak összefüggő gráfot a UnitRoomok a Roomban,
-                    mert különben az előző körhöz képest legalább 1-et fel kellett volna tuidjak venni, vagy pedig már előtte többet kellett volna tudjak felvenni,
-                    rekurzív gondolat, mukodik (remelem)*/
-                if(coherentGraph.size()> i)
-                {
-                    if (!unitRoomToBeAddedToGraph.equals(coherentGraph.get(i))
-                            && !coherentGraph.contains(unitRoomToBeAddedToGraph)
-                            && unitRoomToBeAddedToGraph.isAdjacent(coherentGraph.get(i)))
-                    {
-                        coherentGraph.add(unitRoomToBeAddedToGraph);
-                        //break; ezzel valszeg effektivebb
-                    }
-                }
-                else{
-                    System.out.println("Nem lennenek koherensek a szobak");
-                    return false;
-                }
-            }
-        }
-        //mivel minden indexen vegig tudtunk menni ezert tudunk truet returnolni, azert biztonsag kedveert meg egy kontrollt bennhagyok
-        if(coherentGraph.size() == newRoomUnits.size()) return true;
-            //hogyha nem egyenlok akkor false menjen ki, bar egyenloknek kene lenniuk
-        else return false;
-    }
     //elozo fv, vagyis wouldRoomBeCoherent atirasa generikusra, es akkor egy wouldMapBeCoherent fv-t is helyettesit.
-    private<T extends Graph> boolean kruskalAlgoImplementation(ArrayList<T> newCoherentElements)
+    public <T extends Graph> boolean kruskalForCheckingIfGraphIsCoherent(ArrayList<T> newCoherentElements)
     {
         T starterRoom = newCoherentElements.get(0);
         ArrayList<T> coherentGraph = new ArrayList<>();
@@ -194,12 +152,12 @@ public class Map extends Updatable {
                             && ElementToBeAddedToGraph.isAdjacent(coherentGraph.get(i)))
                     {
                         coherentGraph.add(ElementToBeAddedToGraph);
-                        //break; ezzel valszeg effektivebb
+
                     }
                 }
                 else{
-                    System.out.println("Nem lennenek koherensek a szobak");
-                    return false;
+                    //System.out.println("Nem lennenek koherensek a szobak");
+                    //return false;
                 }
             }
         }
@@ -237,7 +195,7 @@ public class Map extends Updatable {
 
     //ez a fv a mapgenerátorban is hasonlóan szerepel (colliderek és imagek nélkül)
     private void mergeRooms(Room r1, Room r2, Isten isten) {
-        if(!r1.isAdjacent(r2) || r1.getID() == r2.getID()){
+        if(!r1.isPhysicallyAdjacent(r2) || r1.getID() == r2.getID()){
             System.err.println("cant be merged");
             return;
         }
@@ -260,20 +218,21 @@ public class Map extends Updatable {
 
         r1.getUnitRooms().addAll(r2.getUnitRooms()); //insted of this: r1.getUnitRooms().add(unitroom);
 
-        r1.getAdjacentRooms().remove(r2);
-        r2.getAdjacentRooms().remove(r1);
-        for(Room adj : r2.getAdjacentRooms()){
-            if(!r1.getAdjacentRooms().contains(adj) && !adj.equals(r1)){
+        r1.getPhysicallyAdjacentRooms().remove(r2);
+
+        r2.getPhysicallyAdjacentRooms().remove(r1);
+        for(Room adj : r2.getPhysicallyAdjacentRooms()){
+            if(!r1.getPhysicallyAdjacentRooms().contains(adj) && !adj.equals(r1)){
                 //System.out.println("adjroom added in r1: " + adj.getID());
-                r1.getAdjacentRooms().add(adj);
+                r1.getPhysicallyAdjacentRooms().add(adj);
             }
-            adj.getAdjacentRooms().remove(r2);
-            if(!adj.getAdjacentRooms().contains(r1)) {
-                adj.getAdjacentRooms().add(r1);
+            adj.getPhysicallyAdjacentRooms().remove(r2);
+            if(!adj.getPhysicallyAdjacentRooms().contains(r1)) {
+                adj.getPhysicallyAdjacentRooms().add(r1);
             }
         }
 
-        r2.getAdjacentRooms().clear();
+        r2.getPhysicallyAdjacentRooms().clear();
         r2.getUnitRooms().clear();
 
         //r1.setDiscovered(r2.isDiscovered());
@@ -322,7 +281,58 @@ public class Map extends Updatable {
         }
 
     }
+    //egyenlore a fv-t hivom meg, és azon kívül választom meg, hogy melyik két edge között akarom a funcot meghívni, ez változhat
+    public boolean TakeOutDoorIfGraphWouldStayCoherent(Isten isten){
 
+
+        //mindig nagyon ugyanonnan fog maajd ajtot kivenni
+        for(EdgeBetweenRooms chosenEdge : edgeManager.getRoomEdges()){
+
+            //csak akkor veszek ki ajtót, ha mindkét szobának ami között van az edge van legalább 2 szomszédja
+            Room r1 = chosenEdge.getNodeRooms().get(0);
+            Room r2 = chosenEdge.getNodeRooms().get(1);
+            //ha van ajtaja
+            if(chosenEdge.hasDoor()) {
+                //csak akkor, ha van legalabb 2 ajtaja mindkettonekj, egyebkent mindenkepp szar lenne
+                if (r1.getThroughDoorAdjacentRooms().size() >= 2 &&
+                        (r2.getThroughDoorAdjacentRooms().size() >= 2)) {
+                    ArrayList<Room> newRooms = new ArrayList<>(rooms);
+                    Room newRoom1 = getRoomById(newRooms, r1.getID());
+                    Room newRoom2 = getRoomById(newRooms, r2.getID());
+                    newRoom1.getThroughDoorAdjacentRooms().remove(newRoom1);
+                    newRoom2.getThroughDoorAdjacentRooms().remove(newRoom2);
+                    //megnézem, hogy osszefuggo lenne-e az uj graph
+                    if (kruskalForCheckingIfGraphIsCoherent(newRooms)) {
+                        EdgeBetweenRooms edgeBeingModified = edgeManager.getEdgeBetweenRooms(r1, r2);
+                        ArrayList<EdgePiece> edgePieces = edgeBeingModified.getWalls();
+                        for (EdgePiece edgePiece : edgePieces) {
+                            if (edgePiece.isDoor()) {
+                                edgeBeingModified.switchDoorToWall(edgePiece, isten);
+                                r1.getThroughDoorAdjacentRooms().remove(r2);
+                                r2.getThroughDoorAdjacentRooms().remove(r1);
+                                System.out.println("talatam jot");
+                                return true;
+                            }
+                        }
+                    }
+                    System.out.println("Nem lett volna koherens");
+                }
+                if(r1.getPhysicallyAdjacentRooms().size() <=2
+                        || r2.getPhysicallyAdjacentRooms().size() <= 2)
+                    System.out.println("nem volt eleg ajto");
+            }else System.out.println("nincs ajto itt");
+        }
+        return false;
+    }
+    //ajtokivetel feltetelellenorzeshez kell
+    public Room getRoomById(ArrayList<Room> rooms, int ID){
+        for(Room roomById:rooms){
+            if(roomById.getID() == ID){
+                return roomById;
+            }
+        }
+        return null;
+    }
 
     public void setRooms(ArrayList<Room> rooms) {this.rooms = rooms;}
 

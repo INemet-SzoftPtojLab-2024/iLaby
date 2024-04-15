@@ -7,7 +7,6 @@ import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 
 /**
  * this class is only used at the beginning of a game, when a map needs to be generated
@@ -110,7 +109,10 @@ public class Mapgenerator {
 
         for(Room room: map.getRooms()) {
             isten.addUpdatable(room);
+            // itt még minden szoba fizikálisan és logikailag is szomszédos
+            room.setThroughDoorAdjacentRooms(room.getPhysicallyAdjacentRooms());
         }
+
     }
 
 
@@ -145,9 +147,9 @@ public class Mapgenerator {
             minimalRoom.getUnitRooms().add(unitRoom);
             if(unitRoomNeighbourRooms.size()>1){
                 for(Room unitRoomNeighbourRoom: unitRoomNeighbourRooms) {
-                    if (!unitRoomNeighbourRoom.equals(minimalRoom) && !unitRoomNeighbourRoom.isAdjacent(minimalRoom)) {
-                        minimalRoom.getAdjacentRooms().add(unitRoomNeighbourRoom);
-                        unitRoomNeighbourRoom.getAdjacentRooms().add(minimalRoom);
+                    if (!unitRoomNeighbourRoom.equals(minimalRoom) && !unitRoomNeighbourRoom.isPhysicallyAdjacent(minimalRoom)) {
+                        minimalRoom.getPhysicallyAdjacentRooms().add(unitRoomNeighbourRoom);
+                        unitRoomNeighbourRoom.getPhysicallyAdjacentRooms().add(minimalRoom);
                     }
                 }
 
@@ -190,12 +192,12 @@ public class Mapgenerator {
 
     private Room getLongestEdgeNeighbour(Room r){
         //ebbe a listaba taroljuk hogy mejk szomszednak milyen hosszu a szomszedja
-        int[] edgeLengths = new int[r.getAdjacentRooms().size()];
+        int[] edgeLengths = new int[r.getPhysicallyAdjacentRooms().size()];
         for(Integer edgelen : edgeLengths) edgelen = 0;
         for(UnitRoom ur : r.getUnitRooms()){
             for(UnitRoom neighbour : ur.getAdjacentUnitRooms()){
                 if(neighbour.getOwnerRoom().getID() != r.getID()){
-                    edgeLengths[r.getAdjacentRooms().indexOf(neighbour.getOwnerRoom())]++;
+                    edgeLengths[r.getPhysicallyAdjacentRooms().indexOf(neighbour.getOwnerRoom())]++;
                 }
             }
         }
@@ -205,16 +207,16 @@ public class Mapgenerator {
                 longestIdx = i;
             }
         }
-        return r.getAdjacentRooms().get(longestIdx);
+        return r.getPhysicallyAdjacentRooms().get(longestIdx);
     }
 
     private Room getSmallestNeighbour(Room r1){
         Room r2 = map.getRooms().get(0);
         int minSize = Integer.MAX_VALUE;
-        for (int j = 0; j < r1.getAdjacentRooms().size(); j++) {
-            if (r1.getAdjacentRooms().get(j).getUnitRooms().size() < minSize) {
-                minSize = r1.getAdjacentRooms().get(j).getUnitRooms().size();
-                r2 = r1.getAdjacentRooms().get(j);
+        for (int j = 0; j < r1.getPhysicallyAdjacentRooms().size(); j++) {
+            if (r1.getPhysicallyAdjacentRooms().get(j).getUnitRooms().size() < minSize) {
+                minSize = r1.getPhysicallyAdjacentRooms().get(j).getUnitRooms().size();
+                r2 = r1.getPhysicallyAdjacentRooms().get(j);
             }
         }
         return r2;
@@ -227,7 +229,7 @@ public class Mapgenerator {
         }
     }
     private void mergeRooms(Room r1, Room r2) {
-        if(!r1.isAdjacent(r2) || r1.getID() == r2.getID()){
+        if(!r1.isPhysicallyAdjacent(r2) || r1.getID() == r2.getID()){
             System.err.println("cant be merged");
             return;
         }
@@ -238,20 +240,20 @@ public class Mapgenerator {
         }
         r2.getUnitRooms().clear();
 
-        r1.getAdjacentRooms().remove(r2);
-        r2.getAdjacentRooms().remove(r1);
-        for(Room adj : r2.getAdjacentRooms()){
-            if(!r1.getAdjacentRooms().contains(adj) && !adj.equals(r1)){
+        r1.getPhysicallyAdjacentRooms().remove(r2);
+        r2.getPhysicallyAdjacentRooms().remove(r1);
+        for(Room adj : r2.getPhysicallyAdjacentRooms()){
+            if(!r1.getPhysicallyAdjacentRooms().contains(adj) && !adj.equals(r1)){
                 //System.out.println("adjroom added in r1: " + adj.getID());
-                r1.getAdjacentRooms().add(adj);
+                r1.getPhysicallyAdjacentRooms().add(adj);
             }
-            adj.getAdjacentRooms().remove(r2);
-            if(!adj.getAdjacentRooms().contains(r1)) {
-                adj.getAdjacentRooms().add(r1);
+            adj.getPhysicallyAdjacentRooms().remove(r2);
+            if(!adj.getPhysicallyAdjacentRooms().contains(r1)) {
+                adj.getPhysicallyAdjacentRooms().add(r1);
             }
         }
 
-        r2.getAdjacentRooms().clear();
+        r2.getPhysicallyAdjacentRooms().clear();
         map.getRooms().remove(r2);
     }
 
@@ -259,7 +261,7 @@ public class Mapgenerator {
         for(Room r1: map.getRooms()) {
             for (Room r2 : map.getRooms()) {
                 //ha szomszédosak, és még nincs a két szoba kozott definialva az edge (vagyis a falak)
-                if(r1.isAdjacent(r2) && !map.getEdgeManager().getRoomEdges().contains(map.getEdgeManager().getEdgeBetweenRooms(r1,r2))){
+                if(r1.isPhysicallyAdjacent(r2) && !map.getEdgeManager().getRoomEdges().contains(map.getEdgeManager().getEdgeBetweenRooms(r1,r2))){
                     EdgeBetweenRooms newEdge = new EdgeBetweenRooms(r1,r2);
                     map.getEdgeManager().getRoomEdges().add(newEdge);
                     // this collidergroup will be filled up, when the walls are created

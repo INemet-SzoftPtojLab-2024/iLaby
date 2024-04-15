@@ -7,7 +7,6 @@ import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 
 @Getter
 @Setter
@@ -66,7 +65,7 @@ public class EdgeManager {
                 int indexOfDeletedNode = edgeBetweenRoom.getNodeRooms().indexOf(deleted);
                 int index = 0;
                 if(indexOfDeletedNode == 0) index = 1;
-                if(remaining.isAdjacent(edgeBetweenRoom.getNodeRooms().get(index))){//itt mar csak egy eleme lesz(az a szoba ami ramovednak is meg a remainignek is szomszedja)
+                if(remaining.isPhysicallyAdjacent(edgeBetweenRoom.getNodeRooms().get(index))){//itt mar csak egy eleme lesz(az a szoba ami ramovednak is meg a remainignek is szomszedja)
                     // get the other indexNodeRoomINdex
                     Room RDAdjacent = edgeBetweenRoom.getNodeRooms().get(index);//szoba amia remainingnek es a deletednek is szomszadja
                     EdgeBetweenRooms edgeBetweenRAndRDAdjacent = getEdgeBetweenRooms(remaining, RDAdjacent);

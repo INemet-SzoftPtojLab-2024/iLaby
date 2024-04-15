@@ -101,4 +101,11 @@ public class EdgeBetweenRooms {
     public ColliderGroup getColliderGroup() {
         return colliderGroup;
     }
+
+    public boolean hasDoor() {
+        for(EdgePiece edgePiece: walls){
+            if(edgePiece.isDoor()) return true;
+        }
+        return false;
+    }
 }
