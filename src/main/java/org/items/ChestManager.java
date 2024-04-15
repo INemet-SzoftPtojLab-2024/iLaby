@@ -117,10 +117,10 @@ public class ChestManager extends Updatable {
 
         WallLocation wall;//0=left, 1=top, 2=right, 3=bottom
         ArrayList<WallLocation> walls = new ArrayList<>();
-        if(unitRoom.getLeftIsWall())walls.add(WallLocation.LEFT);
-        if(unitRoom.getTopIsWall())walls.add(WallLocation.TOP);
-        if(unitRoom.getRightIsWall())walls.add(WallLocation.RIGHT);
-        if(unitRoom.getBottomIsWall()) walls.add(WallLocation.BOTTOM);
+        if(unitRoom.isLeftWall())walls.add(WallLocation.LEFT);
+        if(unitRoom.isTopWall())walls.add(WallLocation.TOP);
+        if(unitRoom.isRightWall())walls.add(WallLocation.RIGHT);
+        if(unitRoom.isBottomWall()) walls.add(WallLocation.BOTTOM);
 
         Random random = new Random();
         return walls.get(random.nextInt(walls.size()));

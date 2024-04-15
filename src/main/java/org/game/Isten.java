@@ -38,6 +38,7 @@ public class Isten {
      * Initializes the physics engine, game renderer, and list of updatables.
      */
     public Isten() {
+        inventory=new Inventory(5);
         map=new Map(10, 10, 15);
         player = new Player("II. Németh Szilárd");
         itemManager=new ItemManager();
@@ -156,6 +157,10 @@ public class Isten {
     public Camera getCamera() {
         return this.camera;
     }
+    public Player getPlayer(){return player;}
+    public Inventory getInventory(){return inventory;}
+    public ItemManager getItemManager(){return itemManager;}
+    public Map getMap(){return map;}
 
     public void addUpdatable(Updatable u) {
         pendingAddedUpdatables.add(u);
