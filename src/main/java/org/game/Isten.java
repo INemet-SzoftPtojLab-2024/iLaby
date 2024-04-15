@@ -1,5 +1,6 @@
 package main.java.org.game;
 
+import main.java.org.entities.villain.Villain;
 import main.java.org.game.Camera.Camera;
 import main.java.org.game.Graphics.*;
 
@@ -8,6 +9,9 @@ import main.java.org.entities.player.Player;
 import main.java.org.game.Input.Input;
 import main.java.org.game.Map.Map;
 import main.java.org.game.Timer.TimeCounter;
+import main.java.org.game.UI.GameMenu;
+import main.java.org.game.UI.Help;
+import main.java.org.game.UI.TimeCounter;
 import main.java.org.game.physics.PhysicsEngine;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
@@ -32,8 +36,8 @@ public class Isten {
     private final ArrayList<Updatable> pendingRemovedUpdatables;
 
     private final Input inputHandler;
-    private final Camera camera;
 
+    private final Camera camera;
     private GameClient socketClient;
     private GameServer socketServer;
 
@@ -120,7 +124,6 @@ public class Isten {
             socketServer.start();
 
         }
-
         socketClient = new GameClient(this, "localhost");
         socketClient.start();
 
@@ -128,7 +131,6 @@ public class Isten {
         loginPacket.writeData(socketClient);
 
     }
-
 
     /**
      * Method to add renderable objects to the game renderer.
@@ -141,10 +143,14 @@ public class Isten {
      */
     private void addUpdatables()
     {
-        //updatables.add(new Player("II. Németh Szilárd"))
         updatables.add(player);
-        updatables.add(new TimeCounter(600));
-        updatables.add(new Map(10,10, 15));
+        updatables.add(new Villain("Gonosz1", new Vec2(8,7), "./assets/villain/villain1.png"));
+        updatables.add(new Villain("Gonosz2", new Vec2(5,5), "./assets/villain/villain2.png"));
+        updatables.add(new Villain("Gonosz3", new Vec2(3,3), "./assets/villain/villain3.png"));
+        updatables.add(new TimeCounter());
+        updatables.add(new Help());
+        updatables.add(new GameMenu());
+        updatables.add(new Map(10, 10, 15));
     }
 
     /**
@@ -176,10 +182,6 @@ public class Isten {
         pendingRemovedUpdatables.add(u);
     }
 
-    public GameClient getSocketClient() {
-        return socketClient;
-    }
-
     public void movePlayer(String username, float x, float y) {
         int index = getPlayerMPIndex(username);
         ((PlayerMP)this.updatables.get(index)).getPlayerCollider().setPosition(new Vec2(x,y));
@@ -198,5 +200,9 @@ public class Isten {
             index++;
         }
         return index;
+    }
+
+    public GameClient getSocketClient() {
+        return socketClient;
     }
 }

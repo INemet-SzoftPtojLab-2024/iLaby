@@ -21,11 +21,11 @@ public class Map extends Updatable {
 
     @Override
     public void onStart(Isten isten) {
-        this.edgeManager = new EdgeManager();
+        this.edgeManager = new EdgeManager(isten);
         this.mapgenerator = new Mapgenerator(this, isten);
         mapgenerator.generate(minRoomSize);
 
-       // printMap();
+        //printMap();
     }
 
     public Map(int rowNumber, int columnNumber, int minRoomSize){
@@ -48,7 +48,7 @@ public class Map extends Updatable {
         //for testing
         delta += deltaTime;
         if (delta > 3 && cnt < 4 && !merged) {
-            mergeRooms(rooms.get(0), rooms.get(0).getAdjacentRooms().get(0), isten);
+            //mergeRooms(rooms.get(0), rooms.get(0).getAdjacentRooms().get(0), isten);
             /*if (!splitRooms(rooms.get(r), isten)) r++;
             else {
                 r = 0;
@@ -127,7 +127,7 @@ public class Map extends Updatable {
             }
             //update nodeRooms and generate the new ones
             //also updates the images and colliders
-            edgeManager.updateEdgesAfterSplit(r1, newRoom, isten);
+            edgeManager.updateEdgesAfterSplit(r1, newRoom);
             return true;
         }
         return false;
@@ -246,8 +246,8 @@ public class Map extends Updatable {
 
         //set colliders
 
-        edgeManager.deleteEdge(r1,r2,isten);
-        edgeManager.updateEdgesAfterMerge(r1,r2,isten);
+        edgeManager.deleteEdge(r1,r2);
+        edgeManager.updateEdgesAfterMerge(r1,r2);
 
         for(UnitRoom unitRoom : r2.getUnitRooms()){
             //r1.getUnitRooms().add(unitroom);
