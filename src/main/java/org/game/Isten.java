@@ -11,6 +11,8 @@ import main.java.org.game.Map.Map;
 import main.java.org.game.UI.*;
 import main.java.org.game.physics.PhysicsEngine;
 import main.java.org.game.updatable.Updatable;
+import main.java.org.items.ChestManager;
+import main.java.org.items.ItemManager;
 import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
@@ -24,9 +26,11 @@ public class Isten {
     protected final ArrayList<Updatable> updatables;
     private final ArrayList<Updatable> pendingAddedUpdatables;
     private final ArrayList<Updatable> pendingRemovedUpdatables;
-
+    private Player player;
+    private Map map;
+    private Inventory inventory;
     private final Input inputHandler;
-
+    private final ItemManager itemManager;
     private final Camera camera;
 
     /**
@@ -34,6 +38,10 @@ public class Isten {
      * Initializes the physics engine, game renderer, and list of updatables.
      */
     public Isten() {
+        inventory=new Inventory(5);
+        map=new Map(10, 10, 15);
+        player = new Player("II. Németh Szilárd");
+        itemManager=new ItemManager();
         inputHandler = new Input();
         camera = new Camera();
         physicsEngine = new PhysicsEngine();
@@ -104,6 +112,13 @@ public class Isten {
      * Method to add updatable objects to the game.
      */
     protected void addUpdatables() {
+
+        updatables.add(player);
+        updatables.add(itemManager);
+        updatables.add(inventory);
+        updatables.add(map);
+        updatables.add(new ChestManager(10));//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
+
         updatables.add(new Player("II. Németh Szilárd"));
         updatables.add(new Villain("Gonosz1", new Vec2(8,7), "./assets/villain/villain1.png"));
         updatables.add(new Villain("Gonosz2", new Vec2(5,5), "./assets/villain/villain2.png"));
@@ -111,7 +126,6 @@ public class Isten {
         updatables.add(new TimeCounter());
         updatables.add(new Help());
         updatables.add(new GameMenu());
-        updatables.add(new Map(10, 10, 15));
     }
 
     /**
@@ -143,6 +157,10 @@ public class Isten {
     public Camera getCamera() {
         return this.camera;
     }
+    public Player getPlayer(){return player;}
+    public Inventory getInventory(){return inventory;}
+    public ItemManager getItemManager(){return itemManager;}
+    public Map getMap(){return map;}
 
     public void addUpdatable(Updatable u) {
         pendingAddedUpdatables.add(u);

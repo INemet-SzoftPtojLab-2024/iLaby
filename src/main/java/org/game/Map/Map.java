@@ -21,11 +21,11 @@ public class Map extends Updatable {
 
     @Override
     public void onStart(Isten isten) {
-        this.edgeManager = new EdgeManager();
+        this.edgeManager = new EdgeManager(isten);
         this.mapgenerator = new Mapgenerator(this, isten);
         mapgenerator.generate(minRoomSize);
 
-        printMap();
+        //printMap();
     }
 
     public Map(int rowNumber, int columnNumber, int minRoomSize){
@@ -41,18 +41,25 @@ public class Map extends Updatable {
     //for testing
     boolean merged = false;
     double delta = 0;
+    int cnt = 0;
+    int r = 0;
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-
         //for testing
         delta += deltaTime;
-        if(delta > 5 && !merged) {
+        if (delta > 3 && cnt < 4 && !merged) {
             //mergeRooms(rooms.get(0), rooms.get(0).getAdjacentRooms().get(0), isten);
-            splitRooms(rooms.get(0), isten);
+            /*if (!splitRooms(rooms.get(r), isten)) r++;
+            else {
+                r = 0;
+            }
+
+             */
             System.out.println();
             System.out.println();
             //printMap();
-
+            cnt++;
+            delta = 0;
             merged = true;
         }
     }
@@ -73,16 +80,14 @@ public class Map extends Updatable {
     }
 
     //csak akkor ha minden ajto nyitva van!!
+    //a slitelesnel csak a minroomsize fele engedelyezett
     private boolean splitRooms(Room r1, Isten isten)
     {
-        // removeoljuk a szomszedos roomok szomszedossagi listaibol a szobat, es a func vegen hozzaadjuk a ket szetvalasztott szoba egyiket/mindekettot
-        for(Room neighbourRoom : r1.getAdjacentRooms()){
-            neighbourRoom.getAdjacentRooms().remove(r1);
-        }
+        if(r1.getUnitRooms().size() < minRoomSize) return false;
         //egyenlőre minden szoba ami splittel lesz createlve ilyen type-val rendelkezik
-        //int newID = generateNewRoomID(); //már kész van, teszt miatt nincs hasznalva
-        int newId = 999;
-        Room newRoom = new Room(newId);
+        int newID = generateNewRoomID(); //már kész van, teszt miatt nincs hasznalva
+        //int newId = 999;
+        Room newRoom = new Room(newID);
         int lowestRowIdx = getRoomWithLowestRowIdx(r1);
         ArrayList<UnitRoom> addableUnitRooms = new ArrayList<>();
         int distance = 0;
@@ -101,6 +106,10 @@ public class Map extends Updatable {
         ArrayList<UnitRoom> oldRoomWithoutNewRoom = getDifference(r1.getUnitRooms(),addableUnitRooms);
         //ellenorzom, hogy osszefuggoek lennének-e: ha igen:
         if( kruskalAlgoImplementation(oldRoomWithoutNewRoom) && kruskalAlgoImplementation(addableUnitRooms)) {
+            // removeoljuk a szomszedos roomok szomszedossagi listaibol a szobat, es a func vegen hozzaadjuk a ket szetvalasztott szoba egyiket/mindekettot
+            for(Room neighbourRoom : r1.getAdjacentRooms()){
+                neighbourRoom.getAdjacentRooms().remove(r1);
+            }
             for (UnitRoom addUnitRoomToNewRoom : addableUnitRooms) {
                 //kivesszük az előző szobából a  aunitroomot
                 addUnitRoomToNewRoom.getOwnerRoom().getUnitRooms().remove(addUnitRoomToNewRoom);
@@ -118,7 +127,7 @@ public class Map extends Updatable {
             }
             //update nodeRooms and generate the new ones
             //also updates the images and colliders
-            edgeManager.updateEdgesAfterSplit(r1, newRoom, isten);
+            edgeManager.updateEdgesAfterSplit(r1, newRoom);
             return true;
         }
         return false;
@@ -237,7 +246,7 @@ public class Map extends Updatable {
 
         //set colliders
 
-        edgeManager.deleteEdge(r1,r2,isten);
+        edgeManager.deleteEdge(r1,r2);
         edgeManager.updateEdgesAfterMerge(r1,r2);
 
         for(UnitRoom unitRoom : r2.getUnitRooms()){
