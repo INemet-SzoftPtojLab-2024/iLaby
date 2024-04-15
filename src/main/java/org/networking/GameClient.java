@@ -1,6 +1,8 @@
 package main.java.org.networking;
 
+import main.java.org.entities.villain.Villain;
 import main.java.org.game.Isten;
+import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 
 import javax.xml.crypto.Data;
@@ -66,7 +68,31 @@ public class GameClient extends Thread {
                 packet = new Packet03Animation(data);
                 handleAnimation((Packet03Animation)packet);
                 break;
+            case VILLAIN:
+                packet = new Packet05Villain(data);
+                handleVillain((Packet05Villain)packet);
+                break;
+            case VILLAINMOVE:
+                packet = new Packet06VillainMove(data);
+                handleVillainMove((Packet06VillainMove) packet);
+                break;
         }
+    }
+
+    private void handleVillainMove(Packet06VillainMove packet) {
+        String villainName = packet.getVillainName();
+
+        int index = isten.getVillainIndex(villainName);
+        Villain villain = (Villain)isten.getUpdatable(index);
+        if(villain == null) return;
+        if(villain.getVillainCollider() != null) villain.getVillainCollider().setPosition(new Vec2(packet.getX(), packet.getY()));
+    }
+
+    private void handleVillain(Packet05Villain packet) {
+        String villainName = packet.getVillainName();
+        Vec2 position = packet.getPosition();
+        String imagePath = packet.getImagePath();
+        isten.addUpdatable(new Villain(villainName, position, imagePath));
     }
 
     private void handleAnimation(Packet03Animation packet) {
@@ -87,7 +113,12 @@ public class GameClient extends Thread {
         if(player != null) { isten.addUpdatable(player); }
     }
     private void handleMove(Packet02Move packet) {
-        isten.movePlayer((packet.getUsername()), packet.getX(), packet.getY());
+        String username = packet.getUsername();
+
+        int index = isten.getPlayerMPIndex(username);
+        PlayerMP player = (PlayerMP)isten.getUpdatable(index);
+        if(player == null) return;
+        if(player.getPlayerCollider() != null) player.getPlayerCollider().setPosition(new Vec2(packet.getX(), packet.getY()));
     }
 
     public void sendData(byte[] data) {

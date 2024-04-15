@@ -1,7 +1,14 @@
 package main.java.org.networking;
 
+import main.java.org.entities.villain.Villain;
 import main.java.org.game.Isten;
-
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.*;
@@ -13,6 +20,7 @@ import main.java.org.networking.Packet.PacketTypes;
 
 public class GameServer extends Thread {
 
+    private VillainHandler villainHandler;
     private DatagramSocket socket;
     Isten isten;
 
@@ -31,7 +39,9 @@ public class GameServer extends Thread {
 
     public void run() {
         System.out.println("ITS THE SERVER!");
+        startServer();
         while(true) {
+            //Get packets from clients
             byte[] data = new byte[1024];
             DatagramPacket packet = new DatagramPacket(data, data.length);
             try {
@@ -40,10 +50,19 @@ public class GameServer extends Thread {
                 throw new RuntimeException(e);
             }
             parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
-
         }
     }
 
+    private void startServer() {
+        villainHandler = new VillainHandler(this);
+        villainHandler.createVillains();
+    }
+
+    public void updateServer() {
+        villainHandler.updateVillains();
+    }
+
+    //Parse packet to string
     private void parsePacket(byte[] data, InetAddress address, int port) {
 
         String message = new String(data).trim();
@@ -81,6 +100,13 @@ public class GameServer extends Thread {
         PlayerMP player = null;
         player = new PlayerMP(packet.getUsername(), address, port);
         this.addConnection(player,((Packet00Login)packet));
+
+        //Handle creation of villains - when player joins, the server generated villains are generated on client as well
+        handleServerCreations(player);
+    }
+
+    private void handleServerCreations(PlayerMP player) {
+        villainHandler.sendVillainsToNewClient(player);
     }
 
     //handle Move Packet
@@ -110,9 +136,9 @@ public class GameServer extends Thread {
                 //Send data to the new player, that the already connected player exists
                 int index = isten.getPlayerMPIndex(p.getUsername());
                 Vec2 pos = ((PlayerMP)isten.getUpdatable(index)).getPlayerCollider().getPosition();
-                System.out.println("pos " + pos.x + "," + pos.y);
                 packet = new Packet00Login(p.getUsername(), pos.x, pos.y);
                 sendData(packet.getData(), player.ipAddress, player.port);
+
             }
         }
         if(!alreadyConnected) {

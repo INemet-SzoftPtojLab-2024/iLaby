@@ -8,7 +8,9 @@ public abstract class Packet {
         DISCONNECT(01),
         MOVE(02),
         ANIMATION(03),
-        MAP(04);
+        MAP(04),
+        VILLAIN(05),
+        VILLAINMOVE(06);
 
 
         private int packetId;

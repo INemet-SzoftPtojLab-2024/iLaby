@@ -41,6 +41,7 @@ public class Villain extends Entity {
     }
     @Override
     public void onStart(Isten isten) {
+        System.out.println("ONSTART VILLAIN");
         Vec2 playerScale = new Vec2(0.6f, 0.6f);
         villainCollider = new Collider(position, playerScale);
         villainCollider.setMovability(true);
@@ -61,10 +62,12 @@ public class Villain extends Entity {
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
         Vec2 playerPosition = villainCollider.getPosition();
-        Random random = new Random();
         villainImage.setPosition(playerPosition);
         villainName.setPosition(Vec2.sum(playerPosition, new Vec2(0, (float) 0.5)));
+    }
 
+    public void move() {
+        Random random = new Random();
         if(villainCollider.getVelocity().x==0)
         {
             int randomNumber = random.nextInt(4);
@@ -86,7 +89,29 @@ public class Villain extends Entity {
             direction *= -1;
         }
     }
+
     @Override
     public void onDestroy() {
+    }
+
+    public String getVillainName() {
+        return villainName.getText();
+    }
+
+    public Vec2 getPosition() {
+        return position;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public Collider getVillainCollider() {
+        return villainCollider;
+    }
+
+    public void setVillainCollider(Isten isten, Collider collider) {
+        villainCollider = collider;
+        isten.getPhysicsEngine().addCollider(villainCollider);//register collider in the physics engine
     }
 }

@@ -42,9 +42,4 @@ public class Packet03Animation extends Packet {
     public int getActiveImage() {
         return activeImage;
     }
-
-    public int getPrevImage() {
-        //return prevImage;
-        return 0;
-    }
 }

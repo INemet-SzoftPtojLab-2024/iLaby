@@ -95,6 +95,11 @@ public class Isten {
         for(Updatable u : updatables)
             u.onUpdate(this,deltaTime);
 
+        //ServerUpdate
+        if(socketServer != null) {
+            socketServer.updateServer();
+        }
+
         //calculate render positions, check for UI inputs and then render
         renderer.calculateRenderedPositions();
         renderer.processUIInputs(inputHandler);
@@ -144,9 +149,9 @@ public class Isten {
     protected void addUpdatables()
     {
         updatables.add(player);
-        updatables.add(new Villain("Gonosz1", new Vec2(8,7), "./assets/villain/villain1.png"));
-        updatables.add(new Villain("Gonosz2", new Vec2(5,5), "./assets/villain/villain2.png"));
-        updatables.add(new Villain("Gonosz3", new Vec2(3,3), "./assets/villain/villain3.png"));
+        //updatables.add(new Villain("Gonosz1", new Vec2(8,7), "./assets/villain/villain1.png"));
+        //updatables.add(new Villain("Gonosz2", new Vec2(5,5), "./assets/villain/villain2.png"));
+        //updatables.add(new Villain("Gonosz3", new Vec2(3,3), "./assets/villain/villain3.png"));
         updatables.add(new TimeCounter());
         updatables.add(new Help());
         updatables.add(new GameMenu());
@@ -182,11 +187,6 @@ public class Isten {
         pendingRemovedUpdatables.add(u);
     }
 
-    public void movePlayer(String username, float x, float y) {
-        int index = getPlayerMPIndex(username);
-        ((PlayerMP)this.updatables.get(index)).getPlayerCollider().setPosition(new Vec2(x,y));
-    }
-
     public int getPlayerMPIndex(String username) {
         int index = 0;
         for(int i = 0; i < updatables.size(); i++) {
@@ -202,6 +202,20 @@ public class Isten {
         return index;
     }
 
+    public int getVillainIndex(String villainName) {
+        int index = 0;
+        for(int i = 0; i < updatables.size(); i++) {
+            Updatable u = updatables.get(i);
+            if(u instanceof Villain) {
+                if(((Villain)u).getVillainName().equalsIgnoreCase(villainName)) {
+                    break;
+                }
+
+            }
+            index++;
+        }
+        return index;
+    }
     public Updatable getUpdatable(int index) {
         if(index >= updatables.size()) return null;
         return updatables.get(index);
