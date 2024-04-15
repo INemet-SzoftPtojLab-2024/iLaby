@@ -9,4 +9,10 @@ public class Isten2 extends Isten{
         addUpdatable(new MainMenu());
         addUpdatable(new MultiMenu());
     }
+
+    @Override
+    public void init() {
+        addUpdatables();
+        addRenderables();
+    }
 }

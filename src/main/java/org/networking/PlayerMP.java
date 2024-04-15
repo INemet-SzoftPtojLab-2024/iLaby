@@ -16,6 +16,12 @@ public class PlayerMP extends Player {
         this.port = port;
     }
 
+    public PlayerMP(String name, InetAddress ipAddress, int port, Vec2 spawnPosition) {
+        super(name, spawnPosition);
+        this.ipAddress = ipAddress;
+        this.port = port;
+    }
+
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
         super.onUpdate(isten, deltaTime);

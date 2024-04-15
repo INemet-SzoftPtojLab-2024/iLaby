@@ -8,7 +8,6 @@ import main.java.org.entities.player.Player;
 
 import main.java.org.game.Input.Input;
 import main.java.org.game.Map.Map;
-import main.java.org.game.Timer.TimeCounter;
 import main.java.org.game.UI.GameMenu;
 import main.java.org.game.UI.Help;
 import main.java.org.game.UI.TimeCounter;
@@ -106,14 +105,16 @@ public class Isten {
      * Method to initialize the game.
      */
     public void init() {
+        //Create own player
         player = new PlayerMP(JOptionPane.showInputDialog(this.getRenderer(),"Username"),null,-1);
 
+        //Set localPlayer to true, so that only this player can be moved and followed by the camera on this client
         player.localPlayer = true;
 
         addUpdatables();
         addRenderables();
 
-        Packet00Login loginPacket = new Packet00Login(player.getUsername());
+        Packet00Login loginPacket = new Packet00Login(player.getUsername(), 0, 0);
 
         if(socketServer != null) {
             socketServer.addConnection(player,loginPacket);
@@ -127,7 +128,6 @@ public class Isten {
         socketClient = new GameClient(this, "localhost");
         socketClient.start();
 
-
         loginPacket.writeData(socketClient);
 
     }
@@ -135,13 +135,13 @@ public class Isten {
     /**
      * Method to add renderable objects to the game renderer.
      */
-    private void addRenderables() {
+    protected void addRenderables() {
     }
 
     /**
      * Method to add updatable objects to the game.
      */
-    private void addUpdatables()
+    protected void addUpdatables()
     {
         updatables.add(player);
         updatables.add(new Villain("Gonosz1", new Vec2(8,7), "./assets/villain/villain1.png"));
@@ -187,7 +187,7 @@ public class Isten {
         ((PlayerMP)this.updatables.get(index)).getPlayerCollider().setPosition(new Vec2(x,y));
     }
 
-    private int getPlayerMPIndex(String username) {
+    public int getPlayerMPIndex(String username) {
         int index = 0;
         for(int i = 0; i < updatables.size(); i++) {
             Updatable u = updatables.get(i);
@@ -202,6 +202,10 @@ public class Isten {
         return index;
     }
 
+    public Updatable getUpdatable(int index) {
+        if(index >= updatables.size()) return null;
+        return updatables.get(index);
+    }
     public GameClient getSocketClient() {
         return socketClient;
     }

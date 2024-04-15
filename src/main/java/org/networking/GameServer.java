@@ -15,6 +15,9 @@ public class GameServer extends Thread {
 
     private DatagramSocket socket;
     Isten isten;
+
+    //Just values, not references for the actual players
+    //When changing something in one of the connectedPlayers it won't change anything on the actual players in updatable
     private List<PlayerMP> connectedPlayers = new ArrayList<>();
     public GameServer(Isten isten) {
         this.isten = isten;
@@ -53,49 +56,27 @@ public class GameServer extends Thread {
                 break;
             case LOGIN:
                 packet = new Packet00Login(data);
-                System.out.println("["+address.getHostAddress() + ":" + port + "] " + ((Packet00Login)packet).getUsername() + " has connected...");
-                PlayerMP player = null;
-                player = new PlayerMP(((Packet00Login)packet).getUsername(), address, port);
-                this.addConnection(player,((Packet00Login)packet));
+                handleLogin((Packet00Login)packet, address, port);
                 break;
             case DISCONNECT:
                 break;
             case MOVE:
                 packet = new Packet02Move(data);
-                System.out.println(((Packet02Move)packet).getUsername() + " has moved to " + ((Packet02Move)packet).getX() + "," + ((Packet02Move)packet).getY());
                 handleMove(((Packet02Move)packet));
                 break;
         }
     }
 
+    //handle Login Packet
+    private void handleLogin(Packet00Login packet, InetAddress address, int port) {
+        PlayerMP player = null;
+        player = new PlayerMP(packet.getUsername(), address, port);
+        this.addConnection(player,((Packet00Login)packet));
+    }
+
+    //handle Move Packet
     private void handleMove(Packet02Move packet) {
-        if(getPlayerMP(packet.getUsername()) != null) {
-            int index = getPlayerMPIndex(packet.getUsername());
-            if(index == -1) return;
-            if(this.connectedPlayers.get(index).getPlayerCollider() != null) {
-                this.connectedPlayers.get(index).getPlayerCollider().setPosition(new Vec2(packet.getX(), packet.getY()));
-            }
-            packet.writeData(this);
-
-        }
-    }
-
-    private int getPlayerMPIndex(String username) {
-        for(int i = 0; i < connectedPlayers.size(); i++) {
-            if(connectedPlayers.get(i).getUsername().equalsIgnoreCase(username)) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    private PlayerMP getPlayerMP(String username) {
-        for(PlayerMP p: connectedPlayers) {
-            if(p.getUsername().equalsIgnoreCase(username)) {
-                return p;
-            }
-        }
-        return null;
+        packet.writeData(this);
     }
 
     public void addConnection(PlayerMP player, Packet00Login packet) {
@@ -111,18 +92,27 @@ public class GameServer extends Thread {
                 alreadyConnected = true;
             }
             else {
-                packet = new Packet00Login(player.getUsername());
-                System.out.println("SENDING PACKET WITH USERNAME: " + player.getUsername() + " TO " + p.getUsername());
+                //New player's position is (0,0) -> later: spawnPoints
+                //Send data to the already connected players, that the new player exists
+                packet = new Packet00Login(player.getUsername(), 0, 0);
                 sendData(packet.getData(), p.ipAddress, p.port);
-                packet = new Packet00Login(p.getUsername());
+
+                //Send position as well, so that the players spawn at their current posi
+                //Send data to the new player, that the already connected player exists
+                int index = isten.getPlayerMPIndex(p.getUsername());
+                Vec2 pos = ((PlayerMP)isten.getUpdatable(index)).getPlayerCollider().getPosition();
+                System.out.println("pos " + pos.x + "," + pos.y);
+                packet = new Packet00Login(p.getUsername(), pos.x, pos.y);
                 sendData(packet.getData(), player.ipAddress, player.port);
             }
         }
         if(!alreadyConnected) {
+            //If the player has not been connected before, then add it to connectedPlayers
             this.connectedPlayers.add(player);
         }
     }
 
+    //Send data to one client
     public void sendData(byte[] data, InetAddress ipAddress, int port) {
         DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
         try {
@@ -132,6 +122,7 @@ public class GameServer extends Thread {
         }
     }
 
+    //Send data to all clients
     public void sendDataToAllClients(byte[] data) {
         for(PlayerMP p: connectedPlayers) {
             sendData(data, p.ipAddress, p.port);

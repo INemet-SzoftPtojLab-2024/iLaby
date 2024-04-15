@@ -1,6 +1,7 @@
 package main.java.org.networking;
 
 import main.java.org.game.Isten;
+import main.java.org.linalg.Vec2;
 
 import javax.xml.crypto.Data;
 import java.io.IOException;
@@ -42,35 +43,35 @@ public class GameClient extends Thread {
 
     private void parsePacket(byte[] data, InetAddress address, int port) {
 
-        System.out.println("Parse packet client");
+        //System.out.println("Parse packet client");
         String message = new String(data).trim();
         Packet.PacketTypes type = Packet.lookupPacket(message.substring(0,2));
-        Packet packet = null;
         switch(type) {
             default:
                 break;
             case INVALID:
                 break;
             case LOGIN:
-                packet = new Packet00Login(data);
-                System.out.println("GOT LOGIN PACKET WITH USERNAME: " + ((Packet00Login)packet).getUsername());
-                System.out.println("["+address.getHostAddress() + ":" + port + "] " + ((Packet00Login)packet).getUsername() + " has joined the game...");
-                PlayerMP player = null;
-                player = new PlayerMP(((Packet00Login)packet).getUsername(), address, port);
-                if(player != null) { isten.addUpdatable(player); }
+                handleLogin(new Packet00Login(data), address, port);
                 break;
             case DISCONNECT:
                 break;
             case MOVE:
-                packet = new Packet02Move(data);
-                handlePacket((Packet02Move)packet);
+                handleMove(new Packet02Move(data));
+                break;
         }
     }
 
-    private void handlePacket(Packet02Move packet) {
+
+    private void handleLogin(Packet00Login packet, InetAddress address, int port) {
+        PlayerMP player = null;
+        Vec2 player_pos = new Vec2(packet.getX(), packet.getY());
+        player = new PlayerMP(((Packet00Login)packet).getUsername(), address, port, player_pos);
+        if(player != null) { isten.addUpdatable(player); }
+    }
+    private void handleMove(Packet02Move packet) {
         isten.movePlayer((packet.getUsername()), packet.getX(), packet.getY());
     }
-
 
     public void sendData(byte[] data) {
         DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, 1331);

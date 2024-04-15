@@ -29,7 +29,9 @@ public class Player extends Entity {
     boolean alive;  //Bool variable, to store status of player: ded or alive
 
     Sound playerSound = null;
+    private Vec2 spawnPosition;
 
+    public boolean localPlayer = false;
     public Player() {
         playerCollider = null;
         playerImage = null;
@@ -38,6 +40,7 @@ public class Player extends Entity {
         time = 0.0f;
         playerName = null;
         alive = true;
+        spawnPosition = new Vec2(0,0);
     }
 
     public Player(String name) {
@@ -49,6 +52,14 @@ public class Player extends Entity {
         playerName = new Text(name, new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 0, 0, 255);
         playerName.setShadowOn(false);
         alive = true;
+        spawnPosition = new Vec2(0,0);
+
+    }
+
+    public Player(String name, Vec2 spawnPosition) {
+        this(name);
+        this.spawnPosition.x = spawnPosition.x;
+        this.spawnPosition.y = spawnPosition.y;
     }
 
     @Override
@@ -57,7 +68,7 @@ public class Player extends Entity {
 
         Vec2 playerScale = new Vec2(0.5f, 0.5f);
 
-        playerCollider = new Collider(new Vec2(0, 0), playerScale);
+        playerCollider = new Collider(new Vec2(spawnPosition.x, spawnPosition.y), playerScale);
         playerCollider.setMovability(true);
         isten.getPhysicsEngine().addCollider(playerCollider);//register collider in the physics engine
 
@@ -110,18 +121,21 @@ public class Player extends Entity {
 
             if (isten.getInputHandler().isKeyDown(KeyEvent.VK_SHIFT)) run *= 2;//Shift is run
 
-            if (w) {
-                playerCollider.getVelocity().y = 2 * run;
-            } else if (!w) playerCollider.getVelocity().y = 0;
-            if (a) {
-                playerCollider.getVelocity().x = -2 * run;
-            } else if (!a) playerCollider.getVelocity().x = 0;
-            if (s) {
-                playerCollider.getVelocity().y = -2 * run;
-            } else if (!s && !w) playerCollider.getVelocity().y = 0;
-            if (d) {
-                playerCollider.getVelocity().x = 2 * run;
-            } else if (!d && !a) playerCollider.getVelocity().x = 0;
+            if(localPlayer) {
+                if (w) {
+                    playerCollider.getVelocity().y = 2 * run;
+                } else if (!w) playerCollider.getVelocity().y = 0;
+                if (a) {
+                    playerCollider.getVelocity().x = -2 * run;
+                } else if (!a) playerCollider.getVelocity().x = 0;
+                if (s) {
+                    playerCollider.getVelocity().y = -2 * run;
+                } else if (!s && !w) playerCollider.getVelocity().y = 0;
+                if (d) {
+                    playerCollider.getVelocity().x = 2 * run;
+                } else if (!d && !a) playerCollider.getVelocity().x = 0;
+            }
+
 
             //animation
 
@@ -149,7 +163,7 @@ public class Player extends Entity {
             playerName.setPosition(Vec2.sum(playerPosition, new Vec2(0, (float) 0.5)));
 
             //move camera
-            isten.getCamera().setPosition(playerCollider.getPosition());
+            if(localPlayer) isten.getCamera().setPosition(playerCollider.getPosition());
 
             //play sound
             if (!AudioManager.isPlaying(playerSound))
