@@ -8,6 +8,8 @@ import main.java.org.entities.player.Player;
 
 import main.java.org.game.Input.Input;
 import main.java.org.game.Map.Map;
+import main.java.org.game.Map.Room;
+import main.java.org.game.Map.UnitRoom;
 import main.java.org.game.UI.*;
 import main.java.org.game.physics.PhysicsEngine;
 import main.java.org.game.updatable.Updatable;
@@ -16,6 +18,8 @@ import main.java.org.items.ItemManager;
 import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 /**
  * The main class representing the game part of the program.
@@ -39,7 +43,7 @@ public class Isten {
      */
     public Isten() {
         inventory=new Inventory(5);
-        map=new Map(10, 10, 15);
+        map=new Map(10, 10, 3);
         player = new Player("II. Németh Szilárd");
         itemManager=new ItemManager();
         inputHandler = new Input();
@@ -117,11 +121,12 @@ public class Isten {
         updatables.add(itemManager);
         updatables.add(inventory);
         updatables.add(map);
-        updatables.add(new ChestManager(10));//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
+        updatables.add(new ChestManager(100));//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
 
-        updatables.add(new Villain("Gonosz1", new Vec2(8,7), "./assets/villain/villain1.png"));
-        updatables.add(new Villain("Gonosz2", new Vec2(5,5), "./assets/villain/villain2.png"));
-        updatables.add(new Villain("Gonosz3", new Vec2(3,3), "./assets/villain/villain3.png"));
+        updatables.add(new Villain("Villain1", "./assets/villain/villain1.png"));
+        updatables.add(new Villain("Villain2", "./assets/villain/villain2.png"));
+        updatables.add(new Villain("Villain3", "./assets/villain/villain3.png"));
+
         updatables.add(new TimeCounter());
         updatables.add(new Help());
         updatables.add(new GameMenu());
