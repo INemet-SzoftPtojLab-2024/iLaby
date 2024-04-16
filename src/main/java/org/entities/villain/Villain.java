@@ -29,12 +29,6 @@ public class Villain extends Entity {
     String imagePath;
     float velocity;
     double sum;
-    public Villain() {
-        villainCollider = null;
-        villainImage = null;
-        time = 0.0f;
-        villainName = null;
-    }
     public Villain(String name, String iP) {
         villainCollider = null;
         villainImage = null;
@@ -50,7 +44,7 @@ public class Villain extends Entity {
 
         Vec2 playerScale = new Vec2(0.6f, 0.6f);
 
-        position = randomPositions(isten);
+        position = randomPositions(isten.getMap().getRooms());
         villainCollider = new Collider(position, playerScale);
 
         villainCollider.setMovability(true);
@@ -193,32 +187,22 @@ public class Villain extends Entity {
         }
 
     }
-    public Vec2 randomPositions(Isten isten){
-        ArrayList<Room> rooms = isten.getMap().getRooms();
+    public Vec2 randomPositions(ArrayList<Room> rooms){
         Collections.shuffle(rooms);
         Random rand = new Random();
 
-        Room selectedRoom = rooms.get(rand.nextInt(rooms.size() - 1));
+        Room selectedRoom;
 
-        boolean con = true;
-        while (roomsWithVillains.contains(selectedRoom) || con){
+        do {
             selectedRoom = rooms.get(rand.nextInt(rooms.size() - 1));
-            if(isUnitRoomInList(selectedRoom))
-            {
-                con=true;
-                System.out.println("itt "+villainName.getText());
-            }
-            else{
-                con=false;
-            }
-        }
+        } while (roomsWithVillains.contains(selectedRoom) || isStartUnitRoomInRoom(selectedRoom));
 
         UnitRoom selectedUnitRoom = selectedRoom.getUnitRooms().get(rand.nextInt(selectedRoom.getUnitRooms().size()));
-
         roomsWithVillains.add(selectedRoom);
+
         return new Vec2(selectedUnitRoom.getPosition().x, selectedUnitRoom.getPosition().y);
     }
-    boolean isUnitRoomInList( Room room)
+    boolean isStartUnitRoomInRoom(Room room)
     {
         for(UnitRoom unitRoom : room.getUnitRooms())
         {
