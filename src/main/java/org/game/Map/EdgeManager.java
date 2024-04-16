@@ -7,7 +7,6 @@ import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 
 @Getter
 @Setter
@@ -32,6 +31,21 @@ public class EdgeManager {
             }
         }
         return null;
+    }
+    //egy adott szoba összes edgének meghatározása
+    //ha egy szobanak a szomszedait akarom meghatarozni akkor hasznos
+    public ArrayList<EdgeBetweenRooms> getAllEdgeForARoom(Room r1){
+        ArrayList<EdgeBetweenRooms> ret = new ArrayList<>();
+        //vegigiteral aaz osszes edgen
+        for (EdgeBetweenRooms edgeBetweenRooms : roomEdges){
+            //ha tartalmazza hozzaad
+            if(edgeBetweenRooms.getNodeRooms().contains(r1))
+            {
+                ret.add(edgeBetweenRooms);
+            }
+
+        }
+        return ret;
     }
 
 
@@ -66,7 +80,7 @@ public class EdgeManager {
                 int indexOfDeletedNode = edgeBetweenRoom.getNodeRooms().indexOf(deleted);
                 int index = 0;
                 if(indexOfDeletedNode == 0) index = 1;
-                if(remaining.isAdjacent(edgeBetweenRoom.getNodeRooms().get(index))){//itt mar csak egy eleme lesz(az a szoba ami ramovednak is meg a remainignek is szomszedja)
+                if(remaining.isPhysicallyAdjacent(edgeBetweenRoom.getNodeRooms().get(index))){//itt mar csak egy eleme lesz(az a szoba ami ramovednak is meg a remainignek is szomszedja)
                     // get the other indexNodeRoomINdex
                     Room RDAdjacent = edgeBetweenRoom.getNodeRooms().get(index);//szoba amia remainingnek es a deletednek is szomszadja
                     EdgeBetweenRooms edgeBetweenRAndRDAdjacent = getEdgeBetweenRooms(remaining, RDAdjacent);
@@ -226,7 +240,7 @@ public class EdgeManager {
         }
 
         for(EdgeBetweenRooms edge : roomEdges){
-            if(edge.doorNum() < 1) {
+            if(!edge.hasDoor()) {
                 addDoor(edge);
             }
         }
