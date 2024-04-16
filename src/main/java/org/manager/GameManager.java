@@ -1,8 +1,10 @@
 package main.java.org.manager;
 
+import main.java.org.entities.player.Player;
 import main.java.org.game.Audio.AudioManager;
 import main.java.org.game.Isten;
 import main.java.org.game.Isten2;
+import main.java.org.game.PlayerPrefs.PlayerPrefs;
 
 import javax.swing.*;
 import java.awt.*;
@@ -54,6 +56,10 @@ public class GameManager {
     }
 
     public void gameLoop() {
+        //load saves
+        PlayerPrefs.load();
+
+        //game stuff
         while (true) {
             switch (stage) {
                 case MAIN_MENU:
@@ -75,6 +81,8 @@ public class GameManager {
                     }
                     AudioManager.closeAllSounds();
                     AudioManager.unloadPreloadedSounds();
+
+                    PlayerPrefs.save();
                     break;
                 case INGAME:
                     Isten isten = new Isten();
@@ -95,8 +103,11 @@ public class GameManager {
                     }
                     AudioManager.closeAllSounds();
                     AudioManager.unloadPreloadedSounds();
+
+                    PlayerPrefs.save();
                     break;
                 case EXIT:
+                    PlayerPrefs.save();
                     frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
                     break;
             }
