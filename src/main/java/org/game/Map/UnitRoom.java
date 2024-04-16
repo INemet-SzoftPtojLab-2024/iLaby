@@ -86,7 +86,8 @@ public class UnitRoom implements Graph<UnitRoom>{
         }
         if(ownerRoom.getID() == 999) j = 5;
         //String path = "./assets/rooms/" + j + ".png";
-        String path = "./assets/floor_1.png";
+        //String path = "./assets/floor_"+ j +".png";
+        String path = "./assets/floor_6.png";
         setNewImage(path, isten);
     }
 
