@@ -47,16 +47,15 @@ public class Villain extends Entity {
         isten.getPhysicsEngine().addCollider(villainCollider);//register collider in the physics engine
 
         villainImage = new Image(new Vec2(), playerScale, imagePath);
-        villainImage.setSortingLayer(-50);
+        villainImage.setSortingLayer(-68);
         villainImage.setVisibility(true);
         isten.getRenderer().addRenderable(villainImage);//register images in the renderer
 
         if (villainName != null) {
             villainName.setVisibility(true);
-            villainName.setSortingLayer(-50);
+            villainName.setSortingLayer(-68);
             isten.getRenderer().addRenderable(villainName);
         }
-        isten.getCamera().setPixelsPerUnit(100);
     }
     @Override
     public void onUpdate(Isten isten, double deltaTime) {

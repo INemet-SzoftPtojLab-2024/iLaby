@@ -39,7 +39,7 @@ public class Isten {
      */
     public Isten() {
         inventory=new Inventory(5);
-        map=new Map(10, 10, 15);
+        map=new Map(100, 100, 10);
         player = new Player("II. Németh Szilárd");
         itemManager=new ItemManager();
         inputHandler = new Input();
@@ -117,11 +117,11 @@ public class Isten {
         updatables.add(itemManager);
         updatables.add(inventory);
         updatables.add(map);
-        updatables.add(new ChestManager(10));//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
+        updatables.add(new ChestManager(75));//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
 
-        updatables.add(new Villain("Gonosz1", new Vec2(8,7), "./assets/villain/villain1.png"));
-        updatables.add(new Villain("Gonosz2", new Vec2(5,5), "./assets/villain/villain2.png"));
-        updatables.add(new Villain("Gonosz3", new Vec2(3,3), "./assets/villain/villain3.png"));
+        updatables.add(new Villain("Gajdos", new Vec2(8,7), "./assets/villain/villain1.png"));
+        updatables.add(new Villain("Csuka", new Vec2(5,5), "./assets/villain/villain2.png"));
+        updatables.add(new Villain("Villain 3", new Vec2(3,3), "./assets/villain/villain3.png"));
         updatables.add(new TimeCounter());
         updatables.add(new Help());
         updatables.add(new GameMenu());
