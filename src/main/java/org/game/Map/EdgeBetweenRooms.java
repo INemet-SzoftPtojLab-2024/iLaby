@@ -2,7 +2,6 @@ package main.java.org.game.Map;
 
 import lombok.Getter;
 import lombok.Setter;
-import main.java.org.game.Graphics.Image;
 import main.java.org.game.Isten;
 import main.java.org.game.physics.Collider;
 import main.java.org.game.physics.ColliderGroup;
@@ -16,7 +15,7 @@ public class EdgeBetweenRooms {
     //the two room, between the edge is.
     private ArrayList<Room> nodeRooms;
     //the wall pieces
-    private ArrayList<Wall> walls;
+    private ArrayList<EdgePiece> walls;
     private ColliderGroup colliderGroup;
 
     public EdgeBetweenRooms(Room r1, Room r2){
@@ -36,7 +35,11 @@ public class EdgeBetweenRooms {
         walls.add(newWall);
 
     }
-    public void switchWallToDoor(Wall wallToSwitch, Isten isten){
+    public boolean switchWallToDoor(EdgePiece wallToSwitch, Isten isten){
+        //check if door is addable
+        //egy unitroomba csak az egyik iranyba nyilhat ajto
+        if(wallToSwitch.getUnitRoomsBetween().get(0).hasDoor() || wallToSwitch.getUnitRoomsBetween().get(1).hasDoor()) return false;
+
         String doorPath = "./assets/rooms/10.png";
         wallToSwitch.collider.setSolidity(false);
 
@@ -48,9 +51,12 @@ public class EdgeBetweenRooms {
         newDoor.setNewImage(doorPath, wallToSwitch.getCollider().getScale(), isten);
 
         walls.add(newDoor);
+        newDoor.getUnitRoomsBetween().get(0).setHasDoor(true);
+        newDoor.getUnitRoomsBetween().get(1).setHasDoor(true);
         walls.remove(wallToSwitch);
+        return true;
     }
-    public void switchDoorToWall(Door doorToSwitch, Isten isten){
+    public void switchDoorToWall(EdgePiece doorToSwitch, Isten isten){
         String wallPath = "./assets/rooms/11.png";
         doorToSwitch.collider.setSolidity(true);
         isten.getRenderer().deleteRenderable(doorToSwitch.image);
@@ -60,28 +66,40 @@ public class EdgeBetweenRooms {
         newWall.setNewImage(wallPath, doorToSwitch.getCollider().getScale(), isten);
 
         walls.add(newWall);
+        newWall.getUnitRoomsBetween().get(0).setHasDoor(false);
+        newWall.getUnitRoomsBetween().get(1).setHasDoor(false);
         walls.remove(doorToSwitch);
 
     }
     public void removeWallPiece(Wall wallToRemove, Isten isten){
+        wallToRemove.getUnitRoomsBetween().get(0).setHasDoor(false);
+        wallToRemove.getUnitRoomsBetween().get(1).setHasDoor(false);
         for(int i = 0; i < walls.size();i++){
             if(wallToRemove.equals(walls.get(i))){
-                walls.get(i).removeWall(isten, colliderGroup);
+                walls.get(i).removeEdgePiece(isten, colliderGroup);
                 walls.remove(i);
                 return;
             }
         }
     }
 
+
     public ArrayList<Room> getNodeRooms() {
         return nodeRooms;
     }
 
-    public ArrayList<Wall> getWalls() {
+    public ArrayList<EdgePiece> getWalls() {
         return walls;
     }
 
     public ColliderGroup getColliderGroup() {
         return colliderGroup;
+    }
+
+    public boolean hasDoor() {
+        for(EdgePiece edgePiece: walls){
+            if(edgePiece.isDoor()) return true;
+        }
+        return false;
     }
 }

@@ -1,0 +1,24 @@
+
+{	java:S135ª"YReduce the total number of break and continue statements in this loop to use at most one.(¾š÷¿ÿÿÿÿÿ8ä€Î—î1
+u	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš8è€Î—î1
+b
+java:S1226Ä"DIntroduce a new variable instead of reusing the parameter "edgelen".(‡È«Æ8í€Î—î1
+C
+java:S1905_"&Remove this unnecessary cast to "int".(ş½Æå8÷±¾î1
+Y	java:S125†"<This block of commented-out lines of code should be removed.(ĞğşË8ş€Î—î1
+Y	java:S125‹"<This block of commented-out lines of code should be removed.(¾†¾°8ÿ€Î—î1
+^	java:S125"<This block of commented-out lines of code should be removed.(×îÀ£úÿÿÿÿ8€Î—î1
+X	java:S125"<This block of commented-out lines of code should be removed.(¹‚„8‚Î—î1
+O
+java:S1481¢",Remove this unused "minSize" local variable.(§ª®çşÿÿÿÿ8…Î—î1
+Y	java:S125¨"<This block of commented-out lines of code should be removed.(·–¿…8†Î—î1
+^	java:S125±"<This block of commented-out lines of code should be removed.(ë²Åšúÿÿÿÿ8ˆÎ—î1
+^	java:S125¼"<This block of commented-out lines of code should be removed.(Ï¯†Äùÿÿÿÿ8ˆÎ—î1
+Y
+java:S1854Ä";Remove this useless assignment to local variable "edgelen".(‡È«Æ8‰Î—î1
+J
+java:S1481Ä",Remove this unused "edgelen" local variable.(‡È«Æ8‰Î—î1
+M	java:S106é"+Replace this use of System.err by a logger.(•ªËßûÿÿÿÿ8Î—î1
+Y	java:S125÷"<This block of commented-out lines of code should be removed.(ŒÆÊı8Î—î1
+V
+java:S1144Õ"9Remove this unused private "getSmallestNeighbour" method.(‰èÔL8—Î—î1

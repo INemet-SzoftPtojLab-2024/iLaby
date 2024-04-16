@@ -5,7 +5,13 @@ public abstract class Packet {
     public static enum PacketTypes {
         INVALID(-1),
         LOGIN(00),
-        DISCONNECT(01);
+        DISCONNECT(01),
+        MOVE(02),
+        ANIMATION(03),
+        MAP(04),
+        VILLAIN(05),
+        VILLAINMOVE(06);
+
 
         private int packetId;
         private PacketTypes(int packetId) {

@@ -1,18 +1,56 @@
 
-u	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš8§¿Ş¥ã1
-
-java:S11865"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(í®8ª¿Ş¥ã1
+L
+java:S1066"/Merge this if statement with the enclosing one.(ùôı8Ô“âÀî1
+“
+java:S1319‡"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(¡İ·èûÿÿÿÿ8Õ“âÀî1
+…
+java:S1319‡"bThe type of "u1" should be an interface such as "List" rather than the implementation "ArrayList".(¡İ·èûÿÿÿÿ8Õ“âÀî1
+…
+java:S1319‡"bThe type of "u2" should be an interface such as "List" rather than the implementation "ArrayList".(¡İ·èûÿÿÿÿ8Õ“âÀî1
+‘
+java:S1319’"sThe type of "newCoherentElements" should be an interface such as "List" rather than the implementation "ArrayList".(š®Å8Õ“âÀî1
+ƒ
+java:S1319ø"eThe type of "rooms" should be an interface such as "List" rather than the implementation "ArrayList".(ÕÖ®ö8Õ“âÀî1
+“
+java:S1319ş"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(†İÂ˜üÿÿÿÿ8Õ“âÀî1
+r	java:S117["QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(©Æ˜Èıÿÿÿÿ8Õ“âÀî1
+u	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš8×“âÀî1
 £
-java:S1186:"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(İßéàúÿÿÿÿ8ª¿Ş¥ã1
-
-java:S1186>"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ç‰â"8ª¿Ş¥ã1
-£
-java:S1186B"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Á†°”üÿÿÿÿ8ª¿Ş¥ã1
-Z
-java:S1117"=Rename "unitRooms" which hides the field declared at line 14.(öĞÛ8¬¿Ş¥ã1
-N
-java:S1068"1Remove this unused "mapColumnSize" private field.(ÚŸ¶”8±¿Ş¥ã1
-K
-java:S1144>"/Remove this unused private "mergeRooms" method.(ç‰â"8±¿Ş¥ã1
+java:S1186B"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(İßéàúÿÿÿÿ8¾–âÀî1
+x
+java:S1450"[Remove the "mapgenerator" field and declare it as a local variable in the relevant methods.(¬Ï‡¸8¿–âÀî1
+X	java:S125"<This block of commented-out lines of code should be removed.(ËÉÂà8Á–âÀî1
+]	java:S1252"<This block of commented-out lines of code should be removed.(šİÛ€ÿÿÿÿÿ8Â–âÀî1
+L	java:S1066"+Replace this use of System.out by a logger.(½Ó–¯üÿÿÿÿ8Â–âÀî1
+G	java:S106:"+Replace this use of System.out by a logger.(³ƒœ8Ã–âÀî1
+d
+java:S1126©"AReplace this if-then-else statement by a single return statement.(ÁêĞÿÿÿÿÿ8È–âÀî1
+M	java:S106Ë"+Replace this use of System.err by a logger.(•ªËßûÿÿÿÿ8Ë–âÀî1
+M	java:S106Î"+Replace this use of System.out by a logger.(Û¬†öşÿÿÿÿ8Ë–âÀî1
+Y	java:S125Ï"<This block of commented-out lines of code should be removed.(ıÔ¶ó8Ë–âÀî1
+X	java:S125×"<This block of commented-out lines of code should be removed.(–œ8Ë–âÀî1
+^	java:S125ß"<This block of commented-out lines of code should be removed.(â‚ˆ‰şÿÿÿÿ8Ë–âÀî1
+Y	java:S125ç"<This block of commented-out lines of code should be removed.(ØË†å8Ì–âÀî1
+Y	java:S125í"<This block of commented-out lines of code should be removed.(ŒÆÊı8Ì–âÀî1
+Y	java:S125ú"<This block of commented-out lines of code should be removed.(ŒÆÊı8Í–âÀî1
+Y	java:S125†"<This block of commented-out lines of code should be removed.(É¥¤º8Í–âÀî1
+H	java:S106’"+Replace this use of System.out by a logger.(–ÉÎÒ8Î–âÀî1
+H	java:S106•"+Replace this use of System.out by a logger.(–ÉÎÒ8Î–âÀî1
+H	java:S106˜"+Replace this use of System.out by a logger.(–ÉÎÒ8Ï–âÀî1
+M	java:S106›"+Replace this use of System.out by a logger.(ªÓ¼áşÿÿÿÿ8Ï–âÀî1
+M	java:S106œ"+Replace this use of System.out by a logger.(ªÓ¼áşÿÿÿÿ8Ï–âÀî1
+p	java:S100²"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ˆş—´ıÿÿÿÿ8Ï–âÀî1
+H	java:S106Ë"+Replace this use of System.out by a logger.(¤›êì8Ñ–âÀî1
+H	java:S106Ò"+Replace this use of System.out by a logger.(‰Ò“»8Ñ–âÀî1
+M	java:S106×"+Replace this use of System.out by a logger.(¤¼òøûÿÿÿÿ8Ñ–âÀî1
+H	java:S106Ø"+Replace this use of System.out by a logger.(á”º8Ò–âÀî1
+M	java:S106ì"+Replace this use of System.out by a logger.( ÍÅÒşÿÿÿÿ8ªåòÀî1
+H	java:S106ó"+Replace this use of System.out by a logger.(ùŸèÿ8ªåòÀî1
 Q
-java:S1144B"/Remove this unused private "splitRooms" method.(Á†°”üÿÿÿÿ8±¿Ş¥ã1
+java:S1128"/Remove this unused import 'java.sql.SQLOutput'.(ê¤òÃùÿÿÿÿ8Ó–âÀî1
+Q
+java:S1144R"/Remove this unused private "splitRooms" method.(óÇ”Àúÿÿÿÿ8Ô–âÀî1
+M
+java:S1144É"/Remove this unused private "mergeRooms" method.(ú¦ß8Ô–âÀî1
+P
+java:S1144"-Remove this unused private "printMap" method.(êß®ûÿÿÿÿ8Ô–âÀî1

@@ -1,18 +1,31 @@
 package main.java.org.networking;
 
+import main.java.org.entities.villain.Villain;
 import main.java.org.game.Isten;
-
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import main.java.org.linalg.Vec2;
 import main.java.org.networking.Packet.PacketTypes;
 
 public class GameServer extends Thread {
 
+    private VillainHandler villainHandler;
     private DatagramSocket socket;
     Isten isten;
+
+    //Just values, not references for the actual players
+    //When changing something in one of the connectedPlayers it won't change anything on the actual players in updatable
     private List<PlayerMP> connectedPlayers = new ArrayList<>();
     public GameServer(Isten isten) {
         this.isten = isten;
@@ -25,7 +38,10 @@ public class GameServer extends Thread {
     }
 
     public void run() {
+        System.out.println("ITS THE SERVER!");
+        startServer();
         while(true) {
+            //Get packets from clients
             byte[] data = new byte[1024];
             DatagramPacket packet = new DatagramPacket(data, data.length);
             try {
@@ -34,10 +50,19 @@ public class GameServer extends Thread {
                 throw new RuntimeException(e);
             }
             parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
-
         }
     }
 
+    private void startServer() {
+        villainHandler = new VillainHandler(this);
+        villainHandler.createVillains();
+    }
+
+    public void updateServer() {
+        villainHandler.updateVillains();
+    }
+
+    //Parse packet to string
     private void parsePacket(byte[] data, InetAddress address, int port) {
 
         String message = new String(data).trim();
@@ -50,18 +75,43 @@ public class GameServer extends Thread {
                 break;
             case LOGIN:
                 packet = new Packet00Login(data);
-                System.out.println("["+address.getHostAddress() + ":" + port + "] " + ((Packet00Login)packet).getUsername() + " has connected...");
-                PlayerMP player = null;
-                player = new PlayerMP(((Packet00Login)packet).getUsername(), address, port);
-                this.addConnection(player,((Packet00Login)packet));
-                if(player != null) {
-                    this.connectedPlayers.add(player);
-                    isten.addUpdatable(player);
-                }
+                handleLogin((Packet00Login)packet, address, port);
                 break;
             case DISCONNECT:
                 break;
+            case MOVE:
+                packet = new Packet02Move(data);
+                handleMove(((Packet02Move)packet));
+                break;
+            case ANIMATION:
+                packet = new Packet03Animation(data);
+                handleAnimation((Packet03Animation) packet);
+                break;
         }
+    }
+
+    //handle Animation Packet
+    private void handleAnimation(Packet03Animation packet) {
+        packet.writeData(this);
+    }
+
+    //handle Login Packet
+    private void handleLogin(Packet00Login packet, InetAddress address, int port) {
+        PlayerMP player = null;
+        player = new PlayerMP(packet.getUsername(), address, port);
+        this.addConnection(player,((Packet00Login)packet));
+
+        //Handle creation of villains - when player joins, the server generated villains are generated on client as well
+        handleServerCreations(player);
+    }
+
+    private void handleServerCreations(PlayerMP player) {
+        villainHandler.sendVillainsToNewClient(player);
+    }
+
+    //handle Move Packet
+    private void handleMove(Packet02Move packet) {
+        packet.writeData(this);
     }
 
     public void addConnection(PlayerMP player, Packet00Login packet) {
@@ -71,24 +121,33 @@ public class GameServer extends Thread {
                 if(p.ipAddress == null) {
                     p.ipAddress = player.ipAddress;
                 }
-
                 if(p.port == -1) {
                     p.port = player.port;
                 }
                 alreadyConnected = true;
             }
             else {
-                sendData(packet.getData(),p.ipAddress,p.port);
-                packet = new Packet00Login(p.getUsername());
-                sendData(packet.getData(),player.ipAddress, player.port);
+                //New player's position is (0,0) -> later: spawnPoints
+                //Send data to the already connected players, that the new player exists
+                packet = new Packet00Login(player.getUsername(), 0, 0);
+                sendData(packet.getData(), p.ipAddress, p.port);
+
+                //Send position as well, so that the players spawn at their current posi
+                //Send data to the new player, that the already connected player exists
+                int index = isten.getPlayerMPIndex(p.getUsername());
+                Vec2 pos = ((PlayerMP)isten.getUpdatable(index)).getPlayerCollider().getPosition();
+                packet = new Packet00Login(p.getUsername(), pos.x, pos.y);
+                sendData(packet.getData(), player.ipAddress, player.port);
+
             }
         }
         if(!alreadyConnected) {
+            //If the player has not been connected before, then add it to connectedPlayers
             this.connectedPlayers.add(player);
-            //packet.writeData(this);
         }
     }
 
+    //Send data to one client
     public void sendData(byte[] data, InetAddress ipAddress, int port) {
         DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
         try {
@@ -98,6 +157,7 @@ public class GameServer extends Thread {
         }
     }
 
+    //Send data to all clients
     public void sendDataToAllClients(byte[] data) {
         for(PlayerMP p: connectedPlayers) {
             sendData(data, p.ipAddress, p.port);

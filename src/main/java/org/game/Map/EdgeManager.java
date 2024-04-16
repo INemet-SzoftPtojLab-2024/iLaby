@@ -3,11 +3,10 @@ package main.java.org.game.Map;
 import lombok.Getter;
 import lombok.Setter;
 import main.java.org.game.Isten;
-import main.java.org.game.physics.Collider;
 import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.Collections;
 
 @Getter
 @Setter
@@ -16,8 +15,10 @@ import java.util.Random;
  */
 //otlet: minden roomba a hozza tartozo edget eltarolni(lehet folosleges), vagy ez mar atvenne az edge manager szerepet?!
 public class EdgeManager {
+    private Isten isten;
     private ArrayList<EdgeBetweenRooms> roomEdges;
-    public EdgeManager(){
+    public EdgeManager(Isten isten){
+        this.isten = isten;
         roomEdges = new ArrayList<>();
     }
 
@@ -31,15 +32,30 @@ public class EdgeManager {
         }
         return null;
     }
+    //egy adott szoba összes edgének meghatározása
+    //ha egy szobanak a szomszedait akarom meghatarozni akkor hasznos
+    public ArrayList<EdgeBetweenRooms> getAllEdgeForARoom(Room r1){
+        ArrayList<EdgeBetweenRooms> ret = new ArrayList<>();
+        //vegigiteral aaz osszes edgen
+        for (EdgeBetweenRooms edgeBetweenRooms : roomEdges){
+            //ha tartalmazza hozzaad
+            if(edgeBetweenRooms.getNodeRooms().contains(r1))
+            {
+                ret.add(edgeBetweenRooms);
+            }
+
+        }
+        return ret;
+    }
 
 
-    public void deleteEdge(Room r1, Room r2, Isten isten){
+    public void deleteEdge(Room r1, Room r2){
         EdgeBetweenRooms edgeToDelete = getEdgeBetweenRooms(r1, r2);
         for(int i = 0; i < roomEdges.size(); i++){
             if(edgeToDelete.equals(roomEdges.get(i))){
                 //remove all the wallpiece from the edge.
-                for(Wall wallsToDelete : edgeToDelete.getWalls()){
-                    wallsToDelete.removeWall(isten, edgeToDelete.getColliderGroup());
+                for(EdgePiece wallsToDelete : edgeToDelete.getWalls()){
+                    wallsToDelete.removeEdgePiece(isten, edgeToDelete.getColliderGroup());
                 }
                 //edgeToDelete.getNodeRooms().clear(); //it's not required
                 //edgeToDelete.getWalls().clear(); //it's not required
@@ -55,7 +71,7 @@ public class EdgeManager {
 
     //sets new neighbor to r1
     //ahol r2 van oda r1-et állítunk (merge miatt)
-    public void updateEdgesAfterMerge(Room remaining, Room deleted, Isten isten){ //mergenel hasznaljuk csak
+    public void updateEdgesAfterMerge(Room remaining, Room deleted){ //mergenel hasznaljuk csak
         //r1 szoba marad
         //r2 torlodik (ahol szerepl, ki kell cserelni r1-re)
         for(EdgeBetweenRooms edgeBetweenRoom : roomEdges){
@@ -64,15 +80,14 @@ public class EdgeManager {
                 int indexOfDeletedNode = edgeBetweenRoom.getNodeRooms().indexOf(deleted);
                 int index = 0;
                 if(indexOfDeletedNode == 0) index = 1;
-                if(remaining.isAdjacent(edgeBetweenRoom.getNodeRooms().get(index))){//itt mar csak egy eleme lesz(az a szoba ami ramovednak is meg a remainignek is szomszedja)
+                if(remaining.isPhysicallyAdjacent(edgeBetweenRoom.getNodeRooms().get(index))){//itt mar csak egy eleme lesz(az a szoba ami ramovednak is meg a remainignek is szomszedja)
                     // get the other indexNodeRoomINdex
                     Room RDAdjacent = edgeBetweenRoom.getNodeRooms().get(index);//szoba amia remainingnek es a deletednek is szomszadja
                     EdgeBetweenRooms edgeBetweenRAndRDAdjacent = getEdgeBetweenRooms(remaining, RDAdjacent);
 
                     for(int i = 0; i < edgeBetweenRoom.getWalls().size(); i++){
                         //ha ajto akkor kicsereljuk falra
-                        //TODO ha megvan az abstrakt os wallnak es a doornak at kell irni, igy infromaciovestes van a kazstolasnal
-                        if(edgeBetweenRoom.getWalls().get(i).isDoor()) edgeBetweenRoom.switchDoorToWall((Door)edgeBetweenRoom.getWalls().get(i), isten);
+                        if(edgeBetweenRoom.getWalls().get(i).isDoor()) edgeBetweenRoom.switchDoorToWall(edgeBetweenRoom.getWalls().get(i), isten);
                         edgeBetweenRAndRDAdjacent.getWalls().add(edgeBetweenRoom.getWalls().get(i));
                         edgeBetweenRAndRDAdjacent.getColliderGroup().addCollider(edgeBetweenRoom.getWalls().get(i).collider);
                     }
@@ -88,12 +103,12 @@ public class EdgeManager {
         }
 
     }
-    public void updateEdgesAfterSplit(Room oldRoom, Room newRoom, Isten isten){
+    public void updateEdgesAfterSplit(Room oldRoom, Room newRoom){
         //and colliders(walls and edges)
         EdgeBetweenRooms newEdge = new EdgeBetweenRooms(oldRoom,newRoom);
-        addEdge(newEdge, isten);
+        addEdge(newEdge);
         //az uj szobabol meg nem minden szobaba lesz ajto
-        addDoor(oldRoom, newRoom, isten);
+        addDoor(getEdgeBetweenRooms(oldRoom, newRoom));
 
         int oldRoomID = oldRoom.getID();
         int newRoomID = newRoom.getID();
@@ -107,7 +122,7 @@ public class EdgeManager {
                 //ha az edge a ket vizsgalt szoba kozott van, akkor nem kell tovabb vizsgalodni, mert ezt mar beallitottuk az addolasnal
                 if (!getEdgeBetweenRooms(newRoom, oldRoom).equals(checkEdge)) {
                     //az edge falainak a unitroomjaitnak az ownerroomjait nezzuk
-                    for (Wall checkEdgeWall : checkEdge.getWalls()) {
+                    for (EdgePiece checkEdgeWall : checkEdge.getWalls()) {
                         if (checkEdgeWall.getUnitRoomsBetween().get(0).getOwnerRoom().getID() == oldRoomID
                                 || checkEdgeWall.getUnitRoomsBetween().get(1).getOwnerRoom().getID() == oldRoomID)
                             wasInOldRoom = true;
@@ -119,9 +134,9 @@ public class EdgeManager {
                     //melyik szobaban jartunk
                     if (wasInOldRoom && wasInNewRoom) { // ha mindkettoben jartunk akkor --> split the edge
                         //delete from the edge the walls, that are between newroom and the other room
-                        ArrayList<Wall> wallsToRemoveFromCheckEdge = new ArrayList<>();
+                        ArrayList<EdgePiece> wallsToRemoveFromCheckEdge = new ArrayList<>();
                         boolean doorRemoved = false;
-                        for (Wall checkEdgeWall : checkEdge.getWalls()) {
+                        for (EdgePiece checkEdgeWall : checkEdge.getWalls()) {
                             //the wall is between the newRoom and the other one --> delete wall from checkEdge
                             //a maradek lesz az oldroom edge-e
                             if (checkEdgeWall.getUnitRoomsBetween().get(0).getOwnerRoom().getID() == newRoomID
@@ -130,7 +145,7 @@ public class EdgeManager {
                                 if (checkEdgeWall.isDoor())//ha ajtot torlunk
                                     doorRemoved = true;
                                 wallsToRemoveFromCheckEdge.add(checkEdgeWall);
-                                checkEdgeWall.removeWall(isten, checkEdge.getColliderGroup());
+                                checkEdgeWall.removeEdgePiece(isten, checkEdge.getColliderGroup());
                             }
                         }
                         checkEdge.getWalls().removeAll(wallsToRemoveFromCheckEdge);
@@ -146,7 +161,7 @@ public class EdgeManager {
                         EdgeBetweenRooms edgeToAdd = new EdgeBetweenRooms(newRoom, oldRoomNodeRoom);
                         edgesToAdd.add(edgeToAdd);
                         //uj ajto ha deleteltuk az oldroombol
-                        if (doorRemoved) addDoor(oldRoom, oldRoomNodeRoom, isten);
+                        if (doorRemoved) addDoor(getEdgeBetweenRooms(oldRoom, oldRoomNodeRoom));
 
                     } else if (!wasInOldRoom && wasInNewRoom) { //na csak az ujban --> csak a noderoom valtozik regirol az ujra
                         checkEdge.getNodeRooms().remove(oldRoom);
@@ -160,12 +175,12 @@ public class EdgeManager {
 
         }
         for(EdgeBetweenRooms edge : edgesToAdd){
-            addEdge(edge, isten);
-            addDoor(edge.getNodeRooms().get(0), edge.getNodeRooms().get(1), isten);
+            addEdge(edge);
+            addDoor(getEdgeBetweenRooms(edge.getNodeRooms().get(0), edge.getNodeRooms().get(1)));
         }
 
     }
-    public void addEdge(EdgeBetweenRooms newEdge, Isten isten){
+    public void addEdge(EdgeBetweenRooms newEdge){
         Vec2 horizontalScale = new Vec2(1f, 0.1f); //vizszintes
         Vec2 verticalScale = new Vec2(0.1f, 1f); //fuggoleges
         Room r1 = newEdge.getNodeRooms().get(0);
@@ -193,25 +208,41 @@ public class EdgeManager {
         isten.getPhysicsEngine().addColliderGroup(newEdge.getColliderGroup());
     }
     //this function add one door to an edge
-    //meg nics kezelve arra az esetre ha tobb ajtot akarunk
-    public void addDoor(Room r1, Room r2, Isten isten) {
-        EdgeBetweenRooms edge = getEdgeBetweenRooms(r1, r2);
+    //ha mar minden erintett unitroomhoz tartozik ajot, akkor nem addol
+
+    public void addDoor(EdgeBetweenRooms edge) {
         if(edge == null){
-            System.out.println("door is not added");
+            System.out.println("door is no edge between the given rooms");
             return;
         }
-        Random rand = new Random();
-        int randomIndex = rand.nextInt(edge.getWalls().size());
-        edge.switchWallToDoor(edge.getWalls().get(randomIndex), isten);
+
+        ArrayList<Integer> random = new ArrayList<>();
+        for(int i = 0; i < edge.getWalls().size(); i++){
+            random.add(i);
+        }
+        Collections.shuffle(random);
+        for(Integer randomIndex : random)
+        {
+            //egy unitroomban csek egyik iranyba nyilhat ajto!
+            if(edge.switchWallToDoor(edge.getWalls().get(randomIndex), isten)) {
+                break;
+            }
+        }
     }
-    public void initDoors(Isten isten){
-        //TODO
-        //optimalizaljuk hogy ne legyen egy unitroomhoz tobb ajto
-        Random rand = new Random();
+
+    //elofordolhat hogy egy edge nem kap ajtot!!
+    //egy unitroomhoz csak egy ajto tartozhat!!
+    public void initDoors(){
         for(EdgeBetweenRooms edge : roomEdges){
-            int randomIndex = rand.nextInt(edge.getWalls().size());
-            //informaciowasztes?!
-            edge.switchWallToDoor(edge.getWalls().get(randomIndex), isten);
+            if(edge.getWalls().size() == 1){
+                edge.switchWallToDoor(edge.getWalls().get(0), isten);
+            }
+        }
+
+        for(EdgeBetweenRooms edge : roomEdges){
+            if(!edge.hasDoor()) {
+                addDoor(edge);
+            }
         }
     }
     public ArrayList<EdgeBetweenRooms> getRoomEdges() {
