@@ -11,6 +11,7 @@ import main.java.org.entities.Entity;
 import main.java.org.game.Isten;
 import main.java.org.game.Map.Room;
 import main.java.org.game.Map.UnitRoom;
+import main.java.org.game.PlayerPrefs.PlayerPrefs;
 import main.java.org.game.UI.TimeCounter;
 import main.java.org.game.physics.Collider;
 import main.java.org.game.updatable.Updatable;
@@ -42,7 +43,8 @@ public class Player extends Entity {
         motivational = null;
         activeImage = 0;
         time = 0.0f;
-        playerName = null;
+        playerName = new Text(PlayerPrefs.getString("name"), new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 0, 0, 255);
+        playerName.setShadowOn(false);
         alive = true;
     }
 
@@ -69,11 +71,11 @@ public class Player extends Entity {
         isten.getPhysicsEngine().addCollider(playerCollider);//register collider in the physics engine
 
         playerImage = new ArrayList<>();
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_right1.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_right2.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_left1.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_left2.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_ded.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right1.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right2.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left1.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left2.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_ded.png"));
 
         death = new ImageUI(new Vec2(0, 0), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/character/ded.png");
         death.setSortingLayer(-70);
@@ -117,27 +119,30 @@ public class Player extends Entity {
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-        Room currentRoom = null;
-        for (Updatable u : isten.getUpdatables()) {
-            if (u.getClass().equals(Villain.class)) {
-                for (Room room : isten.getMap().getRooms()) {
-                    for (UnitRoom unitRoom : room.getUnitRooms()) {
-                        if (playerCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
-                                playerCollider.getPosition().x <= unitRoom.getPosition().x + 0.5 &&
-                                playerCollider.getPosition().y >= unitRoom.getPosition().y - 0.5 &&
-                                playerCollider.getPosition().y <= unitRoom.getPosition().y + 0.5) {
-                            currentRoom = room;
-                        }
-                    }
-                }
-                Villain villain = (Villain) u;
-                if (currentRoom != null && currentRoom.equals(villain.getRoom())) {
-                    alive = false;
-                }
-            }
-        }
         //called every frame
         if (alive) {
+
+            Room currentRoom = null;
+            for (Updatable u : isten.getUpdatables()) {
+                if (u.getClass().equals(Villain.class)) {
+                    for (Room room : isten.getMap().getRooms()) {
+                        for (UnitRoom unitRoom : room.getUnitRooms()) {
+                            if (playerCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
+                                    playerCollider.getPosition().x <= unitRoom.getPosition().x + 0.5 &&
+                                    playerCollider.getPosition().y >= unitRoom.getPosition().y - 0.5 &&
+                                    playerCollider.getPosition().y <= unitRoom.getPosition().y + 0.5) {
+                                currentRoom = room;
+                            }
+                        }
+                    }
+                    Villain villain = (Villain) u;
+                    if (currentRoom != null && currentRoom.equals(villain.getRoom())) {
+                        alive = false;
+                        AudioManager.closeSound(playerSound);
+                    }
+                }
+            }
+
             //move the character
             int run = 1;
             boolean w = isten.getInputHandler().isKeyDown(KeyEvent.VK_W);
@@ -189,7 +194,7 @@ public class Player extends Entity {
             isten.getCamera().setPosition(playerCollider.getPosition());
 
             //play sound
-            if (!AudioManager.isPlaying(playerSound))
+            if (!AudioManager.isPlaying(playerSound) && alive)
                 playerSound = AudioManager.playSound("./assets/audio/playersound.ogg");
 
             if (TimeCounter.getTimeRemaining() < 0 && alive) {
@@ -198,7 +203,6 @@ public class Player extends Entity {
             }
 
         } else {
-            if (AudioManager.isPlaying(playerSound) && activeImage != 4) AudioManager.closeSound(playerSound);
             if (!AudioManager.isPlaying(playerSound) && activeImage != 4)
                 playerSound = AudioManager.playSound("./assets/audio/died.ogg");
 

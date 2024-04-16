@@ -40,7 +40,7 @@ public class Isten {
     public Isten() {
         inventory=new Inventory(5);
         map=new Map(100, 100, 10);
-        player = new Player("II. Németh Szilárd");
+        player = new Player();
         itemManager=new ItemManager();
         inputHandler = new Input();
         camera = new Camera();
