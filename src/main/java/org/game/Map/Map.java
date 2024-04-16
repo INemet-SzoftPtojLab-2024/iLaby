@@ -46,10 +46,10 @@ public class Map extends Updatable {
     public void onUpdate(Isten isten, double deltaTime) {
         //for testing
         delta += deltaTime;
-        if (delta > 3) {
+        if (delta > 5) {
+            mergeRooms(rooms.get(0),rooms.get(0).getPhysicallyAdjacentRooms().get(0), isten);
             TakeOutDoorIfGraphWouldStayCoherent(isten);
             delta = 0;
-            merged = true;
         }
     }
 
@@ -75,7 +75,6 @@ public class Map extends Updatable {
         if(r1.getUnitRooms().size() < minRoomSize) return false;
         //egyenlőre minden szoba ami splittel lesz createlve ilyen type-val rendelkezik
         int newID = generateNewRoomID(); //már kész van, teszt miatt nincs hasznalva
-        //int newId = 999;
         Room newRoom = new Room(newID);
         int lowestRowIdx = getRoomWithLowestRowIdx(r1);
         ArrayList<UnitRoom> addableUnitRooms = new ArrayList<>();
@@ -155,10 +154,6 @@ public class Map extends Updatable {
 
                     }
                 }
-                else{
-                    //System.out.println("Nem lennenek koherensek a szobak");
-                    //return false;
-                }
             }
         }
         //mivel minden indexen vegig tudtunk menni ezert tudunk truet returnolni, azert biztonsag kedveert meg egy kontrollt bennhagyok
@@ -218,20 +213,40 @@ public class Map extends Updatable {
 
         r1.getUnitRooms().addAll(r2.getUnitRooms()); //insted of this: r1.getUnitRooms().add(unitroom);
 
+        //kiszedjuk a torolt szobat mindket szomszedossagi listabol
         r1.getPhysicallyAdjacentRooms().remove(r2);
+        r1.getThroughDoorAdjacentRooms().remove(r2);
 
+        //vagy ez kell ide, vagy a feltetel, de igazabol mindegy, hadd maradjon  mind2,de a feltetel jobb,
+        // mert a kikommentelt kodresz egyel lejjebb lehet errort dobna
+        //r2.getThroughDoorAdjacentRooms().remove(r1);
         r2.getPhysicallyAdjacentRooms().remove(r1);
+        //vegigiteralunk az r2 fizikalis szomszedossagi listajan
         for(Room adj : r2.getPhysicallyAdjacentRooms()){
-            if(!r1.getPhysicallyAdjacentRooms().contains(adj) && !adj.equals(r1)){
+            //ha r1 nem tartalmazza r2 fiz szomszedjat, akkor hozzaadjuk r1 listajahoz
+            if(!r1.getPhysicallyAdjacentRooms().contains(adj) ){
                 //System.out.println("adjroom added in r1: " + adj.getID());
                 r1.getPhysicallyAdjacentRooms().add(adj);
             }
+            //kivesszük magának r2 szomszédjának a fiz szomszédossági listájából r2-t
             adj.getPhysicallyAdjacentRooms().remove(r2);
+            //vegul ha r1 nem tartalmazzaa a fiz szomszedossagi listajaban r2 szomszedjat, akkor r1 szomszedjava tesszuk
             if(!adj.getPhysicallyAdjacentRooms().contains(r1)) {
                 adj.getPhysicallyAdjacentRooms().add(r1);
             }
         }
-
+        //ugyanezt megcsinaljuk az ajton keresztuli szomszedossagra is.
+        for(Room adj : r2.getThroughDoorAdjacentRooms()){
+            if(!r1.getThroughDoorAdjacentRooms().contains(adj)){
+                //System.out.println("adjroom added in r1: " + adj.getID());
+                r1.getThroughDoorAdjacentRooms().add(adj);
+            }
+            adj.getThroughDoorAdjacentRooms().remove(r2);
+            if(!adj.getThroughDoorAdjacentRooms().contains(r1)) {
+                adj.getThroughDoorAdjacentRooms().add(r1);
+            }
+        }
+        //ezek mit csinalnak?
         r2.getPhysicallyAdjacentRooms().clear();
         r2.getUnitRooms().clear();
 
@@ -240,8 +255,6 @@ public class Map extends Updatable {
         //r1.setRoomType(r2.getRoomType());
         r1.setMaxPlayerCount(r1.getMaxPlayerCount() + r2.getMaxPlayerCount());
         rooms.remove(r2);
-
-
     }
 
     //merge the rooms until every room has minimumm size of the given number
@@ -279,7 +292,6 @@ public class Map extends Updatable {
 
 
         }
-
     }
     //egyenlore a fv-t hivom meg, és azon kívül választom meg, hogy melyik két edge között akarom a funcot meghívni, ez változhat
     public boolean TakeOutDoorIfGraphWouldStayCoherent(Isten isten){
