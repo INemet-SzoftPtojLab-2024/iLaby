@@ -119,9 +119,9 @@ public class Isten {
         updatables.add(map);
         updatables.add(new ChestManager(75));//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
 
-        updatables.add(new Villain("Gajdos", new Vec2(8,7), "./assets/villain/villain1.png"));
-        updatables.add(new Villain("Csuka", new Vec2(5,5), "./assets/villain/villain2.png"));
-        updatables.add(new Villain("Villain 3", new Vec2(3,3), "./assets/villain/villain3.png"));
+        updatables.add(new Villain("Gajdos",  "./assets/villain/villain1.png"));
+        updatables.add(new Villain("Csuka",  "./assets/villain/villain2.png"));
+        updatables.add(new Villain("Villain 3",  "./assets/villain/villain3.png"));
         updatables.add(new TimeCounter());
         updatables.add(new Help());
         updatables.add(new GameMenu());
