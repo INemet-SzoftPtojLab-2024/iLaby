@@ -12,6 +12,10 @@ public class PlayerPrefs {
 
     private static HashMap<String, PlayerPrefsItemInternal> loadedItems=new HashMap<>();
 
+    /**
+     * load the data serialized into the playerprefs file<br>
+     * it overrides the effect of every set and delete that was done after the last save() call
+     */
     public static void load()
     {
         loadedItems.clear();
@@ -44,6 +48,10 @@ public class PlayerPrefs {
             loadedItems.put(ppis.key, ppis.data);
     }
 
+    /**
+     * save the contents of the playerprefs into the file <br>
+     * this finalizes the effect of set and delete calls
+     */
     public static void save()
     {
         //construct PlayerPrefsItemSerialized[]
@@ -86,16 +94,33 @@ public class PlayerPrefs {
         }
     }
 
+    /**
+     * does the key already exist in the playerprefs system
+     * @param key the key
+     * @return true, if the key exists
+     */
     public static boolean hasKey(String key)
     {
         return loadedItems.containsKey(key);
     }
 
+    /**
+     * delete an item from the playerprefs system <br>
+     * if the key doesn't exist, nothing happens
+     * @param key the key
+     */
     public static void delete(String key)
     {
         loadedItems.remove(key);
     }
 
+    /**
+     * set an integer by key <br>
+     * if the key is not yet registered, it will be done <br>
+     * NOTE: a key can only be associated with one item (it doesn't matter, if they are of different types)
+     * @param key the key
+     * @param value the integer value
+     */
     public static void setInt(String key, int value)
     {
         PlayerPrefsItemInternal ppii=loadedItems.get(key);
@@ -109,6 +134,13 @@ public class PlayerPrefs {
         loadedItems.put(key, ppii);
     }
 
+    /**
+     * set a float by key <br>
+     * if the key is not yet registered, it will be done <br>
+     * NOTE: a key can only be associated with one item (it doesn't matter, if they are of different types)
+     * @param key the key
+     * @param value the float value
+     */
     public static void setFloat(String key, float value)
     {
         PlayerPrefsItemInternal ppii=loadedItems.get(key);
@@ -122,6 +154,13 @@ public class PlayerPrefs {
         loadedItems.put(key, ppii);
     }
 
+    /**
+     * set a string by key <br>
+     * if the key is not yet registered, it will be done <br>
+     * NOTE: a key can only be associated with one item (it doesn't matter, if they are of different types)
+     * @param key the key
+     * @param value the string value
+     */
     public static void setString(String key, String value)
     {
         PlayerPrefsItemInternal ppii=loadedItems.get(key);
@@ -135,6 +174,11 @@ public class PlayerPrefs {
         loadedItems.put(key, ppii);
     }
 
+    /**
+     * acquire an integer value by key
+     * @param key the key
+     * @return the integer value, or <b>null</b>, if the key doesn't exist
+     */
     public static Integer getInt(String key)
     {
         PlayerPrefsItemInternal ppii=loadedItems.get(key);
@@ -152,6 +196,11 @@ public class PlayerPrefs {
         return (Integer) ppii.intValue;
     }
 
+    /**
+     * acquire a float value by key
+     * @param key the key
+     * @return the float value, or <b>null</b>, if the key doesn't exist
+     */
     public static Float getFloat(String key)
     {
         PlayerPrefsItemInternal ppii=loadedItems.get(key);
@@ -169,6 +218,11 @@ public class PlayerPrefs {
         return (Float) ppii.floatValue;
     }
 
+    /**
+     * acquire a string value by key
+     * @param key the key
+     * @return the string value, or <b>null</b>, if the key doesn't exist
+     */
     public static String getString(String key)
     {
         PlayerPrefsItemInternal ppii=loadedItems.get(key);
