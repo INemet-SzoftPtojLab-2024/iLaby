@@ -86,7 +86,14 @@ public class Room extends Updatable implements Graph<Room>{
 
     public void setMaxPlayerCount(int maxPlayerCount) {this.maxPlayerCount = maxPlayerCount;}
     public RoomType getRoomType() {return roomType;}
-
-
-
+    public UnitRoom getUnitRoomWithPos(Vec2 pos){
+        for(UnitRoom UnitRoom : unitRooms)
+        {
+            if(UnitRoom.getPosition().x == pos.x && UnitRoom.getPosition().y == pos.y)
+            {
+                return UnitRoom;
+            }
+        }
+        return null;
+    }
 }
