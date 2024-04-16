@@ -24,6 +24,7 @@ public class Villain extends Entity {
     Text villainName;
     float time;
     Vec2 position;
+    Room room;
     UnitRoom currentUnitRoom;
     UnitRoom prevUnitRoom;
     String imagePath;
@@ -38,6 +39,7 @@ public class Villain extends Entity {
         imagePath = iP;
         velocity = 0.5f;
         sum=0.0;
+        room = null;
     }
     @Override
     public void onStart(Isten isten) {
@@ -199,7 +201,7 @@ public class Villain extends Entity {
 
         UnitRoom selectedUnitRoom = selectedRoom.getUnitRooms().get(rand.nextInt(selectedRoom.getUnitRooms().size()));
         roomsWithVillains.add(selectedRoom);
-
+        room = selectedRoom;
         return new Vec2(selectedUnitRoom.getPosition().x, selectedUnitRoom.getPosition().y);
     }
     boolean isStartUnitRoomInRoom(Room room)
@@ -215,5 +217,9 @@ public class Villain extends Entity {
     }
     @Override
     public void onDestroy() {
+    }
+
+    public Room getRoom() {
+        return room;
     }
 }

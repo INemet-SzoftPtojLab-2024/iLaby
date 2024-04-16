@@ -1,6 +1,7 @@
 package main.java.org.entities.player;
 
 
+import main.java.org.entities.villain.Villain;
 import main.java.org.game.Audio.AudioManager;
 import main.java.org.game.Audio.Sound;
 import main.java.org.game.Graphics.*;
@@ -8,8 +9,11 @@ import main.java.org.game.Graphics.*;
 import main.java.org.entities.Entity;
 
 import main.java.org.game.Isten;
+import main.java.org.game.Map.Room;
+import main.java.org.game.Map.UnitRoom;
 import main.java.org.game.UI.TimeCounter;
 import main.java.org.game.physics.Collider;
+import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 
 import java.awt.event.KeyEvent;
@@ -106,9 +110,31 @@ public class Player extends Entity {
         AudioManager.preloadSound("./assets/audio/playersound.ogg");
         AudioManager.preloadSound("./assets/audio/died.ogg");
     }
+    public void isInSameRoom(Villain v){
+
+    }
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
+        Room currentRoom = null;
+        for(Updatable u : isten.getUpdatables()){
+            if (u.getClass().equals(Villain.class)){
+                for (Room room : isten.getMap().getRooms()){
+                    for (UnitRoom unitRoom : room.getUnitRooms()){
+                        if (playerCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
+                                playerCollider.getPosition().x <= unitRoom.getPosition().x + 0.5 &&
+                                playerCollider.getPosition().y >= unitRoom.getPosition().y - 0.5 &&
+                                playerCollider.getPosition().y <= unitRoom.getPosition().y + 0.5){
+                            currentRoom = room;
+                        }
+                    }
+                }
+                Villain villain = (Villain) u;
+                if (currentRoom != null && currentRoom.equals(villain.getRoom())){
+                    alive = false;
+                }
+            }
+        }
         //called every frame
         if (alive) {
             //move the character
