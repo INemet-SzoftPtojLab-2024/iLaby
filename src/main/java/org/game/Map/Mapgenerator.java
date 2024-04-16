@@ -110,7 +110,7 @@ public class Mapgenerator {
         for(Room room: map.getRooms()) {
             isten.addUpdatable(room);
             // itt még minden szoba fizikálisan és logikailag is szomszédos
-            room.setThroughDoorAdjacentRooms(room.getPhysicallyAdjacentRooms());
+            room.setDoorAdjacentRooms(room.getPhysicallyAdjacentRooms());
         }
 
     }

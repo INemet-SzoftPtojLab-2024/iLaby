@@ -4,7 +4,6 @@ import main.java.org.game.Isten;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 
-import java.sql.SQLOutput;
 import java.util.*;
 
 
@@ -47,16 +46,26 @@ public class Map extends Updatable {
         //for testing
         delta += deltaTime;
         if (delta > 5) {
-            //mergeRooms(rooms.get(0),rooms.get(0).getPhysicallyAdjacentRooms().get(0), isten);
 
+            //TESTCASE 1:::
             if(cnt%3==0){
                 addDoorToEdgeWithoutDoor(isten);
                 System.out.println("ajtoaddolas tortent");
             }
             else{
-                TakeOutDoorIfGraphWouldStayCoherent(isten);
-                System.out.println("aajtokivetel tortent");
+                TakeOutDoor(isten);
+                System.out.println("ajtokivetel tortent");
             }
+            //TESTCASE 2:
+            //mergeRooms(rooms.get(0), rooms.get(0).getPhysicallyAdjacentRooms().get(0), isten);
+            //TESTCASE 3:
+            /*for(Room splittable : rooms){
+                if(splitRooms(splittable,isten))
+                {
+                    System.out.println("sikerult a split");
+                    break;
+                }
+            }*/
             cnt++;
             delta = 0;
         }
@@ -104,20 +113,24 @@ public class Map extends Updatable {
         //ellenorzom, hogy osszefuggoek lennének-e: ha igen:
         //id mindegy micsoda, itt igazabol nem hasznalom
         if( kruskalForCheckingIfGraphIsCoherent(oldRoomWithoutNewRoom) && kruskalForCheckingIfGraphIsCoherent(addableUnitRooms)) {
-            // removeoljuk a szomszedos roomok szomszedossagi listaibol a szobat, es a func vegen hozzaadjuk a ket szetvalasztott szoba egyiket/mindekettot
-            for(Room neighbourRoom : r1.getPhysicallyAdjacentRooms()){
-                neighbourRoom.getPhysicallyAdjacentRooms().remove(r1);
+            // removeoljuk a szomszedos roomok szomszedossagi listaibol a szobat fizikalisan, es a func vegen hozzaadjuk a ket szetvalasztott szoba egyiket/mindekettot
+            for(Room physicalNeighbourRoom : r1.getPhysicallyAdjacentRooms()){
+                physicalNeighbourRoom.getPhysicallyAdjacentRooms().remove(r1);
+            }
+            //itt pedig az ajtos szomszeddossagi listabol is removeoljuk
+            for(Room byDoorNeighbourRoom: r1.getDoorAdjacentRooms()){
+                byDoorNeighbourRoom.getDoorAdjacentRooms().remove(r1);
             }
             for (UnitRoom addUnitRoomToNewRoom : addableUnitRooms) {
-                //kivesszük az előző szobából a  aunitroomot
+                //kivesszük az előző szobából a  unitroomot
                 addUnitRoomToNewRoom.getOwnerRoom().getUnitRooms().remove(addUnitRoomToNewRoom);
                 addUnitRoomToNewRoom.setOwnerRoom(newRoom);
                 //hozzáadjuk az új szobához a unitroomot
                 newRoom.getUnitRooms().add(addUnitRoomToNewRoom);
             }
             rooms.add(newRoom);
-            newRoom.setAdjacentRooms();
-            r1.setAdjacentRooms();
+            newRoom.setPhysicallyAdjacentRooms();
+            r1.setPhysicallyAdjacentRooms();
 
             //set the images
             for(UnitRoom unitRoom : newRoom.getUnitRooms()) {
@@ -126,9 +139,28 @@ public class Map extends Updatable {
             //update nodeRooms and generate the new ones
             //also updates the images and colliders
             edgeManager.updateEdgesAfterSplit(r1, newRoom);
+            setByDoorAdjacentRooms(newRoom);
+            setByDoorAdjacentRooms(r1);
             return true;
         }
         return false;
+    }
+    public void setByDoorAdjacentRooms(Room r){
+        r.getDoorAdjacentRooms().clear();
+        //tesztelesre meg jo lehet
+        //ArrayList<EdgeBetweenRooms> edgesOfRoom = edgeManager.getAllEdgeForARoom(r1);
+        //az ajtoban tarolhato, hogy egyiranyu-e, meg ezt nem tudjuk fixre
+        for(Room adjacentRoom : r.getPhysicallyAdjacentRooms()){
+            if(edgeManager.getEdgeBetweenRooms(r,adjacentRoom).hasDoor())
+            {
+                r.getDoorAdjacentRooms().add(adjacentRoom);
+                adjacentRoom.getDoorAdjacentRooms().add(r);
+
+            }
+
+        }
+
+
     }
 
 
@@ -224,7 +256,7 @@ public class Map extends Updatable {
 
         //kiszedjuk a torolt szobat mindket szomszedossagi listabol
         r1.getPhysicallyAdjacentRooms().remove(r2);
-        r1.getThroughDoorAdjacentRooms().remove(r2);
+        r1.getDoorAdjacentRooms().remove(r2);
 
         //vagy ez kell ide, vagy a feltetel, de igazabol mindegy, hadd maradjon  mind2,de a feltetel jobb,
         // mert a kikommentelt kodresz egyel lejjebb lehet errort dobna
@@ -245,19 +277,30 @@ public class Map extends Updatable {
             }
         }
         //ugyanezt megcsinaljuk az ajton keresztuli szomszedossagra is.
-        for(Room adj : r2.getThroughDoorAdjacentRooms()){
-            if(!r1.getThroughDoorAdjacentRooms().contains(adj)){
-                //System.out.println("adjroom added in r1: " + adj.getID());
-                r1.getThroughDoorAdjacentRooms().add(adj);
-            }
-            adj.getThroughDoorAdjacentRooms().remove(r2);
-            if(!adj.getThroughDoorAdjacentRooms().contains(r1)) {
-                adj.getThroughDoorAdjacentRooms().add(r1);
+        for(Room physicallyAdjacentRoom: r1.getPhysicallyAdjacentRooms()){
+            if(edgeManager.getEdgeBetweenRooms(r1,physicallyAdjacentRoom).hasDoor()){
+                if(!r1.getDoorAdjacentRooms().contains(physicallyAdjacentRoom))
+                {
+                    r1.getDoorAdjacentRooms().add(physicallyAdjacentRoom);
+                }
+                if(!physicallyAdjacentRoom.getDoorAdjacentRooms().contains(r1))
+                {
+                    physicallyAdjacentRoom.getDoorAdjacentRooms().add(r1);
+                }
+
             }
         }
-        //ezek mit csinalnak?
-        r2.getPhysicallyAdjacentRooms().clear();
-        r2.getUnitRooms().clear();
+        // a folotti implementaciot haszanljuk most, de elvileg mindketto mukodik
+        /*for(Room adj : r2.getDoorAdjacentRooms()){
+            if(!r1.getDoorAdjacentRooms().contains(adj)){
+                //System.out.println("adjroom added in r1: " + adj.getID());
+                r1.getDoorAdjacentRooms().add(adj);
+            }
+            adj.getDoorAdjacentRooms().remove(r2);
+            if(!adj.getDoorAdjacentRooms().contains(r1)) {
+                adj.getDoorAdjacentRooms().add(r1);
+            }
+        }*/
 
         //r1.setDiscovered(r2.isDiscovered());
         //r1.setPlayerCount(r1.getPlayerCount() + r2.getPlayerCount());
@@ -303,9 +346,9 @@ public class Map extends Updatable {
         }
     }
     //egyenlore a fv-t hivom meg, és azon kívül választom meg, hogy melyik két edge között akarom a funcot meghívni, ez változhat
-    public boolean TakeOutDoorIfGraphWouldStayCoherent(Isten isten){
+    public boolean TakeOutDoor(Isten isten){
 
-
+        Collections.shuffle(edgeManager.getRoomEdges());
         //mindig nagyon ugyanonnan fog maajd ajtot kivenni
         for(EdgeBetweenRooms chosenEdge : edgeManager.getRoomEdges()){
 
@@ -315,10 +358,10 @@ public class Map extends Updatable {
             //ha van ajtaja
             if(chosenEdge.hasDoor()) {
                 //csak akkor, ha van legalabb 2 ajtaja mindkettonekj, egyebkent mindenkepp szar lenne
-                if (r1.getThroughDoorAdjacentRooms().size() >= 2 &&
-                        (r2.getThroughDoorAdjacentRooms().size() >= 2)) {
-                    r1.getThroughDoorAdjacentRooms().remove(r2);
-                    r2.getThroughDoorAdjacentRooms().remove(r1);
+                if (r1.getDoorAdjacentRooms().size() >= 2 &&
+                        (r2.getDoorAdjacentRooms().size() >= 2)) {
+                    r1.getDoorAdjacentRooms().remove(r2);
+                    r2.getDoorAdjacentRooms().remove(r1);
                     //megnézem, hogy osszefuggo lenne-e az uj graph
                     if (kruskalForCheckingIfGraphIsCoherent(rooms)) {
                         EdgeBetweenRooms edgeBeingModified = edgeManager.getEdgeBetweenRooms(r1, r2);
@@ -326,8 +369,8 @@ public class Map extends Updatable {
                         for (EdgePiece edgePiece : edgePieces) {
                             if (edgePiece.isDoor()) {
                                 edgeBeingModified.switchDoorToWall(edgePiece, isten);
-                                r1.getThroughDoorAdjacentRooms().remove(r2);
-                                r2.getThroughDoorAdjacentRooms().remove(r1);
+                                r1.getDoorAdjacentRooms().remove(r2);
+                                r2.getDoorAdjacentRooms().remove(r1);
                                 System.out.println("talatam jot");
                                 return true;
                             }
@@ -336,8 +379,8 @@ public class Map extends Updatable {
                     else
                     {
                         System.out.println("Nem lett volna koherens");
-                        r1.getThroughDoorAdjacentRooms().add(r2);
-                        r2.getThroughDoorAdjacentRooms().add(r1);
+                        r1.getDoorAdjacentRooms().add(r2);
+                        r2.getDoorAdjacentRooms().add(r1);
                     }
                 }
                 else System.out.println("nem volt eleg ajto");
@@ -348,6 +391,7 @@ public class Map extends Updatable {
     //fv ami az ajtok hozzaadasat valositja meg
     public boolean addDoorToEdgeWithoutDoor(Isten isten){
         //vegigiteralok az eleken
+        Collections.shuffle(edgeManager.getRoomEdges());
         for(EdgeBetweenRooms chosenEdge: edgeManager.getRoomEdges()){
             //csak olyan el erdekel, amin nincs ajto, ergo a ket szoba nem atjarhato
             if(!chosenEdge.hasDoor()){
@@ -359,8 +403,8 @@ public class Map extends Updatable {
                     if(chosenEdge.switchWallToDoor(chosenPiece,isten))
                     {
                         //frissitem a szomszedossagi listakat
-                        r1.getThroughDoorAdjacentRooms().add(r2);
-                        r2.getThroughDoorAdjacentRooms().add(r1);
+                        r1.getDoorAdjacentRooms().add(r2);
+                        r2.getDoorAdjacentRooms().add(r1);
                         System.out.println("Ajto hozzaadva");
                         return true;
                     }

@@ -32,6 +32,21 @@ public class EdgeManager {
         }
         return null;
     }
+    //egy adott szoba összes edgének meghatározása
+    //ha egy szobanak a szomszedait akarom meghatarozni akkor hasznos
+    public ArrayList<EdgeBetweenRooms> getAllEdgeForARoom(Room r1){
+        ArrayList<EdgeBetweenRooms> ret = new ArrayList<>();
+        //vegigiteral aaz osszes edgen
+        for (EdgeBetweenRooms edgeBetweenRooms : roomEdges){
+            //ha tartalmazza hozzaad
+            if(edgeBetweenRooms.getNodeRooms().contains(r1))
+            {
+                ret.add(edgeBetweenRooms);
+            }
+
+        }
+        return ret;
+    }
 
 
     public void deleteEdge(Room r1, Room r2){
@@ -225,7 +240,7 @@ public class EdgeManager {
         }
 
         for(EdgeBetweenRooms edge : roomEdges){
-            if(edge.doorNum() < 1) {
+            if(!edge.hasDoor()) {
                 addDoor(edge);
             }
         }

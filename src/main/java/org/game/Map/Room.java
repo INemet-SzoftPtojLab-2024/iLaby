@@ -10,7 +10,7 @@ public class Room extends Updatable implements Graph<Room>{
     private int ID;
     private ArrayList<UnitRoom> unitRooms;
     private ArrayList<Room> physicallyAdjacentRooms;
-    private ArrayList<Room> throughDoorAdjacentRooms;
+    private ArrayList<Room> doorAdjacentRooms;
     private int maxPlayerCount = 5;
     int playerCount;
 
@@ -27,7 +27,7 @@ public class Room extends Updatable implements Graph<Room>{
         this.ID = ID;
         unitRooms = new ArrayList<>();
         physicallyAdjacentRooms = new ArrayList<>();
-        throughDoorAdjacentRooms = new ArrayList<>();
+        doorAdjacentRooms = new ArrayList<>();
         //hasDoorWith = new ArrayList<>();
         roomType = RoomType.getRandomRoomtype();
 
@@ -39,8 +39,8 @@ public class Room extends Updatable implements Graph<Room>{
 
     }
 
-    public ArrayList<Room> getThroughDoorAdjacentRooms() {
-        return throughDoorAdjacentRooms;
+    public ArrayList<Room> getDoorAdjacentRooms() {
+        return doorAdjacentRooms;
     }
 
     @Override
@@ -52,13 +52,14 @@ public class Room extends Updatable implements Graph<Room>{
     public void onDestroy() {
 
     }
-    public void setThroughDoorAdjacentRooms(ArrayList<Room> rooms){
-        throughDoorAdjacentRooms=new ArrayList<>(rooms);
+    public void setDoorAdjacentRooms(ArrayList<Room> rooms){
+        doorAdjacentRooms =new ArrayList<>(rooms);
     }
 
+    //ez az ajton keresztuli
     public boolean isAdjacent(Room room) {
         // if(this.equals(room)) return false; egynelore nem kell lekezelni
-        for (Room checkRoom : throughDoorAdjacentRooms) {
+        for (Room checkRoom : doorAdjacentRooms) {
             if (room.equals(checkRoom)) return true;
         }
         return  false;
@@ -71,7 +72,7 @@ public class Room extends Updatable implements Graph<Room>{
         }
         return  false;
     }
-    public void setAdjacentRooms(){
+    public void setPhysicallyAdjacentRooms(){
         physicallyAdjacentRooms.clear();
         for(UnitRoom unitRoom : unitRooms){
             for(UnitRoom neighbourUnitRoom: unitRoom.getAdjacentUnitRooms()){

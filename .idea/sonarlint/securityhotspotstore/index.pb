@@ -31,3 +31,7 @@ T
 $src/main/java/org/game/Map/Wall.java,5\9\59f88d28553f94fc6ef2453d83f314324b3d302f
 Q
 !src/main/java/org/game/Isten.java,a\e\ae6b841d57349f3d394f98633de24bf000774d96
+T
+$src/main/java/org/game/Map/Door.java,9\5\95e852f03d23ecabb97806217a07c752c409eb7b
+X
+(src/main/java/org/game/Map/RoomType.java,0\9\098e2fb073f84303e4936b5215044c9bf5a18688

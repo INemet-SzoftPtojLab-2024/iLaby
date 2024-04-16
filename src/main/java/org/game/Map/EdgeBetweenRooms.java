@@ -82,13 +82,7 @@ public class EdgeBetweenRooms {
             }
         }
     }
-    public int doorNum(){
-        int cnt = 0;
-        for(EdgePiece wall : walls){
-            if(wall.isDoor()) cnt++;
-        }
-        return cnt;
-    }
+
 
     public ArrayList<Room> getNodeRooms() {
         return nodeRooms;

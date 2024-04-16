@@ -3,6 +3,8 @@
 u	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš8è€Î—î1
 b
 java:S1226Ä"DIntroduce a new variable instead of reusing the parameter "edgelen".(‡È«Æ8í€Î—î1
+C
+java:S1905_"&Remove this unnecessary cast to "int".(ş½Æå8÷±¾î1
 Y	java:S125†"<This block of commented-out lines of code should be removed.(ĞğşË8ş€Î—î1
 Y	java:S125‹"<This block of commented-out lines of code should be removed.(¾†¾°8ÿ€Î—î1
 ^	java:S125"<This block of commented-out lines of code should be removed.(×îÀ£úÿÿÿÿ8€Î—î1
