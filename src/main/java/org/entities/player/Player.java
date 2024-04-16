@@ -88,6 +88,7 @@ public class Player extends Entity {
             im.setVisibility(false);
             isten.getRenderer().addRenderable(im);//register images in the renderer
         }
+        playerImage.get(playerImage.size()-1).setSortingLayer(-67);
 
         activeImage = 1;
         playerImage.get(activeImage).setVisibility(true);

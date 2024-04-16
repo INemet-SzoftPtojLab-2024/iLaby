@@ -6,6 +6,7 @@ import main.java.org.game.Graphics.Text;
 import main.java.org.game.Isten;
 import main.java.org.game.Map.UnitRoom;
 import main.java.org.game.physics.Collider;
+import main.java.org.game.physics.CollisionInfo;
 import main.java.org.linalg.Vec2;
 
 import java.util.Random;
@@ -47,23 +48,25 @@ public class Villain extends Entity {
         isten.getPhysicsEngine().addCollider(villainCollider);//register collider in the physics engine
 
         villainImage = new Image(new Vec2(), playerScale, imagePath);
-        villainImage.setSortingLayer(-50);
+        villainImage.setSortingLayer(-68);
         villainImage.setVisibility(true);
         isten.getRenderer().addRenderable(villainImage);//register images in the renderer
 
         if (villainName != null) {
             villainName.setVisibility(true);
-            villainName.setSortingLayer(-50);
+            villainName.setSortingLayer(-68);
             isten.getRenderer().addRenderable(villainName);
         }
-        isten.getCamera().setPixelsPerUnit(100);
+        //isten.getCamera().setPixelsPerUnit(100);
     }
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-        Vec2 playerPosition = villainCollider.getPosition();
+        Vec2 villainPosition = villainCollider.getPosition();
         Random random = new Random();
-        villainImage.setPosition(playerPosition);
-        villainName.setPosition(Vec2.sum(playerPosition, new Vec2(0, (float) 0.5)));
+        villainImage.setPosition(villainPosition);
+        villainName.setPosition(Vec2.sum(villainPosition, new Vec2(0, (float) 0.5)));
+
+        CollisionInfo[] collisions= villainCollider.getLastCollisionInfo();
 
         if(villainCollider.getVelocity().x==0)
         {
