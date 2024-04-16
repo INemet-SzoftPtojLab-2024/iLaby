@@ -1,8 +1,8 @@
 
-E
-java:S1066m"/Merge this if statement with the enclosing one.(öı›Ÿ
+L
+java:S1066l"/Merge this if statement with the enclosing one.(öı›Ÿ8Ñ—”î1
 Œ
-java:S1319ê"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(—•íıÿÿÿÿ
-k	java:S117G"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Áäúÿÿÿÿ
+java:S1319é"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(—•íıÿÿÿÿ
+r	java:S117F"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Áäúÿÿÿÿ8Ñ—”î1
 n	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš
-A	java:S106É"+Replace this use of System.out by a logger.(ö³¦
+H	java:S106È"+Replace this use of System.out by a logger.(ö³¦8©Ñ—”î1

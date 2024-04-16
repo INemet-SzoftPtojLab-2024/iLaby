@@ -1,0 +1,8 @@
+
+n	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš
+[
+java:S1128">Remove this unused import 'main.java.org.game.Graphics.Image'.(Äí·é8¬çö›î1
+W
+java:S1128"5Remove this unused import 'main.java.org.game.Isten'.(Åáç‰úÿÿÿÿ8­çö›î1
+g
+java:S1128"ERemove this unused import 'main.java.org.game.physics.ColliderGroup'.(ÇÍêðûÿÿÿÿ8­çö›î1

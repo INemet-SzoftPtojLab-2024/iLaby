@@ -46,7 +46,7 @@ public class Map extends Updatable {
     public void onUpdate(Isten isten, double deltaTime) {
         //for testing
         delta += deltaTime;
-        if (delta > 10) {
+        if (delta > 3) {
             TakeOutDoorIfGraphWouldStayCoherent(isten);
             delta = 0;
             merged = true;
@@ -296,13 +296,10 @@ public class Map extends Updatable {
                 //csak akkor, ha van legalabb 2 ajtaja mindkettonekj, egyebkent mindenkepp szar lenne
                 if (r1.getThroughDoorAdjacentRooms().size() >= 2 &&
                         (r2.getThroughDoorAdjacentRooms().size() >= 2)) {
-                    ArrayList<Room> newRooms = new ArrayList<>(rooms);
-                    Room newRoom1 = getRoomById(newRooms, r1.getID());
-                    Room newRoom2 = getRoomById(newRooms, r2.getID());
-                    newRoom1.getThroughDoorAdjacentRooms().remove(newRoom1);
-                    newRoom2.getThroughDoorAdjacentRooms().remove(newRoom2);
+                    r1.getThroughDoorAdjacentRooms().remove(r2);
+                    r2.getThroughDoorAdjacentRooms().remove(r1);
                     //megnézem, hogy osszefuggo lenne-e az uj graph
-                    if (kruskalForCheckingIfGraphIsCoherent(newRooms)) {
+                    if (kruskalForCheckingIfGraphIsCoherent(rooms)) {
                         EdgeBetweenRooms edgeBeingModified = edgeManager.getEdgeBetweenRooms(r1, r2);
                         ArrayList<EdgePiece> edgePieces = edgeBeingModified.getWalls();
                         for (EdgePiece edgePiece : edgePieces) {
@@ -315,11 +312,14 @@ public class Map extends Updatable {
                             }
                         }
                     }
-                    System.out.println("Nem lett volna koherens");
+                    else
+                    {
+                        System.out.println("Nem lett volna koherens");
+                        r1.getThroughDoorAdjacentRooms().add(r2);
+                        r2.getThroughDoorAdjacentRooms().add(r1);
+                    }
                 }
-                if(r1.getPhysicallyAdjacentRooms().size() <=2
-                        || r2.getPhysicallyAdjacentRooms().size() <= 2)
-                    System.out.println("nem volt eleg ajto");
+                else System.out.println("nem volt eleg ajto");
             }else System.out.println("nincs ajto itt");
         }
         return false;
