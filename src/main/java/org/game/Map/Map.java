@@ -47,8 +47,17 @@ public class Map extends Updatable {
         //for testing
         delta += deltaTime;
         if (delta > 5) {
-            mergeRooms(rooms.get(0),rooms.get(0).getPhysicallyAdjacentRooms().get(0), isten);
-            TakeOutDoorIfGraphWouldStayCoherent(isten);
+            //mergeRooms(rooms.get(0),rooms.get(0).getPhysicallyAdjacentRooms().get(0), isten);
+
+            if(cnt%3==0){
+                addDoorToEdgeWithoutDoor(isten);
+                System.out.println("ajtoaddolas tortent");
+            }
+            else{
+                TakeOutDoorIfGraphWouldStayCoherent(isten);
+                System.out.println("aajtokivetel tortent");
+            }
+            cnt++;
             delta = 0;
         }
     }
@@ -336,15 +345,33 @@ public class Map extends Updatable {
         }
         return false;
     }
-    //ajtokivetel feltetelellenorzeshez kell
-    public Room getRoomById(ArrayList<Room> rooms, int ID){
-        for(Room roomById:rooms){
-            if(roomById.getID() == ID){
-                return roomById;
+    //fv ami az ajtok hozzaadasat valositja meg
+    public boolean addDoorToEdgeWithoutDoor(Isten isten){
+        //vegigiteralok az eleken
+        for(EdgeBetweenRooms chosenEdge: edgeManager.getRoomEdges()){
+            //csak olyan el erdekel, amin nincs ajto, ergo a ket szoba nem atjarhato
+            if(!chosenEdge.hasDoor()){
+                Room r1 = chosenEdge.getNodeRooms().get(0);
+                Room r2 = chosenEdge.getNodeRooms().get(1);
+                //vegigmegyek a falakon, mert elkepzelheto, hogy van olyan, amire nem illesztheto aajto
+                for(EdgePiece chosenPiece: chosenEdge.getWalls()){
+                    //ha tudok raa ajtot illeszteni, aakkor ezt megteszem
+                    if(chosenEdge.switchWallToDoor(chosenPiece,isten))
+                    {
+                        //frissitem a szomszedossagi listakat
+                        r1.getThroughDoorAdjacentRooms().add(r2);
+                        r2.getThroughDoorAdjacentRooms().add(r1);
+                        System.out.println("Ajto hozzaadva");
+                        return true;
+                    }
+                }
             }
         }
-        return null;
+        //ha nem tudtam ajtot hozzaadni, akkor teli a map
+        System.out.println("Teli a map");
+        return false;
     }
+
 
     public void setRooms(ArrayList<Room> rooms) {this.rooms = rooms;}
 
