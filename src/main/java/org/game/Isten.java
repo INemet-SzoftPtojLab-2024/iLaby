@@ -165,6 +165,10 @@ public class Isten {
         pendingAddedUpdatables.add(u);
     }
 
+    public ArrayList<Updatable> getUpdatables() {
+        return updatables;
+    }
+
     public void removeUpdatable(Updatable u) {
         pendingRemovedUpdatables.add(u);
     }

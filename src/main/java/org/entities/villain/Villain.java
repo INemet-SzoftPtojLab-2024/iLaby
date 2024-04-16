@@ -24,17 +24,13 @@ public class Villain extends Entity {
     Text villainName;
     float time;
     Vec2 position;
+    Room room;
     UnitRoom currentUnitRoom;
     UnitRoom prevUnitRoom;
     String imagePath;
     float velocity;
     double sum;
-    public Villain() {
-        villainCollider = null;
-        villainImage = null;
-        time = 0.0f;
-        villainName = null;
-    }
+
     public Villain(String name, String iP) {
         villainCollider = null;
         villainImage = null;
@@ -43,71 +39,73 @@ public class Villain extends Entity {
         villainName.setShadowOn(false);
         imagePath = iP;
         velocity = 0.5f;
-        sum=0.0;
+        sum = 0.0;
+        room = null;
     }
+
     @Override
     public void onStart(Isten isten) {
 
         Vec2 playerScale = new Vec2(0.6f, 0.6f);
 
-        position = randomPositions(isten);
+        position = randomPositions(isten.getMap().getRooms());
         villainCollider = new Collider(position, playerScale);
 
         villainCollider.setMovability(true);
         isten.getPhysicsEngine().addCollider(villainCollider);//register collider in the physics engine
 
         villainImage = new Image(new Vec2(), playerScale, imagePath);
-        villainImage.setSortingLayer(-50);
+        villainImage.setSortingLayer(-68);
         villainImage.setVisibility(true);
         isten.getRenderer().addRenderable(villainImage);//register images in the renderer
 
         if (villainName != null) {
             villainName.setVisibility(true);
-            villainName.setSortingLayer(-50);
+            villainName.setSortingLayer(-68);
             isten.getRenderer().addRenderable(villainName);
         }
-        isten.getCamera().setPixelsPerUnit(100);
         Map map = isten.getMap();
 
-        for (Room room : map.getRooms()){
-            for (UnitRoom unitRoom : room.getUnitRooms()){
+        for (Room room : map.getRooms()) {
+            for (UnitRoom unitRoom : room.getUnitRooms()) {
                 if (position.x >= unitRoom.getPosition().x - 0.5 &&
                         position.x <= unitRoom.getPosition().x + 0.5 &&
                         position.y >= unitRoom.getPosition().y - 0.5 &&
-                        position.y <= unitRoom.getPosition().y + 0.5){
+                        position.y <= unitRoom.getPosition().y + 0.5) {
                     currentUnitRoom = unitRoom;
                 }
             }
         }
         prevUnitRoom = currentUnitRoom;
     }
+
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-        sum+=deltaTime;
+        sum += deltaTime;
         Vec2 playerPosition = villainCollider.getPosition();
         Random random = new Random();
         villainImage.setPosition(playerPosition);
         villainName.setPosition(Vec2.sum(playerPosition, new Vec2(0, (float) 0.5)));
 
 
-        if(sum<2)return;
+        if (sum < 2) return;
         Map map = isten.getMap();
 
-        for (Room room : map.getRooms()){
-            for (UnitRoom unitRoom : room.getUnitRooms()){
+        for (Room room : map.getRooms()) {
+            for (UnitRoom unitRoom : room.getUnitRooms()) {
                 if (villainCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
                         villainCollider.getPosition().x <= unitRoom.getPosition().x + 0.5 &&
                         villainCollider.getPosition().y >= unitRoom.getPosition().y - 0.5 &&
-                        villainCollider.getPosition().y <= unitRoom.getPosition().y + 0.5){
+                        villainCollider.getPosition().y <= unitRoom.getPosition().y + 0.5) {
                     currentUnitRoom = unitRoom;
                 }
             }
         }
         int randomNumber = random.nextInt(3);
-        if(villainCollider.getVelocity().x < 0) {
+        if (villainCollider.getVelocity().x < 0) {
             if (currentUnitRoom.isLeftDoor()) {
                 villainCollider.getVelocity().x = 0;
-                switch (randomNumber){
+                switch (randomNumber) {
                     case 0:
                         villainCollider.getVelocity().x = velocity;
                         break;
@@ -120,10 +118,10 @@ public class Villain extends Entity {
                 }
             }
         }
-        if(villainCollider.getVelocity().x > 0) {
+        if (villainCollider.getVelocity().x > 0) {
             if (currentUnitRoom.isRightDoor()) {
                 villainCollider.getVelocity().x = 0;
-                switch (randomNumber){
+                switch (randomNumber) {
                     case 0:
                         villainCollider.getVelocity().x = -velocity;
                         break;
@@ -136,10 +134,10 @@ public class Villain extends Entity {
                 }
             }
         }
-        if(villainCollider.getVelocity().y > 0){
-            if (currentUnitRoom.isTopDoor()){
+        if (villainCollider.getVelocity().y > 0) {
+            if (currentUnitRoom.isTopDoor()) {
                 villainCollider.getVelocity().y = 0;
-                switch (randomNumber){
+                switch (randomNumber) {
                     case 0:
                         villainCollider.getVelocity().x = velocity;
                         break;
@@ -152,10 +150,10 @@ public class Villain extends Entity {
                 }
             }
         }
-        if(villainCollider.getVelocity().y < 0) {
+        if (villainCollider.getVelocity().y < 0) {
             if (currentUnitRoom.isBottomDoor()) {
                 villainCollider.getVelocity().y = 0;
-                switch (randomNumber){
+                switch (randomNumber) {
                     case 0:
                         villainCollider.getVelocity().x = velocity;
                         break;
@@ -168,11 +166,9 @@ public class Villain extends Entity {
                 }
             }
         }
-        if(villainCollider.getVelocity().x == 0 &&villainCollider.getVelocity().y == 0)
-        {
+        if (villainCollider.getVelocity().x == 0 && villainCollider.getVelocity().y == 0) {
             randomNumber = random.nextInt(4);
-            switch (randomNumber)
-            {
+            switch (randomNumber) {
                 case 0:
                     villainCollider.getVelocity().x = velocity;
                     villainCollider.getVelocity().y = 0.0f;
@@ -193,43 +189,37 @@ public class Villain extends Entity {
         }
 
     }
-    public Vec2 randomPositions(Isten isten){
-        ArrayList<Room> rooms = isten.getMap().getRooms();
+
+    public Vec2 randomPositions(ArrayList<Room> rooms) {
         Collections.shuffle(rooms);
         Random rand = new Random();
 
-        Room selectedRoom = rooms.get(rand.nextInt(rooms.size() - 1));
+        Room selectedRoom;
 
-        boolean con = true;
-        while (roomsWithVillains.contains(selectedRoom) || con){
+        do {
             selectedRoom = rooms.get(rand.nextInt(rooms.size() - 1));
-            if(isUnitRoomInList(selectedRoom))
-            {
-                con=true;
-                System.out.println("itt "+villainName.getText());
-            }
-            else{
-                con=false;
-            }
-        }
+        } while (roomsWithVillains.contains(selectedRoom) || isStartUnitRoomInRoom(selectedRoom));
 
         UnitRoom selectedUnitRoom = selectedRoom.getUnitRooms().get(rand.nextInt(selectedRoom.getUnitRooms().size()));
-
         roomsWithVillains.add(selectedRoom);
+        room = selectedRoom;
         return new Vec2(selectedUnitRoom.getPosition().x, selectedUnitRoom.getPosition().y);
     }
-    boolean isUnitRoomInList( Room room)
-    {
-        for(UnitRoom unitRoom : room.getUnitRooms())
-        {
-            if(unitRoom.getPosition().x == 0 && unitRoom.getPosition().y == 0)
-            {
+
+    boolean isStartUnitRoomInRoom(Room room) {
+        for (UnitRoom unitRoom : room.getUnitRooms()) {
+            if (unitRoom.getPosition().x == 0 && unitRoom.getPosition().y == 0) {
                 return true;
             }
         }
         return false;
     }
+
     @Override
     public void onDestroy() {
+    }
+
+    public Room getRoom() {
+        return room;
     }
 }
