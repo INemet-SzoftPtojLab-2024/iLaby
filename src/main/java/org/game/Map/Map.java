@@ -44,28 +44,32 @@ public class Map extends Updatable {
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
         //for testing
+        int tester= 3;
         delta += deltaTime;
         if (delta > 5) {
-
             //TESTCASE 1:::
-            if(cnt%3==0){
-                addDoorToEdgeWithoutDoor(isten);
-                System.out.println("ajtoaddolas tortent");
-            }
-            else{
-                TakeOutDoor(isten);
-                System.out.println("ajtokivetel tortent");
-            }
-            //TESTCASE 2:
-            //mergeRooms(rooms.get(0), rooms.get(0).getPhysicallyAdjacentRooms().get(0), isten);
-            //TESTCASE 3:
-            /*for(Room splittable : rooms){
-                if(splitRooms(splittable,isten))
-                {
-                    System.out.println("sikerult a split");
-                    break;
+            if(tester == 1) {
+                if (cnt % 3 == 0) {
+                    addDoorToEdgeWithoutDoor(isten);
+                    System.out.println("ajtoaddolas tortent");
+                } else {
+
+                    TakeOutDoor(isten);
+                    System.out.println("ajtokivetel tortent");
                 }
-            }*/
+            }
+            if(tester == 2)
+            {
+                mergeRooms(rooms.get(0), rooms.get(0).getPhysicallyAdjacentRooms().get(0), isten);
+            }
+            if(tester == 3){
+                for(Room splittable : rooms) {
+                    if (splitRooms(splittable, isten)) {
+                        System.out.println("sikerult a split");
+                        break;
+                    }
+                }
+            }
             cnt++;
             delta = 0;
         }
