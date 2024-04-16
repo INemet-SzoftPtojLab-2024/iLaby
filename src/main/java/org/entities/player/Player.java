@@ -39,7 +39,7 @@ public class Player extends Entity {
         playerCollider = null;
         playerImage = null;
         death = null;
-        motivational=null;
+        motivational = null;
         activeImage = 0;
         time = 0.0f;
         playerName = null;
@@ -50,7 +50,7 @@ public class Player extends Entity {
         playerCollider = null;
         playerImage = null;
         death = null;
-        motivational=null;
+        motivational = null;
         activeImage = 0;
         time = 0.0f;
         playerName = new Text(name, new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 0, 0, 255);
@@ -81,10 +81,10 @@ public class Player extends Entity {
         death.setAlignment(Renderable.CENTER, Renderable.CENTER);
         isten.getRenderer().addRenderable(death);
 
-        motivational=new TextUI("Try again loser.",new Vec2(0,-170),26,200,200,200);
+        motivational = new TextUI("Try again loser.", new Vec2(0, -170), 26, 200, 200, 200);
         motivational.setSortingLayer(-71);
         motivational.setVisibility(false);
-        motivational.setAlignment(Renderable.CENTER,Renderable.CENTER);
+        motivational.setAlignment(Renderable.CENTER, Renderable.CENTER);
         isten.getRenderer().addRenderable(motivational);
 
         for (Image im : playerImage) {
@@ -92,7 +92,7 @@ public class Player extends Entity {
             im.setVisibility(false);
             isten.getRenderer().addRenderable(im);//register images in the renderer
         }
-        playerImage.get(playerImage.size()-1).setSortingLayer(-67);
+        playerImage.get(playerImage.size() - 1).setSortingLayer(-67);
 
         activeImage = 1;
         playerImage.get(activeImage).setVisibility(true);
@@ -110,27 +110,28 @@ public class Player extends Entity {
         AudioManager.preloadSound("./assets/audio/playersound.ogg");
         AudioManager.preloadSound("./assets/audio/died.ogg");
     }
-    public void isInSameRoom(Villain v){
+
+    public void isInSameRoom(Villain v) {
 
     }
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
         Room currentRoom = null;
-        for(Updatable u : isten.getUpdatables()){
-            if (u.getClass().equals(Villain.class)){
-                for (Room room : isten.getMap().getRooms()){
-                    for (UnitRoom unitRoom : room.getUnitRooms()){
+        for (Updatable u : isten.getUpdatables()) {
+            if (u.getClass().equals(Villain.class)) {
+                for (Room room : isten.getMap().getRooms()) {
+                    for (UnitRoom unitRoom : room.getUnitRooms()) {
                         if (playerCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
                                 playerCollider.getPosition().x <= unitRoom.getPosition().x + 0.5 &&
                                 playerCollider.getPosition().y >= unitRoom.getPosition().y - 0.5 &&
-                                playerCollider.getPosition().y <= unitRoom.getPosition().y + 0.5){
+                                playerCollider.getPosition().y <= unitRoom.getPosition().y + 0.5) {
                             currentRoom = room;
                         }
                     }
                 }
                 Villain villain = (Villain) u;
-                if (currentRoom != null && currentRoom.equals(villain.getRoom())){
+                if (currentRoom != null && currentRoom.equals(villain.getRoom())) {
                     alive = false;
                 }
             }
@@ -197,7 +198,8 @@ public class Player extends Entity {
             }
 
         } else {
-            if (!AudioManager.isPlaying(playerSound) && activeImage!=4)
+            if (AudioManager.isPlaying(playerSound) && activeImage != 4) AudioManager.closeSound(playerSound);
+            if (!AudioManager.isPlaying(playerSound) && activeImage != 4)
                 playerSound = AudioManager.playSound("./assets/audio/died.ogg");
 
             if (activeImage != 4) {
