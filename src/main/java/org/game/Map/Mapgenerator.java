@@ -57,7 +57,7 @@ public class Mapgenerator {
                     Collider wallCollider = new Collider(wallRightPos, verticalScale);
                     sideWallColliders.addCollider(wallCollider);
                     Wall newWall = new Wall(wallCollider,wallRightPos , actualUnitRoom);
-                    wallPath = "./assets/fancy/walls/wall_outer_mid_left.png";
+                    wallPath = "./assets/walls/wall_outer_mid_left.png";
                     verticalScale = new Vec2(0.3f, 1f);
                     newWall.setNewImage(wallPath, verticalScale, isten);
                 }
@@ -66,7 +66,7 @@ public class Mapgenerator {
                     Collider wallCollider = new Collider(wallLeftPos, verticalScale);
                     sideWallColliders.addCollider(wallCollider);
                     Wall newWall = new Wall(wallCollider,wallLeftPos , actualUnitRoom);
-                    wallPath = "./assets/fancy/walls/wall_outer_mid_right.png";
+                    wallPath = "./assets/walls/wall_outer_mid_right.png";
                     verticalScale = new Vec2(0.3f, 1f);
                     newWall.setNewImage(wallPath, verticalScale, isten);
                 }
@@ -76,7 +76,7 @@ public class Mapgenerator {
                     Collider wallCollider = new Collider(wallTopPos, horizontalScale);
                     sideWallColliders.addCollider(wallCollider);
                     Wall newWall = new Wall(wallCollider,wallTopPos , actualUnitRoom);
-                    wallPath = "./assets/fancy/walls/wall_edge_top_left.png";
+                    wallPath = "./assets/walls/wall_edge_top_left.png";
                     horizontalScale = new Vec2(1f, 0.3f);
                     newWall.setNewImage(wallPath, horizontalScale, isten);
                 }
@@ -86,7 +86,7 @@ public class Mapgenerator {
                     Collider wallCollider = new Collider(wallBottomPos, horizontalScale);
                     sideWallColliders.addCollider(wallCollider);
                     Wall newWall = new Wall(wallCollider,wallBottomPos , actualUnitRoom);
-                    wallPath = "./assets/fancy/walls/wall_edge_top_left.png";
+                    wallPath = "./assets/walls/wall_edge_top_left.png";
                     horizontalScale = new Vec2(1f, 0.3f);
                     newWall.setNewImage(wallPath, horizontalScale, isten);
                 }
