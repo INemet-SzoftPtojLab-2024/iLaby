@@ -39,8 +39,8 @@ public class MainMenu extends Updatable {
         images.add(new ImageUI(new Vec2(0, 375), new Vec2(300, 50), "./assets/ui/developer_logo.png"));
         images.add(new ImageUI(new Vec2(0, 0), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/ui/menu_background.jpg"));
 
-        for(int i=0;i<2;i++){
-            charImages.add(new ImageUI(new Vec2(0, 75), new Vec2(200, 200), "./assets/character/character"+i+"_right1.png"));
+        for (int i = 0; i < 3; i++) {
+            charImages.add(new ImageUI(new Vec2(0, 75), new Vec2(200, 200), "./assets/character/character" + i + "_right1.png"));
         }
 
         buttons.add(new ButtonUI(new Vec2(0, -125), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Solo", "./assets/Monocraft.ttf", 50));
@@ -126,23 +126,25 @@ public class MainMenu extends Updatable {
         buttons.get(8).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
             String name = JOptionPane.showInputDialog("Username");
-            if (!name.isEmpty()) {
-                texts.get(0).setText(name);
-                PlayerPrefs.setString("name", name);
+            if (name != null) {
+                if (!name.isEmpty()) {
+                    texts.get(0).setText(name);
+                    PlayerPrefs.setString("name", name);
+                }
             }
         });
         buttons.get(9).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
             if (activeCharImage > 0) activeCharImage--;
             else activeCharImage = charImages.size() - 1;
-            PlayerPrefs.setInt("skin",activeCharImage);
+            PlayerPrefs.setInt("skin", activeCharImage);
             for (int i = 0; i < charImages.size(); i++) charImages.get(i).setVisibility(i == activeCharImage);
         });
         buttons.get(10).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
-            if (activeCharImage < charImages.size()-1) activeCharImage++;
+            if (activeCharImage < charImages.size() - 1) activeCharImage++;
             else activeCharImage = 0;
-            PlayerPrefs.setInt("skin",activeCharImage);
+            PlayerPrefs.setInt("skin", activeCharImage);
             for (int i = 0; i < charImages.size(); i++) charImages.get(i).setVisibility(i == activeCharImage);
         });
 

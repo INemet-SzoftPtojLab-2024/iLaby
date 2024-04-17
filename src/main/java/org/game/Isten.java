@@ -121,7 +121,14 @@ public class Isten {
 
         updatables.add(new Villain("Gajdos",  "./assets/villain/villain1.png"));
         updatables.add(new Villain("Csuka",  "./assets/villain/villain2.png"));
-        updatables.add(new Villain("Villain 3",  "./assets/villain/villain3.png"));
+        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
         updatables.add(new TimeCounter());
         updatables.add(new Help());
         updatables.add(new GameMenu());
