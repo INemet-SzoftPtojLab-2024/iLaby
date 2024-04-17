@@ -20,7 +20,7 @@ public class Help extends Updatable {
     public void onStart(Isten isten) {
         help = new ImageUI(new Vec2(0, 0), new Vec2(600, 600), "./assets/ui/help.png");
         help.setVisibility(false);
-        help.setSortingLayer(-70);
+        help.setSortingLayer(-72);
         help.setAlignment(Renderable.CENTER,Renderable.CENTER);
         isten.getRenderer().addRenderable(help);
     }

@@ -1,6 +1,7 @@
 package main.java.org.entities.player;
 
 
+import main.java.org.entities.villain.Villain;
 import main.java.org.game.Audio.AudioManager;
 import main.java.org.game.Audio.Sound;
 import main.java.org.game.Graphics.*;
@@ -8,8 +9,12 @@ import main.java.org.game.Graphics.*;
 import main.java.org.entities.Entity;
 
 import main.java.org.game.Isten;
+import main.java.org.game.Map.Room;
+import main.java.org.game.Map.UnitRoom;
+import main.java.org.game.PlayerPrefs.PlayerPrefs;
 import main.java.org.game.UI.TimeCounter;
 import main.java.org.game.physics.Collider;
+import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 
 import java.awt.event.KeyEvent;
@@ -35,10 +40,11 @@ public class Player extends Entity {
         playerCollider = null;
         playerImage = null;
         death = null;
-        motivational=null;
+        motivational = null;
         activeImage = 0;
         time = 0.0f;
-        playerName = null;
+        playerName = new Text(PlayerPrefs.getString("name"), new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 0, 0, 255);
+        playerName.setShadowOn(false);
         alive = true;
     }
 
@@ -46,7 +52,7 @@ public class Player extends Entity {
         playerCollider = null;
         playerImage = null;
         death = null;
-        motivational=null;
+        motivational = null;
         activeImage = 0;
         time = 0.0f;
         playerName = new Text(name, new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 0, 0, 255);
@@ -65,17 +71,11 @@ public class Player extends Entity {
         isten.getPhysicsEngine().addCollider(playerCollider);//register collider in the physics engine
 
         playerImage = new ArrayList<>();
-        //playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_right1.png"));
-        //playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_right2.png"));
-        //playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_left1.png"));
-        //playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_left2.png"));
-        //playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_ded.png"));
-
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/fancy/character/character_right1.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/fancy/character/character_right2.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/fancy/character/character_left1.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/fancy/character/character_left2.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/fancy/character/character_ded.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right1.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right2.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left1.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left2.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_ded.png"));
 
         death = new ImageUI(new Vec2(0, 0), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/character/ded.png");
         death.setSortingLayer(-70);
@@ -83,10 +83,10 @@ public class Player extends Entity {
         death.setAlignment(Renderable.CENTER, Renderable.CENTER);
         isten.getRenderer().addRenderable(death);
 
-        motivational=new TextUI("Try again loser.",new Vec2(0,-170),26,200,200,200);
+        motivational = new TextUI("Try again loser.", new Vec2(0, -170), 26, 200, 200, 200);
         motivational.setSortingLayer(-71);
         motivational.setVisibility(false);
-        motivational.setAlignment(Renderable.CENTER,Renderable.CENTER);
+        motivational.setAlignment(Renderable.CENTER, Renderable.CENTER);
         isten.getRenderer().addRenderable(motivational);
 
         for (Image im : playerImage) {
@@ -94,6 +94,7 @@ public class Player extends Entity {
             im.setVisibility(false);
             isten.getRenderer().addRenderable(im);//register images in the renderer
         }
+        playerImage.get(playerImage.size() - 1).setSortingLayer(-67);
 
         activeImage = 1;
         playerImage.get(activeImage).setVisibility(true);
@@ -112,10 +113,36 @@ public class Player extends Entity {
        AudioManager.preloadSound("./assets/audio/died.ogg");
     }
 
+    public void isInSameRoom(Villain v) {
+
+    }
+
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
         //called every frame
         if (alive) {
+
+            Room currentRoom = null;
+            for (Updatable u : isten.getUpdatables()) {
+                if (u.getClass().equals(Villain.class)) {
+                    for (Room room : isten.getMap().getRooms()) {
+                        for (UnitRoom unitRoom : room.getUnitRooms()) {
+                            if (playerCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
+                                    playerCollider.getPosition().x <= unitRoom.getPosition().x + 0.5 &&
+                                    playerCollider.getPosition().y >= unitRoom.getPosition().y - 0.5 &&
+                                    playerCollider.getPosition().y <= unitRoom.getPosition().y + 0.5) {
+                                currentRoom = room;
+                            }
+                        }
+                    }
+                    Villain villain = (Villain) u;
+                    if (currentRoom != null && currentRoom.equals(villain.getRoom())) {
+                        alive = false;
+                        AudioManager.closeSound(playerSound);
+                    }
+                }
+            }
+
             //move the character
             int run = 1;
             boolean w = isten.getInputHandler().isKeyDown(KeyEvent.VK_W);
@@ -167,7 +194,7 @@ public class Player extends Entity {
             isten.getCamera().setPosition(playerCollider.getPosition());
 
             //play sound
-            if (!AudioManager.isPlaying(playerSound))
+            if (!AudioManager.isPlaying(playerSound) && alive)
                 playerSound = AudioManager.playSound("./assets/audio/playersound.ogg");
 
             if (TimeCounter.getTimeRemaining() < 0 && alive) {
@@ -176,7 +203,7 @@ public class Player extends Entity {
             }
 
         } else {
-            if (!AudioManager.isPlaying(playerSound) && activeImage!=4)
+            if (!AudioManager.isPlaying(playerSound) && activeImage != 4)
                 playerSound = AudioManager.playSound("./assets/audio/died.ogg");
 
             if (activeImage != 4) {
