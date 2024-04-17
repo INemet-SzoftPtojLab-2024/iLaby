@@ -84,10 +84,10 @@ public class UnitRoom implements Graph<UnitRoom>{
             case BASIC -> j = 4;
             default -> j = 0;
         }
-        if(ownerRoom.getID() == 999) j = 5;
+        //if(ownerRoom.getID() == 999) j = 5;
         //String path = "./assets/rooms/" + j + ".png";
         //String path = "./assets/floor_"+ j +".png";
-        String path = "./assets/floor_6.png";
+        String path = "./assets/fancy/floors/floor" + j + ".png";
         setNewImage(path, isten);
     }
 

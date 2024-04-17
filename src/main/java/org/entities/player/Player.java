@@ -65,11 +65,17 @@ public class Player extends Entity {
         isten.getPhysicsEngine().addCollider(playerCollider);//register collider in the physics engine
 
         playerImage = new ArrayList<>();
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_right1.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_right2.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_left1.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_left2.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_ded.png"));
+        //playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_right1.png"));
+        //playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_right2.png"));
+        //playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_left1.png"));
+        //playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_left2.png"));
+        //playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_ded.png"));
+
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/fancy/character/character_right1.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/fancy/character/character_right2.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/fancy/character/character_left1.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/fancy/character/character_left2.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/fancy/character/character_ded.png"));
 
         death = new ImageUI(new Vec2(0, 0), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/character/ded.png");
         death.setSortingLayer(-70);
@@ -103,7 +109,7 @@ public class Player extends Entity {
 
         //preload player sound
         AudioManager.preloadSound("./assets/audio/playersound.ogg");
-        AudioManager.preloadSound("./assets/audio/died.ogg");
+       AudioManager.preloadSound("./assets/audio/died.ogg");
     }
 
     @Override
