@@ -7,7 +7,6 @@ import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 
 /**
  * this class is only used at the beginning of a game, when a map needs to be generated
@@ -24,13 +23,14 @@ public class Mapgenerator {
     public void generate(int minRoomSize){
         //collidergroup for the sideWalls
         ColliderGroup sideWallColliders = new ColliderGroup();
-        Vec2 horizontalScale = new Vec2(1f, 0.1f); //vizszintes
-        Vec2 verticalScale = new Vec2(0.1f, 1f); //fuggoleges
-        String wallPath = "./assets/rooms/11.png";
+
+        String wallPath;
         for(int i = 0; i< map.getMapRowSize(); i++)
         {
             for(int j = 0;j<map.getMapColumnSize();j++)
             {
+                Vec2 horizontalScale = new Vec2(1f, 0.1f);//vizszintes
+                Vec2 verticalScale = new Vec2(0.1f, 1f); //fuggoleges
                 UnitRoom actualUnitRoom = map.getUnitRooms()[i][j];
                 if(i>0){
                     actualUnitRoom.getAdjacentUnitRooms().add(map.getUnitRooms()[i-1][j]);
@@ -57,6 +57,8 @@ public class Mapgenerator {
                     Collider wallCollider = new Collider(wallRightPos, verticalScale);
                     sideWallColliders.addCollider(wallCollider);
                     Wall newWall = new Wall(wallCollider,wallRightPos , actualUnitRoom);
+                    wallPath = "./assets/fancy/walls/wall_outer_mid_left.png";
+                    verticalScale = new Vec2(0.3f, 1f);
                     newWall.setNewImage(wallPath, verticalScale, isten);
                 }
                 if(actualUnitRoom.getLeftNeighbor() == null){ //if the unitroom hasn't got left neigbour
@@ -64,20 +66,28 @@ public class Mapgenerator {
                     Collider wallCollider = new Collider(wallLeftPos, verticalScale);
                     sideWallColliders.addCollider(wallCollider);
                     Wall newWall = new Wall(wallCollider,wallLeftPos , actualUnitRoom);
+                    wallPath = "./assets/fancy/walls/wall_outer_mid_right.png";
+                    verticalScale = new Vec2(0.3f, 1f);
                     newWall.setNewImage(wallPath, verticalScale, isten);
                 }
                 if(actualUnitRoom.getTopNeighbor() == null){ //if the unitroom hasn't got top neigbour
+
                     Vec2 wallTopPos = new Vec2(actualUnitRoom.getColNum(), actualUnitRoom.getRowNum() + 0.5f);
                     Collider wallCollider = new Collider(wallTopPos, horizontalScale);
                     sideWallColliders.addCollider(wallCollider);
                     Wall newWall = new Wall(wallCollider,wallTopPos , actualUnitRoom);
+                    wallPath = "./assets/fancy/walls/wall_edge_top_left.png";
+                    horizontalScale = new Vec2(1f, 0.3f);
                     newWall.setNewImage(wallPath, horizontalScale, isten);
                 }
                 if(actualUnitRoom.getBottomNeighbor() == null){ //if the unitroom hasn't got bottom neigbour
+
                     Vec2 wallBottomPos = new Vec2(actualUnitRoom.getColNum(), actualUnitRoom.getRowNum() - 0.5f);
                     Collider wallCollider = new Collider(wallBottomPos, horizontalScale);
                     sideWallColliders.addCollider(wallCollider);
                     Wall newWall = new Wall(wallCollider,wallBottomPos , actualUnitRoom);
+                    wallPath = "./assets/fancy/walls/wall_edge_top_left.png";
+                    horizontalScale = new Vec2(1f, 0.3f);
                     newWall.setNewImage(wallPath, horizontalScale, isten);
                 }
 
@@ -278,18 +288,22 @@ public class Mapgenerator {
             for(UnitRoom wallFinderUnitRoom: r1.getUnitRooms()){
                 if(wallFinderUnitRoom.getTopNeighbor() != null && wallFinderUnitRoom.getTopNeighbor().getOwnerRoom().equals(r2)){
                     Vec2 wallTopPos = new Vec2(wallFinderUnitRoom.getColNum(), wallFinderUnitRoom.getRowNum() + 0.5f);
+                    horizontalScale = new Vec2(1f, 0.3f); //vizszintes
                     edgeBetweenRoom.addNewWall(wallTopPos, horizontalScale, wallFinderUnitRoom ,wallFinderUnitRoom.getTopNeighbor(), isten);
                 }
                 if(wallFinderUnitRoom.getBottomNeighbor() != null && wallFinderUnitRoom.getBottomNeighbor().getOwnerRoom().equals(r2)){
                     Vec2 wallBottomPos = new Vec2(wallFinderUnitRoom.getColNum(), wallFinderUnitRoom.getRowNum() - 0.5f);
+                    horizontalScale = new Vec2(1f, -0.3f); //vizszintes
                     edgeBetweenRoom.addNewWall(wallBottomPos, horizontalScale, wallFinderUnitRoom, wallFinderUnitRoom.getBottomNeighbor(),isten);
                 }
                 if(wallFinderUnitRoom.getLeftNeighbor() != null && wallFinderUnitRoom.getLeftNeighbor().getOwnerRoom().equals(r2)){
                     Vec2 wallLeftPos = new Vec2(wallFinderUnitRoom.getColNum() - 0.5f, wallFinderUnitRoom.getRowNum());
+                    verticalScale = new Vec2(-0.1f, 1f); //fuggoleges
                     edgeBetweenRoom.addNewWall(wallLeftPos, verticalScale, wallFinderUnitRoom, wallFinderUnitRoom.getLeftNeighbor() ,isten);
                 }
                 if(wallFinderUnitRoom.getRightNeighbor() != null && wallFinderUnitRoom.getRightNeighbor().getOwnerRoom().equals(r2)){
                     Vec2 wallRightPos = new Vec2(wallFinderUnitRoom.getColNum() + 0.5f, wallFinderUnitRoom.getRowNum());
+                    verticalScale = new Vec2(0.1f, 1f); //fuggoleges
                     edgeBetweenRoom.addNewWall(wallRightPos, verticalScale, wallFinderUnitRoom, wallFinderUnitRoom.getRightNeighbor(),isten);
                 }
             }

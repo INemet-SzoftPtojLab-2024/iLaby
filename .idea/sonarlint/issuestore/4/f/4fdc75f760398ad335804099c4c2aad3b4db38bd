@@ -1,0 +1,31 @@
+
+t	java:S135¨"YReduce the total number of break and continue statements in this loop to use at most one.(¾š÷¿ÿÿÿÿÿ
+n	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš
+[
+java:S1226Â"DIntroduce a new variable instead of reusing the parameter "edgelen".(‡È«Æ
+h
+java:S3776"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(Ð–ö¦
+<
+java:S1905`"&Remove this unnecessary cast to "int".(þ½Æå
+h
+java:S3776u"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(ÿëØµ
+R	java:S125„"<This block of commented-out lines of code should be removed.(ÐðþË
+R	java:S125‰"<This block of commented-out lines of code should be removed.(¾†¾°
+W	java:S125Ž"<This block of commented-out lines of code should be removed.(×îÀ£úÿÿÿÿ
+Q	java:S125›"<This block of commented-out lines of code should be removed.(¹‚„
+H
+java:S1481 ",Remove this unused "minSize" local variable.(§ª®çþÿÿÿÿ
+R	java:S125¦"<This block of commented-out lines of code should be removed.(·–¿…
+W	java:S125¯"<This block of commented-out lines of code should be removed.(ë²Åšúÿÿÿÿ
+W	java:S125º"<This block of commented-out lines of code should be removed.(Ï¯†Äùÿÿÿÿ
+C
+java:S1481Â",Remove this unused "edgelen" local variable.(‡È«Æ
+F	java:S106ç"+Replace this use of System.err by a logger.(•ªËßûÿÿÿÿ
+R	java:S125õ"<This block of commented-out lines of code should be removed.(ŒÆÊý
+h
+java:S3776"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(¼Ó¢n
+H
+java:S1128
+"-Remove this unused import 'java.util.Random'.(èøÉ›ùÿÿÿÿ
+O
+java:S1144Ó"9Remove this unused private "getSmallestNeighbour" method.(‰èÔL

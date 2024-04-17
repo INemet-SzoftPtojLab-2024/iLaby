@@ -110,7 +110,7 @@ public class Player extends Entity {
 
         //preload player sound
         AudioManager.preloadSound("./assets/audio/playersound.ogg");
-        AudioManager.preloadSound("./assets/audio/died.ogg");
+       AudioManager.preloadSound("./assets/audio/died.ogg");
     }
 
     public void isInSameRoom(Villain v) {
