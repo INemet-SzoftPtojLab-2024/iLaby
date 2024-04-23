@@ -5,6 +5,7 @@ import main.java.org.game.Graphics.Renderable;
 import main.java.org.game.Isten;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.items.Item;
+import main.java.org.items.usable_items.Gasmask;
 import main.java.org.linalg.Vec2;
 
 import java.awt.event.KeyEvent;
@@ -22,6 +23,7 @@ public class Inventory extends Updatable {
      */
     private int selectedSlot;
     private  Isten isten;
+    private boolean hasGasMask;
 
 
     public Inventory(int size){
@@ -32,6 +34,7 @@ public class Inventory extends Updatable {
         for (int i = 0; i < 5; i++) {storedItems.add(null);}
         for (int i = 0; i < 5; i++) {itemIcons.add(null);}
         selectedSlot=1;
+        hasGasMask=false;
     }
 
     @Override
@@ -127,6 +130,10 @@ public class Inventory extends Updatable {
         tmp.setVisibility(true);
         tmp.setSortingLayer(-69);
         isten.getRenderer().addRenderable(tmp);
+        if(item instanceof Gasmask)
+        {
+            hasGasMask=true;
+        }
     }
 
     /**
@@ -154,5 +161,56 @@ public class Inventory extends Updatable {
         if(selectedItem != null){
             selectedItem.use();
         }
+    }
+
+    public List<Item> getStoredItems() {
+        return storedItems;
+    }
+    public int getStoredItemsSize()
+    {
+        int count=0;
+        for(int i = 0; i < 5 ; i++)
+        {
+            if(storedItems.get(i) !=null)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+    public void dropAllItems(Isten isten)
+    {
+        itemIcons.clear();
+        storedItems.clear();
+        inventoryIcons.clear() ;
+        for (int i = 0; i < 5; i++) {storedItems.add(null);}
+        for (int i = 0; i < 5; i++) {itemIcons.add(null);}
+
+        selectedSlot=1;
+        ImageUI tmp=null;
+        for (int i = 0; i < 5; i++) {
+            if(storedItems.get(i)==null && i==0){
+
+                tmp=new ImageUI(getSlotLocation(i+1),new Vec2(iconSize,iconSize),"./assets/ui/inventorySlot_Selected.png");
+                itemIcons.set(i,tmp);
+                tmp.setAlignment(Renderable.CENTER,Renderable.BOTTOM);
+                tmp.setVisibility(true);
+                tmp.setSortingLayer(-69);
+                isten.getRenderer().addRenderable(tmp);
+            }
+            else if(storedItems.get(i)==null){
+                tmp=new ImageUI(getSlotLocation(i+1),new Vec2(iconSize,iconSize),"./assets/ui/inventorySlot.png");
+                itemIcons.set(i,tmp);
+                tmp.setAlignment(Renderable.CENTER,Renderable.BOTTOM);
+                tmp.setVisibility(true);
+                tmp.setSortingLayer(-69);
+                isten.getRenderer().addRenderable(tmp);
+            }
+        }
+
+    }
+    public boolean getExistenceOfGasMask()
+    {
+        return hasGasMask;
     }
 }

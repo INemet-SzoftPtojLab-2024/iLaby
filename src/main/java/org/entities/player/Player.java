@@ -10,6 +10,7 @@ import main.java.org.entities.Entity;
 
 import main.java.org.game.Isten;
 import main.java.org.game.Map.Room;
+import main.java.org.game.Map.RoomType;
 import main.java.org.game.Map.UnitRoom;
 import main.java.org.game.PlayerPrefs.PlayerPrefs;
 import main.java.org.game.UI.TimeCounter;
@@ -119,6 +120,7 @@ public class Player extends Entity {
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
+
         //called every frame
         if (alive) {
 
@@ -139,6 +141,36 @@ public class Player extends Entity {
                     if (currentRoom != null && currentRoom.equals(villain.getRoom())) {
                         alive = false;
                         AudioManager.closeSound(playerSound);
+                    }
+                    if(!isten.getInventory().getExistenceOfGasMask()) {
+                        if (currentRoom != null && currentRoom.getRoomType() == RoomType.GAS) {
+                            if (isten.getInventory().getStoredItemsSize() == 1) {
+                                isten.getInventory().getStoredItems().get(0).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(1).getPosition().x, currentRoom.getUnitRooms().get(1).getPosition().y));
+                                isten.getInventory().dropAllItems(isten);
+                            } else if (isten.getInventory().getStoredItemsSize() == 2) {
+                                isten.getInventory().getStoredItems().get(0).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(1).getPosition().x, currentRoom.getUnitRooms().get(1).getPosition().y));
+                                isten.getInventory().getStoredItems().get(1).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(2).getPosition().x, currentRoom.getUnitRooms().get(2).getPosition().y));
+                                isten.getInventory().dropAllItems(isten);
+                            } else if (isten.getInventory().getStoredItemsSize() == 3) {
+                                isten.getInventory().getStoredItems().get(0).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(1).getPosition().x, currentRoom.getUnitRooms().get(1).getPosition().y));
+                                isten.getInventory().getStoredItems().get(1).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(2).getPosition().x, currentRoom.getUnitRooms().get(2).getPosition().y));
+                                isten.getInventory().getStoredItems().get(2).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(3).getPosition().x, currentRoom.getUnitRooms().get(3).getPosition().y));
+                                isten.getInventory().dropAllItems(isten);
+                            } else if (isten.getInventory().getStoredItemsSize() == 4) {
+                                isten.getInventory().getStoredItems().get(0).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(1).getPosition().x, currentRoom.getUnitRooms().get(1).getPosition().y));
+                                isten.getInventory().getStoredItems().get(1).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(2).getPosition().x, currentRoom.getUnitRooms().get(2).getPosition().y));
+                                isten.getInventory().getStoredItems().get(2).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(3).getPosition().x, currentRoom.getUnitRooms().get(3).getPosition().y));
+                                isten.getInventory().getStoredItems().get(3).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(4).getPosition().x, currentRoom.getUnitRooms().get(4).getPosition().y));
+                                isten.getInventory().dropAllItems(isten);
+                            } else if (isten.getInventory().getStoredItemsSize() == 5) {
+                                isten.getInventory().getStoredItems().get(0).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(1).getPosition().x, currentRoom.getUnitRooms().get(1).getPosition().y));
+                                isten.getInventory().getStoredItems().get(1).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(2).getPosition().x, currentRoom.getUnitRooms().get(2).getPosition().y));
+                                isten.getInventory().getStoredItems().get(2).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(3).getPosition().x, currentRoom.getUnitRooms().get(3).getPosition().y));
+                                isten.getInventory().getStoredItems().get(3).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(4).getPosition().x, currentRoom.getUnitRooms().get(4).getPosition().y));
+                                isten.getInventory().getStoredItems().get(4).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(5).getPosition().x, currentRoom.getUnitRooms().get(5).getPosition().y));
+                                isten.getInventory().dropAllItems(isten);
+                            }
+                        }
                     }
                 }
             }

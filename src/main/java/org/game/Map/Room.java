@@ -28,20 +28,18 @@ public class Room extends Updatable implements Graph<Room>{
 
 
     public Room(int ID){
-        boolean startRoom=false;
         this.ID = ID;
         unitRooms = new ArrayList<>();
         adjacentRooms = new ArrayList<>();
-        for(UnitRoom unitRoom : unitRooms)
-        {
-            if (unitRoom.getPosition().x == 0 && unitRoom.getPosition().y == 0) {
-                startRoom=true;
-            }
-        }
         //hasDoorWith = new ArrayList<>();
-        roomType = RoomType.getRandomRoomtype(startRoom);
 
+        roomType = RoomType.getRandomRoomtype(false);
     }
+
+    public void setRoomType(boolean startRoom) {
+        roomType =  RoomType.getRandomRoomtype(startRoom);
+    }
+
     public  Room(){}
 
     @Override
@@ -93,7 +91,19 @@ public class Room extends Updatable implements Graph<Room>{
 
     public void setMaxPlayerCount(int maxPlayerCount) {this.maxPlayerCount = maxPlayerCount;}
     public RoomType getRoomType() {return roomType;}
-
-
-
+    public boolean isUnitRoomInSameRoomAsStartRoom(Vec2 position)
+    {
+        boolean isUnitRoomInRoom=false;
+        boolean isStartUnitRoomInRoom =false;
+        for(UnitRoom unitRoom1 : unitRooms)
+        {
+            if(unitRoom1.getPosition().x == position.x && unitRoom1.getPosition().y== position.y) {
+                isUnitRoomInRoom = true;
+            }
+            if (unitRoom1.getPosition().x == 0 && unitRoom1.getPosition().y == 0) {
+                isStartUnitRoomInRoom = true;
+            }
+        }
+        return isStartUnitRoomInRoom && isUnitRoomInRoom;
+    }
 }
