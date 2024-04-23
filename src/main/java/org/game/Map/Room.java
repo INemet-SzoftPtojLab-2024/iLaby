@@ -28,11 +28,18 @@ public class Room extends Updatable implements Graph<Room>{
 
 
     public Room(int ID){
+        boolean startRoom=false;
         this.ID = ID;
         unitRooms = new ArrayList<>();
         adjacentRooms = new ArrayList<>();
+        for(UnitRoom unitRoom : unitRooms)
+        {
+            if (unitRoom.getPosition().x == 0 && unitRoom.getPosition().y == 0) {
+                startRoom=true;
+            }
+        }
         //hasDoorWith = new ArrayList<>();
-        roomType = RoomType.getRandomRoomtype();
+        roomType = RoomType.getRandomRoomtype(startRoom);
 
     }
     public  Room(){}
