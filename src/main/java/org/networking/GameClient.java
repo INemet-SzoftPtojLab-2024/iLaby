@@ -2,6 +2,7 @@ package main.java.org.networking;
 
 import main.java.org.entities.villain.Villain;
 import main.java.org.game.Isten;
+import main.java.org.game.UI.TimeCounter;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 
@@ -76,7 +77,16 @@ public class GameClient extends Thread {
                 packet = new Packet06VillainMove(data);
                 handleVillainMove((Packet06VillainMove) packet);
                 break;
+            case TIMER:
+                packet = new Packet07Timer(data);
+                handleTimer((Packet07Timer)packet);
+
         }
+    }
+
+    private void handleTimer(Packet07Timer packet) {
+        double timeRemaining = packet.timeRemaining;
+        TimeCounter.setTimeRemaining(timeRemaining);
     }
 
     private void handleVillainMove(Packet06VillainMove packet) {

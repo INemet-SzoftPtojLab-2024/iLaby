@@ -12,6 +12,7 @@ import java.net.DatagramSocket;
 import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.*;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,9 @@ import main.java.org.networking.Packet.PacketTypes;
 
 public class GameServer extends Thread {
 
+    private ArrayList<ServerSideHandler> serverSideHandlers;
     private VillainHandler villainHandler;
+    private TimeHandler timeHandler;
     private DatagramSocket socket;
     Isten isten;
 
@@ -54,12 +57,22 @@ public class GameServer extends Thread {
     }
 
     private void startServer() {
-        villainHandler = new VillainHandler(this);
-        villainHandler.createVillains();
+        serverSideHandlers = new ArrayList<ServerSideHandler>();
+        timeHandler = new TimeHandler();
+        villainHandler = new VillainHandler();
+
+        serverSideHandlers.add(timeHandler);
+        serverSideHandlers.add(villainHandler);
+
+        for(ServerSideHandler serverSideHandler: serverSideHandlers) {
+            serverSideHandler.create(this);
+        }
     }
 
     public void updateServer(Isten isten, double deltaTime) {
-        villainHandler.updateVillains(isten, deltaTime);
+        for(ServerSideHandler serverSideHandler: serverSideHandlers) {
+            serverSideHandler.update(isten, deltaTime);
+        }
     }
 
     //Parse packet to string
@@ -102,11 +115,11 @@ public class GameServer extends Thread {
         this.addConnection(player,((Packet00Login)packet));
 
         //Handle creation of villains - when player joins, the server generated villains are generated on client as well
-        handleServerCreations(player);
+        handlePlayerJoinedData(player);
     }
 
-    private void handleServerCreations(PlayerMP player) {
-        villainHandler.sendVillainsToNewClient(player);
+    private void handlePlayerJoinedData(PlayerMP player) {
+        villainHandler.sendDataToClient(player);
     }
 
     //handle Move Packet
@@ -159,7 +172,8 @@ public class GameServer extends Thread {
 
     //Send data to all clients
     public void sendDataToAllClients(byte[] data) {
-        for(PlayerMP p: connectedPlayers) {
+        for(int i = 0; i < connectedPlayers.size(); i++) {
+            PlayerMP p = connectedPlayers.get(i);
             sendData(data, p.ipAddress, p.port);
         }
     }

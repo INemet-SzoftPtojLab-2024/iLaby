@@ -1,7 +1,6 @@
 package main.java.org.networking;
 
 public abstract class Packet {
-
     public static enum PacketTypes {
         INVALID(-1),
         LOGIN(00),
@@ -10,7 +9,8 @@ public abstract class Packet {
         ANIMATION(03),
         MAP(04),
         VILLAIN(05),
-        VILLAINMOVE(06);
+        VILLAINMOVE(06),
+        TIMER(07);
 
 
         private int packetId;

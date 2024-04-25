@@ -47,12 +47,22 @@ public class TimeCounter extends Updatable {
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-        if (timeRemaining > 0) {
-            timeRemaining -= deltaTime;
+        if(timeRemaining > 0) {
             if (!timeText.getText().equals(secondsToMMSS(timeRemaining))) {
                 timeText.setText(secondsToMMSS(timeRemaining));
             }
         }
+    }
+
+    //called from server
+    public static void tick(double deltaTime) {
+        if (timeRemaining > 0) {
+            timeRemaining -= deltaTime;
+        }
+    }
+
+    public static void setTimeRemaining(double t) {
+        timeRemaining = t;
     }
 
     @Override

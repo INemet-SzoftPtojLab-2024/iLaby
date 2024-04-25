@@ -9,16 +9,16 @@ import java.net.DatagramPacket;
 import java.util.ArrayList;
 
 //Handles villain creation and update for Server
-public class VillainHandler {
+public class VillainHandler extends ServerSideHandler {
 
-    Isten isten;
-    GameServer server;
     ArrayList<Villain> villains;
 
-    public VillainHandler(GameServer server) {
+    @Override
+    public void create(GameServer server) {
         this.server = server;
         this.isten = server.isten;
         villains = new ArrayList<>();
+        createVillains();
     }
 
     public void createVillains() {
@@ -44,7 +44,8 @@ public class VillainHandler {
 
     }
 
-    public void sendVillainsToNewClient(PlayerMP client) {
+    @Override
+    public void sendDataToClient(PlayerMP client) {
         for(int i = 0; i < villains.size(); i++) {
             Packet05Villain packet = new Packet05Villain(villains.get(i).getVillainName(),
                     villains.get(i).getPosition(),
@@ -53,7 +54,14 @@ public class VillainHandler {
         }
     }
 
-    public void updateVillains(Isten isten, double deltaTime) {
+    @Override
+    public void sendDataToAllClients(Packet packet) {
+        //send to every client
+        packet.writeData(server);
+    }
+
+    @Override
+    public void update(Isten isten, double deltaTime) {
 
         for(Villain villain: villains) {
             if(villain.getVillainCollider() == null) continue;
@@ -61,8 +69,7 @@ public class VillainHandler {
             Packet06VillainMove packet = new Packet06VillainMove(villain.getVillainName(),
                     villain.getVillainCollider().getPosition().x,
                     villain.getVillainCollider().getPosition().y);
-            //send to every client
-            packet.writeData(server);
+            sendDataToAllClients(packet);
         }
     }
 
