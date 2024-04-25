@@ -33,7 +33,7 @@ public class PlayerMP extends Player {
 
     @Override
     protected void sendAnimationData(Isten isten) {
-        Packet03Animation animationPacket = new Packet03Animation(getPlayerName().getText(), activeImage);
+        Packet03Animation animationPacket = new Packet03Animation(getPlayerName().getText(), getActiveImage());
         animationPacket.writeData(isten.getSocketClient());
     }
     private void sendMoveData(Isten isten) {

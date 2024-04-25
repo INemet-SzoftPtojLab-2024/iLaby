@@ -102,7 +102,7 @@ public class Isten {
 
         //ServerUpdate
         if(socketServer != null) {
-            socketServer.updateServer();
+            socketServer.updateServer(this, deltaTime);
         }
 
         //calculate render positions, check for UI inputs and then render
@@ -159,16 +159,7 @@ public class Isten {
         updatables.add(map);
         updatables.add(new ChestManager(75));//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
 
-        updatables.add(new Villain("Gajdos",  "./assets/villain/villain1.png"));
-        updatables.add(new Villain("Csuka",  "./assets/villain/villain2.png"));
-        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
-        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
-        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
-        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
-        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
-        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
-        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
-        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+
         updatables.add(new TimeCounter());
         updatables.add(new Help());
         updatables.add(new GameMenu());
@@ -252,5 +243,9 @@ public class Isten {
     }
     public GameClient getSocketClient() {
         return socketClient;
+    }
+
+    public ArrayList<Updatable> getUpdatables() {
+        return updatables;
     }
 }

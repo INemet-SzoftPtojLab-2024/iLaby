@@ -22,9 +22,16 @@ public class VillainHandler {
     }
 
     public void createVillains() {
-        villains.add(new Villain("Gonosz1", new Vec2(8,7), "./assets/villain/villain1.png"));
-        villains.add(new Villain("Gonosz2", new Vec2(5,5), "./assets/villain/villain2.png"));
-        villains.add(new Villain("Gonosz3", new Vec2(3,3), "./assets/villain/villain3.png"));
+        villains.add(new Villain("Gajdos",  "./assets/villain/villain1.png"));
+        villains.add(new Villain("Csuka",  "./assets/villain/villain2.png"));
+        villains.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        villains.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        villains.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        villains.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        villains.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        villains.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        villains.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        villains.add(new Villain("Villain",  "./assets/villain/villain3.png"));
 
         for(Villain villain: villains) {
             Collider villainCollider;
@@ -32,6 +39,7 @@ public class VillainHandler {
             villainCollider = new Collider(villain.getPosition(), playerScale);
             villainCollider.setMovability(true);
             villain.setVillainCollider(isten, villainCollider);
+            villain.setPosition(new Vec2(5,2));
         }
 
     }
@@ -45,11 +53,11 @@ public class VillainHandler {
         }
     }
 
-    public void updateVillains() {
+    public void updateVillains(Isten isten, double deltaTime) {
 
         for(Villain villain: villains) {
             if(villain.getVillainCollider() == null) continue;
-            villain.move();
+            villain.move(isten, deltaTime);
             Packet06VillainMove packet = new Packet06VillainMove(villain.getVillainName(),
                     villain.getVillainCollider().getPosition().x,
                     villain.getVillainCollider().getPosition().y);

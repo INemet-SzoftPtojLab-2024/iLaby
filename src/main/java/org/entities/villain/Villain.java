@@ -20,6 +20,7 @@ import java.util.Random;
  * The villain class, makes almost everything related to the villain.
  */
 public class Villain extends Entity {
+    static ArrayList<Room> roomsWithVillains = new ArrayList<>();
     Image villainImage;
     Collider villainCollider;
     Text villainName;
@@ -29,6 +30,9 @@ public class Villain extends Entity {
     String imagePath;
     float velocity;
     double sum;
+    Room room;
+    UnitRoom currentUnitRoom;
+    UnitRoom prevUnitRoom;
 
     public Villain() {
         villainCollider = null;
@@ -40,6 +44,10 @@ public class Villain extends Entity {
         sum = 0.0;
         room = null;
     }
+    public Villain(String name, String iP) {
+        this(name, new Vec2(0,0), iP);
+    }
+
     public Villain(String name, Vec2 pos, String iP) {
         villainCollider = null;
         villainImage = null;
@@ -91,12 +99,17 @@ public class Villain extends Entity {
     }
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
+
+
+    }
+
+    public void move(Isten isten, double deltaTime) {
         sum += deltaTime;
         Vec2 playerPosition = villainCollider.getPosition();
         Random random = new Random();
-        villainImage.setPosition(playerPosition);
-        villainName.setPosition(Vec2.sum(playerPosition, new Vec2(0, (float) 0.5)));
-
+        if(villainImage != null) villainImage.setPosition(playerPosition);
+        if(villainName != null) villainName.setPosition(Vec2.sum(playerPosition, new Vec2(0, (float) 0.5)));
+        if(villainCollider == null) return;
 
         if (sum < 2) return;
         Map map = isten.getMap();
@@ -197,15 +210,37 @@ public class Villain extends Entity {
                     break;
             }
         }
-
     }
+
+    public Vec2 randomPositions(ArrayList<Room> rooms) {
+        Collections.shuffle(rooms);
+        Random rand = new Random();
+
+        Room selectedRoom;
+
+        do {
+            selectedRoom = rooms.get(rand.nextInt(rooms.size() - 1));
+        } while (roomsWithVillains.contains(selectedRoom) || isStartUnitRoomInRoom(selectedRoom));
+
+        UnitRoom selectedUnitRoom = selectedRoom.getUnitRooms().get(rand.nextInt(selectedRoom.getUnitRooms().size()));
+        roomsWithVillains.add(selectedRoom);
+        room = selectedRoom;
+        return new Vec2(selectedUnitRoom.getPosition().x, selectedUnitRoom.getPosition().y);
+    }
+
+    boolean isStartUnitRoomInRoom(Room room) {
+        for (UnitRoom unitRoom : room.getUnitRooms()) {
+            if (unitRoom.getPosition().x == 0 && unitRoom.getPosition().y == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void onDestroy() {
     }
 
-    @Override
-    public void onDestroy() {
-    }
 
     public String getVillainName() {
         return villainName.getText();
@@ -230,5 +265,9 @@ public class Villain extends Entity {
 
     public Room getRoom() {
         return room;
+    }
+
+    public void setPosition(Vec2 vec2) {
+        position = vec2;
     }
 }

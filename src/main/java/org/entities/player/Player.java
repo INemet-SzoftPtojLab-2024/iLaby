@@ -166,18 +166,18 @@ public class Player extends Entity {
             if (isten.getInputHandler().isKeyDown(KeyEvent.VK_SHIFT)) run *= 2;//Shift is run
 
             if(localPlayer) {
-            if (w) {
-                playerCollider.getVelocity().y = 2 * run;
-            } else if (!w) playerCollider.getVelocity().y = 0;
-            if (a) {
-                playerCollider.getVelocity().x = -2 * run;
-            } else if (!a) playerCollider.getVelocity().x = 0;
-            if (s) {
-                playerCollider.getVelocity().y = -2 * run;
-            } else if (!s && !w) playerCollider.getVelocity().y = 0;
-            if (d) {
-                playerCollider.getVelocity().x = 2 * run;
-            } else if (!d && !a) playerCollider.getVelocity().x = 0;
+                if (w) {
+                    playerCollider.getVelocity().y = 2 * run;
+                } else if (!w) playerCollider.getVelocity().y = 0;
+                if (a) {
+                    playerCollider.getVelocity().x = -2 * run;
+                } else if (!a) playerCollider.getVelocity().x = 0;
+                if (s) {
+                    playerCollider.getVelocity().y = -2 * run;
+                } else if (!s && !w) playerCollider.getVelocity().y = 0;
+                if (d) {
+                    playerCollider.getVelocity().x = 2 * run;
+                } else if (!d && !a) playerCollider.getVelocity().x = 0;
             }
             //animation
 

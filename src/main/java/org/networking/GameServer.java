@@ -58,8 +58,8 @@ public class GameServer extends Thread {
         villainHandler.createVillains();
     }
 
-    public void updateServer() {
-        villainHandler.updateVillains();
+    public void updateServer(Isten isten, double deltaTime) {
+        villainHandler.updateVillains(isten, deltaTime);
     }
 
     //Parse packet to string
