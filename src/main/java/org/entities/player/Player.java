@@ -1,6 +1,7 @@
 package main.java.org.entities.player;
 
 
+import main.java.org.entities.villain.Villain;
 import main.java.org.game.Audio.AudioManager;
 import main.java.org.game.Audio.Sound;
 import main.java.org.game.Graphics.*;
@@ -12,6 +13,10 @@ import main.java.org.game.UI.TimeCounter;
 import main.java.org.game.physics.Collider;
 import main.java.org.linalg.Vec2;
 import main.java.org.networking.Packet03Animation;
+import main.java.org.game.Map.Room;
+import main.java.org.game.Map.UnitRoom;
+import main.java.org.game.PlayerPrefs.PlayerPrefs;
+import main.java.org.game.updatable.Updatable;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -19,29 +24,35 @@ import java.util.ArrayList;
 /**
  * The player class, makes almost everything related to the player.
  */
-public abstract class Player extends Entity {
+public class Player extends Entity {
 
-    protected Collider playerCollider;
-    protected ArrayList<Image> playerImage;
-    protected ImageUI death;
-    protected int activeImage;
-    protected float time;
-    protected Text playerName;
+    Collider playerCollider;
+    ArrayList<Image> playerImage;
+    ImageUI death;
+    int activeImage;
+    TextUI motivational;
+    float time;
+    Text playerName;
     boolean alive;  //Bool variable, to store status of player: ded or alive
 
     Sound playerSound = null;
+
     protected Vec2 spawnPosition;
     protected int run = 1;
     public boolean localPlayer = false;
+
     public Player() {
         playerCollider = null;
         playerImage = null;
         death = null;
+        motivational = null;
         activeImage = 0;
         time = 0.0f;
-        playerName = null;
+        playerName = new Text(PlayerPrefs.getString("name"), new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 0, 0, 255);
+        playerName.setShadowOn(false);
         alive = true;
         spawnPosition = new Vec2(0,0);
+
     }
 
     public Player(String name) {
@@ -49,6 +60,7 @@ public abstract class Player extends Entity {
         playerImage = null;
         death = null;
         activeImage = 0;
+        motivational = null;
         time = 0.0f;
         playerName = new Text(name, new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 0, 0, 255);
         playerName.setShadowOn(false);
@@ -62,35 +74,41 @@ public abstract class Player extends Entity {
         this.spawnPosition.x = spawnPosition.x;
         this.spawnPosition.y = spawnPosition.y;
     }
-
     @Override
     public void onStart(Isten isten) {
         //called when the player is initialized
 
         Vec2 playerScale = new Vec2(0.5f, 0.5f);
 
-        playerCollider = new Collider(new Vec2(spawnPosition.x, spawnPosition.y), playerScale);
+        playerCollider = new Collider(new Vec2(0, 0), playerScale);
         playerCollider.setMovability(true);
         isten.getPhysicsEngine().addCollider(playerCollider);//register collider in the physics engine
 
         playerImage = new ArrayList<>();
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_right1.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_right2.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_left1.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_left2.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character_ded.png"));
-
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right1.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right2.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left1.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left2.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_ded.png"));
         death = new ImageUI(new Vec2(0, 0), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/character/ded.png");
         death.setSortingLayer(-70);
         death.setVisibility(false);
         death.setAlignment(Renderable.CENTER, Renderable.CENTER);
         isten.getRenderer().addRenderable(death);
 
+        motivational = new TextUI("Try again loser.", new Vec2(0, -170), 26, 200, 200, 200);
+        motivational.setSortingLayer(-71);
+        motivational.setVisibility(false);
+        motivational.setAlignment(Renderable.CENTER, Renderable.CENTER);
+        isten.getRenderer().addRenderable(motivational);
+
+
         for (Image im : playerImage) {
             im.setSortingLayer(-69);
             im.setVisibility(false);
             isten.getRenderer().addRenderable(im);//register images in the renderer
         }
+        playerImage.get(playerImage.size() - 1).setSortingLayer(-67);
 
         activeImage = 1;
         playerImage.get(activeImage).setVisibility(true);
@@ -109,10 +127,35 @@ public abstract class Player extends Entity {
         AudioManager.preloadSound("./assets/audio/died.ogg");
     }
 
+    public void isInSameRoom(Villain v) {
+
+    }
+
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
         //called every frame
         if (alive) {
+
+            Room currentRoom = null;
+            for (Updatable u : isten.getUpdatables()) {
+                if (u.getClass().equals(Villain.class)) {
+                    for (Room room : isten.getMap().getRooms()) {
+                        for (UnitRoom unitRoom : room.getUnitRooms()) {
+                            if (playerCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
+                                    playerCollider.getPosition().x <= unitRoom.getPosition().x + 0.5 &&
+                                    playerCollider.getPosition().y >= unitRoom.getPosition().y - 0.5 &&
+                                    playerCollider.getPosition().y <= unitRoom.getPosition().y + 0.5) {
+                                currentRoom = room;
+                            }
+                        }
+                    }
+                    Villain villain = (Villain) u;
+                    if (currentRoom != null && currentRoom.equals(villain.getRoom())) {
+                        alive = false;
+                        AudioManager.closeSound(playerSound);
+                    }
+                }
+            }
             //move the character
             run = 1;
             boolean w = isten.getInputHandler().isKeyDown(KeyEvent.VK_W);
@@ -123,21 +166,19 @@ public abstract class Player extends Entity {
             if (isten.getInputHandler().isKeyDown(KeyEvent.VK_SHIFT)) run *= 2;//Shift is run
 
             if(localPlayer) {
-                if (w) {
-                    playerCollider.getVelocity().y = 2 * run;
-                } else if (!w) playerCollider.getVelocity().y = 0;
-                if (a) {
-                    playerCollider.getVelocity().x = -2 * run;
-                } else if (!a) playerCollider.getVelocity().x = 0;
-                if (s) {
-                    playerCollider.getVelocity().y = -2 * run;
-                } else if (!s && !w) playerCollider.getVelocity().y = 0;
-                if (d) {
-                    playerCollider.getVelocity().x = 2 * run;
-                } else if (!d && !a) playerCollider.getVelocity().x = 0;
+            if (w) {
+                playerCollider.getVelocity().y = 2 * run;
+            } else if (!w) playerCollider.getVelocity().y = 0;
+            if (a) {
+                playerCollider.getVelocity().x = -2 * run;
+            } else if (!a) playerCollider.getVelocity().x = 0;
+            if (s) {
+                playerCollider.getVelocity().y = -2 * run;
+            } else if (!s && !w) playerCollider.getVelocity().y = 0;
+            if (d) {
+                playerCollider.getVelocity().x = 2 * run;
+            } else if (!d && !a) playerCollider.getVelocity().x = 0;
             }
-
-
             //animation
 
             time += deltaTime;
@@ -185,6 +226,8 @@ public abstract class Player extends Entity {
                 activeImage = 4;
                 playerImage.get(activeImage).setVisibility(true);
                 death.setVisibility(true);
+                motivational.setVisibility(true);
+
             }
         }
         death.setScale(new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()));

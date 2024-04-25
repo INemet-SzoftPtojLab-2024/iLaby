@@ -8,18 +8,21 @@ import main.java.org.entities.player.Player;
 
 import main.java.org.game.Input.Input;
 import main.java.org.game.Map.Map;
-import main.java.org.game.UI.GameMenu;
-import main.java.org.game.UI.Help;
-import main.java.org.game.UI.TimeCounter;
+import main.java.org.game.UI.*;
 import main.java.org.game.physics.PhysicsEngine;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
+
+import main.java.org.items.ChestManager;
+import main.java.org.items.ItemManager;
+
 import main.java.org.networking.GameClient;
 import main.java.org.networking.GameServer;
 import main.java.org.networking.Packet00Login;
 import main.java.org.networking.PlayerMP;
 
 import javax.swing.*;
+
 import java.util.ArrayList;
 
 /**
@@ -27,33 +30,37 @@ import java.util.ArrayList;
  */
 public class Isten {
     private final PhysicsEngine physicsEngine;
-
-    private final GameRenderer renderer;
-
-    private final ArrayList<Updatable> updatables;
+    protected final GameRenderer renderer;
+    protected final ArrayList<Updatable> updatables;
     private final ArrayList<Updatable> pendingAddedUpdatables;
     private final ArrayList<Updatable> pendingRemovedUpdatables;
 
+    private Map map;
+    private Inventory inventory;
     private final Input inputHandler;
+    private final ItemManager itemManager;
 
     private final Camera camera;
+
     private GameClient socketClient;
     private GameServer socketServer;
 
     private PlayerMP player;
-
     /**
      * Constructor for Isten.
      * Initializes the physics engine, game renderer, and list of updatables.
      */
     public Isten() {
-        inputHandler=new Input();
-        camera=new Camera();
-        physicsEngine=new PhysicsEngine();
-        renderer=new GameRenderer(camera, inputHandler);
-        updatables=new ArrayList<>();
-        pendingAddedUpdatables=new ArrayList<>();
-        pendingRemovedUpdatables=new ArrayList<>();
+        inventory=new Inventory(5);
+        map=new Map(100, 100, 10);
+        itemManager=new ItemManager();
+        inputHandler = new Input();
+        camera = new Camera();
+        physicsEngine = new PhysicsEngine();
+        renderer = new GameRenderer(camera, inputHandler);
+        updatables = new ArrayList<>();
+        pendingAddedUpdatables = new ArrayList<>();
+        pendingRemovedUpdatables = new ArrayList<>();
     }
 
     /**
@@ -70,9 +77,8 @@ public class Isten {
 
 
         //remove pending updatables from updatables
-        for(Updatable u : pendingRemovedUpdatables)
-            if(!u.isDestroyed())
-            {
+        for (Updatable u : pendingRemovedUpdatables)
+            if (!u.isDestroyed()) {
                 u.setDestroyedTrue();
                 u.onDestroy();
             }
@@ -84,16 +90,15 @@ public class Isten {
         pendingAddedUpdatables.clear();
 
         //check if updatable has been initialized
-        for(Updatable u : updatables)
-            if(!u.isInitialized())
-            {
+        for (Updatable u : updatables)
+            if (!u.isInitialized()) {
                 u.setInitializedTrue();
                 u.onStart(this);
             }
 
         //call onUpdates
-        for(Updatable u : updatables)
-            u.onUpdate(this,deltaTime);
+        for (Updatable u : updatables)
+            u.onUpdate(this, deltaTime);
 
         //ServerUpdate
         if(socketServer != null) {
@@ -146,16 +151,27 @@ public class Isten {
     /**
      * Method to add updatable objects to the game.
      */
-    protected void addUpdatables()
-    {
+    protected void addUpdatables() {
+
         updatables.add(player);
-        //updatables.add(new Villain("Gonosz1", new Vec2(8,7), "./assets/villain/villain1.png"));
-        //updatables.add(new Villain("Gonosz2", new Vec2(5,5), "./assets/villain/villain2.png"));
-        //updatables.add(new Villain("Gonosz3", new Vec2(3,3), "./assets/villain/villain3.png"));
+        updatables.add(itemManager);
+        updatables.add(inventory);
+        updatables.add(map);
+        updatables.add(new ChestManager(75));//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
+
+        updatables.add(new Villain("Gajdos",  "./assets/villain/villain1.png"));
+        updatables.add(new Villain("Csuka",  "./assets/villain/villain2.png"));
+        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
         updatables.add(new TimeCounter());
         updatables.add(new Help());
         updatables.add(new GameMenu());
-        updatables.add(new Map(10, 10, 15));
     }
 
     /**
@@ -167,23 +183,37 @@ public class Isten {
         return renderer;
     }
 
-    /** returns the physics engine of the isten */
-    public PhysicsEngine getPhysicsEngine(){return physicsEngine;}
+    /**
+     * returns the physics engine of the isten
+     */
+    public PhysicsEngine getPhysicsEngine() {
+        return physicsEngine;
+    }
 
-    /** returns the inputhandler of the isten */
-    public Input getInputHandler(){return inputHandler;}
+    /**
+     * returns the inputhandler of the isten
+     */
+    public Input getInputHandler() {
+        return inputHandler;
+    }
 
-    /** returns the camera of the isten */
-    public Camera getCamera(){return this.camera;}
+    /**
+     * returns the camera of the isten
+     */
+    public Camera getCamera() {
+        return this.camera;
+    }
 
+    public Player getPlayer(){return player;}
+    public Inventory getInventory(){return inventory;}
+    public ItemManager getItemManager(){return itemManager;}
+    public Map getMap(){return map;}
 
-    public void addUpdatable(Updatable u)
-    {
+    public void addUpdatable(Updatable u) {
         pendingAddedUpdatables.add(u);
     }
 
-    public void removeUpdatable(Updatable u)
-    {
+    public void removeUpdatable(Updatable u) {
         pendingRemovedUpdatables.add(u);
     }
 
@@ -223,5 +253,4 @@ public class Isten {
     public GameClient getSocketClient() {
         return socketClient;
     }
-
 }
