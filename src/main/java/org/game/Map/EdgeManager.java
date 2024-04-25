@@ -74,6 +74,7 @@ public class EdgeManager {
     public void updateEdgesAfterMerge(Room remaining, Room deleted){ //mergenel hasznaljuk csak
         //r1 szoba marad
         //r2 torlodik (ahol szerepl, ki kell cserelni r1-re)
+        ArrayList<EdgeBetweenRooms> edgeToRemove = new ArrayList<>();
         for(EdgeBetweenRooms edgeBetweenRoom : roomEdges){
             if(edgeBetweenRoom.getNodeRooms().contains(deleted)){
 
@@ -93,13 +94,16 @@ public class EdgeManager {
                     }
                     isten.getPhysicsEngine().removeColliderGroup(edgeBetweenRoom.getColliderGroup().id);
                     edgeBetweenRoom.getColliderGroup().getColliders().clear();
-
+                    edgeToRemove.add(edgeBetweenRoom);
                 }
                 else{
                     edgeBetweenRoom.getNodeRooms().remove(deleted);
                     edgeBetweenRoom.getNodeRooms().add(remaining);
                 }
             }
+        }
+        for(EdgeBetweenRooms edgeToDelete : edgeToRemove){
+            roomEdges.remove(edgeToDelete);
         }
 
     }
@@ -116,12 +120,13 @@ public class EdgeManager {
         // mivel meg semmi sincs atallitva ezert az split elotti edgeklesznek ervenyben
         ArrayList<EdgeBetweenRooms> edgesToAdd = new ArrayList<>();
         for(EdgeBetweenRooms checkEdge : roomEdges){
-            boolean wasInOldRoom = false;
-            boolean wasInNewRoom = false;
+
             if(checkEdge.getNodeRooms().contains(oldRoom)) {
                 //ha az edge a ket vizsgalt szoba kozott van, akkor nem kell tovabb vizsgalodni, mert ezt mar beallitottuk az addolasnal
                 if (!getEdgeBetweenRooms(newRoom, oldRoom).equals(checkEdge)) {
                     //az edge falainak a unitroomjaitnak az ownerroomjait nezzuk
+                    boolean wasInOldRoom = false;
+                    boolean wasInNewRoom = false;
                     for (EdgePiece checkEdgeWall : checkEdge.getWalls()) {
                         if (checkEdgeWall.getUnitRoomsBetween().get(0).getOwnerRoom().getID() == oldRoomID
                                 || checkEdgeWall.getUnitRoomsBetween().get(1).getOwnerRoom().getID() == oldRoomID)
@@ -161,7 +166,7 @@ public class EdgeManager {
                         EdgeBetweenRooms edgeToAdd = new EdgeBetweenRooms(newRoom, oldRoomNodeRoom);
                         edgesToAdd.add(edgeToAdd);
                         //uj ajto ha deleteltuk az oldroombol
-                        if (doorRemoved) addDoor(getEdgeBetweenRooms(oldRoom, oldRoomNodeRoom));
+                        if(!getEdgeBetweenRooms(oldRoom, oldRoomNodeRoom).hasDoor()) addDoor(getEdgeBetweenRooms(oldRoom, oldRoomNodeRoom));
 
                     } else if (!wasInOldRoom && wasInNewRoom) { //na csak az ujban --> csak a noderoom valtozik regirol az ujra
                         checkEdge.getNodeRooms().remove(oldRoom);
@@ -215,6 +220,7 @@ public class EdgeManager {
             System.out.println("door is no edge between the given rooms");
             return;
         }
+        if(edge.hasDoor()) return;
 
         ArrayList<Integer> random = new ArrayList<>();
         for(int i = 0; i < edge.getWalls().size(); i++){

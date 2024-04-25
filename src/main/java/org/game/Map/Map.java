@@ -45,10 +45,10 @@ public class Map extends Updatable {
     public void onUpdate(Isten isten, double deltaTime) {
         //for testing
         delta += deltaTime;
-        if (delta > 5) {
+        if (delta > 3) {
 
             //TESTCASE 1:::
-            if(cnt%3==0){
+            if(cnt%4==0){
                 addDoorToEdgeWithoutDoor(isten);
                 System.out.println("ajtoaddolas tortent");
             }
@@ -57,15 +57,16 @@ public class Map extends Updatable {
                 System.out.println("ajtokivetel tortent");
             }
             //TESTCASE 2:
-            //mergeRooms(rooms.get(0), rooms.get(0).getPhysicallyAdjacentRooms().get(0), isten);
+            //if(cnt%7==0) mergeRooms(rooms.get(0), rooms.get(0).getPhysicallyAdjacentRooms().get(0), isten);
             //TESTCASE 3:
-            /*for(Room splittable : rooms){
-                if(splitRooms(splittable,isten))
-                {
-                    System.out.println("sikerult a split");
-                    break;
+            if((cnt+2)%4==0) {
+                for (Room splittable : rooms) {
+                    if (splitRooms(splittable, isten)) {
+                        System.out.println("sikerult a split");
+                        break;
+                    }
                 }
-            }*/
+            }
             cnt++;
             delta = 0;
         }
@@ -123,7 +124,8 @@ public class Map extends Updatable {
             }
             for (UnitRoom addUnitRoomToNewRoom : addableUnitRooms) {
                 //kivesszük az előző szobából a  unitroomot
-                addUnitRoomToNewRoom.getOwnerRoom().getUnitRooms().remove(addUnitRoomToNewRoom);
+                r1.getUnitRooms().remove(addUnitRoomToNewRoom);
+               // addUnitRoomToNewRoom.getOwnerRoom().getUnitRooms().remove(addUnitRoomToNewRoom);
                 addUnitRoomToNewRoom.setOwnerRoom(newRoom);
                 //hozzáadjuk az új szobához a unitroomot
                 newRoom.getUnitRooms().add(addUnitRoomToNewRoom);
