@@ -34,8 +34,14 @@ public class Player extends Entity {
     float time;
     Text playerName;
     boolean alive;  //Bool variable, to store status of player: ded or alive
-
     Sound playerSound = null;
+    double faintingTime;
+    int setPlayerImage;
+    boolean isFainted;
+    float speed;
+    int stillImage1;
+    int stillImage2;
+
 
     public Player() {
         playerCollider = null;
@@ -47,6 +53,12 @@ public class Player extends Entity {
         playerName = new Text(PlayerPrefs.getString("name"), new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 0, 0, 255);
         playerName.setShadowOn(false);
         alive = true;
+        faintingTime = 0;
+        setPlayerImage = 0;
+        isFainted = false;
+        speed = 2;
+        stillImage1 = 0;
+        stillImage2 = 0;
     }
 
     public Player(String name) {
@@ -59,6 +71,12 @@ public class Player extends Entity {
         playerName = new Text(name, new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 0, 0, 255);
         playerName.setShadowOn(false);
         alive = true;
+        faintingTime = 0;
+        setPlayerImage = 0;
+        isFainted=false;
+        speed = 2;
+        stillImage1 =0;
+        stillImage2 =0;
     }
 
     @Override
@@ -117,10 +135,62 @@ public class Player extends Entity {
     public void isInSameRoom(Villain v) {
 
     }
-
+    public void setImageToFainted(Isten isten)
+    {
+        for (Image im : playerImage) {
+            isten.getRenderer().deleteRenderable(im);
+        }
+        Vec2 faintedScale = new Vec2(0.6f, 0.6f);
+        playerImage.set(0, new Image(new Vec2(), faintedScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right1_fainted.png"));
+        playerImage.set(1, new Image(new Vec2(), faintedScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right2_fainted1.png"));
+        playerImage.set(2, new Image(new Vec2(), faintedScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left1_fainted.png"));
+        playerImage.set(3, new Image(new Vec2(), faintedScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left2_fainted1.png"));
+        playerImage.set(4, new Image(new Vec2(), new Vec2(0.5f, 0.5f), "./assets/character/character"+PlayerPrefs.getInt("skin")+"_ded.png"));
+        playerImage.add( new Image(new Vec2(), faintedScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right2_fainted2.png"));
+        playerImage.add( new Image(new Vec2(), faintedScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left2_fainted2.png"));
+        for (Image im : playerImage) {
+            im.setSortingLayer(-69);
+            im.setVisibility(false);
+            isten.getRenderer().addRenderable(im);
+        }
+        playerImage.get(playerImage.size() - 1).setSortingLayer(-67);
+        playerImage.get(activeImage).setVisibility(true);
+    }
+    public void setImageToNormal(Isten isten)
+    {
+        for (Image im : playerImage) {
+            isten.getRenderer().deleteRenderable(im);
+        }
+        Vec2 playerScale = new Vec2(0.5f, 0.5f);
+        playerImage.set(0, new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right1.png"));
+        playerImage.set(1,new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right2.png"));
+        playerImage.set(2,new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left1.png"));
+        playerImage.set(3,new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left2.png"));
+        playerImage.set(4,new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_ded.png"));
+        for (Image im : playerImage) {
+            im.setSortingLayer(-69);
+            im.setVisibility(false);
+            isten.getRenderer().addRenderable(im);
+        }
+        playerImage.get(playerImage.size() - 1).setSortingLayer(-67);
+        playerImage.get(activeImage).setVisibility(true);
+    }
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-
+        if(isFainted)
+        {
+            if(faintingTime > 15 )
+            {
+                faintingTime=0;
+                setImageToNormal(isten);
+                isFainted = false;
+                setPlayerImage++;
+                speed=2;
+            }
+            else{
+                faintingTime+=deltaTime;
+            }
+        }
         //called every frame
         if (alive) {
 
@@ -144,32 +214,20 @@ public class Player extends Entity {
                     }
                     if(!isten.getInventory().getExistenceOfGasMask()) {
                         if (currentRoom != null && currentRoom.getRoomType() == RoomType.GAS) {
-                            if (isten.getInventory().getStoredItemsSize() == 1) {
-                                isten.getInventory().getStoredItems().get(0).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(1).getPosition().x, currentRoom.getUnitRooms().get(1).getPosition().y));
-                                isten.getInventory().dropAllItems(isten);
-                            } else if (isten.getInventory().getStoredItemsSize() == 2) {
-                                isten.getInventory().getStoredItems().get(0).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(1).getPosition().x, currentRoom.getUnitRooms().get(1).getPosition().y));
-                                isten.getInventory().getStoredItems().get(1).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(2).getPosition().x, currentRoom.getUnitRooms().get(2).getPosition().y));
-                                isten.getInventory().dropAllItems(isten);
-                            } else if (isten.getInventory().getStoredItemsSize() == 3) {
-                                isten.getInventory().getStoredItems().get(0).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(1).getPosition().x, currentRoom.getUnitRooms().get(1).getPosition().y));
-                                isten.getInventory().getStoredItems().get(1).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(2).getPosition().x, currentRoom.getUnitRooms().get(2).getPosition().y));
-                                isten.getInventory().getStoredItems().get(2).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(3).getPosition().x, currentRoom.getUnitRooms().get(3).getPosition().y));
-                                isten.getInventory().dropAllItems(isten);
-                            } else if (isten.getInventory().getStoredItemsSize() == 4) {
-                                isten.getInventory().getStoredItems().get(0).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(1).getPosition().x, currentRoom.getUnitRooms().get(1).getPosition().y));
-                                isten.getInventory().getStoredItems().get(1).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(2).getPosition().x, currentRoom.getUnitRooms().get(2).getPosition().y));
-                                isten.getInventory().getStoredItems().get(2).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(3).getPosition().x, currentRoom.getUnitRooms().get(3).getPosition().y));
-                                isten.getInventory().getStoredItems().get(3).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(4).getPosition().x, currentRoom.getUnitRooms().get(4).getPosition().y));
-                                isten.getInventory().dropAllItems(isten);
-                            } else if (isten.getInventory().getStoredItemsSize() == 5) {
-                                isten.getInventory().getStoredItems().get(0).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(1).getPosition().x, currentRoom.getUnitRooms().get(1).getPosition().y));
-                                isten.getInventory().getStoredItems().get(1).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(2).getPosition().x, currentRoom.getUnitRooms().get(2).getPosition().y));
-                                isten.getInventory().getStoredItems().get(2).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(3).getPosition().x, currentRoom.getUnitRooms().get(3).getPosition().y));
-                                isten.getInventory().getStoredItems().get(3).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(4).getPosition().x, currentRoom.getUnitRooms().get(4).getPosition().y));
-                                isten.getInventory().getStoredItems().get(4).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(5).getPosition().x, currentRoom.getUnitRooms().get(5).getPosition().y));
-                                isten.getInventory().dropAllItems(isten);
+                            if(setPlayerImage % 2 == 0)
+                            {
+                                setImageToFainted(isten);
+                                isFainted=true;
+                                setPlayerImage++;
+                                speed = 1;
                             }
+                            for(int i = 0; i< 5; i++)
+                            {
+                                if(isten.getInventory().getStoredItems().get(i) != null) {
+                                    isten.getInventory().getStoredItems().get(i).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(i+1).getPosition().x, currentRoom.getUnitRooms().get(i+1).getPosition().y));
+                                }
+                            }
+                            isten.getInventory().dropAllItems(isten);
                         }
                     }
                 }
@@ -181,33 +239,69 @@ public class Player extends Entity {
             boolean a = isten.getInputHandler().isKeyDown(KeyEvent.VK_A);
             boolean s = isten.getInputHandler().isKeyDown(KeyEvent.VK_S);
             boolean d = isten.getInputHandler().isKeyDown(KeyEvent.VK_D);
-
-            if (isten.getInputHandler().isKeyDown(KeyEvent.VK_SHIFT)) run *= 2;//Shift is run
+            if(!isFainted)
+            {
+                if (isten.getInputHandler().isKeyDown(KeyEvent.VK_SHIFT)) run *= 2;//Shift is run
+            }
 
             if (w) {
-                playerCollider.getVelocity().y = 2 * run;
+                playerCollider.getVelocity().y = speed * run;
             } else if (!w) playerCollider.getVelocity().y = 0;
             if (a) {
-                playerCollider.getVelocity().x = -2 * run;
+                playerCollider.getVelocity().x = -speed * run;
             } else if (!a) playerCollider.getVelocity().x = 0;
             if (s) {
-                playerCollider.getVelocity().y = -2 * run;
+                playerCollider.getVelocity().y = -speed * run;
             } else if (!s && !w) playerCollider.getVelocity().y = 0;
             if (d) {
-                playerCollider.getVelocity().x = 2 * run;
+                playerCollider.getVelocity().x = speed * run;
             } else if (!d && !a) playerCollider.getVelocity().x = 0;
 
             //animation
 
             time += deltaTime;
 
+            if(isFainted && playerCollider.getVelocity().magnitude() == 0.0f)
+            {
+                if(activeImage == 1){
+                    if(stillImage1 % 50 == 0)
+                    {
+                        playerImage.get(5).setVisibility(false);
+                        playerImage.get(activeImage).setVisibility(true);
+                    }
+                    else if(stillImage1 % 101 == 0){
+                        playerImage.get(activeImage).setVisibility(false);
+                        playerImage.get(5).setVisibility(true);
+                    }
+                    stillImage1++;
+                    time = 0.0f;
+                }
+                if(activeImage == 3){
+                    if(stillImage2 % 50 == 0)
+                    {
+                        playerImage.get(6).setVisibility(false);
+                        playerImage.get(activeImage).setVisibility(true);
+                    }
+                    else if(stillImage2 % 101 == 0){
+                        playerImage.get(activeImage).setVisibility(false);
+                        playerImage.get(6).setVisibility(true);
+                    }
+                    stillImage2++;
+                    time = 0.0f;
+                }
+            }
+
             if (time > 0.2f / run) { //after this much time does the animation changes
+                if(isFainted) {
+                    playerImage.get(5).setVisibility(false);
+                    playerImage.get(6).setVisibility(false);
+                }
                 int prev = activeImage;
                 if (playerCollider.getVelocity().x > 0) activeImage = 0;
                 else if (playerCollider.getVelocity().x < 0) activeImage = 2;
-                else if (prev > 1) activeImage = 2;
+                else if (prev > 1 && prev < 5) activeImage = 2;
                 else activeImage = 0;
-                if (prev % 2 == 0 || playerCollider.getVelocity().magnitude() == 0.0f) activeImage++;
+                if ((prev % 2 == 0 || playerCollider.getVelocity().magnitude() == 0.0f) && prev!=5 && prev!=6) activeImage++;
                 playerImage.get(prev).setVisibility(false);
                 playerImage.get(activeImage).setVisibility(true);
                 time = 0.0f;
