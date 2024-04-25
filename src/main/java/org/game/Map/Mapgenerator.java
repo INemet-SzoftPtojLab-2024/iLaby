@@ -19,7 +19,6 @@ public class Mapgenerator {
         this.map = map;
     }
 
-
     public void generate(int minRoomSize){
         //collidergroup for the sideWalls
         ColliderGroup sideWallColliders = new ColliderGroup();
@@ -52,6 +51,7 @@ public class Mapgenerator {
 
                 //let's generate also the sideWalls, because they are fix
                 //note: that the corner unitrooms can fulfill two conditions
+                /*
                 if(actualUnitRoom.getRightNeighbor() == null){ //if the unitroom hasn't got right neigbour
                     Vec2 wallRightPos = new Vec2(actualUnitRoom.getColNum() + 0.5f, actualUnitRoom.getRowNum());
                     Collider wallCollider = new Collider(wallRightPos, verticalScale);
@@ -91,10 +91,14 @@ public class Mapgenerator {
                     newWall.setNewImage(wallPath, horizontalScale, isten);
                 }
 
+                 */
+
             }
         }
         //add the collidergroup to the system
-        isten.getPhysicsEngine().addColliderGroup(sideWallColliders);
+
+
+        //isten.getPhysicsEngine().addColliderGroup(sideWallColliders);
 
         ArrayList<Integer> shuffledNums = new ArrayList<>();
         for(int i = 0; i < map.getMapRowSize() * map.getMapColumnSize(); i++){
@@ -114,7 +118,7 @@ public class Mapgenerator {
         //add the images to the unitrooms
         addImages();
         //create the walls of the rooms
-        defineEdges();
+        //defineEdges();
 
         map.getEdgeManager().initDoors();
 

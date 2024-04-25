@@ -65,7 +65,6 @@ public class Villain extends Entity {
     @Override
     public void onStart(Isten isten) {
         Vec2 playerScale = new Vec2(0.6f, 0.6f);
-        position = randomPositions(isten.getMap().getRooms());
 
         villainCollider = new Collider(position, playerScale);
         villainCollider.setMovability(true);

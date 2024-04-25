@@ -23,9 +23,11 @@ public class GameServer extends Thread {
 
     private ArrayList<ServerSideHandler> serverSideHandlers;
     private VillainHandler villainHandler;
+    private MapHandler mapHandler;
     private TimeHandler timeHandler;
     private DatagramSocket socket;
     Isten isten;
+    boolean isInitialized = false;
 
     //Just values, not references for the actual players
     //When changing something in one of the connectedPlayers it won't change anything on the actual players in updatable
@@ -53,25 +55,31 @@ public class GameServer extends Thread {
                 throw new RuntimeException(e);
             }
             parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
+
         }
     }
 
     private void startServer() {
-        serverSideHandlers = new ArrayList<ServerSideHandler>();
-        timeHandler = new TimeHandler();
-        villainHandler = new VillainHandler();
+        isInitialized = true;
 
+        serverSideHandlers = new ArrayList<ServerSideHandler>();
+        mapHandler = new MapHandler();
+        timeHandler = new TimeHandler();
+        //villainHandler = new VillainHandler();
+
+        serverSideHandlers.add(mapHandler);
         serverSideHandlers.add(timeHandler);
-        serverSideHandlers.add(villainHandler);
+        //serverSideHandlers.add(villainHandler);
 
         for(ServerSideHandler serverSideHandler: serverSideHandlers) {
             serverSideHandler.create(this);
+            serverSideHandler.setInitialized(true);
         }
     }
 
     public void updateServer(Isten isten, double deltaTime) {
         for(ServerSideHandler serverSideHandler: serverSideHandlers) {
-            serverSideHandler.update(isten, deltaTime);
+            if(serverSideHandler.isInitialized) serverSideHandler.update(isten, deltaTime);
         }
     }
 
@@ -119,7 +127,8 @@ public class GameServer extends Thread {
     }
 
     private void handlePlayerJoinedData(PlayerMP player) {
-        villainHandler.sendDataToClient(player);
+        mapHandler.sendDataToClient(player);
+        //villainHandler.sendDataToClient(player);
     }
 
     //handle Move Packet
@@ -176,5 +185,9 @@ public class GameServer extends Thread {
             PlayerMP p = connectedPlayers.get(i);
             sendData(data, p.ipAddress, p.port);
         }
+    }
+
+    public boolean isInitialized() {
+        return isInitialized;
     }
 }

@@ -2,6 +2,8 @@ package main.java.org.networking;
 
 import main.java.org.entities.villain.Villain;
 import main.java.org.game.Isten;
+import main.java.org.game.Map.Map;
+import main.java.org.game.Map.RoomType;
 import main.java.org.game.UI.TimeCounter;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
@@ -69,6 +71,10 @@ public class GameClient extends Thread {
                 packet = new Packet03Animation(data);
                 handleAnimation((Packet03Animation)packet);
                 break;
+            case UNITROOM:
+                packet = new Packet04UnitRoom(data);
+                handleUnitRoom((Packet04UnitRoom)packet);
+                break;
             case VILLAIN:
                 packet = new Packet05Villain(data);
                 handleVillain((Packet05Villain)packet);
@@ -80,10 +86,27 @@ public class GameClient extends Thread {
             case TIMER:
                 packet = new Packet07Timer(data);
                 handleTimer((Packet07Timer)packet);
+                break;
 
         }
     }
 
+
+    private void handleUnitRoom(Packet04UnitRoom packet) {
+        Vec2 position = new Vec2(packet.getX(), packet.getY());
+        int type = packet.getType();
+        RoomType roomType;
+        String path = "./assets/floors/floor" + (type+1) + ".png";
+        Map map = isten.getMap();
+        for(int i = 0; i < map.getMapRowSize(); i++) {
+            for(int j = 0; j < map.getMapColumnSize(); j++) {
+                if(map.getUnitRooms()[i][j].getPosition().x == position.x &&
+                map.getUnitRooms()[i][j].getPosition().y == position.y) {
+                    map.getUnitRooms()[i][j].setNewImage(path, isten);
+                }
+            }
+        }
+    }
     private void handleTimer(Packet07Timer packet) {
         double timeRemaining = packet.timeRemaining;
         TimeCounter.setTimeRemaining(timeRemaining);

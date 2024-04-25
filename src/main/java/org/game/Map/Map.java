@@ -21,11 +21,15 @@ public class Map extends Updatable {
 
     @Override
     public void onStart(Isten isten) {
+
+
+        //printMap();
+    }
+
+    public void init(Isten isten) {
         this.edgeManager = new EdgeManager(isten);
         this.mapgenerator = new Mapgenerator(this, isten);
         mapgenerator.generate(minRoomSize);
-
-        //printMap();
     }
 
     public Map(int rowNumber, int columnNumber, int minRoomSize){

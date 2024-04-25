@@ -5,12 +5,12 @@ public class Packet01Disconnect extends Packet {
     private String username;
 
     public Packet01Disconnect(byte[] data) {
-        super(02);
+        super(01);
         this.username = readData(data);
     }
 
     public Packet01Disconnect(String username) {
-        super(02);
+        super(01);
         this.username = username;
     }
 

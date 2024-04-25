@@ -19,7 +19,7 @@ public class Packet07Timer extends Packet {
     }
 
     public void writeData(GameServer server) {
-        server.sendDataToAllClients(getData());
+        if(server != null) server.sendDataToAllClients(getData());
     }
 
     public byte[] getData() {

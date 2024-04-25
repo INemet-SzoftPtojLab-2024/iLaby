@@ -34,12 +34,13 @@ public class VillainHandler extends ServerSideHandler {
         villains.add(new Villain("Villain",  "./assets/villain/villain3.png"));
 
         for(Villain villain: villains) {
-            Collider villainCollider;
-            Vec2 playerScale = new Vec2(0.6f, 0.6f);
-            villainCollider = new Collider(villain.getPosition(), playerScale);
-            villainCollider.setMovability(true);
-            villain.setVillainCollider(isten, villainCollider);
-            villain.setPosition(new Vec2(5,2));
+            //Collider villainCollider;
+            villain.setPosition(villain.randomPositions(isten.getMap().getRooms()));
+
+            //Vec2 playerScale = new Vec2(0.6f, 0.6f);
+            //villainCollider = new Collider(villain.getPosition(), playerScale);
+            //villainCollider.setMovability(true);
+            //villain.setVillainCollider(isten, villainCollider);
         }
 
     }

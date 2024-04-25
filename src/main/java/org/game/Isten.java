@@ -96,6 +96,12 @@ public class Isten {
                 u.onStart(this);
             }
 
+        if(socketServer != null) {
+            if(!socketServer.isInitialized()) {
+                socketServer.start();
+            }
+        }
+
         //call onUpdates
         for (Updatable u : updatables)
             u.onUpdate(this, deltaTime);
@@ -132,8 +138,6 @@ public class Isten {
 
         if(JOptionPane.showConfirmDialog(this.getRenderer(), "Server?") == 0) {
             socketServer = new GameServer(this);
-            socketServer.start();
-
         }
         socketClient = new GameClient(this, "localhost");
         socketClient.start();
@@ -157,6 +161,7 @@ public class Isten {
         updatables.add(itemManager);
         updatables.add(inventory);
         updatables.add(map);
+
         updatables.add(new ChestManager(75));//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
 
 

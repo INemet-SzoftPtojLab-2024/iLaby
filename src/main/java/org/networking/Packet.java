@@ -7,7 +7,7 @@ public abstract class Packet {
         DISCONNECT(01),
         MOVE(02),
         ANIMATION(03),
-        MAP(04),
+        UNITROOM(04),
         VILLAIN(05),
         VILLAINMOVE(06),
         TIMER(07);
