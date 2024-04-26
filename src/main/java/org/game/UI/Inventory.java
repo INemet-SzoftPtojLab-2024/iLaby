@@ -195,4 +195,20 @@ public class Inventory extends Updatable {
     {
         return hasGasMask;
     }
+    public void removeStoredItem(Item item){
+        storedItems.remove(item);
+    }
+
+    public void destroyGasMask(){
+        if (hasGasMask){
+            for (int i = 0; i < storedItems.size(); i++){
+                if (storedItems.get(i) != null && storedItems.get(i).getClass().equals(Gasmask.class)){
+                    storedItems.remove(i);
+                    storedItems.add(i, null);
+                    isten.getRenderer().deleteRenderable(itemIcons.get(i));
+                }
+            }
+            hasGasMask = false;
+        }
+    }
 }

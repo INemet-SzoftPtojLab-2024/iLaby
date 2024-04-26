@@ -9,6 +9,7 @@ import main.java.org.game.Graphics.*;
 import main.java.org.entities.Entity;
 
 import main.java.org.game.Isten;
+import main.java.org.game.Map.Item;
 import main.java.org.game.Map.Room;
 import main.java.org.game.Map.RoomType;
 import main.java.org.game.Map.UnitRoom;
@@ -16,6 +17,7 @@ import main.java.org.game.PlayerPrefs.PlayerPrefs;
 import main.java.org.game.UI.TimeCounter;
 import main.java.org.game.physics.Collider;
 import main.java.org.game.updatable.Updatable;
+import main.java.org.items.usable_items.Gasmask;
 import main.java.org.linalg.Vec2;
 
 import java.awt.event.KeyEvent;
@@ -208,8 +210,8 @@ public class Player extends Entity {
                         alive = false;
                         AudioManager.closeSound(playerSound);
                     }
-                    if(!isten.getInventory().getExistenceOfGasMask()) {
-                        if (currentRoom != null && currentRoom.getRoomType() == RoomType.GAS) {
+                    if (currentRoom != null && currentRoom.getRoomType() == RoomType.GAS) {
+                        if(!isten.getInventory().getExistenceOfGasMask()) {
                             if(setPlayerImage % 2 == 0)
                             {
                                 setImage(true);
@@ -224,6 +226,18 @@ public class Player extends Entity {
                                 }
                             }
                             isten.getInventory().dropAllItems(isten);
+                        }
+                        else{
+                            for(main.java.org.items.Item item : isten.getInventory().getStoredItems()){
+                                if (item != null && item.getClass().equals(Gasmask.class)){
+                                    Gasmask gasmask = (Gasmask) item;
+                                    gasmask.useMask(deltaTime);
+                                    if (gasmask.getCapacity() <= 0){
+                                        isten.getInventory().destroyGasMask();
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
