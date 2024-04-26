@@ -11,6 +11,7 @@ public class Packet04UnitRoom extends Packet {
         this.x = Float.parseFloat(dataArray[0]);
         this.y = Float.parseFloat(dataArray[1]);
         this.type = Integer.parseInt(dataArray[2]);
+        //System.out.println("dataArray0: " + dataArray[0] + "dataArray1: " + dataArray[1] + "dataArray2: " + dataArray[2]);
 
     }
 

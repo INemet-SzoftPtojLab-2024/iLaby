@@ -17,6 +17,7 @@ public class Map extends Updatable {
     private final int mapColumnSize;
     private EdgeManager edgeManager;
     private final int minRoomSize;
+    private boolean isGenerated = false;
     //private boolean
 
     @Override
@@ -30,6 +31,7 @@ public class Map extends Updatable {
         this.edgeManager = new EdgeManager(isten);
         this.mapgenerator = new Mapgenerator(this, isten);
         mapgenerator.generate(minRoomSize);
+        isGenerated = true;
     }
 
     public Map(int rowNumber, int columnNumber, int minRoomSize){
@@ -350,4 +352,7 @@ public class Map extends Updatable {
         return mapColumnSize;
     }
     public EdgeManager getEdgeManager(){ return edgeManager;}
+    public boolean isGenerated() {
+        return isGenerated;
+    }
 }

@@ -70,10 +70,10 @@ public class Isten {
      */
     public void update(double deltaTime) {
 
+
         inputHandler.update();
 
-
-        physicsEngine.step(deltaTime);
+        if(map.isGenerated() || socketServer == null) physicsEngine.step(deltaTime);
 
 
         //remove pending updatables from updatables
@@ -96,11 +96,6 @@ public class Isten {
                 u.onStart(this);
             }
 
-        if(socketServer != null) {
-            if(!socketServer.isInitialized()) {
-                socketServer.start();
-            }
-        }
 
         //call onUpdates
         for (Updatable u : updatables)
@@ -112,6 +107,8 @@ public class Isten {
         }
 
         //calculate render positions, check for UI inputs and then render
+
+
         renderer.calculateRenderedPositions();
         renderer.processUIInputs(inputHandler);
         renderer.repaint();
@@ -138,6 +135,8 @@ public class Isten {
 
         if(JOptionPane.showConfirmDialog(this.getRenderer(), "Server?") == 0) {
             socketServer = new GameServer(this);
+            socketServer.start();
+
         }
         socketClient = new GameClient(this, "localhost");
         socketClient.start();

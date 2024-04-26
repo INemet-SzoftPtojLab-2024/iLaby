@@ -7,6 +7,7 @@ public class Packet00Login extends Packet {
     public Packet00Login(byte[] data) {
         super(00);
         String[] dataArray = readData(data).split(",");
+        System.out.println(readData(data));
         this.username = dataArray[0];
         this.x = Float.parseFloat(dataArray[1]);
         this.y = Float.parseFloat(dataArray[2]);

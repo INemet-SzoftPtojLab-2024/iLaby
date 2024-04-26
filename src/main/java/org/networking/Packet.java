@@ -10,9 +10,8 @@ public abstract class Packet {
         UNITROOM(04),
         VILLAIN(05),
         VILLAINMOVE(06),
-        TIMER(07);
-
-
+        TIMER(07),
+        WALL(20);
         private int packetId;
         private PacketTypes(int packetId) {
             this.packetId = packetId;
@@ -35,6 +34,7 @@ public abstract class Packet {
 
     public String readData(byte[] data) {
         String message = new String(data).trim();
+        //System.out.println(message);
         return message.substring(2);
     }
 

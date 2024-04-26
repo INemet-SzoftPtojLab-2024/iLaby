@@ -23,7 +23,7 @@ public class Packet01Disconnect extends Packet {
     }
 
     public byte[] getData() {
-        return ("02" + this.username).getBytes();
+        return ("01" + this.username).getBytes();
     }
 
     public String getUsername() {

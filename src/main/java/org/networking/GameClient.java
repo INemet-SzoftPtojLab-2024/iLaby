@@ -5,10 +5,8 @@ import main.java.org.game.Isten;
 import main.java.org.game.Map.Map;
 import main.java.org.game.Map.RoomType;
 import main.java.org.game.UI.TimeCounter;
-import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.*;
 
@@ -87,11 +85,18 @@ public class GameClient extends Thread {
                 packet = new Packet07Timer(data);
                 handleTimer((Packet07Timer)packet);
                 break;
-
+            case WALL:
+                packet = new Packet0010Wall(data);
+                handleWall((Packet0010Wall) packet);
+                break;
         }
     }
 
-
+    private void handleWall(Packet0010Wall packet) {
+        Vec2 pos = new Vec2(packet.getPosX(), packet.getPosY());
+        Vec2 scale = new Vec2(packet.getScaleX(), packet.getScaleY());
+        String imagePath = packet.getImagePath();
+    }
     private void handleUnitRoom(Packet04UnitRoom packet) {
         Vec2 position = new Vec2(packet.getX(), packet.getY());
         int type = packet.getType();
@@ -136,7 +141,7 @@ public class GameClient extends Thread {
             player.getPlayerImage().get(i).setVisibility(false);
         }
         player.setActiveImage(packet.getActiveImage());
-        player.getPlayerImage().get(packet.getActiveImage()).setVisibility(true);
+        if(!player.getPlayerImage().isEmpty()) player.getPlayerImage().get(packet.getActiveImage()).setVisibility(true);
     }
 
     private void handleLogin(Packet00Login packet, InetAddress address, int port) {
