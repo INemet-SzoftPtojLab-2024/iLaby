@@ -28,6 +28,8 @@ public class Player extends Entity {
 
     Collider playerCollider;
     ArrayList<Image> playerImage;
+    ArrayList<Image> playerImageNormal;
+    ArrayList<Image> playerImageFainted;
     ImageUI death;
     TextUI motivational;
     int activeImage;
@@ -46,6 +48,8 @@ public class Player extends Entity {
     public Player() {
         playerCollider = null;
         playerImage = null;
+        playerImageNormal=null;
+        playerImageFainted=null;
         death = null;
         motivational = null;
         activeImage = 0;
@@ -64,6 +68,8 @@ public class Player extends Entity {
     public Player(String name) {
         playerCollider = null;
         playerImage = null;
+        playerImageNormal=null;
+        playerImageFainted=null;
         death = null;
         motivational = null;
         activeImage = 0;
@@ -84,17 +90,44 @@ public class Player extends Entity {
         //called when the player is initialized
 
         Vec2 playerScale = new Vec2(0.5f, 0.5f);
+        Vec2 faintedScale = new Vec2(0.6f, 0.6f);
 
         playerCollider = new Collider(new Vec2(0, 0), playerScale);
         playerCollider.setMovability(true);
         isten.getPhysicsEngine().addCollider(playerCollider);//register collider in the physics engine
 
-        playerImage = new ArrayList<>();
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right1.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right2.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left1.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left2.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_ded.png"));
+        playerImageNormal = new ArrayList<>();
+        playerImageNormal.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right1.png"));
+        playerImageNormal.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right2.png"));
+        playerImageNormal.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left1.png"));
+        playerImageNormal.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left2.png"));
+        playerImageNormal.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_ded.png"));
+
+        for (Image im : playerImageNormal) {
+            im.setSortingLayer(-69);
+            im.setVisibility(false);
+            isten.getRenderer().addRenderable(im);//register images in the renderer
+        }
+        playerImageNormal.get(playerImageNormal.size() - 1).setSortingLayer(-67);
+
+        playerImageFainted=new ArrayList<>();
+        playerImageFainted.add(new Image(new Vec2(), faintedScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right1_fainted.png"));
+        playerImageFainted.add(new Image(new Vec2(), faintedScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right2_fainted1.png"));
+        playerImageFainted.add(new Image(new Vec2(), faintedScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left1_fainted.png"));
+        playerImageFainted.add(new Image(new Vec2(), faintedScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left2_fainted1.png"));
+        playerImageFainted.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_ded.png"));
+        playerImageFainted.add(new Image(new Vec2(), faintedScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right2_fainted2.png"));
+        playerImageFainted.add(new Image(new Vec2(), faintedScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left2_fainted2.png"));
+
+        for (Image im : playerImageFainted) {
+            im.setSortingLayer(-69);
+            im.setVisibility(false);
+            isten.getRenderer().addRenderable(im);//register images in the renderer
+        }
+        playerImageFainted.get(playerImageFainted.size() - 1).setSortingLayer(-67);
+
+
+        playerImage=playerImageNormal;
 
         death = new ImageUI(new Vec2(0, 0), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/character/ded.png");
         death.setSortingLayer(-70);
@@ -107,13 +140,6 @@ public class Player extends Entity {
         motivational.setVisibility(false);
         motivational.setAlignment(Renderable.CENTER, Renderable.CENTER);
         isten.getRenderer().addRenderable(motivational);
-
-        for (Image im : playerImage) {
-            im.setSortingLayer(-69);
-            im.setVisibility(false);
-            isten.getRenderer().addRenderable(im);//register images in the renderer
-        }
-        playerImage.get(playerImage.size() - 1).setSortingLayer(-67);
 
         activeImage = 1;
         playerImage.get(activeImage).setVisibility(true);
@@ -131,49 +157,19 @@ public class Player extends Entity {
         AudioManager.preloadSound("./assets/audio/playersound.ogg");
         AudioManager.preloadSound("./assets/audio/died.ogg");
     }
-
-    public void isInSameRoom(Villain v) {
-
-    }
-    public void setImageToFainted(Isten isten)
+    public void setImage(boolean isFainted)
     {
-        for (Image im : playerImage) {
-            isten.getRenderer().deleteRenderable(im);
+        if(isFainted)
+        {
+            playerImage.get(activeImage).setVisibility(false);
+            playerImageFainted.get(activeImage).setVisibility(true);
+            playerImage=playerImageFainted;
         }
-        Vec2 faintedScale = new Vec2(0.6f, 0.6f);
-        playerImage.set(0, new Image(new Vec2(), faintedScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right1_fainted.png"));
-        playerImage.set(1, new Image(new Vec2(), faintedScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right2_fainted1.png"));
-        playerImage.set(2, new Image(new Vec2(), faintedScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left1_fainted.png"));
-        playerImage.set(3, new Image(new Vec2(), faintedScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left2_fainted1.png"));
-        playerImage.set(4, new Image(new Vec2(), new Vec2(0.5f, 0.5f), "./assets/character/character"+PlayerPrefs.getInt("skin")+"_ded.png"));
-        playerImage.add( new Image(new Vec2(), faintedScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right2_fainted2.png"));
-        playerImage.add( new Image(new Vec2(), faintedScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left2_fainted2.png"));
-        for (Image im : playerImage) {
-            im.setSortingLayer(-69);
-            im.setVisibility(false);
-            isten.getRenderer().addRenderable(im);
+        else{
+            playerImage.get(activeImage).setVisibility(false);
+            playerImageNormal.get(activeImage).setVisibility(true);
+            playerImage=playerImageNormal;
         }
-        playerImage.get(playerImage.size() - 1).setSortingLayer(-67);
-        playerImage.get(activeImage).setVisibility(true);
-    }
-    public void setImageToNormal(Isten isten)
-    {
-        for (Image im : playerImage) {
-            isten.getRenderer().deleteRenderable(im);
-        }
-        Vec2 playerScale = new Vec2(0.5f, 0.5f);
-        playerImage.set(0, new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right1.png"));
-        playerImage.set(1,new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right2.png"));
-        playerImage.set(2,new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left1.png"));
-        playerImage.set(3,new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left2.png"));
-        playerImage.set(4,new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_ded.png"));
-        for (Image im : playerImage) {
-            im.setSortingLayer(-69);
-            im.setVisibility(false);
-            isten.getRenderer().addRenderable(im);
-        }
-        playerImage.get(playerImage.size() - 1).setSortingLayer(-67);
-        playerImage.get(activeImage).setVisibility(true);
     }
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
@@ -182,7 +178,7 @@ public class Player extends Entity {
             if(faintingTime > 15 )
             {
                 faintingTime=0;
-                setImageToNormal(isten);
+                setImage(false);
                 isFainted = false;
                 setPlayerImage++;
                 speed=2;
@@ -216,7 +212,7 @@ public class Player extends Entity {
                         if (currentRoom != null && currentRoom.getRoomType() == RoomType.GAS) {
                             if(setPlayerImage % 2 == 0)
                             {
-                                setImageToFainted(isten);
+                                setImage(true);
                                 isFainted=true;
                                 setPlayerImage++;
                                 speed = 1;
