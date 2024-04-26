@@ -92,7 +92,11 @@ public class UnitRoom implements Graph<UnitRoom>{
         String path = "./assets/rooms/" + j + ".png";
         setNewImage(path, isten);
     }
-
+    public void setUnitRoomToGasUnitRoom(Isten isten)
+    {
+        String path = "./assets/rooms/1.png";
+        setNewImage(path, isten);
+    }
 
     public boolean isTopEdge(){
         if(TopNeighbor == null) return true;

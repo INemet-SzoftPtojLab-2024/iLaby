@@ -4,8 +4,11 @@ import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.ImageUI;
 import main.java.org.game.Graphics.Renderable;
 import main.java.org.game.Isten;
+import main.java.org.game.Map.Room;
+import main.java.org.game.Map.UnitRoom;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.items.Item;
+import main.java.org.items.usable_items.Camambert;
 import main.java.org.items.usable_items.Gasmask;
 import main.java.org.linalg.Vec2;
 
@@ -61,7 +64,6 @@ public class Inventory extends Updatable {
             isten.getRenderer().addRenderable(inventoryIcon);
             inventoryIcons.add(inventoryIcon);
         }
-
     }
 
     @Override
@@ -94,6 +96,27 @@ public class Inventory extends Updatable {
         }
         if(isten.getInputHandler().isKeyDown(KeyEvent.VK_R)&&storedItems.get(selectedSlot-1)!=null){
             if( storedItems.get(selectedSlot-1) instanceof Gasmask)hasGasMask=false;
+            if(storedItems.get(selectedSlot-1) instanceof Camambert)
+            {
+                Room currentRoom = null;
+                for (Room room : isten.getMap().getRooms()) {
+                    for (UnitRoom unitRoom : room.getUnitRooms()) {
+                        if (isten.getPlayer().getPlayerCollider().getPosition().x >= unitRoom.getPosition().x - 0.5 &&
+                                isten.getPlayer().getPlayerCollider().getPosition().x <= unitRoom.getPosition().x + 0.5 &&
+                                isten.getPlayer().getPlayerCollider().getPosition().y >= unitRoom.getPosition().y - 0.5 &&
+                                isten.getPlayer().getPlayerCollider().getPosition().y <= unitRoom.getPosition().y + 0.5) {
+                            currentRoom = room;
+                        }
+                    }
+                }
+                if(currentRoom!=null) {
+                    currentRoom.setRoomTypeToGas();
+                    for(UnitRoom unitRoom : currentRoom.getUnitRooms())
+                    {
+                        unitRoom.setUnitRoomToGasUnitRoom(isten);
+                    }
+                }
+            }
             storedItems.get(selectedSlot-1).dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
             storedItems.set(selectedSlot-1,null);
             tmp = new ImageUI(getSlotLocation(selectedSlot ), new Vec2(iconSize), "./assets/ui/inventorySlot_Selected.png");

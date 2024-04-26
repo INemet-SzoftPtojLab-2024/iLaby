@@ -39,6 +39,10 @@ public class Room extends Updatable implements Graph<Room>{
     public void setRoomType(boolean startRoom) {
         roomType =  RoomType.getRandomRoomtype(startRoom);
     }
+    public void setRoomTypeToGas()
+    {
+        roomType=RoomType.GAS;
+    }
 
     public  Room(){}
 

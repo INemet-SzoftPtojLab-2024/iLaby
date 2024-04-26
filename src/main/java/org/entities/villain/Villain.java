@@ -6,6 +6,7 @@ import main.java.org.game.Graphics.Text;
 import main.java.org.game.Isten;
 import main.java.org.game.Map.Map;
 import main.java.org.game.Map.Room;
+import main.java.org.game.Map.RoomType;
 import main.java.org.game.Map.UnitRoom;
 import main.java.org.game.physics.Collider;
 import main.java.org.linalg.Vec2;
@@ -198,7 +199,7 @@ public class Villain extends Entity {
 
         do {
             selectedRoom = rooms.get(rand.nextInt(rooms.size() - 1));
-        } while (roomsWithVillains.contains(selectedRoom) || isStartUnitRoomInRoom(selectedRoom));
+        } while (roomsWithVillains.contains(selectedRoom) || isStartUnitRoomInRoom(selectedRoom)|| selectedRoom.getRoomType()== RoomType.GAS);
 
         UnitRoom selectedUnitRoom = selectedRoom.getUnitRooms().get(rand.nextInt(selectedRoom.getUnitRooms().size()));
         roomsWithVillains.add(selectedRoom);
@@ -214,7 +215,22 @@ public class Villain extends Entity {
         }
         return false;
     }
-
+    public boolean isInGasRoom(Isten isten)
+    {
+        Room currentRoom = null;
+        for (Room room : isten.getMap().getRooms()) {
+            for (UnitRoom unitRoom : room.getUnitRooms()) {
+                if (villainCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
+                        villainCollider.getPosition().x <= unitRoom.getPosition().x + 0.5 &&
+                        villainCollider.getPosition().y >= unitRoom.getPosition().y - 0.5 &&
+                        villainCollider.getPosition().y <= unitRoom.getPosition().y + 0.5) {
+                    currentRoom = room;
+                }
+            }
+        }
+        if(currentRoom!= null && currentRoom.getRoomType()== RoomType.GAS)return true;
+        else return false;
+    }
     @Override
     public void onDestroy() {
     }
