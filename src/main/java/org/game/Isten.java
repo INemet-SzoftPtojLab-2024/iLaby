@@ -16,10 +16,7 @@ import main.java.org.linalg.Vec2;
 import main.java.org.items.ChestManager;
 import main.java.org.items.ItemManager;
 
-import main.java.org.networking.GameClient;
-import main.java.org.networking.GameServer;
-import main.java.org.networking.Packet00Login;
-import main.java.org.networking.PlayerMP;
+import main.java.org.networking.*;
 
 import javax.swing.*;
 
@@ -29,6 +26,7 @@ import java.util.ArrayList;
  * The main class representing the game part of the program.
  */
 public class Isten {
+    private HandlerManager handlerManager;
     private final PhysicsEngine physicsEngine;
     protected final GameRenderer renderer;
     protected final ArrayList<Updatable> updatables;
@@ -61,6 +59,8 @@ public class Isten {
         updatables = new ArrayList<>();
         pendingAddedUpdatables = new ArrayList<>();
         pendingRemovedUpdatables = new ArrayList<>();
+
+        handlerManager = new HandlerManager(this);
     }
 
     /**
@@ -106,9 +106,12 @@ public class Isten {
             socketServer.updateServer(this, deltaTime);
         }
 
+
+        //Manage handlers of client
+        handlerManager.executeTasks();
+
+
         //calculate render positions, check for UI inputs and then render
-
-
         renderer.calculateRenderedPositions();
         renderer.processUIInputs(inputHandler);
         renderer.repaint();
@@ -161,7 +164,7 @@ public class Isten {
         updatables.add(inventory);
         updatables.add(map);
 
-        updatables.add(new ChestManager(75));//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
+        //updatables.add(new ChestManager(75));//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
 
 
         updatables.add(new TimeCounter());
@@ -251,5 +254,13 @@ public class Isten {
 
     public ArrayList<Updatable> getUpdatables() {
         return updatables;
+    }
+
+    public GameServer getSocketServer() {
+        return socketServer;
+    }
+
+    public HandlerManager getHandlerManager() {
+        return handlerManager;
     }
 }

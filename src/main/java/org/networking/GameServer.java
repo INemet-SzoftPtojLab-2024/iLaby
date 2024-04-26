@@ -79,7 +79,7 @@ public class GameServer extends Thread {
 
     public void updateServer(Isten isten, double deltaTime) {
         for(ServerSideHandler serverSideHandler: serverSideHandlers) {
-            if(serverSideHandler.isInitialized) serverSideHandler.update(isten, deltaTime);
+            serverSideHandler.update(isten, deltaTime);
         }
     }
 

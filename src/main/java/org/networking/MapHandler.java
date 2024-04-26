@@ -21,10 +21,18 @@ public class MapHandler extends ServerSideHandler {
         this.server = server;
         this.isten = server.isten;
         isten.getMap().init(isten);
+        isInitialized = true;
+        sendDataToWaitingClients();
     }
 
     @Override
     public void sendDataToClient(PlayerMP client) {
+
+        if(!isInitialized) {
+            if(!waitingClients.contains(client)) waitingClients.add(client);
+            return;
+        }
+
         Map map = isten.getMap();
         for(int i = 0; i < map.getMapRowSize(); i++) {
             for(int j = 0; j < map.getMapColumnSize(); j++) {
@@ -34,37 +42,29 @@ public class MapHandler extends ServerSideHandler {
                 server.sendData(packet.getData(), client.ipAddress, client.port);
             }
             try {
-                Thread.sleep(50);
+                Thread.sleep(15);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
 
-        /*
+
+        //
         for(int i = 0; i < map.getEdgeManager().getRoomEdges().size(); i++) {
             EdgeBetweenRooms re = map.getEdgeManager().getRoomEdges().get(i);
-            for(int j = 0; j < re.getWalls().size(); j++) {
+            for (int j = 0; j < re.getWalls().size(); j++) {
                 EdgePiece edgePiece = re.getWalls().get(j);
                 Vec2 pos = edgePiece.getImage().getPosition();
                 Vec2 scale = edgePiece.getImage().getScale();
-                String path;
-                if(edgePiece.isDoor()) {
-                    path = "/assets/doors/doors_leaf_closed.png";
-                }
-                else {
-                    path = "/assets/walls/wall_mid.png";
-                }
-                Packet0010Wall packet = new Packet0010Wall(pos.x, pos.y, scale.x, scale.y, path);
+                Packet0010Wall packet = new Packet0010Wall(pos.x, pos.y, scale.x, scale.y, edgePiece.isDoor());
                 server.sendData(packet.getData(), client.ipAddress, client.port);
             }
             try {
-                Thread.sleep(50);
+                Thread.sleep(5);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
-
-         */
 
 
 

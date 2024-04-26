@@ -23,7 +23,8 @@ public class Map extends Updatable {
     @Override
     public void onStart(Isten isten) {
 
-
+        Mapgenerator mapgenerator = new Mapgenerator(this, isten);
+        mapgenerator.generateSideWalls();
         //printMap();
     }
 

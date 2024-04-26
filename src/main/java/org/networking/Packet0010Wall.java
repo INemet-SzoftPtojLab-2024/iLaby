@@ -6,7 +6,7 @@ public class Packet0010Wall extends Packet {
     float posY;
     float scaleX;
     float scaleY;
-    String imagePath;
+    boolean isDoor;
 
     public Packet0010Wall(byte[] data) {
         super(20);
@@ -15,16 +15,16 @@ public class Packet0010Wall extends Packet {
         this.posY = Float.parseFloat(dataArray[1]);
         this.scaleX = Float.parseFloat(dataArray[2]);
         this.scaleY = Float.parseFloat(dataArray[3]);
-        this.imagePath = dataArray[4];
+        this.isDoor = Boolean.parseBoolean(dataArray[4]);
     }
 
-    public Packet0010Wall(float posX, float posY, float scaleX, float scaleY, String imagePath) {
+    public Packet0010Wall(float posX, float posY, float scaleX, float scaleY, boolean isDoor) {
         super(20);
         this.posX = posX;
         this.posY = posY;
         this.scaleX = scaleX;
         this.scaleY = scaleY;
-        this.imagePath = imagePath;
+        this.isDoor = isDoor;
     }
 
     public void writeData(GameClient client) {
@@ -36,7 +36,7 @@ public class Packet0010Wall extends Packet {
     }
 
     public byte[] getData() {
-        return ("20" + posX + "," +posY + "," + scaleX + "," + scaleY + "," + imagePath).getBytes();
+        return ("20" + posX + "," +posY + "," + scaleX + "," + scaleY + "," + isDoor).getBytes();
     }
 
     public float getPosX () {
@@ -53,8 +53,8 @@ public class Packet0010Wall extends Packet {
     public float getScaleY () {
         return scaleY;
     }
-    public String getImagePath() {
-        return imagePath;
+    public boolean isDoor() {
+        return isDoor;
     }
 
 
