@@ -15,4 +15,7 @@ public class Camambert extends Item {
         image.setVisibility(false);
 
     }
+    public void dropCamembertOnGround(){
+        image.setVisibility(false);
+    }
 }

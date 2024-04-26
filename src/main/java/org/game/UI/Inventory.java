@@ -28,6 +28,11 @@ public class Inventory extends Updatable {
     private int selectedSlot;
     private  Isten isten;
     private boolean hasGasMask;
+    private ArrayList<Image> explosion;
+    private int explosionCount;
+    double time;
+    private Vec2 prevPos;
+    private Camambert camembert;
 
 
     public Inventory(int size){
@@ -39,6 +44,11 @@ public class Inventory extends Updatable {
         for (int i = 0; i < 5; i++) {itemIcons.add(null);}
         selectedSlot=1;
         hasGasMask=false;
+        explosion = new ArrayList<>();
+        explosionCount=0;
+        time=0;
+        prevPos=new Vec2();
+        camembert=null;
     }
 
     @Override
@@ -63,6 +73,15 @@ public class Inventory extends Updatable {
             inventoryIcon.setVisibility(true);
             isten.getRenderer().addRenderable(inventoryIcon);
             inventoryIcons.add(inventoryIcon);
+        }
+        Image exp=null;
+        for(float i = 0.3f; i <= 6.3f; i+=0.2f) {
+            exp = new Image(new Vec2(),
+                    new Vec2(i, i), "./assets/items/camembert/explosion_camembert.png");
+            exp.setSortingLayer(-67);
+            exp.setVisibility(false);
+            isten.getRenderer().addRenderable(exp);
+            explosion.add(exp);
         }
     }
 
@@ -98,27 +117,17 @@ public class Inventory extends Updatable {
             if( storedItems.get(selectedSlot-1) instanceof Gasmask)hasGasMask=false;
             if(storedItems.get(selectedSlot-1) instanceof Camambert)
             {
-                Room currentRoom = null;
-                for (Room room : isten.getMap().getRooms()) {
-                    for (UnitRoom unitRoom : room.getUnitRooms()) {
-                        if (isten.getPlayer().getPlayerCollider().getPosition().x >= unitRoom.getPosition().x - 0.5 &&
-                                isten.getPlayer().getPlayerCollider().getPosition().x <= unitRoom.getPosition().x + 0.5 &&
-                                isten.getPlayer().getPlayerCollider().getPosition().y >= unitRoom.getPosition().y - 0.5 &&
-                                isten.getPlayer().getPlayerCollider().getPosition().y <= unitRoom.getPosition().y + 0.5) {
-                            currentRoom = room;
-                        }
-                    }
+                camembert=(Camambert)storedItems.get(selectedSlot-1);
+                for(int i = 0; i< 30;i++)
+                {
+                    explosion.get(i).setPosition(isten.getPlayer().getPlayerCollider().getPosition());
                 }
-                if(currentRoom!=null) {
-                    currentRoom.setRoomTypeToGas();
-                    for(UnitRoom unitRoom : currentRoom.getUnitRooms())
-                    {
-                        unitRoom.setUnitRoomToGasUnitRoom(isten);
-                    }
-                }
+                prevPos=isten.getPlayer().getPlayerCollider().getPosition();
+                explosionCount++;
+                time=0;
             }
-            storedItems.get(selectedSlot-1).dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
-            storedItems.set(selectedSlot-1,null);
+            storedItems.get(selectedSlot - 1).dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
+            storedItems.set(selectedSlot - 1, null);
             tmp = new ImageUI(getSlotLocation(selectedSlot ), new Vec2(iconSize), "./assets/ui/inventorySlot_Selected.png");
             inventoryIcons.set(selectedSlot - 1, tmp);
             tmp.setAlignment(Renderable.CENTER, Renderable.BOTTOM);
@@ -128,6 +137,42 @@ public class Inventory extends Updatable {
             itemIcons.get(selectedSlot-1).setVisibility(false);
 
         }
+        time+=deltaTime;
+            if (time > 1 && explosionCount>0) {
+                if(explosionCount==1){
+                    Room currentRoom = null;
+                    for (Room room : isten.getMap().getRooms()) {
+                        for (UnitRoom unitRoom : room.getUnitRooms()) {
+                            if (prevPos.x >= unitRoom.getPosition().x - 0.5 &&
+                                    prevPos.x <= unitRoom.getPosition().x + 0.5 &&
+                                    prevPos.y >= unitRoom.getPosition().y - 0.5 &&
+                                    prevPos.y <= unitRoom.getPosition().y + 0.5) {
+                                currentRoom = room;
+                            }
+                        }
+                    }
+                    if (currentRoom != null) {
+                        currentRoom.setRoomTypeToGas();
+                        for (UnitRoom unitRoom : currentRoom.getUnitRooms()) {
+                            unitRoom.setUnitRoomToGasUnitRoom(isten);
+                        }
+                    }
+                }
+                if (explosionCount > 0 && explosionCount <= 30) {
+                    if (explosionCount > 1) {
+                        explosion.get(explosionCount - 2).setVisibility(false);
+                        explosion.get(explosionCount - 1).setVisibility(true);
+                    } else {
+                        explosion.get(0).setVisibility(true);
+                    }
+                    explosionCount++;
+                } else if (explosionCount > 30) {
+                    camembert.dropCamembertOnGround();
+                    explosion.get(explosionCount - 2).setVisibility(false);
+                    explosionCount = 0;
+                    time = 0;
+                }
+            }
     }
 
     @Override

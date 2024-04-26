@@ -83,10 +83,10 @@ public class Villain extends Entity {
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
         sum += deltaTime;
-        Vec2 playerPosition = villainCollider.getPosition();
+        Vec2 villainPosition = villainCollider.getPosition();
         Random random = new Random();
-        villainImage.setPosition(playerPosition);
-        villainName.setPosition(Vec2.sum(playerPosition, new Vec2(0, (float) 0.5)));
+        villainImage.setPosition(villainPosition);
+        villainName.setPosition(Vec2.sum(villainPosition, new Vec2(0, (float) 0.5)));
 
 
         if (sum < 2) return;
