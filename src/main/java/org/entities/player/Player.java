@@ -136,26 +136,7 @@ public class Player extends Entity {
         //called every frame
         if (alive) {
 
-            Room currentRoom = null;
-            for (Updatable u : isten.getUpdatables()) {
-                if (u.getClass().equals(Villain.class)) {
-                    for (Room room : isten.getMap().getRooms()) {
-                        for (UnitRoom unitRoom : room.getUnitRooms()) {
-                            if (playerCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
-                                    playerCollider.getPosition().x <= unitRoom.getPosition().x + 0.5 &&
-                                    playerCollider.getPosition().y >= unitRoom.getPosition().y - 0.5 &&
-                                    playerCollider.getPosition().y <= unitRoom.getPosition().y + 0.5) {
-                                currentRoom = room;
-                            }
-                        }
-                    }
-                    Villain villain = (Villain) u;
-                    if (currentRoom != null && currentRoom.equals(villain.getRoom())) {
-                        alive = false;
-                        AudioManager.closeSound(playerSound);
-                    }
-                }
-            }
+
             //move the character
             run = 1;
             boolean w = isten.getInputHandler().isKeyDown(KeyEvent.VK_W);
@@ -218,19 +199,46 @@ public class Player extends Entity {
             }
 
         } else {
+
             if (!AudioManager.isPlaying(playerSound))
-                playerSound = AudioManager.playSound("./assets/audio/died.ogg");
+                if(localPlayer) playerSound = AudioManager.playSound("./assets/audio/died.ogg");
 
             if (activeImage != 4) {
                 playerImage.get(activeImage).setVisibility(false);
                 activeImage = 4;
                 playerImage.get(activeImage).setVisibility(true);
-                death.setVisibility(true);
-                motivational.setVisibility(true);
-
+                if(localPlayer) {
+                    death.setVisibility(true);
+                    motivational.setVisibility(true);
+                }
             }
         }
         death.setScale(new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()));
+    }
+
+    public boolean checkIfPlayerInVillainRoom(Isten isten) {
+        Room currentRoom = null;
+        for (Updatable u : isten.getUpdatables()) {
+            if (u.getClass().equals(Villain.class)) {
+                for (Room room : isten.getMap().getRooms()) {
+                    for (UnitRoom unitRoom : room.getUnitRooms()) {
+                        if (playerCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
+                                playerCollider.getPosition().x <= unitRoom.getPosition().x + 0.5 &&
+                                playerCollider.getPosition().y >= unitRoom.getPosition().y - 0.5 &&
+                                playerCollider.getPosition().y <= unitRoom.getPosition().y + 0.5) {
+                            currentRoom = room;
+                        }
+                    }
+                }
+                Villain villain = (Villain) u;
+                if (currentRoom != null && currentRoom.equals(villain.getRoom())) {
+                    alive = false;
+                    AudioManager.closeSound(playerSound);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override

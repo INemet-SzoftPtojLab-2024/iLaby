@@ -11,6 +11,7 @@ public class Packet06VillainMove extends Packet {
         this.villainName = dataArray[0];
         this.x = Float.parseFloat(dataArray[1]);
         this.y = Float.parseFloat(dataArray[2]);
+
     }
 
     public Packet06VillainMove(String villainName, float x, float y) {
@@ -18,6 +19,7 @@ public class Packet06VillainMove extends Packet {
         this.villainName = villainName;
         this.x = x;
         this.y = y;
+
     }
 
     public void writeData(GameClient client) {
@@ -44,5 +46,6 @@ public class Packet06VillainMove extends Packet {
     public float getY() {
         return y;
     }
+
 
 }

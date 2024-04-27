@@ -11,7 +11,8 @@ public abstract class Packet {
         VILLAIN(05),
         VILLAINMOVE(06),
         TIMER(07),
-        WALL(20);
+        WALL(20),
+        DEATH(21);
         private int packetId;
         private PacketTypes(int packetId) {
             this.packetId = packetId;

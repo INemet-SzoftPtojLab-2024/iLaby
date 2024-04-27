@@ -88,6 +88,23 @@ public class GameClient extends Thread {
                 packet = new Packet20Wall(data);
                 handleWall((Packet20Wall) packet);
                 break;
+            case DEATH:
+                packet = new Packet21Death(data);
+                handleDeath((Packet21Death)packet);
+                break;
+        }
+    }
+
+    private void handleDeath(Packet21Death packet) {
+        String username = packet.getUsername();
+
+        for(int i = 0; i < isten.getUpdatables().size(); i++) {
+            if(isten.getUpdatable(i).getClass() == PlayerMP.class) {
+                PlayerMP playerMP = (PlayerMP)isten.getUpdatable(i);
+                if(playerMP.getUsername().equalsIgnoreCase(username)) {
+                    playerMP.setAlive(false);
+                }
+            }
         }
     }
 
@@ -154,6 +171,8 @@ public class GameClient extends Thread {
         String villainName = packet.getVillainName();
         Vec2 position = packet.getPosition();
         String imagePath = packet.getImagePath();
+        int random1 = packet.getRandom1();
+        int random2 = packet.getRandom2();
 
         HandlerManager hm = isten.getHandlerManager();
         hm.lock.lock();
@@ -161,7 +180,7 @@ public class GameClient extends Thread {
                 // Critical section
                 // Access shared resources here
                 hm.addTask(HandlerManager.TaskType.Villain);
-                hm.addData(new HandlerManager.VillainData(villainName, position, imagePath));
+                hm.addData(new HandlerManager.VillainData(villainName, position, imagePath, random1, random2));
             } finally {
                 hm.lock.unlock(); // Release the lock
             }

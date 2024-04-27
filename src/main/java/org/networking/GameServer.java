@@ -25,7 +25,9 @@ public class GameServer extends Thread {
     private VillainHandler villainHandler;
     private MapHandler mapHandler;
     private TimeHandler timeHandler;
+    private DeathHandler deathHandler;
     private DatagramSocket socket;
+
     Isten isten;
     boolean isInitialized = false;
 
@@ -69,10 +71,12 @@ public class GameServer extends Thread {
         mapHandler = new MapHandler();
         timeHandler = new TimeHandler();
         villainHandler = new VillainHandler();
+        deathHandler = new DeathHandler();
 
         serverSideHandlers.add(mapHandler);
         serverSideHandlers.add(timeHandler);
         serverSideHandlers.add(villainHandler);
+        serverSideHandlers.add(deathHandler);
 
         for(ServerSideHandler serverSideHandler: serverSideHandlers) {
             serverSideHandler.create(this);

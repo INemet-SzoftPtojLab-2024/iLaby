@@ -33,6 +33,7 @@ public class Villain extends Entity {
     Room room;
     UnitRoom currentUnitRoom;
     UnitRoom prevUnitRoom;
+    private int random1, random2;
 
     public Villain() {
         villainCollider = null;
@@ -215,20 +216,29 @@ public class Villain extends Entity {
         }
     }
 
-    public Vec2 randomPositions(ArrayList<Room> rooms) {
-        Collections.shuffle(rooms);
+    public float[] randomPositions(ArrayList<Room> rooms) {
+        //Collections.shuffle(rooms);
         Random rand = new Random();
 
         Room selectedRoom;
 
         do {
-            selectedRoom = rooms.get(rand.nextInt(rooms.size() - 1));
+            random1 = rand.nextInt(rooms.size() - 1);
+            selectedRoom = rooms.get(random1);
         } while (roomsWithVillains.contains(selectedRoom) || isStartUnitRoomInRoom(selectedRoom));
 
-        UnitRoom selectedUnitRoom = selectedRoom.getUnitRooms().get(rand.nextInt(selectedRoom.getUnitRooms().size()));
+        random2 = rand.nextInt(selectedRoom.getUnitRooms().size());
+        UnitRoom selectedUnitRoom = selectedRoom.getUnitRooms().get(random2);
         roomsWithVillains.add(selectedRoom);
         room = selectedRoom;
-        return new Vec2(selectedUnitRoom.getPosition().x, selectedUnitRoom.getPosition().y);
+        return new float[]{random1, random2, selectedUnitRoom.getPosition().x, selectedUnitRoom.getPosition().y};
+    }
+
+    public void setRoomForVillain(ArrayList<Room> rooms, int selectedRoomIndex, int selectedUnitRoomIndex) {
+        Room selectedRoom = rooms.get(selectedRoomIndex);
+        UnitRoom selectedUnitRoom = selectedRoom.getUnitRooms().get(selectedUnitRoomIndex);
+        roomsWithVillains.add(selectedRoom);
+        room = selectedRoom;
     }
 
     boolean isStartUnitRoomInRoom(Room room) {
@@ -276,5 +286,21 @@ public class Villain extends Entity {
 
     public void setPosition(Vec2 vec2) {
         position = vec2;
+    }
+
+    public int getRandom1() {
+        return random1;
+    }
+
+    public int getRandom2() {
+        return random2;
+    }
+
+    public void setRandom1(int random1) {
+        this.random1 = random1;
+    }
+
+    public void setRandom2(int random2) {
+        this.random2 = random2;
     }
 }

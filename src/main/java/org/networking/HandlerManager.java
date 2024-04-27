@@ -40,15 +40,19 @@ public class HandlerManager {
     }
 
     public static class VillainData extends HandlerData {
-        VillainData(String villainName, Vec2 position, String imgPath) {
+        VillainData(String villainName, Vec2 position, String imgPath, int random1, int random2) {
             this.villainName = villainName;
             this.position = position;
             this.imgPath = imgPath;
+            this.random1 = random1;
+            this.random2 = random2;
         }
 
         public String villainName;
         public Vec2 position;
         public String imgPath;
+        public int random1;
+        public int random2;
     }
 
     public static class WallData extends HandlerData {
@@ -200,6 +204,7 @@ public class HandlerManager {
 
     private void villainHandler(VillainData villainData) {
         Villain villain = new Villain(villainData.villainName, villainData.position, villainData.imgPath);
+        //villain.setRoomForVillain(isten.getMap().getRooms(), villainData.random1, villainData.random2);
         isten.addUpdatable(villain);
     }
 

@@ -2,11 +2,13 @@ package main.java.org.networking;
 
 import main.java.org.entities.villain.Villain;
 import main.java.org.game.Isten;
+import main.java.org.game.Map.Room;
 import main.java.org.game.physics.Collider;
 import main.java.org.linalg.Vec2;
 
 import java.net.DatagramPacket;
 import java.util.ArrayList;
+import java.util.Random;
 
 //Handles villain creation and update for Server
 public class VillainHandler extends ServerSideHandler {
@@ -40,7 +42,11 @@ public class VillainHandler extends ServerSideHandler {
         villainSkeletons.add(new Villain("Csuka",  "./assets/villain/villain2.png"));
 
         for(Villain villain: villainSkeletons) {
-            villain.setPosition(villain.randomPositions(isten.getMap().getRooms()));
+            float[] data = villain.randomPositions(isten.getMap().getRooms());
+            int random1 = (int)data[0];
+            int random2 = (int)data[1];
+            Vec2 pos = new Vec2(data[2], data[3]);
+            villain.setPosition(pos);
         }
 
     }
@@ -56,7 +62,9 @@ public class VillainHandler extends ServerSideHandler {
         for(int i = 0; i < villainSkeletons.size(); i++) {
             Packet05Villain packet = new Packet05Villain(villainSkeletons.get(i).getVillainName(),
                     villainSkeletons.get(i).getPosition(),
-                    villainSkeletons.get(i).getImagePath());
+                    villainSkeletons.get(i).getImagePath(),
+                    villainSkeletons.get(i).getRandom1(),
+                    villainSkeletons.get(i).getRandom2());
             server.sendData(packet.getData(), client.ipAddress, client.port);
         }
     }
@@ -75,11 +83,18 @@ public class VillainHandler extends ServerSideHandler {
         }
         else currTime = 0;
 
+
         for(Villain skeleton: villainSkeletons) {
             int index = isten.getVillainIndex(skeleton.getVillainName());
             Villain villain = (Villain)isten.getUpdatable(index);
 
             if(villain == null || !villain.isInitialized()) continue;
+
+
+            if(villain.getRoom() == null) {
+                villain.setRoomForVillain(isten.getMap().getRooms(), skeleton.getRandom1(), skeleton.getRandom2());
+            }
+
 
             villain.move(isten, deltaTime);
 
