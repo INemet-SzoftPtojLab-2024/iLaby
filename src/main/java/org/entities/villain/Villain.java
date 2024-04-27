@@ -4,14 +4,16 @@ import main.java.org.entities.Entity;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.Text;
 import main.java.org.game.Isten;
-import main.java.org.game.Map.Map;
-import main.java.org.game.Map.Room;
 import main.java.org.game.Map.UnitRoom;
 import main.java.org.game.physics.Collider;
 import main.java.org.linalg.Vec2;
 
+import main.java.org.game.Map.Map;
+import main.java.org.game.Map.Room;
+
 import java.util.ArrayList;
 import java.util.Collections;
+
 import java.util.Random;
 
 /**
@@ -23,47 +25,64 @@ public class Villain extends Entity {
     Collider villainCollider;
     Text villainName;
     float time;
+    int direction;
     Vec2 position;
-    Room room;
-    UnitRoom currentUnitRoom;
-    UnitRoom prevUnitRoom;
     String imagePath;
     float velocity;
     double sum;
+    Room room;
+    UnitRoom currentUnitRoom;
+    UnitRoom prevUnitRoom;
+    private int random1, random2;
 
+    public Villain() {
+        villainCollider = null;
+        villainImage = null;
+        time = 0.0f;
+        villainName = null;
+        direction=1;
+        velocity = 0.5f;
+        sum = 0.0;
+        room = null;
+    }
     public Villain(String name, String iP) {
+        this(name, new Vec2(0,0), iP);
+    }
+
+    public Villain(String name, Vec2 pos, String iP) {
         villainCollider = null;
         villainImage = null;
         time = 0.0f;
         villainName = new Text(name, new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 255, 0, 0);
         villainName.setShadowOn(false);
+        direction=1;
+        position = pos;
         imagePath = iP;
         velocity = 0.5f;
         sum = 0.0;
         room = null;
-    }
 
+    }
     @Override
     public void onStart(Isten isten) {
-
         Vec2 playerScale = new Vec2(0.6f, 0.6f);
 
-        position = randomPositions(isten.getMap().getRooms());
         villainCollider = new Collider(position, playerScale);
-
         villainCollider.setMovability(true);
         isten.getPhysicsEngine().addCollider(villainCollider);//register collider in the physics engine
 
         villainImage = new Image(new Vec2(), playerScale, imagePath);
-        villainImage.setSortingLayer(-68);
+        villainImage.setSortingLayer(-50);
         villainImage.setVisibility(true);
         isten.getRenderer().addRenderable(villainImage);//register images in the renderer
 
         if (villainName != null) {
             villainName.setVisibility(true);
-            villainName.setSortingLayer(-68);
+            villainName.setSortingLayer(-50);
             isten.getRenderer().addRenderable(villainName);
         }
+        //isten.getCamera().setPixelsPerUnit(100);
+
         Map map = isten.getMap();
 
         for (Room room : map.getRooms()) {
@@ -81,6 +100,14 @@ public class Villain extends Entity {
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
+
+        Vec2 playerPosition = villainCollider.getPosition();
+        villainImage.setPosition(playerPosition);
+        villainName.setPosition(Vec2.sum(playerPosition, new Vec2(0, (float) 0.5)));
+
+    }
+
+    public void move(Isten isten, double deltaTime) {
         sum += deltaTime;
         Vec2 playerPosition = villainCollider.getPosition();
         Random random = new Random();
@@ -187,23 +214,31 @@ public class Villain extends Entity {
                     break;
             }
         }
-
     }
 
-    public Vec2 randomPositions(ArrayList<Room> rooms) {
-        Collections.shuffle(rooms);
+    public float[] randomPositions(ArrayList<Room> rooms) {
+        //Collections.shuffle(rooms);
         Random rand = new Random();
 
         Room selectedRoom;
 
         do {
-            selectedRoom = rooms.get(rand.nextInt(rooms.size() - 1));
+            random1 = rand.nextInt(rooms.size() - 1);
+            selectedRoom = rooms.get(random1);
         } while (roomsWithVillains.contains(selectedRoom) || isStartUnitRoomInRoom(selectedRoom));
 
-        UnitRoom selectedUnitRoom = selectedRoom.getUnitRooms().get(rand.nextInt(selectedRoom.getUnitRooms().size()));
+        random2 = rand.nextInt(selectedRoom.getUnitRooms().size());
+        UnitRoom selectedUnitRoom = selectedRoom.getUnitRooms().get(random2);
         roomsWithVillains.add(selectedRoom);
         room = selectedRoom;
-        return new Vec2(selectedUnitRoom.getPosition().x, selectedUnitRoom.getPosition().y);
+        return new float[]{random1, random2, selectedUnitRoom.getPosition().x, selectedUnitRoom.getPosition().y};
+    }
+
+    public void setRoomForVillain(ArrayList<Room> rooms, int selectedRoomIndex, int selectedUnitRoomIndex) {
+        Room selectedRoom = rooms.get(selectedRoomIndex);
+        UnitRoom selectedUnitRoom = selectedRoom.getUnitRooms().get(selectedUnitRoomIndex);
+        roomsWithVillains.add(selectedRoom);
+        room = selectedRoom;
     }
 
     boolean isStartUnitRoomInRoom(Room room) {
@@ -219,7 +254,53 @@ public class Villain extends Entity {
     public void onDestroy() {
     }
 
+
+    public String getVillainName() {
+        return villainName.getText();
+    }
+
+    public Vec2 getPosition() {
+        return position;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public Collider getVillainCollider() {
+        return villainCollider;
+    }
+
+    public void setVillainCollider(Isten isten, Collider collider) {
+        villainCollider = collider;
+        isten.getPhysicsEngine().addCollider(villainCollider);//register collider in the physics engine
+    }
+
+    public void setVillainImage(Isten isten, Image image) {
+        villainImage = image;
+        isten.getRenderer().addRenderable(villainImage);
+    }
     public Room getRoom() {
         return room;
+    }
+
+    public void setPosition(Vec2 vec2) {
+        position = vec2;
+    }
+
+    public int getRandom1() {
+        return random1;
+    }
+
+    public int getRandom2() {
+        return random2;
+    }
+
+    public void setRandom1(int random1) {
+        this.random1 = random1;
+    }
+
+    public void setRandom2(int random2) {
+        this.random2 = random2;
     }
 }

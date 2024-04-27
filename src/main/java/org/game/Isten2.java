@@ -7,4 +7,10 @@ public class Isten2 extends Isten{
     protected void addUpdatables() {
         addUpdatable(new MainMenu());
     }
+
+    @Override
+    public void init() {
+        addUpdatables();
+        addRenderables();
+    }
 }
