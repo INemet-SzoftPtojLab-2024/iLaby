@@ -29,11 +29,16 @@ public class GameServer extends Thread {
     Isten isten;
     boolean isInitialized = false;
 
+    //Notification for gamemanager, that the server is initialized, so it can enter the gameloop
+    SharedObject InitializationLock;
+
+
     //Just values, not references for the actual players
     //When changing something in one of the connectedPlayers it won't change anything on the actual players in updatable
     private List<PlayerMP> connectedPlayers = new ArrayList<>();
     public GameServer(Isten isten) {
         this.isten = isten;
+        InitializationLock = new SharedObject();
         try {
             this.socket = new DatagramSocket(1331);
         }
@@ -55,31 +60,33 @@ public class GameServer extends Thread {
                 throw new RuntimeException(e);
             }
             parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
-
         }
     }
 
     private void startServer() {
-        isInitialized = true;
 
         serverSideHandlers = new ArrayList<ServerSideHandler>();
         mapHandler = new MapHandler();
         timeHandler = new TimeHandler();
-        //villainHandler = new VillainHandler();
+        villainHandler = new VillainHandler();
 
         serverSideHandlers.add(mapHandler);
         serverSideHandlers.add(timeHandler);
-        //serverSideHandlers.add(villainHandler);
+        serverSideHandlers.add(villainHandler);
 
         for(ServerSideHandler serverSideHandler: serverSideHandlers) {
             serverSideHandler.create(this);
             serverSideHandler.setInitialized(true);
         }
+        isInitialized = true;
+        //Send notification to game manager, so that it can start the game loop
+        InitializationLock.sendNotification();
+
     }
 
     public void updateServer(Isten isten, double deltaTime) {
         for(ServerSideHandler serverSideHandler: serverSideHandlers) {
-            serverSideHandler.update(isten, deltaTime);
+            if(serverSideHandler.isInitialized && isInitialized) serverSideHandler.update(isten, deltaTime);
         }
     }
 
@@ -128,7 +135,7 @@ public class GameServer extends Thread {
 
     private void handlePlayerJoinedData(PlayerMP player) {
         mapHandler.sendDataToClient(player);
-        //villainHandler.sendDataToClient(player);
+        villainHandler.sendDataToClient(player);
     }
 
     //handle Move Packet
@@ -189,5 +196,9 @@ public class GameServer extends Thread {
 
     public boolean isInitialized() {
         return isInitialized;
+    }
+
+    public SharedObject getInitializationLock() {
+        return InitializationLock;
     }
 }

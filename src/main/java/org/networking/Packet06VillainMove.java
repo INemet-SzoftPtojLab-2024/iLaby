@@ -3,7 +3,7 @@ package main.java.org.networking;
 public class Packet06VillainMove extends Packet {
 
     private String villainName;
-    private float x,y;
+    private float x, y;
 
     public Packet06VillainMove(byte[] data) {
         super(06);

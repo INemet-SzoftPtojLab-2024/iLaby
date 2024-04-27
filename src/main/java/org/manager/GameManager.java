@@ -5,6 +5,7 @@ import main.java.org.game.Audio.AudioManager;
 import main.java.org.game.Isten;
 import main.java.org.game.Isten2;
 import main.java.org.game.PlayerPrefs.PlayerPrefs;
+import main.java.org.networking.SharedObject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -88,6 +89,17 @@ public class GameManager {
                     Isten isten = new Isten();
                     changePanel(isten.getRenderer());//ez az isten.init elott fusson
                     isten.init();
+
+                    //Wait for the server to initialize (only on server side)
+                    if(isten.getSocketServer() != null) {
+                        SharedObject serverInitLock = isten.getSocketServer().getInitializationLock();
+                        try {
+                            serverInitLock.waitForNotification();
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
 
                     long lastFrame = System.nanoTime();
                     while (stage == GameStage.INGAME) {

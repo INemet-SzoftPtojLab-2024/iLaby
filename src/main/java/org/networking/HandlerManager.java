@@ -1,7 +1,13 @@
 package main.java.org.networking;
 
+import main.java.org.entities.villain.Villain;
 import main.java.org.game.Graphics.Image;
+import java.util.concurrent.locks.Lock;
+import main.java.org.game.Graphics.Text;
 import main.java.org.game.Isten;
+import main.java.org.game.Map.Map;
+import main.java.org.game.Map.Room;
+import main.java.org.game.Map.UnitRoom;
 import main.java.org.game.physics.Collider;
 import main.java.org.game.physics.ColliderGroup;
 import main.java.org.linalg.Vec2;
@@ -9,6 +15,8 @@ import main.java.org.linalg.Vec2;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Handler;
 
 public class HandlerManager {
 
@@ -17,13 +25,30 @@ public class HandlerManager {
     public HandlerManager(Isten isten) {
         this.isten = isten;
     }
+
     private List<TaskType> tasks = new ArrayList<>();
     private List<TaskType> synchronizedTasks = Collections.synchronizedList(tasks);
     private List<HandlerData> handlerDataList = new ArrayList<>();
     private List<HandlerData> synchronizedHandlerDataList = Collections.synchronizedList(handlerDataList);
+    public Lock lock = new ReentrantLock();
 
+    //->>>>>>>>>>>>>>>>//
+    //HANDLER DATA
+    //->>>>>>>>>>>>>>>>//
     public static abstract class HandlerData {
 
+    }
+
+    public static class VillainData extends HandlerData {
+        VillainData(String villainName, Vec2 position, String imgPath) {
+            this.villainName = villainName;
+            this.position = position;
+            this.imgPath = imgPath;
+        }
+
+        public String villainName;
+        public Vec2 position;
+        public String imgPath;
     }
 
     public static class WallData extends HandlerData {
@@ -39,59 +64,132 @@ public class HandlerManager {
         public boolean isDoor;
     }
 
+    public static class VillainMoveData extends HandlerData {
+        public VillainMoveData(String villainName, Vec2 position) {
+            this.villainName = villainName;
+            this.position = position;
+        }
+
+        public String villainName;
+        public Vec2 position;
+    }
+
+    //->>>>>>>>>>>>>>>>//
+    //EXECUTION
+    //->>>>>>>>>>>>>>>>//
     public void executeTasks() {
 
-        if(synchronizedHandlerDataList.size() != synchronizedTasks.size()) return;
+
+        if (synchronizedHandlerDataList.size() != synchronizedTasks.size()) return;
+
 
         while (!synchronizedTasks.isEmpty()) {
-            TaskType task = getTask();
-            HandlerData data = getHandlerData();
-            System.out.println("EXECUTE TASKS");
+
+            TaskType task;
+            HandlerData data;
+
+            lock.lock();
+            try {
+                // Critical section
+                // Access shared resources here
+                task = getTask();
+                data = getHandlerData();
+            } finally {
+                lock.unlock(); // Release the lock
+            }
+
+            if (task == null || data == null) return;
             switch (task) {
+                case Villain: {
+                    if (data.getClass() != VillainData.class) return;
+                    VillainData villainData = (VillainData) data;
+                    villainHandler(villainData);
+                    break;
+                }
+                case VillainMove: {
+                    if (data.getClass() != VillainMoveData.class) return;
+                    VillainMoveData villainMoveData = (VillainMoveData) data;
+                    villainMoveHandler(villainMoveData);
+                    break;
+                }
                 case WallHandler: {
-                    System.out.println("HANDLE WALL DATA");
-                    WallData wallData = (WallData)data;
+                    if (data.getClass() != WallData.class) return;
+                    WallData wallData = (WallData) data;
                     wallHandler(wallData);
+                    break;
                 }
             }
+
+        }
+
+
+    }
+
+    //->>>>>>>>>>>>>>>>//
+    //TASKTYPE ENUM
+    //->>>>>>>>>>>>>>>>//
+    public enum TaskType {
+        Villain,
+        VillainMove,
+        WallHandler,
+    }
+
+    synchronized public void addTask(TaskType type) {
+        lock.lock();
+        try {
+            synchronizedTasks.add(type);
+        }
+        finally {
+            lock.unlock();
         }
     }
 
-    public enum TaskType {
-        WallHandler
-    }
-
-    public void addTask(TaskType type) {
-        synchronizedTasks.add(type);
-    }
-
-    public void addData(HandlerData data) {
-        synchronizedHandlerDataList.add(data);
+    synchronized public void addData(HandlerData data) {
+        lock.lock();
+        try {
+            synchronizedHandlerDataList.add(data);
+        }
+        finally {
+            lock.unlock();
+        }
     }
 
     public TaskType getTask() {
-        if(tasks.isEmpty()) return null;
-        TaskType task = tasks.getLast();
-        synchronizedTasks.remove(task);
-        return task;
+        lock.lock();
+        try {
+            if (tasks.isEmpty()) return null;
+            return synchronizedTasks.removeLast();
+        }
+        finally {
+            lock.unlock();
+        }
+
     }
 
     public HandlerData getHandlerData() {
-        if(handlerDataList.isEmpty()) return null;
-        HandlerData data = handlerDataList.getLast();
-        synchronizedHandlerDataList.remove(data);
-        return data;
+        lock.lock();
+        try {
+            if (handlerDataList.isEmpty()) return null;
+            return synchronizedHandlerDataList.removeLast();
+        }
+        finally {
+            lock.unlock();
+        }
+
     }
 
+
+    //->>>>>>>>>>>>>>>>//
+    //HANDLER FUNCTIONS
+    //->>>>>>>>>>>>>>>>//
     private void wallHandler(WallData wallData) {
         ColliderGroup cg = new ColliderGroup();
         Collider collider = new Collider(wallData.pos, wallData.scale);
 
-        if(wallData.isDoor) {
+        if (wallData.isDoor) {
             isten.getRenderer().addRenderable(new Image(wallData.pos, wallData.scale, "./assets/doors/doors_leaf_closed.png"));
             collider.setSolidity(false);
-        }
-        else {
+        } else {
             isten.getRenderer().addRenderable(new Image(wallData.pos, wallData.scale, "./assets/walls/wall_mid.png"));
 
         }
@@ -100,6 +198,20 @@ public class HandlerManager {
         isten.getPhysicsEngine().addColliderGroup(cg);
     }
 
+    private void villainHandler(VillainData villainData) {
+        Villain villain = new Villain(villainData.villainName, villainData.position, villainData.imgPath);
+        isten.addUpdatable(villain);
+    }
 
-
+    private void villainMoveHandler(VillainMoveData villainMoveData) {
+        int index = isten.getVillainIndex(villainMoveData.villainName);
+        Villain villain = (Villain) isten.getUpdatable(index);
+        if (villain == null) {
+            return;
+        }
+        if (villain.getVillainCollider() != null) {
+            Vec2 position = villainMoveData.position;
+            villain.getVillainCollider().setPosition(position);
+        }
+    }
 }

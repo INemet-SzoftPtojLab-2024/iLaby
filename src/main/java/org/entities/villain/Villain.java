@@ -96,9 +96,13 @@ public class Villain extends Entity {
         }
         prevUnitRoom = currentUnitRoom;
     }
+
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
 
+        Vec2 playerPosition = villainCollider.getPosition();
+        villainImage.setPosition(playerPosition);
+        villainName.setPosition(Vec2.sum(playerPosition, new Vec2(0, (float) 0.5)));
 
     }
 
@@ -106,9 +110,9 @@ public class Villain extends Entity {
         sum += deltaTime;
         Vec2 playerPosition = villainCollider.getPosition();
         Random random = new Random();
-        if(villainImage != null) villainImage.setPosition(playerPosition);
-        if(villainName != null) villainName.setPosition(Vec2.sum(playerPosition, new Vec2(0, (float) 0.5)));
-        if(villainCollider == null) return;
+        villainImage.setPosition(playerPosition);
+        villainName.setPosition(Vec2.sum(playerPosition, new Vec2(0, (float) 0.5)));
+
 
         if (sum < 2) return;
         Map map = isten.getMap();
@@ -262,6 +266,10 @@ public class Villain extends Entity {
         isten.getPhysicsEngine().addCollider(villainCollider);//register collider in the physics engine
     }
 
+    public void setVillainImage(Isten isten, Image image) {
+        villainImage = image;
+        isten.getRenderer().addRenderable(villainImage);
+    }
     public Room getRoom() {
         return room;
     }

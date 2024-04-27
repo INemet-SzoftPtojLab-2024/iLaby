@@ -1,14 +1,10 @@
 package main.java.org.networking;
 
-import main.java.org.entities.villain.Villain;
-import main.java.org.game.Graphics.Image;
 import main.java.org.game.Isten;
 import main.java.org.game.Map.Map;
-import main.java.org.game.Map.RoomType;
 import main.java.org.game.UI.TimeCounter;
 import main.java.org.linalg.Vec2;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.*;
 
@@ -89,23 +85,31 @@ public class GameClient extends Thread {
                 break;
             case WALL:
                 //System.out.println("GOT WALL PACKET");
-                packet = new Packet0010Wall(data);
-                handleWall((Packet0010Wall) packet);
+                packet = new Packet20Wall(data);
+                handleWall((Packet20Wall) packet);
                 break;
         }
     }
 
-    private void handleWall(Packet0010Wall packet) {
+    private void handleWall(Packet20Wall packet) {
 
-        if(isten.getSocketServer() != null) return;
+        //if(isten.getSocketServer() != null) return;
 
         Vec2 pos = new Vec2(packet.getPosX(), packet.getPosY());
         Vec2 scale = new Vec2(packet.getScaleX(), packet.getScaleY());
         boolean isDoor = packet.isDoor();
 
         HandlerManager hm = isten.getHandlerManager();
-        hm.addTask(HandlerManager.TaskType.WallHandler);
-        hm.addData(new HandlerManager.WallData(pos, scale, isDoor));
+        hm.lock.lock();
+            try {
+                // Critical section
+                // Access shared resources here
+                hm.addTask(HandlerManager.TaskType.WallHandler);
+                hm.addData(new HandlerManager.WallData(pos, scale, isDoor));
+            } finally {
+                hm.lock.unlock(); // Release the lock
+            }
+
     }
     private void handleUnitRoom(Packet04UnitRoom packet) {
         Vec2 position = new Vec2(packet.getX(), packet.getY());
@@ -127,19 +131,41 @@ public class GameClient extends Thread {
     }
 
     private void handleVillainMove(Packet06VillainMove packet) {
-        String villainName = packet.getVillainName();
 
-        int index = isten.getVillainIndex(villainName);
-        Villain villain = (Villain)isten.getUpdatable(index);
-        if(villain == null) return;
-        if(villain.getVillainCollider() != null) villain.getVillainCollider().setPosition(new Vec2(packet.getX(), packet.getY()));
+        //if(isten.getSocketServer() != null) return;
+
+        String villainName = packet.getVillainName();
+        Vec2 position = new Vec2(packet.getX(), packet.getY());
+
+        HandlerManager hm = isten.getHandlerManager();
+        hm.lock.lock();
+            try {
+                // Critical section
+                // Access shared resources here
+                hm.addTask(HandlerManager.TaskType.VillainMove);
+                hm.addData(new HandlerManager.VillainMoveData(villainName, position));
+            } finally {
+                hm.lock.unlock(); // Release the lock
+            }
     }
 
     private void handleVillain(Packet05Villain packet) {
+
         String villainName = packet.getVillainName();
         Vec2 position = packet.getPosition();
         String imagePath = packet.getImagePath();
-        isten.addUpdatable(new Villain(villainName, position, imagePath));
+
+        HandlerManager hm = isten.getHandlerManager();
+        hm.lock.lock();
+            try {
+                // Critical section
+                // Access shared resources here
+                hm.addTask(HandlerManager.TaskType.Villain);
+                hm.addData(new HandlerManager.VillainData(villainName, position, imagePath));
+            } finally {
+                hm.lock.unlock(); // Release the lock
+            }
+
     }
 
     private void handleAnimation(Packet03Animation packet) {

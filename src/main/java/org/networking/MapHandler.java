@@ -4,15 +4,7 @@ import main.java.org.game.Isten;
 import main.java.org.game.Map.EdgeBetweenRooms;
 import main.java.org.game.Map.EdgePiece;
 import main.java.org.game.Map.Map;
-import main.java.org.game.Map.UnitRoom;
 import main.java.org.linalg.Vec2;
-import main.java.org.networking.GameServer;
-import main.java.org.networking.Packet;
-import main.java.org.networking.PlayerMP;
-import main.java.org.networking.ServerSideHandler;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MapHandler extends ServerSideHandler {
 
@@ -56,7 +48,7 @@ public class MapHandler extends ServerSideHandler {
                 EdgePiece edgePiece = re.getWalls().get(j);
                 Vec2 pos = edgePiece.getImage().getPosition();
                 Vec2 scale = edgePiece.getImage().getScale();
-                Packet0010Wall packet = new Packet0010Wall(pos.x, pos.y, scale.x, scale.y, edgePiece.isDoor());
+                Packet20Wall packet = new Packet20Wall(pos.x, pos.y, scale.x, scale.y, edgePiece.isDoor());
                 server.sendData(packet.getData(), client.ipAddress, client.port);
             }
             try {

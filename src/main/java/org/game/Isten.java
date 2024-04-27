@@ -50,7 +50,7 @@ public class Isten {
      */
     public Isten() {
         inventory=new Inventory(5);
-        map=new Map(100, 100, 10);
+        map=new Map(20, 20, 10);
         itemManager=new ItemManager();
         inputHandler = new Input();
         camera = new Camera();
@@ -73,7 +73,7 @@ public class Isten {
 
         inputHandler.update();
 
-        if(map.isGenerated() || socketServer == null) physicsEngine.step(deltaTime);
+        if(socketServer == null || socketServer.isInitialized()) physicsEngine.step(deltaTime);
 
 
         //remove pending updatables from updatables
@@ -101,10 +101,12 @@ public class Isten {
         for (Updatable u : updatables)
             u.onUpdate(this, deltaTime);
 
+
         //ServerUpdate
         if(socketServer != null) {
             socketServer.updateServer(this, deltaTime);
         }
+
 
 
         //Manage handlers of client

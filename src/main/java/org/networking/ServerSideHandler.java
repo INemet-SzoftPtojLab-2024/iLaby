@@ -16,8 +16,10 @@ public abstract class ServerSideHandler {
     public abstract void sendDataToAllClients(Packet packet);
     public abstract void update(Isten isten, double deltaTime);
     protected void sendDataToWaitingClients() {
-        for(PlayerMP client: waitingClients) {
+        for(int i = 0; i < waitingClients.size(); i++) {
+            PlayerMP client = waitingClients.get(i);
             sendDataToClient(client);
+            waitingClients.remove(client);
         }
     }
     public void setInitialized(boolean b) {

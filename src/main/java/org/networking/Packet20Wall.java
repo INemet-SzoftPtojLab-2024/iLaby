@@ -1,6 +1,6 @@
 package main.java.org.networking;
 
-public class Packet0010Wall extends Packet {
+public class Packet20Wall extends Packet {
 
     float posX;
     float posY;
@@ -8,7 +8,7 @@ public class Packet0010Wall extends Packet {
     float scaleY;
     boolean isDoor;
 
-    public Packet0010Wall(byte[] data) {
+    public Packet20Wall(byte[] data) {
         super(20);
         String[] dataArray = readData(data).split(",");
         this.posX = Float.parseFloat(dataArray[0]);
@@ -18,7 +18,7 @@ public class Packet0010Wall extends Packet {
         this.isDoor = Boolean.parseBoolean(dataArray[4]);
     }
 
-    public Packet0010Wall(float posX, float posY, float scaleX, float scaleY, boolean isDoor) {
+    public Packet20Wall(float posX, float posY, float scaleX, float scaleY, boolean isDoor) {
         super(20);
         this.posX = posX;
         this.posY = posY;

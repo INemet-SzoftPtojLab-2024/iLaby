@@ -11,46 +11,52 @@ import java.util.ArrayList;
 //Handles villain creation and update for Server
 public class VillainHandler extends ServerSideHandler {
 
-    ArrayList<Villain> villains;
+    ArrayList<Villain> villains = new ArrayList<>();
+    ArrayList<Villain> villainSkeletons = new ArrayList<>();
 
+    private double currTime = 0;
     @Override
     public void create(GameServer server) {
         this.server = server;
         this.isten = server.isten;
         villains = new ArrayList<>();
         createVillains();
+        isInitialized = true;
+        sendDataToWaitingClients();
     }
 
     public void createVillains() {
-        villains.add(new Villain("Gajdos",  "./assets/villain/villain1.png"));
-        villains.add(new Villain("Csuka",  "./assets/villain/villain2.png"));
-        villains.add(new Villain("Villain",  "./assets/villain/villain3.png"));
-        villains.add(new Villain("Villain",  "./assets/villain/villain3.png"));
-        villains.add(new Villain("Villain",  "./assets/villain/villain3.png"));
-        villains.add(new Villain("Villain",  "./assets/villain/villain3.png"));
-        villains.add(new Villain("Villain",  "./assets/villain/villain3.png"));
-        villains.add(new Villain("Villain",  "./assets/villain/villain3.png"));
-        villains.add(new Villain("Villain",  "./assets/villain/villain3.png"));
-        villains.add(new Villain("Villain",  "./assets/villain/villain3.png"));
 
-        for(Villain villain: villains) {
-            //Collider villainCollider;
+
+        villainSkeletons.add(new Villain("Villain1", "./assets/villain/villain1.png"));
+        villainSkeletons.add(new Villain("Villain2",  "./assets/villain/villain1.png"));
+        villainSkeletons.add(new Villain("Villain3",  "./assets/villain/villain1.png"));
+        villainSkeletons.add(new Villain("Villain4",  "./assets/villain/villain1.png"));
+        villainSkeletons.add(new Villain("Villain5",  "./assets/villain/villain1.png"));
+        villainSkeletons.add(new Villain("Villain6",  "./assets/villain/villain1.png"));
+        villainSkeletons.add(new Villain("Villain7",  "./assets/villain/villain3.png"));
+        villainSkeletons.add(new Villain("Villain8",  "./assets/villain/villain3.png"));
+        villainSkeletons.add(new Villain("Gajdos",  "./assets/villain/villain1.png"));
+        villainSkeletons.add(new Villain("Csuka",  "./assets/villain/villain2.png"));
+
+        for(Villain villain: villainSkeletons) {
             villain.setPosition(villain.randomPositions(isten.getMap().getRooms()));
-
-            //Vec2 playerScale = new Vec2(0.6f, 0.6f);
-            //villainCollider = new Collider(villain.getPosition(), playerScale);
-            //villainCollider.setMovability(true);
-            //villain.setVillainCollider(isten, villainCollider);
         }
 
     }
 
     @Override
     public void sendDataToClient(PlayerMP client) {
-        for(int i = 0; i < villains.size(); i++) {
-            Packet05Villain packet = new Packet05Villain(villains.get(i).getVillainName(),
-                    villains.get(i).getPosition(),
-                    villains.get(i).getImagePath());
+
+        if(!isInitialized) {
+            if(!waitingClients.contains(client)) waitingClients.add(client);
+            return;
+        }
+
+        for(int i = 0; i < villainSkeletons.size(); i++) {
+            Packet05Villain packet = new Packet05Villain(villainSkeletons.get(i).getVillainName(),
+                    villainSkeletons.get(i).getPosition(),
+                    villainSkeletons.get(i).getImagePath());
             server.sendData(packet.getData(), client.ipAddress, client.port);
         }
     }
@@ -64,13 +70,25 @@ public class VillainHandler extends ServerSideHandler {
     @Override
     public void update(Isten isten, double deltaTime) {
 
-        for(Villain villain: villains) {
-            if(villain.getVillainCollider() == null) continue;
+        if(currTime < 10000) {
+            currTime += deltaTime;
+        }
+        else currTime = 0;
+
+        for(Villain skeleton: villainSkeletons) {
+            int index = isten.getVillainIndex(skeleton.getVillainName());
+            Villain villain = (Villain)isten.getUpdatable(index);
+
+            if(villain == null || !villain.isInitialized()) continue;
+
             villain.move(isten, deltaTime);
-            Packet06VillainMove packet = new Packet06VillainMove(villain.getVillainName(),
-                    villain.getVillainCollider().getPosition().x,
-                    villain.getVillainCollider().getPosition().y);
-            sendDataToAllClients(packet);
+
+            if((int)(currTime * 100) % 2 == 0) {
+                Packet06VillainMove packet = new Packet06VillainMove(villain.getVillainName(),
+                        villain.getVillainCollider().getPosition().x,
+                        villain.getVillainCollider().getPosition().y);
+                sendDataToAllClients(packet);
+            }
         }
     }
 
