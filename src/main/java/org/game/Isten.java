@@ -122,11 +122,12 @@ public class Isten {
     /**
      * Method to initialize the game.
      */
-    public void init() {
-        //Create own player
+
+    public void initMP() {
+        //Set localPlayer to true, so that only this player can be moved and followed by the camera on this client
         player = new PlayerMP(JOptionPane.showInputDialog(this.getRenderer(),"Username"),null,-1);
 
-        //Set localPlayer to true, so that only this player can be moved and followed by the camera on this client
+
         player.localPlayer = true;
 
         addUpdatables();
@@ -147,7 +148,30 @@ public class Isten {
         socketClient.start();
 
         loginPacket.writeData(socketClient);
+    }
+    public void init() {
+        //Create own player
+        player = new PlayerMP(JOptionPane.showInputDialog(this.getRenderer(),"Username"),null,-1);
 
+
+        player.localPlayer = true;
+
+        addUpdatables();
+        addRenderables();
+
+        Packet00Login loginPacket = new Packet00Login(player.getUsername(), 0, 0);
+
+        if(socketServer != null) {
+            socketServer.addConnection(player,loginPacket);
+        }
+
+        socketServer = new GameServer(this);
+        socketServer.start();
+
+        socketClient = new GameClient(this, "localhost");
+        socketClient.start();
+
+        loginPacket.writeData(socketClient);
     }
 
     /**
@@ -166,7 +190,7 @@ public class Isten {
         updatables.add(inventory);
         updatables.add(map);
 
-        //updatables.add(new ChestManager(75));//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
+        updatables.add(new ChestManager(75));//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
 
 
         updatables.add(new TimeCounter());
@@ -265,4 +289,6 @@ public class Isten {
     public HandlerManager getHandlerManager() {
         return handlerManager;
     }
+
+
 }

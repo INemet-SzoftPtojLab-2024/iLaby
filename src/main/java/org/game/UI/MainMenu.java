@@ -87,6 +87,8 @@ public class MainMenu extends Updatable {
         buttons.get(1).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
             multi = true;
+            TimeCounter.setTime(901);
+            GameManager.setStage(GameManager.GameStage.INGAME);
         });
         buttons.get(2).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
@@ -184,5 +186,9 @@ public class MainMenu extends Updatable {
     @Override
     public void onDestroy() {
 
+    }
+
+    public boolean isMulti() {
+        return multi;
     }
 }
