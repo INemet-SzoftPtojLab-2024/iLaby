@@ -82,113 +82,114 @@ public class Villain extends Entity {
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-        sum += deltaTime;
-        Vec2 villainPosition = villainCollider.getPosition();
-        Random random = new Random();
-        villainImage.setPosition(villainPosition);
-        villainName.setPosition(Vec2.sum(villainPosition, new Vec2(0, (float) 0.5)));
+        if(!isInGasRoom(isten)) {
+            sum += deltaTime;
+            Vec2 villainPosition = villainCollider.getPosition();
+            Random random = new Random();
+            villainImage.setPosition(villainPosition);
+            villainName.setPosition(Vec2.sum(villainPosition, new Vec2(0, (float) 0.5)));
 
 
-        if (sum < 2) return;
-        Map map = isten.getMap();
+            if (sum < 2) return;
+            Map map = isten.getMap();
 
-        for (Room room : map.getRooms()) {
-            for (UnitRoom unitRoom : room.getUnitRooms()) {
-                if (villainCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
-                        villainCollider.getPosition().x <= unitRoom.getPosition().x + 0.5 &&
-                        villainCollider.getPosition().y >= unitRoom.getPosition().y - 0.5 &&
-                        villainCollider.getPosition().y <= unitRoom.getPosition().y + 0.5) {
-                    currentUnitRoom = unitRoom;
+            for (Room room : map.getRooms()) {
+                for (UnitRoom unitRoom : room.getUnitRooms()) {
+                    if (villainCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
+                            villainCollider.getPosition().x <= unitRoom.getPosition().x + 0.5 &&
+                            villainCollider.getPosition().y >= unitRoom.getPosition().y - 0.5 &&
+                            villainCollider.getPosition().y <= unitRoom.getPosition().y + 0.5) {
+                        currentUnitRoom = unitRoom;
+                    }
                 }
             }
-        }
-        int randomNumber = random.nextInt(3);
-        if (villainCollider.getVelocity().x < 0) {
-            if (currentUnitRoom.isLeftDoor()) {
-                villainCollider.getVelocity().x = 0;
+            int randomNumber = random.nextInt(3);
+            if (villainCollider.getVelocity().x < 0) {
+                if (currentUnitRoom.isLeftDoor()) {
+                    villainCollider.getVelocity().x = 0;
+                    switch (randomNumber) {
+                        case 0:
+                            villainCollider.getVelocity().x = velocity;
+                            break;
+                        case 1:
+                            villainCollider.getVelocity().y = velocity;
+                            break;
+                        case 2:
+                            villainCollider.getVelocity().y = -velocity;
+                            break;
+                    }
+                }
+            }
+            if (villainCollider.getVelocity().x > 0) {
+                if (currentUnitRoom.isRightDoor()) {
+                    villainCollider.getVelocity().x = 0;
+                    switch (randomNumber) {
+                        case 0:
+                            villainCollider.getVelocity().x = -velocity;
+                            break;
+                        case 1:
+                            villainCollider.getVelocity().y = velocity;
+                            break;
+                        case 2:
+                            villainCollider.getVelocity().y = -velocity;
+                            break;
+                    }
+                }
+            }
+            if (villainCollider.getVelocity().y > 0) {
+                if (currentUnitRoom.isTopDoor()) {
+                    villainCollider.getVelocity().y = 0;
+                    switch (randomNumber) {
+                        case 0:
+                            villainCollider.getVelocity().x = velocity;
+                            break;
+                        case 1:
+                            villainCollider.getVelocity().y = -velocity;
+                            break;
+                        case 2:
+                            villainCollider.getVelocity().x = -velocity;
+                            break;
+                    }
+                }
+            }
+            if (villainCollider.getVelocity().y < 0) {
+                if (currentUnitRoom.isBottomDoor()) {
+                    villainCollider.getVelocity().y = 0;
+                    switch (randomNumber) {
+                        case 0:
+                            villainCollider.getVelocity().x = velocity;
+                            break;
+                        case 1:
+                            villainCollider.getVelocity().y = velocity;
+                            break;
+                        case 2:
+                            villainCollider.getVelocity().x = -velocity;
+                            break;
+                    }
+                }
+            }
+            if (villainCollider.getVelocity().x == 0 && villainCollider.getVelocity().y == 0) {
+                randomNumber = random.nextInt(4);
                 switch (randomNumber) {
                     case 0:
                         villainCollider.getVelocity().x = velocity;
+                        villainCollider.getVelocity().y = 0.0f;
                         break;
                     case 1:
-                        villainCollider.getVelocity().y = velocity;
-                        break;
-                    case 2:
-                        villainCollider.getVelocity().y = -velocity;
-                        break;
-                }
-            }
-        }
-        if (villainCollider.getVelocity().x > 0) {
-            if (currentUnitRoom.isRightDoor()) {
-                villainCollider.getVelocity().x = 0;
-                switch (randomNumber) {
-                    case 0:
                         villainCollider.getVelocity().x = -velocity;
+                        villainCollider.getVelocity().y = 0.0f;
                         break;
-                    case 1:
+                    case 2:
                         villainCollider.getVelocity().y = velocity;
+                        villainCollider.getVelocity().x = 0.0f;
                         break;
-                    case 2:
+                    case 3:
                         villainCollider.getVelocity().y = -velocity;
+                        villainCollider.getVelocity().x = 0.0f;
                         break;
                 }
             }
         }
-        if (villainCollider.getVelocity().y > 0) {
-            if (currentUnitRoom.isTopDoor()) {
-                villainCollider.getVelocity().y = 0;
-                switch (randomNumber) {
-                    case 0:
-                        villainCollider.getVelocity().x = velocity;
-                        break;
-                    case 1:
-                        villainCollider.getVelocity().y = -velocity;
-                        break;
-                    case 2:
-                        villainCollider.getVelocity().x = -velocity;
-                        break;
-                }
-            }
-        }
-        if (villainCollider.getVelocity().y < 0) {
-            if (currentUnitRoom.isBottomDoor()) {
-                villainCollider.getVelocity().y = 0;
-                switch (randomNumber) {
-                    case 0:
-                        villainCollider.getVelocity().x = velocity;
-                        break;
-                    case 1:
-                        villainCollider.getVelocity().y = velocity;
-                        break;
-                    case 2:
-                        villainCollider.getVelocity().x = -velocity;
-                        break;
-                }
-            }
-        }
-        if (villainCollider.getVelocity().x == 0 && villainCollider.getVelocity().y == 0) {
-            randomNumber = random.nextInt(4);
-            switch (randomNumber) {
-                case 0:
-                    villainCollider.getVelocity().x = velocity;
-                    villainCollider.getVelocity().y = 0.0f;
-                    break;
-                case 1:
-                    villainCollider.getVelocity().x = -velocity;
-                    villainCollider.getVelocity().y = 0.0f;
-                    break;
-                case 2:
-                    villainCollider.getVelocity().y = velocity;
-                    villainCollider.getVelocity().x = 0.0f;
-                    break;
-                case 3:
-                    villainCollider.getVelocity().y = -velocity;
-                    villainCollider.getVelocity().x = 0.0f;
-                    break;
-            }
-        }
-
     }
 
     public Vec2 randomPositions(ArrayList<Room> rooms) {

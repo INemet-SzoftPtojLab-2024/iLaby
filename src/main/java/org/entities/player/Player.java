@@ -206,7 +206,7 @@ public class Player extends Entity {
                         }
                     }
                     Villain villain = (Villain) u;
-                    if (currentRoom != null && currentRoom.equals(villain.getRoom())) {
+                    if (currentRoom != null && currentRoom.equals(villain.getRoom()) && currentRoom.getRoomType()!=RoomType.GAS) {
                         alive = false;
                         AudioManager.closeSound(playerSound);
                     }
