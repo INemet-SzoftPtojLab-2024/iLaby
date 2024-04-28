@@ -185,6 +185,7 @@ public class EdgeManager {
         }
 
     }
+
     public void addEdge(EdgeBetweenRooms newEdge){
         Vec2 horizontalScale = new Vec2(1f, 0.1f); //vizszintes
         Vec2 verticalScale = new Vec2(0.1f, 1f); //fuggoleges

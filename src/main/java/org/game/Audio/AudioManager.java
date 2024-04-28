@@ -135,11 +135,16 @@ public final class AudioManager {
      */
     public static void closeAllSounds()
     {
-        for(SoundInternal si : activeSounds)
+        /*for(SoundInternal si : activeSounds)
         {
             si.clip.stop();
             si.clip.close();
+        }*/
+        for (int i = 0; i < activeSounds.size(); i++) {
+            activeSounds.get(i).clip.stop();
+            activeSounds.get(i).clip.close();
         }
+
         activeSounds.clear();
     }
 

@@ -1,24 +1,18 @@
 
 ’
-java:S1319*"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(‚‡÷ıüÿÿÿÿ8¬ë‹›î1
-‚
-java:S13197"eThe type of "rooms" should be an interface such as "List" rather than the implementation "ArrayList".(–Ó°Ê8­ë‹›î1
+java:S1319D"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ØÎ­şùÿÿÿÿ8¹ÃÊ¥ã1
 ’
-java:S1319V"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ØÎ­şùÿÿÿÿ8­ë‹›î1
-’
-java:S1319Y"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(Ş„Ù­úÿÿÿÿ8­ë‹›î1
-r	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¶Ò’úÿÿÿÿ8­ë‹›î1
-u	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš8®ë‹›î1
-i	java:S116
-"MRename this field "ID" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÆÌèš8¼ë‹›î1
+java:S1319G"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(½“‰Ìıÿÿÿÿ8ºÃÊ¥ã1
+r	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¶Ò’úÿÿÿÿ8ºÃÊ¥ã1
+u	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš8ºÃÊ¥ã1
+i	java:S116	"MRename this field "ID" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÆÌèš8ÿ«ã™î1
 £
-java:S1186&"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(µÕ«ùÿÿÿÿ8¼ë‹›î1
+java:S1186#"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(µÕ«ùÿÿÿÿ8‚¬ã™î1
 
-java:S1186/"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(í®8¼ë‹›î1
+java:S1186("€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(í®8ƒ¬ã™î1
 £
-java:S11864"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(İßéàúÿÿÿÿ8¼ë‹›î1
-X	java:S125"<This block of commented-out lines of code should be removed.(Çìß8½ë‹›î1
-X	java:S125"<This block of commented-out lines of code should be removed.(í¶’ÿ8¾ë‹›î1
-]	java:S125"<This block of commented-out lines of code should be removed.(ÏÌÙñùÿÿÿÿ8¾ë‹›î1
-]	java:S125<"<This block of commented-out lines of code should be removed.(âù¨Œøÿÿÿÿ8Àë‹›î1
-]	java:S125D"<This block of commented-out lines of code should be removed.(âù¨Œøÿÿÿÿ8Àë‹›î1
+java:S1186-"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(İßéàúÿÿÿÿ8…¬ã™î1
+X	java:S125"<This block of commented-out lines of code should be removed.(Çìß8ÀÃÊ¥ã1
+X	java:S125"<This block of commented-out lines of code should be removed.(í¶’ÿ8¬ã™î1
+]	java:S125"<This block of commented-out lines of code should be removed.(ÏÌÙñùÿÿÿÿ8”¬ã™î1
+]	java:S1252"<This block of commented-out lines of code should be removed.(âù¨Œøÿÿÿÿ8’”Ö¥ã1
