@@ -43,7 +43,7 @@ public class Player extends Entity {
         motivational = null;
         activeImage = 0;
         time = 0.0f;
-        playerName = new Text(PlayerPrefs.getString("name"), new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 0, 0, 255);
+        playerName = new Text(PlayerPrefs.getString("name"), new Vec2(0, 0), "./assets/Bavarian.otf", 15, 0, 0, 255);
         playerName.setShadowOn(false);
         alive = true;
     }
@@ -55,7 +55,7 @@ public class Player extends Entity {
         motivational = null;
         activeImage = 0;
         time = 0.0f;
-        playerName = new Text(name, new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 0, 0, 255);
+        playerName = new Text(name, new Vec2(0, 0), "./assets/Bavarian.otf", 15, 0, 0, 255);
         playerName.setShadowOn(false);
         alive = true;
     }

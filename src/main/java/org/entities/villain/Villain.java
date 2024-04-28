@@ -35,7 +35,7 @@ public class Villain extends Entity {
         villainCollider = null;
         villainImage = null;
         time = 0.0f;
-        villainName = new Text(name, new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 255, 0, 0);
+        villainName = new Text(name, new Vec2(0, 0), "./assets/Bavarian.otf", 15, 255, 0, 0);
         villainName.setShadowOn(false);
         imagePath = iP;
         velocity = 0.5f;
