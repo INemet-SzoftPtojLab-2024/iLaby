@@ -3,7 +3,6 @@ package main.java.org.items;
 import main.java.org.game.Isten;
 import main.java.org.game.Map.Map;
 import main.java.org.game.Map.UnitRoom;
-import main.java.org.game.Map.Wall;
 import main.java.org.game.physics.Collider;
 import main.java.org.game.physics.ColliderGroup;
 import main.java.org.game.updatable.Updatable;
@@ -72,7 +71,7 @@ public class ChestManager extends Updatable {
             int random;
             switch (random= rand.nextInt(3)){//TODO: ezt meg ki kene talalni hogy milyen valoszinuseggel dobjak a chestek az itemeket
                 case 0: {
-                    chests.add(new Chest(chestPos, isten, wall.ordinal(), new ArrayList<Item>(Arrays.asList(new Gasmask(isten), new Camambert(isten), new Transistor(isten)))));
+                    chests.add(new Chest(chestPos, isten, wall.ordinal(), new ArrayList<Item>(Arrays.asList(new Gasmask(isten), new Camembert(isten), new Transistor(isten)))));
                     break;
                 }
                 case 1: {

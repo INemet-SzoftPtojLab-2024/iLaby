@@ -47,6 +47,11 @@ public class Gasmask extends Item {
             capacityBarBackground.setVisibility(true);
         }
     }
+    @Override
+    public void dropOnGround(Vec2 pos){
+        super.dropOnGround(pos);
+        //TODO ha ledobja a maszkot ottmarad a téglalap
+    }
     public void useMask(double deltaTime) {
         float usageRate = 5.0f;
         capacity -= (float) (deltaTime * usageRate);
