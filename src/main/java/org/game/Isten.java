@@ -8,6 +8,7 @@ import main.java.org.entities.player.Player;
 
 import main.java.org.game.Input.Input;
 import main.java.org.game.Map.Map;
+import main.java.org.game.PlayerPrefs.PlayerPrefs;
 import main.java.org.game.UI.*;
 import main.java.org.game.physics.PhysicsEngine;
 import main.java.org.game.updatable.Updatable;
@@ -133,7 +134,9 @@ public class Isten {
         addUpdatables();
         addRenderables();
 
-        Packet00Login loginPacket = new Packet00Login(player.getUsername(), 0, 0);
+        int skinID = PlayerPrefs.getInt("skin");
+        player.setSkinID(skinID);
+        Packet00Login loginPacket = new Packet00Login(player.getUsername(), 0, 0, skinID);
 
         if(socketServer != null) {
             socketServer.addConnection(player,loginPacket);
@@ -153,13 +156,14 @@ public class Isten {
         //Create own player
         player = new PlayerMP(JOptionPane.showInputDialog(this.getRenderer(),"Username"),null,-1);
 
-
         player.localPlayer = true;
 
         addUpdatables();
         addRenderables();
 
-        Packet00Login loginPacket = new Packet00Login(player.getUsername(), 0, 0);
+        int skinID = PlayerPrefs.getInt("skin");
+        player.setSkinID(skinID);
+        Packet00Login loginPacket = new Packet00Login(player.getUsername(), 0, 0, skinID);
 
         if(socketServer != null) {
             socketServer.addConnection(player,loginPacket);

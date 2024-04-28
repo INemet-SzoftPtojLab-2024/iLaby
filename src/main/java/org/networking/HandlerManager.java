@@ -2,6 +2,8 @@ package main.java.org.networking;
 
 import main.java.org.entities.villain.Villain;
 import main.java.org.game.Graphics.Image;
+
+import java.net.InetAddress;
 import java.util.concurrent.locks.Lock;
 import main.java.org.game.Graphics.Text;
 import main.java.org.game.Isten;
@@ -78,13 +80,46 @@ public class HandlerManager {
         public Vec2 position;
     }
 
+    public static class LoginData extends HandlerData {
+        public LoginData(String username, InetAddress inetAddress, int port, Vec2 position, int skinID) {
+            this.username = username;
+            this.inetAddress = inetAddress;
+            this.port = port;
+            this.position = position;
+            this.skinID = skinID;
+        }
+
+        public String username;
+        public Vec2 position;
+        public int port;
+        public InetAddress inetAddress;
+        public int skinID;
+    }
+
     //->>>>>>>>>>>>>>>>//
     //EXECUTION
     //->>>>>>>>>>>>>>>>//
     public void executeTasks() {
 
-
         if (synchronizedHandlerDataList.size() != synchronizedTasks.size()) return;
+
+        /*
+        lock.lock();
+        try {
+            for(int i = 0; i < synchronizedTasks.size(); i++) {
+                TaskType task = synchronizedTasks.get(i);
+                HandlerData data = synchronizedHandlerDataList.get(i);
+                if(task == TaskType.VillainMove) {
+                    System.out.println(task);
+                    System.out.println(data.getClass());
+                }
+            }
+        }
+        finally {
+            lock.unlock();
+        }
+
+         */
 
 
         while (!synchronizedTasks.isEmpty()) {
@@ -116,10 +151,16 @@ public class HandlerManager {
                     villainMoveHandler(villainMoveData);
                     break;
                 }
-                case WallHandler: {
+                case Wall: {
                     if (data.getClass() != WallData.class) return;
                     WallData wallData = (WallData) data;
                     wallHandler(wallData);
+                    break;
+                }
+                case Login: {
+                    if(data.getClass() != LoginData.class) return;
+                    LoginData loginData = (LoginData)data;
+                    loginHandler(loginData);
                     break;
                 }
             }
@@ -135,7 +176,8 @@ public class HandlerManager {
     public enum TaskType {
         Villain,
         VillainMove,
-        WallHandler,
+        Wall,
+        Login,
     }
 
     synchronized public void addTask(TaskType type) {
@@ -162,7 +204,7 @@ public class HandlerManager {
         lock.lock();
         try {
             if (tasks.isEmpty()) return null;
-            return synchronizedTasks.removeLast();
+            return synchronizedTasks.removeFirst();
         }
         finally {
             lock.unlock();
@@ -174,7 +216,7 @@ public class HandlerManager {
         lock.lock();
         try {
             if (handlerDataList.isEmpty()) return null;
-            return synchronizedHandlerDataList.removeLast();
+            return synchronizedHandlerDataList.removeFirst();
         }
         finally {
             lock.unlock();
@@ -218,5 +260,17 @@ public class HandlerManager {
             Vec2 position = villainMoveData.position;
             villain.getVillainCollider().setPosition(position);
         }
+    }
+
+    private void loginHandler(LoginData loginData) {
+        String username = loginData.username;
+        InetAddress address = loginData.inetAddress;
+        int port = loginData.port;
+        Vec2 position = loginData.position;
+        int skinID = loginData.skinID;
+
+        PlayerMP player = new PlayerMP(username, address, port, position);
+        player.setSkinID(skinID);
+        isten.addUpdatable(player);
     }
 }

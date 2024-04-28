@@ -39,6 +39,7 @@ public class Player extends Entity {
 
     protected Vec2 spawnPosition;
     protected int run = 1;
+    protected int skinID;
     public boolean localPlayer = false;
 
     public Player() {
@@ -85,11 +86,11 @@ public class Player extends Entity {
         isten.getPhysicsEngine().addCollider(playerCollider);//register collider in the physics engine
 
         playerImage = new ArrayList<>();
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right1.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_right2.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left1.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_left2.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+PlayerPrefs.getInt("skin")+"_ded.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+skinID+"_right1.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+skinID+"_right2.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+skinID+"_left1.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+skinID+"_left2.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+skinID+"_ded.png"));
         death = new ImageUI(new Vec2(0, 0), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/character/ded.png");
         death.setSortingLayer(-70);
         death.setVisibility(false);
@@ -293,5 +294,13 @@ public class Player extends Entity {
     //Needed for instant animation change
     protected void sendAnimationData(Isten isten) {
         //implemented in PlayerMP -> override
+    }
+
+    public void setSkinID(int skinID) {
+        this.skinID = skinID;
+    }
+
+    public int getSkinID() {
+        return skinID;
     }
 }
