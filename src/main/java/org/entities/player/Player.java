@@ -52,7 +52,7 @@ public class Player extends Entity {
         playerName = new Text(PlayerPrefs.getString("name"), new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 0, 0, 255);
         playerName.setShadowOn(false);
         alive = true;
-        spawnPosition = new Vec2(0,0);
+        spawnPosition = new Vec2(0, 0);
 
     }
 
@@ -66,7 +66,7 @@ public class Player extends Entity {
         playerName = new Text(name, new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 0, 0, 255);
         playerName.setShadowOn(false);
         alive = true;
-        spawnPosition = new Vec2(0,0);
+        spawnPosition = new Vec2(0, 0);
 
     }
 
@@ -75,6 +75,7 @@ public class Player extends Entity {
         this.spawnPosition.x = spawnPosition.x;
         this.spawnPosition.y = spawnPosition.y;
     }
+
     @Override
     public void onStart(Isten isten) {
         //called when the player is initialized
@@ -86,11 +87,11 @@ public class Player extends Entity {
         isten.getPhysicsEngine().addCollider(playerCollider);//register collider in the physics engine
 
         playerImage = new ArrayList<>();
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+skinID+"_right1.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+skinID+"_right2.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+skinID+"_left1.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+skinID+"_left2.png"));
-        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+skinID+"_ded.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character" + skinID + "_right1.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character" + skinID + "_right2.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character" + skinID + "_left1.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character" + skinID + "_left2.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character" + skinID + "_ded.png"));
         death = new ImageUI(new Vec2(0, 0), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/character/ded.png");
         death.setSortingLayer(-70);
         death.setVisibility(false);
@@ -147,7 +148,7 @@ public class Player extends Entity {
 
             if (isten.getInputHandler().isKeyDown(KeyEvent.VK_SHIFT)) run *= 2;//Shift is run
 
-            if(localPlayer) {
+            if (localPlayer) {
                 if (w) {
                     playerCollider.getVelocity().y = 2 * run;
                 } else if (!w) playerCollider.getVelocity().y = 0;
@@ -188,7 +189,7 @@ public class Player extends Entity {
             playerName.setPosition(Vec2.sum(playerPosition, new Vec2(0, (float) 0.5)));
 
             //move camera
-            if(localPlayer) isten.getCamera().setPosition(playerCollider.getPosition());
+            if (localPlayer) isten.getCamera().setPosition(playerCollider.getPosition());
 
             //play sound
             if (!AudioManager.isPlaying(playerSound))
@@ -201,14 +202,14 @@ public class Player extends Entity {
 
         } else {
 
-            if (!AudioManager.isPlaying(playerSound))
-                if(localPlayer) playerSound = AudioManager.playSound("./assets/audio/died.ogg");
+            if (!AudioManager.isPlaying(playerSound) && localPlayer && activeImage != 4)
+                playerSound = AudioManager.playSound("./assets/audio/died.ogg");
 
             if (activeImage != 4) {
                 playerImage.get(activeImage).setVisibility(false);
                 activeImage = 4;
                 playerImage.get(activeImage).setVisibility(true);
-                if(localPlayer) {
+                if (localPlayer) {
                     death.setVisibility(true);
                     motivational.setVisibility(true);
                 }
@@ -218,28 +219,31 @@ public class Player extends Entity {
     }
 
     public boolean checkIfPlayerInVillainRoom(Isten isten) {
-        Room currentRoom = null;
-        for (Updatable u : isten.getUpdatables()) {
-            if (u.getClass().equals(Villain.class)) {
-                for (Room room : isten.getMap().getRooms()) {
-                    for (UnitRoom unitRoom : room.getUnitRooms()) {
-                        if (playerCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
-                                playerCollider.getPosition().x <= unitRoom.getPosition().x + 0.5 &&
-                                playerCollider.getPosition().y >= unitRoom.getPosition().y - 0.5 &&
-                                playerCollider.getPosition().y <= unitRoom.getPosition().y + 0.5) {
-                            currentRoom = room;
+        if (alive) {
+            Room currentRoom = null;
+            for (Updatable u : isten.getUpdatables()) {
+                if (u.getClass().equals(Villain.class)) {
+                    for (Room room : isten.getMap().getRooms()) {
+                        for (UnitRoom unitRoom : room.getUnitRooms()) {
+                            if (playerCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
+                                    playerCollider.getPosition().x <= unitRoom.getPosition().x + 0.5 &&
+                                    playerCollider.getPosition().y >= unitRoom.getPosition().y - 0.5 &&
+                                    playerCollider.getPosition().y <= unitRoom.getPosition().y + 0.5) {
+                                currentRoom = room;
+                            }
                         }
                     }
-                }
-                Villain villain = (Villain) u;
-                if (currentRoom != null && currentRoom.equals(villain.getRoom())) {
-                    alive = false;
-                    AudioManager.closeSound(playerSound);
-                    return true;
+                    Villain villain = (Villain) u;
+                    if (currentRoom != null && currentRoom.equals(villain.getRoom())) {
+                        alive = false;
+                        if (playerSound != null)
+                            AudioManager.closeSound(playerSound);
+                        return true;
+                    }
                 }
             }
-        }
-        return false;
+            return false;
+        } else return true;
     }
 
     @Override
