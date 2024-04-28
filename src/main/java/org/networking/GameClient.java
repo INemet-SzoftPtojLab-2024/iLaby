@@ -3,13 +3,16 @@ package main.java.org.networking;
 import main.java.org.game.Isten;
 import main.java.org.game.Map.Map;
 import main.java.org.game.UI.TimeCounter;
+import main.java.org.game.physics.Collider;
+import main.java.org.game.physics.ColliderGroup;
+import main.java.org.items.Chest;
+import main.java.org.items.ChestManager;
 import main.java.org.linalg.Vec2;
 
 import java.io.IOException;
 import java.net.*;
 
 public class GameClient extends Thread {
-
     private InetAddress ipAddress;
     private DatagramSocket socket;
     Isten isten;
@@ -40,7 +43,6 @@ public class GameClient extends Thread {
 
         }
     }
-
 
     private void parsePacket(byte[] data, InetAddress address, int port) {
 
@@ -83,6 +85,14 @@ public class GameClient extends Thread {
                 packet = new Packet07Timer(data);
                 handleTimer((Packet07Timer)packet);
                 break;
+            case CHESTGENERATION:
+                packet = new Packet10ChestGeneration(data);
+                handleChestGeneration((Packet10ChestGeneration) packet);
+                break;
+            case CHESTOPENED:
+                packet = new Packet11ChestOpened(data);
+                handleChestOpened((Packet11ChestOpened) packet);
+                break;
             case WALL:
                 //System.out.println("GOT WALL PACKET");
                 packet = new Packet20Wall(data);
@@ -94,6 +104,36 @@ public class GameClient extends Thread {
                 break;
         }
     }
+
+    private void handleChestOpened(Packet11ChestOpened packet) {
+        for(int i = 0; i < isten.getUpdatables().size(); i++) {
+            if(isten.getUpdatable(i).getClass() == ChestManager.class) {
+                isten.getUpdatables().get(i).getChests().get(packet.chestIndex).open();
+            }
+        }
+    }
+    private int chestGenCount = 0;
+    private void handleChestGeneration(Packet10ChestGeneration packet) {
+        if(isten.getSocketServer() != null) return;
+
+        int chestIndex = 0;
+        for(int i = 0; i < isten.getUpdatables().size(); i++) {
+            if(isten.getUpdatable(i).getClass() == ChestManager.class) {
+                chestIndex = i;
+                isten.getUpdatables().get(i).getChests().add(new Chest(packet.pos,isten,packet.heading, packet.chestType));
+                chestGenCount++;
+            }
+        }
+
+        ColliderGroup chestColliders=new ColliderGroup();
+        for (int i = 0; i < isten.getUpdatables().get(chestIndex).getChests().size(); i++) {
+            Collider c=new Collider( isten.getUpdatables().get(chestIndex).getChests().get(i).getPosition(),new Vec2(0.15f,0.15f));
+            chestColliders.addCollider(c);
+        }
+        isten.getPhysicsEngine().addColliderGroup(chestColliders);
+
+    }
+
     private void handleDeath(Packet21Death packet) {
         String username = packet.getUsername();
 

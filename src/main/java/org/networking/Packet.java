@@ -11,6 +11,8 @@ public abstract class Packet {
         VILLAIN(05),
         VILLAINMOVE(06),
         TIMER(07),
+        CHESTGENERATION(10),
+        CHESTOPENED(11),
         WALL(20),
         DEATH(21);
         private int packetId;

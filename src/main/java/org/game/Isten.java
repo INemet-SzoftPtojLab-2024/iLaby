@@ -45,6 +45,7 @@ public class Isten {
     private GameServer socketServer;
 
     private PlayerMP player;
+    private ChestManager chestManager;
     /**
      * Constructor for Isten.
      * Initializes the physics engine, game renderer, and list of updatables.
@@ -52,6 +53,7 @@ public class Isten {
     public Isten() {
         inventory=new Inventory(5);
         map=new Map(20, 20, 10);
+        chestManager = new ChestManager(75);
         itemManager=new ItemManager();
         inputHandler = new Input();
         camera = new Camera();
@@ -60,6 +62,7 @@ public class Isten {
         updatables = new ArrayList<>();
         pendingAddedUpdatables = new ArrayList<>();
         pendingRemovedUpdatables = new ArrayList<>();
+
 
         handlerManager = new HandlerManager(this);
     }
@@ -151,6 +154,8 @@ public class Isten {
         socketClient.start();
 
         loginPacket.writeData(socketClient);
+
+        update(0);
     }
     public void init() {
         //Create own player
@@ -194,7 +199,7 @@ public class Isten {
         updatables.add(inventory);
         updatables.add(map);
 
-        updatables.add(new ChestManager(75));//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
+        updatables.add(chestManager);//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
 
 
         updatables.add(new TimeCounter());
@@ -278,6 +283,29 @@ public class Isten {
         if(index >= updatables.size()) return null;
         return updatables.get(index);
     }
+
+    /**
+     * returns an ArrayList of updatables of the given type <br>
+     * <br>
+     * how to use it:
+     * ArrayList< Player> alma=new ArrayList<>();
+     * alma = isten.getUpdatablesByType(Player.class);
+     * @param type the Class of the elements
+     * @return an array list of elements
+     * @param <E> the type of the queried elements
+     */
+    public final <E extends Updatable> ArrayList<E> getUpdatablesByType(Class<E> type)
+    {
+        ArrayList<E> tempList=new ArrayList<>();
+        for(int i=0;i<updatables.size();i++)
+        {
+            if(type.isInstance(updatables.get(i)))
+                tempList.add((E)updatables.get(i));
+        }
+
+        return tempList;
+    }
+
     public GameClient getSocketClient() {
         return socketClient;
     }
@@ -294,5 +322,5 @@ public class Isten {
         return handlerManager;
     }
 
-
+    public ChestManager getChestManager() { return chestManager; }
 }

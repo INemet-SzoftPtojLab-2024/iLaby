@@ -16,6 +16,7 @@ import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.java.org.items.ChestManager;
 import main.java.org.linalg.Vec2;
 import main.java.org.networking.Packet.PacketTypes;
 
@@ -26,6 +27,7 @@ public class GameServer extends Thread {
     private MapHandler mapHandler;
     private TimeHandler timeHandler;
     private DeathHandler deathHandler;
+    private ChestGenerationHandler chestGenerationHandler;
     private DatagramSocket socket;
 
     Isten isten;
@@ -39,6 +41,7 @@ public class GameServer extends Thread {
     //When changing something in one of the connectedPlayers it won't change anything on the actual players in updatable
     private List<PlayerMP> connectedPlayers = new ArrayList<>();
     public GameServer(Isten isten) {
+        //System.out.println("SERVER CONST");
         this.isten = isten;
         InitializationLock = new SharedObject();
         try {
@@ -72,11 +75,13 @@ public class GameServer extends Thread {
         timeHandler = new TimeHandler();
         villainHandler = new VillainHandler();
         deathHandler = new DeathHandler();
+        chestGenerationHandler = new ChestGenerationHandler();
 
         serverSideHandlers.add(mapHandler);
         serverSideHandlers.add(timeHandler);
         serverSideHandlers.add(villainHandler);
         serverSideHandlers.add(deathHandler);
+        serverSideHandlers.add(chestGenerationHandler);
 
         for(ServerSideHandler serverSideHandler: serverSideHandlers) {
             serverSideHandler.create(this);
@@ -119,6 +124,17 @@ public class GameServer extends Thread {
                 packet = new Packet03Animation(data);
                 handleAnimation((Packet03Animation) packet);
                 break;
+            case CHESTOPENED:
+                packet = new Packet11ChestOpened(data);
+                handleChestOpened((Packet11ChestOpened) packet);
+        }
+    }
+
+    private void handleChestOpened(Packet11ChestOpened packet) {
+        for(int i = 0; i < isten.getUpdatables().size(); i++) {
+            if(isten.getUpdatable(i).getClass() == ChestManager.class) {
+                isten.getUpdatables().get(i).getChests().get(packet.chestIndex).open();
+            }
         }
     }
 
@@ -141,6 +157,7 @@ public class GameServer extends Thread {
     private void handlePlayerJoinedData(PlayerMP player) {
         mapHandler.sendDataToClient(player);
         villainHandler.sendDataToClient(player);
+        chestGenerationHandler.sendDataToClient(player);
     }
 
     //handle Move Packet

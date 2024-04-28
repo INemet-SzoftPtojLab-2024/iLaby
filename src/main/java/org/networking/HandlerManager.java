@@ -204,7 +204,7 @@ public class HandlerManager {
         lock.lock();
         try {
             if (tasks.isEmpty()) return null;
-            return synchronizedTasks.removeFirst();
+            return synchronizedTasks.remove(0);
         }
         finally {
             lock.unlock();
@@ -216,7 +216,7 @@ public class HandlerManager {
         lock.lock();
         try {
             if (handlerDataList.isEmpty()) return null;
-            return synchronizedHandlerDataList.removeFirst();
+            return synchronizedHandlerDataList.remove(0);
         }
         finally {
             lock.unlock();
