@@ -94,7 +94,6 @@ public class GameClient extends Thread {
                 break;
         }
     }
-
     private void handleDeath(Packet21Death packet) {
         String username = packet.getUsername();
 
@@ -121,7 +120,7 @@ public class GameClient extends Thread {
             try {
                 // Critical section
                 // Access shared resources here
-                hm.addTask(HandlerManager.TaskType.WallHandler);
+                hm.addTask(HandlerManager.TaskType.Wall);
                 hm.addData(new HandlerManager.WallData(pos, scale, isDoor));
             } finally {
                 hm.lock.unlock(); // Release the lock
@@ -190,19 +189,29 @@ public class GameClient extends Thread {
     private void handleAnimation(Packet03Animation packet) {
         int index = isten.getPlayerMPIndex(packet.getUsername());
         PlayerMP player = (PlayerMP)isten.getUpdatable(index);
-        if(player == null || player.localPlayer) return;
+        if(player == null || player.localPlayer || player.getPlayerImage() == null) return;
         for(int i = 0; i < player.getPlayerImage().size(); i++) {
             player.getPlayerImage().get(i).setVisibility(false);
         }
         player.setActiveImage(packet.getActiveImage());
-        if(!player.getPlayerImage().isEmpty()) player.getPlayerImage().get(packet.getActiveImage()).setVisibility(true);
+        if(!player.getPlayerImage().isEmpty() && packet.getActiveImage() < player.getPlayerImage().size()) player.getPlayerImage().get(packet.getActiveImage()).setVisibility(true);
     }
 
     private void handleLogin(Packet00Login packet, InetAddress address, int port) {
         PlayerMP player = null;
-        Vec2 player_pos = new Vec2(packet.getX(), packet.getY());
-        player = new PlayerMP(packet.getUsername(), address, port, player_pos);
-        if(player != null) { isten.addUpdatable(player); }
+        Vec2 position = new Vec2(packet.getX(), packet.getY());
+        String username = packet.getUsername();
+        int skinID = packet.getSkinID();
+
+        HandlerManager hm = isten.getHandlerManager();
+        hm.lock.lock();
+        try {
+            hm.addTask(HandlerManager.TaskType.Login);
+            hm.addData(new HandlerManager.LoginData(username, address, port, position, skinID));
+        }
+        finally {
+            hm.lock.unlock();
+        }
     }
     private void handleMove(Packet02Move packet) {
         String username = packet.getUsername();

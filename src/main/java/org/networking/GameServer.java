@@ -131,7 +131,8 @@ public class GameServer extends Thread {
     private void handleLogin(Packet00Login packet, InetAddress address, int port) {
         PlayerMP player = null;
         player = new PlayerMP(packet.getUsername(), address, port);
-        this.addConnection(player,((Packet00Login)packet));
+        player.setSkinID(packet.getSkinID());
+        this.addConnection(player, packet);
 
         //Handle creation of villains - when player joins, the server generated villains are generated on client as well
         handlePlayerJoinedData(player);
@@ -162,14 +163,14 @@ public class GameServer extends Thread {
             else {
                 //New player's position is (0,0) -> later: spawnPoints
                 //Send data to the already connected players, that the new player exists
-                packet = new Packet00Login(player.getUsername(), 0, 0);
+                packet = new Packet00Login(player.getUsername(), 0, 0, player.getSkinID());
                 sendData(packet.getData(), p.ipAddress, p.port);
 
-                //Send position as well, so that the players spawn at their current posi
+                //Send position as well, so that the players spawn at their current position
                 //Send data to the new player, that the already connected player exists
                 int index = isten.getPlayerMPIndex(p.getUsername());
                 Vec2 pos = ((PlayerMP)isten.getUpdatable(index)).getPlayerCollider().getPosition();
-                packet = new Packet00Login(p.getUsername(), pos.x, pos.y);
+                packet = new Packet00Login(p.getUsername(), pos.x, pos.y, p.getSkinID());
                 sendData(packet.getData(), player.ipAddress, player.port);
 
             }
