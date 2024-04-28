@@ -278,6 +278,29 @@ public class Isten {
         if(index >= updatables.size()) return null;
         return updatables.get(index);
     }
+
+    /**
+     * returns an ArrayList of updatables of the given type <br>
+     * <br>
+     * how to use it:
+     * ArrayList< Player> alma=new ArrayList<>();
+     * alma = isten.getUpdatablesByType(Player.class);
+     * @param type the Class of the elements
+     * @return an array list of elements
+     * @param <E> the type of the queried elements
+     */
+    public final <E extends Updatable> ArrayList<E> getUpdatablesByType(Class<E> type)
+    {
+        ArrayList<E> tempList=new ArrayList<>();
+        for(int i=0;i<updatables.size();i++)
+        {
+            if(type.isInstance(updatables.get(i)))
+                tempList.add((E)updatables.get(i));
+        }
+
+        return tempList;
+    }
+
     public GameClient getSocketClient() {
         return socketClient;
     }
