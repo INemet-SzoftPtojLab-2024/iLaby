@@ -20,49 +20,68 @@ import java.util.Random;
  */
 public class Villain extends Entity {
     static ArrayList<Room> roomsWithVillains = new ArrayList<>();
-    Image villainImage;
-    Collider villainCollider;
-    Text villainName;
-    float time;
-    Vec2 position;
-    Room room;
-    UnitRoom currentUnitRoom;
-    UnitRoom prevUnitRoom;
-    String imagePath;
-    float velocity;
-    double sum;
+    private Image villainImage;
+    private Collider villainCollider;
+    private Text villainName;
+    private float time;
+    private Vec2 position;
+    private Room room;
+    private UnitRoom currentUnitRoom;
+    private UnitRoom prevUnitRoom;
+    private ArrayList<Image> images;
+    private float velocity;
+    private double sum;
+    private int id;
+    private int stillImage;
 
-    public Villain(String name, String iP) {
+    public Villain(String name, int ID) {
         villainCollider = null;
         villainImage = null;
         time = 0.0f;
         villainName = new Text(name, new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 255, 0, 0);
         villainName.setShadowOn(false);
-        imagePath = iP;
+        images=new ArrayList<>();
         velocity = 0.5f;
         sum = 0.0;
         room = null;
+        id=ID;
+        stillImage=0;
     }
 
     @Override
     public void onStart(Isten isten) {
 
-        Vec2 playerScale = new Vec2(0.6f, 0.6f);
+        Vec2 villainScale = new Vec2(0.6f, 0.6f);
+        Vec2 faintedScale = new Vec2(0.7f, 0.7f);
+
+        images.add(new Image(new Vec2(), villainScale, "./assets/villain/villain"+id+".png"));
+        images.add(new Image(new Vec2(), faintedScale, "./assets/villain/villain"+id+"_fainted1.png"));
+        images.add(new Image(new Vec2(), faintedScale, "./assets/villain/villain"+id+"_fainted2.png"));
 
         position = randomPositions(isten.getMap().getRooms());
-        villainCollider = new Collider(position, playerScale);
+        villainCollider = new Collider(position, villainScale);
 
         villainCollider.setMovability(true);
-        isten.getPhysicsEngine().addCollider(villainCollider);//register collider in the physics engine
+        isten.getPhysicsEngine().addCollider(villainCollider);
 
-        villainImage = new Image(new Vec2(), playerScale, imagePath);
-        villainImage.setSortingLayer(-68);
-        villainImage.setVisibility(true);
-        isten.getRenderer().addRenderable(villainImage);//register images in the renderer
+        for (int i = 0; i< 3; i++) {
 
+            if(i == 0)
+            {
+                villainImage= images.get(0);
+                images.get(i).setSortingLayer(-60);
+                images.get(i).setVisibility(true);
+                isten.getRenderer().addRenderable(images.get(i));
+            }
+            else{
+                images.get(i).setSortingLayer(-60);
+                images.get(i).setVisibility(false);
+                isten.getRenderer().addRenderable(images.get(i));
+            }
+        }
         if (villainName != null) {
             villainName.setVisibility(true);
-            villainName.setSortingLayer(-68);
+            villainName.setSortingLayer(-60);
             isten.getRenderer().addRenderable(villainName);
         }
         Map map = isten.getMap();
@@ -189,6 +208,27 @@ public class Villain extends Entity {
                         break;
                 }
             }
+        }
+        else{
+            images.get(0).setVisibility(false);
+            if(stillImage==0)
+            {
+                images.get(1).setPosition(villainCollider.getPosition());
+                images.get(2).setPosition(villainCollider.getPosition());
+                images.get(1).setVisibility(true);
+            }
+
+            stillImage++;
+            if(stillImage % 100 == 0)
+            {
+                images.get(1).setVisibility(false);
+                images.get(2).setVisibility(true);
+            }
+            else if(stillImage % 201 == 0){
+                images.get(2).setVisibility(false);
+                images.get(1).setVisibility(true);
+            }
+
         }
     }
 
