@@ -25,7 +25,7 @@ public class Inventory extends Updatable {
      */
     private int selectedSlot;
     private  Isten isten;
-    private boolean hasGasMask;
+    private boolean hasGasmaskEquipped;
     private boolean camembertTriggered;
     private Camembert camembert;
 
@@ -38,7 +38,7 @@ public class Inventory extends Updatable {
         for (int i = 0; i < 5; i++) {storedItems.add(null);}
         for (int i = 0; i < 5; i++) {itemIcons.add(null);}
         selectedSlot=1;
-        hasGasMask=false;
+        hasGasmaskEquipped =false;
         camembertTriggered = false;
         camembert = null;
     }
@@ -128,7 +128,7 @@ public class Inventory extends Updatable {
             }
         }
         if(tmp==null) {
-            if( storedItems.get(selectedSlot-1) instanceof Gasmask)hasGasMask=false;
+            //
             storedItems.get(selectedSlot-1).dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
             storedItems.set(selectedSlot - 1, item);
             itemIcons.get(selectedSlot-1).setVisibility(false);
@@ -139,9 +139,14 @@ public class Inventory extends Updatable {
         tmp.setVisibility(true);
         tmp.setSortingLayer(-69);
         isten.getRenderer().addRenderable(tmp);
-        if(item instanceof Gasmask)
-        {
-            hasGasMask=true;
+
+        for (Item item1 : storedItems){
+            if (item1 !=null && item1.getClass().equals(Gasmask.class)){
+                Gasmask gasmask = (Gasmask) item;
+                if (gasmask.isEquipped()){
+                    hasGasmaskEquipped = true;
+                }
+            }
         }
     }
 
@@ -201,23 +206,33 @@ public class Inventory extends Updatable {
             isten.getRenderer().deleteRenderable(im);
         }
         selectedSlot=1;
-        hasGasMask=false;
+        hasGasmaskEquipped =false;
     }
     public boolean getExistenceOfGasMask()
     {
-        return hasGasMask;
+        return hasGasmaskEquipped;
     }
 
     public void destroyGasMask(){
-        if (hasGasMask){
+        if (hasGasmaskEquipped){
             for (int i = 0; i < storedItems.size(); i++){
                 if (storedItems.get(i) != null && storedItems.get(i).getClass().equals(Gasmask.class)){
-                    storedItems.remove(i);
-                    storedItems.add(i, null);
-                    isten.getRenderer().deleteRenderable(itemIcons.get(i));
+                    Gasmask gasmask = (Gasmask) storedItems.get(i);
+                    if (gasmask.isEquipped()){
+                        storedItems.remove(i);
+                        storedItems.add(i, null);
+                        isten.getRenderer().deleteRenderable(itemIcons.get(i));
+                    }
                 }
             }
-            hasGasMask = false;
+            hasGasmaskEquipped = false;
+            for (int i = 0; i < storedItems.size(); i++) {
+                if (storedItems.get(i) != null && storedItems.get(i).getClass().equals(Gasmask.class)) {
+                    Gasmask gasmask = (Gasmask) storedItems.get(i);
+                    gasmask.use();
+                    break;
+                }
+            }
         }
     }
     public void removeCamembert(){
@@ -236,5 +251,9 @@ public class Inventory extends Updatable {
 
     public void setCamembert(Camembert camembert) {
         this.camembert = camembert;
+    }
+
+    public void setGasmaskEquipped(boolean hasGasmaskEquipped) {
+        this.hasGasmaskEquipped = hasGasmaskEquipped;
     }
 }
