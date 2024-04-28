@@ -86,9 +86,10 @@ public class EdgeManager {
                     Room RDAdjacent = edgeBetweenRoom.getNodeRooms().get(index);//szoba amia remainingnek es a deletednek is szomszadja
                     EdgeBetweenRooms edgeBetweenRAndRDAdjacent = getEdgeBetweenRooms(remaining, RDAdjacent);
 
+                    //atpakuljuk az egyik edgebol a masikba, hogy majd kitorolhessuk a vegen az egyiket
                     for(int i = 0; i < edgeBetweenRoom.getWalls().size(); i++){
-                        //ha ajto akkor kicsereljuk falra
-                        if(edgeBetweenRoom.getWalls().get(i).isDoor()) edgeBetweenRoom.switchDoorToWall(edgeBetweenRoom.getWalls().get(i), isten);
+                        //ha ajto akkor kicsereljuk falra, de csak akkor ha a masikon mar van ajto, hogy egy edgen ne legyen ketto
+                        if(edgeBetweenRoom.getWalls().get(i).isDoor() && edgeBetweenRAndRDAdjacent.hasDoor()) edgeBetweenRoom.switchDoorToWall(edgeBetweenRoom.getWalls().get(i), isten);
                         edgeBetweenRAndRDAdjacent.getWalls().add(edgeBetweenRoom.getWalls().get(i));
                         edgeBetweenRAndRDAdjacent.getColliderGroup().addCollider(edgeBetweenRoom.getWalls().get(i).collider);
                     }
@@ -251,6 +252,13 @@ public class EdgeManager {
                 addDoor(edge);
             }
         }
+    }
+    public int getDoorNum(){
+        int cnt =  0;
+        for(EdgeBetweenRooms edge : roomEdges){
+            if(edge.hasDoor()) cnt++;
+        }
+        return cnt;
     }
     public ArrayList<EdgeBetweenRooms> getRoomEdges() {
         return roomEdges;

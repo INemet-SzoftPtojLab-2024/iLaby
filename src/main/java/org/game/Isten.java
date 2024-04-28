@@ -39,7 +39,7 @@ public class Isten {
      */
     public Isten() {
         inventory=new Inventory(5);
-        map=new Map(100, 100, 10);
+        map=new Map(10, 10, 8);
         player = new Player();
         itemManager=new ItemManager();
         inputHandler = new Input();
@@ -117,18 +117,18 @@ public class Isten {
         updatables.add(itemManager);
         updatables.add(inventory);
         updatables.add(map);
-        updatables.add(new ChestManager(75));//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
+        //updatables.add(new ChestManager(75));//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
 
-        updatables.add(new Villain("Gajdos",  "./assets/villain/villain1.png"));
-        updatables.add(new Villain("Csuka",  "./assets/villain/villain2.png"));
-        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
-        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
-        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
-        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
-        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
-        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
-        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
-        updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        //updatables.add(new Villain("Gajdos",  "./assets/villain/villain1.png"));
+        //updatables.add(new Villain("Csuka",  "./assets/villain/villain2.png"));
+        //updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        //updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        //updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        //updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        //updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        //updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        //updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
+        //updatables.add(new Villain("Villain",  "./assets/villain/villain3.png"));
         updatables.add(new TimeCounter());
         updatables.add(new Help());
         updatables.add(new GameMenu());
