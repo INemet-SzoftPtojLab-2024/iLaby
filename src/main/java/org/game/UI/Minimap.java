@@ -1,5 +1,6 @@
 package main.java.org.game.UI;
 
+import main.java.org.entities.villain.Villain;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.ImageUI;
 import main.java.org.game.Graphics.Renderable;
@@ -31,6 +32,7 @@ public class Minimap extends Updatable {
 
     private final Object syncObject=new Object();
     private boolean canRerender=true;
+    private Thread currentThread=null;
 
     public Minimap(int displayedScale, int res, int pixelsPerUnit, int wallWidthInPixels)
     {
@@ -65,8 +67,8 @@ public class Minimap extends Updatable {
             if(canRerender==true)
             {
                 canRerender=false;
-                Thread thread = new Thread(()->{this.draw(isten);});
-                thread.start();
+                currentThread = new Thread(()->{this.draw(isten);});
+                currentThread.start();
             }
         }
     }
@@ -286,6 +288,49 @@ public class Minimap extends Updatable {
             }
         }while(69==420);
 
+        do{//draw enemies
+            ArrayList<Villain> villains=isten.getUpdatablesByType(Villain.class);
+
+            ArrayList<Vec2> positions=new ArrayList<>();
+            for(int i=0;i<villains.size();i++)
+            {
+                positions.add(villains.get(i).getPosition());
+            }
+
+
+            for(int j=0;j<villains.size();j++)
+            {
+                Vec2 startPos=positions.get(j).clone();
+                startPos.x-=lowerBound.x;
+                startPos.y-=lowerBound.y;
+
+                if(startPos.x<0||startPos.y<0||startPos.x>covered.x||startPos.y>covered.y)
+                    continue;
+
+                startPos.y=covered.y-startPos.y;
+
+                int drawX, drawY;
+                drawX=Math.round(width*startPos.x* onePerCovered.x)-wallWidthInPixels;
+                drawY=Math.round(height* startPos.y* onePerCovered.y)-wallWidthInPixels;
+                int drawEndX, drawEndY;
+                drawEndX=drawX+2*wallWidthInPixels;
+                drawEndY=drawY+2*wallWidthInPixels;
+                //System.out.println(drawX+" "+drawY+" "+drawEndX+" "+drawEndY);
+
+                for(int k=drawY>-1?drawY:0;k<height&&k<drawEndY;k++)
+                {
+                    for(int l=drawX>-1?drawX:0;l<width&&l<drawEndX;l++)
+                    {
+                        int index=4*(width*k+l);
+                        rawData[index++]=255;
+                        rawData[index++]=0;
+                        rawData[index++]=0;
+                        rawData[index]=255;
+                    }
+                }
+            }
+        }while(69==420);
+
         //apply transparency mask
         int currentIndex=3;//offset to alpha value
         float outerRadius=(float)Math.sqrt((width*0.5f)*(height*0.5f));
@@ -319,6 +364,7 @@ public class Minimap extends Updatable {
         synchronized (syncObject)
         {
             canRerender=true;
+            currentThread=null;
         }
     }
 }
