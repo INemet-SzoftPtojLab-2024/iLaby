@@ -51,8 +51,8 @@ public class Minimap extends Updatable {
         displayedImage.setPosition(new Vec2(20,20));
         displayedImage.setScale(new Vec2(displayedScale,displayedScale));
         displayedImage.setSortingLayer(-69420);
-        displayedImage.setAlignment(Renderable.RIGHT, Renderable.TOP);
-        displayedImage.setOrigin(Renderable.RIGHT, Renderable.TOP);
+        displayedImage.setAlignment(Renderable.RIGHT, Renderable.BOTTOM);
+        displayedImage.setOrigin(Renderable.RIGHT, Renderable.BOTTOM);
         displayedImage.setImage(displayedImageData);
 
         isten.getRenderer().addRenderable(displayedImage);
@@ -87,7 +87,7 @@ public class Minimap extends Updatable {
         final Vec2 covered=Vec2.subtract(upperBound,lowerBound);
         final Vec2 onePerCovered=new Vec2(1/covered.x, 1/covered.y);
 
-        ArrayList<Room> rooms = isten.getMap().getRooms();
+        /*ArrayList<Room> rooms = isten.getMap().getRooms();
         if(rooms==null)
             rooms=new ArrayList<>();
 
@@ -122,7 +122,7 @@ public class Minimap extends Updatable {
                     }
                 }
             }
-        }
+        }*/
 
         //edging intensifies (drawing edges)
         ArrayList<EdgeBetweenRooms> edges =isten.getMap().getEdgeManager().getRoomEdges();
@@ -184,6 +184,84 @@ public class Minimap extends Updatable {
                     for(int l=drawX;l<drawEndX;l++)
                     {
                         int index=4*(width*k+l);
+                        rawData[index++]=r;
+                        rawData[index++]=g;
+                        rawData[index++]=b;
+                        rawData[index]=255;
+                    }
+                }
+            }
+        }
+
+        //draw the great edges
+        do{
+            float mapSizeX, mapSizeY;
+            mapSizeX=isten.getMap().getMapColumnSize();
+            mapSizeY=isten.getMap().getMapRowSize();
+
+            float wallWidth=0.1f;
+
+            try{
+                Vec2 temp=isten.getMap().getEdgeManager().getRoomEdges().get(0).getWalls().get(0).getCollider().getScale();
+                wallWidth=temp.x>temp.y?temp.y:temp.x;
+            }
+            catch (Exception ex){}
+
+            Vec2[] positions=new Vec2[]{
+                    new Vec2(-0.5f, 0.5f*mapSizeY-0.5f),
+                    new Vec2(0.5f*mapSizeX-0.5f, mapSizeY-0.5f),
+                    new Vec2(mapSizeX-0.5f, 0.5f*mapSizeY-0.5f),
+                    new Vec2(0.5f*mapSizeX-0.5f,-0.5f)
+            };
+            Vec2[] scales=new Vec2[]{
+                    new Vec2(wallWidth, mapSizeY),
+                    new Vec2(mapSizeX, wallWidth),
+                    new Vec2(wallWidth, mapSizeY),
+                    new Vec2(mapSizeX, wallWidth)
+            };
+
+            for(int j=0;j<4;j++)
+            {
+                Vec2 startPos=positions[j].clone();
+                Vec2 scale=scales[j];
+                startPos.x-=0.5f*scale.x+lowerBound.x;
+                startPos.y-=0.5f*scale.y+lowerBound.y;
+                startPos.y=covered.y-startPos.y-scale.y;
+
+                int drawX, drawY;
+                drawX=Math.round(width*startPos.x* onePerCovered.x);
+                drawY=Math.round(height* startPos.y* onePerCovered.y)+1;
+
+                int drawEndX=Math.round(scale.x*pixelsPerUnit);
+                int drawEndY=Math.round(scale.y*pixelsPerUnit);
+
+                if(drawEndX>drawEndY)
+                {
+                    drawX--;
+                    drawEndX+=drawX+wallWidthInPixels/2;
+                    drawEndY=drawY+wallWidthInPixels;
+                }
+                else
+                {
+                    drawY--;
+                    drawEndY+=drawY;
+                    drawEndX=drawX+wallWidthInPixels;
+                }
+
+                if(drawX<0)
+                    drawX=0;
+                if(drawY<0)
+                    drawY=0;
+                if(drawEndX>width)
+                    drawEndX=width;
+                if(drawEndY>height)
+                    drawEndY=height;
+
+                for(int k=drawY;k<drawEndY;k++)
+                {
+                    for(int l=drawX;l<drawEndX;l++)
+                    {
+                        int index=4*(width*k+l);
                         rawData[index++]=255;
                         rawData[index++]=255;
                         rawData[index++]=255;
@@ -191,21 +269,48 @@ public class Minimap extends Updatable {
                     }
                 }
             }
-        }
+        } while(69==420);
+
+        //draw player
+        do{
+            for(int i=height/2-wallWidthInPixels;i<height/2+wallWidthInPixels+1;i++)
+            {
+                for (int j=width/2-wallWidthInPixels;j<width/2+wallWidthInPixels+1;j++)
+                {
+                    int currentIndex=4*(i*width+j);
+                    rawData[currentIndex++]=0;
+                    rawData[currentIndex++]=0;
+                    rawData[currentIndex++]=255;
+                    rawData[currentIndex]=255;
+                }
+            }
+        }while(69==420);
 
         //apply transparency mask
-        int currentIndex=0;
-        int radius=(width/2)*(height/2);
+        int currentIndex=3;//offset to alpha value
+        float outerRadius=(float)Math.sqrt((width*0.5f)*(height*0.5f));
+        float innerRadius=outerRadius*0.9f;
+        float onePerInterpolationDistance=1/(outerRadius-innerRadius);
         for(int row=0;row<height;row++)
         {
-            for(int col=0;col<width;col++)
+            for(int col=0;col<width;col++, currentIndex+=4)
             {
-                if(Math.pow(row-height/2,2)+Math.pow(col-width/2,2)>radius)
+                float length=(float)Math.sqrt(Math.pow(row-height*0.5f,2)+Math.pow(col-width*0.5f,2));
+
+                if(rawData[currentIndex]==0)
+                    rawData[currentIndex]=128;
+
+                if(length<innerRadius)
                 {
-                    rawData[currentIndex+3]=0;
+                    continue;
+                }
+                if(length>outerRadius)
+                {
+                    rawData[currentIndex]=0;
+                    continue;
                 }
 
-                currentIndex+=4;
+                rawData[currentIndex]=(int)((rawData[currentIndex]/255.0f)*(255-255*(length-innerRadius)*onePerInterpolationDistance));
             }
         }
 
