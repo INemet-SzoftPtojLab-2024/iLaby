@@ -298,7 +298,7 @@ public class EdgeManager extends Updatable {
                         door.open();
                     }
                     if(door.isOpened()){
-                        door.increaseTimeSinceOpen(deltaTime);
+                        door.manageOpenDoor(deltaTime);
                     }
 
                 }

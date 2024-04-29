@@ -4,6 +4,7 @@ import main.java.org.game.Isten;
 import main.java.org.game.updatable.Updatable;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 
 public class Room extends Updatable implements Graph<Room>{
@@ -39,9 +40,6 @@ public class Room extends Updatable implements Graph<Room>{
 
     }
 
-    public ArrayList<Room> getDoorAdjacentRooms() {
-        return doorAdjacentRooms;
-    }
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
@@ -82,6 +80,49 @@ public class Room extends Updatable implements Graph<Room>{
                 }
             }
         }
+    }
+
+    public ArrayList<Integer> getMinMaxRowColValues(){
+        ArrayList<Integer> minMaxRowColValues = new ArrayList<>();
+        int maxColNum, maxRowNum, minColNum, minRowNum;
+        maxColNum = minColNum = unitRooms.get(0).getColNum();
+        maxRowNum = minRowNum = unitRooms.get(0).getRowNum();
+        for(UnitRoom unitRoom : unitRooms){
+            if(maxColNum < unitRoom.getColNum()) maxColNum = unitRoom.getColNum();
+            if(minColNum > unitRoom.getColNum()) minColNum = unitRoom.getColNum();
+            if(maxRowNum < unitRoom.getRowNum()) maxRowNum = unitRoom.getRowNum();
+            if(minRowNum > unitRoom.getRowNum()) minRowNum = unitRoom.getRowNum();
+        }
+        minMaxRowColValues.add(maxColNum);
+        minMaxRowColValues.add(minColNum);
+        minMaxRowColValues.add(maxRowNum);
+        minMaxRowColValues.add(minRowNum);
+        return minMaxRowColValues;
+    }
+    //function hogy megtalaljam azon UnitRoomokat, amik egy adott szamu soraban vannak a szobanaka alulrol nezve, amit a distance hataroz meg
+    // splitRooms func-on belül használva
+    public ArrayList<UnitRoom> getUnitRoomsWithXDistanceFromLowestRowIdxInOrderByColumn(int lowestRowIdx, int distance) {
+        ArrayList<UnitRoom> ret = new ArrayList<>();
+        for(UnitRoom unitRoom: unitRooms){
+            if(unitRoom.getRowNum()==lowestRowIdx+distance){
+                ret.add(unitRoom);
+            }
+        }
+        ret.sort(Comparator.comparing(UnitRoom::getColNum));
+        return ret;
+    }
+    public ArrayList<UnitRoom> getUnitRoomsWithXDistanceFromLowestColumnIdxInOrderByRow(int lowestColIdx, int distance) {
+        ArrayList<UnitRoom> ret = new ArrayList<>();
+        for(UnitRoom unitRoom: unitRooms){
+            if(unitRoom.getColNum()==lowestColIdx+distance){
+                ret.add(unitRoom);
+            }
+        }
+        ret.sort(Comparator.comparing(UnitRoom::getRowNum));
+        return ret;
+    }
+    public ArrayList<Room> getDoorAdjacentRooms() {
+        return doorAdjacentRooms;
     }
 
     public ArrayList<UnitRoom> getUnitRooms() {

@@ -1,11 +1,8 @@
 package main.java.org.game.Map;
 
-import main.java.org.entities.player.Player;
-import main.java.org.game.Graphics.Image;
 import main.java.org.game.Isten;
 import main.java.org.game.physics.Collider;
 import main.java.org.game.physics.ColliderGroup;
-import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 
 import static java.lang.Math.sqrt;
@@ -52,10 +49,7 @@ public class Door extends EdgePiece {
     public boolean isPlayerAtDoor(Isten isten){
         //egy adott sugaru körben ha benne van az ajto kozepehez kepest
         //player es a pont tavolsaga
-
-        System.out.println(getMidPosition().x + ", " + getMidPosition().y);
         Vec2 playerPos = Vec2.sum(isten.getPlayer().getPlayerCollider().getPosition(), new Vec2(0.5f));
-        System.out.println(playerPos.x + ", " + playerPos.y);
         Vec2 playerDoorVector = Vec2.subtract(getMidPosition(),playerPos);
         double playerDoorDistance = sqrt(Vec2.dot(playerDoorVector,playerDoorVector));
         if(playerDoorDistance < 0.5) return true;
@@ -73,7 +67,7 @@ public class Door extends EdgePiece {
     public boolean isClosed(){
         return collider.isSolid();
     }
-    public void  increaseTimeSinceOpen(double delta){
+    public void manageOpenDoor(double delta){
         timeSinceOpen += delta;
         if(timeSinceOpen > 2.0f){
             close();

@@ -16,17 +16,6 @@ public class Map extends Updatable {
     private final int mapColumnSize;
     private EdgeManager edgeManager;
     private final int minRoomSize;
-    //private boolean
-
-    @Override
-    public void onStart(Isten isten) {
-        this.edgeManager = new EdgeManager(isten);
-        isten.addUpdatable(edgeManager);
-        this.mapgenerator = new Mapgenerator(this, isten);
-        mapgenerator.generate(minRoomSize);
-
-        //printMap();
-    }
 
     public Map(int rowNumber, int columnNumber, int minRoomSize){
         this.mapRowSize = rowNumber;
@@ -36,6 +25,13 @@ public class Map extends Updatable {
         this.rooms = new ArrayList<>();
         initUnitRooms();
 
+    }
+    @Override
+    public void onStart(Isten isten) {
+        this.edgeManager = new EdgeManager(isten);
+        isten.addUpdatable(edgeManager);
+        this.mapgenerator = new Mapgenerator(this, isten);
+        mapgenerator.generate(minRoomSize);
     }
 
     //for testing
@@ -52,9 +48,7 @@ public class Map extends Updatable {
 
         if(!stop) {
             delta += deltaTime;
-            if (delta > 0.5) {
-
-
+            if (delta > 2) {
                 //TESTCASE 1:::
                 if(sec %3==0){
                     addDoorToEdgeWithoutDoor(isten);
@@ -66,20 +60,18 @@ public class Map extends Updatable {
                         System.out.println("edgeNum: "+edgeManager.getRoomEdges().size());
                         System.out.println("doorNum: "+edgeManager.getDoorNum());
                         System.out.println("ajtokivetel tortent");
-                        if(!isGraphKohernt(rooms)) System.err.println("The Graph is not coherent after takeoutdoor!");
                     }
 
 
                 }
-                    //TESTCASE 2:
+                //TESTCASE 2:
                 if (sec % 4 == 0) {
                     Collections.shuffle(rooms);
                     mergeRooms(rooms.get(0), rooms.get(0).getPhysicallyAdjacentRooms().get(0), isten);
                     System.out.println("r1 adjacentrooms Number: " + rooms.get(0).getPhysicallyAdjacentRooms().size());
-                    //if(!isGraphKohernt(rooms)) System.err.println("The Graph is not coherent after merge!");
 
                 }
-                    //TESTCASE 3:
+                //TESTCASE 3:
                 if((sec+2)%4==0) {
                     for (Room splittable : rooms) {
                         if (splitRooms(splittable, isten)) {
@@ -118,28 +110,46 @@ public class Map extends Updatable {
     }
 
     //a slitelesnel csak a minroomsize fele engedelyezett
-
     private boolean splitRooms(Room r1, Isten isten)
     {
         if(r1.getUnitRooms().size() < minRoomSize) return false;
         //egyenlőre minden szoba ami splittel lesz createlve ilyen type-val rendelkezik
         int newID = generateNewRoomID();
         Room newRoom = new Room(newID);
-        int lowestRowIdx = getRoomWithLowestRowIdx(r1);
         ArrayList<UnitRoom> addableUnitRooms = new ArrayList<>();
         int distance = 0;
-        ArrayList<UnitRoom> UnitRoomsWithDistanceXFromLowestRow;
-        //addig, amíg az új szoba a méret fele nem lesz
-        while(addableUnitRooms.size()<r1.getUnitRooms().size()/2){
-            UnitRoomsWithDistanceXFromLowestRow=getUnitRoomsWithXDistanceFromLowestRowIdxInOrderByColumn(r1,lowestRowIdx,distance++); //tavolsag novelese, es igy soronkent egyesevel balrol jobbra az osszes unitroom hozzaadasa, amig kell
-            for(UnitRoom addableUnitRoom:UnitRoomsWithDistanceXFromLowestRow){
-                if(addableUnitRooms.size()<r1.getUnitRooms().size()/2 )
-                {
-                    addableUnitRooms.add(addableUnitRoom);
-                }
+        ArrayList<Integer> minMaxRowColValues = r1.getMinMaxRowColValues();
+        int highestColIdx = minMaxRowColValues.get(0);
+        int lowestColIdx = minMaxRowColValues.get(1);
+        int highestRowIdx = minMaxRowColValues.get(2);
+        int lowestRowIdx = minMaxRowColValues.get(3);
+        //ha a szoba inkább fuggolegesen nagy, akkor a sorokat figyeljuk
+        if((highestRowIdx - lowestRowIdx) > (highestColIdx - lowestColIdx)) {
+            //int lowestRowIdx = getRoomWithLowestRowIdx(r1);
+            ArrayList<UnitRoom> UnitRoomsWithDistanceXFromLowestRow;
+            //addig, amíg az új szoba a méret fele nem lesz
+            while (addableUnitRooms.size() < r1.getUnitRooms().size() / 2) {
+                UnitRoomsWithDistanceXFromLowestRow = r1.getUnitRoomsWithXDistanceFromLowestRowIdxInOrderByColumn(lowestRowIdx, distance++); //tavolsag novelese, es igy soronkent egyesevel balrol jobbra az osszes unitroom hozzaadasa, amig kell
+                for (UnitRoom addableUnitRoom : UnitRoomsWithDistanceXFromLowestRow) {
+                    if (addableUnitRooms.size() < r1.getUnitRooms().size() / 2) {
+                        addableUnitRooms.add(addableUnitRoom);
+                    }
 
+                }
+            }
+        }else{
+            ArrayList<UnitRoom> UnitRoomsWithDistanceXFromLowestColumn;
+            while (addableUnitRooms.size() < r1.getUnitRooms().size() / 2) {
+                UnitRoomsWithDistanceXFromLowestColumn = r1.getUnitRoomsWithXDistanceFromLowestColumnIdxInOrderByRow(lowestRowIdx, distance++); //tavolsag novelese, es igy soronkent egyesevel balrol jobbra az osszes unitroom hozzaadasa, amig kell
+                for (UnitRoom addableUnitRoom : UnitRoomsWithDistanceXFromLowestColumn) {
+                    if (addableUnitRooms.size() < r1.getUnitRooms().size() / 2) {
+                        addableUnitRooms.add(addableUnitRoom);
+                    }
+
+                }
             }
         }
+        // a fenti ket ag helyett meg lehetne csinalni a max ertekekkel is, ha nem lesz coherens az eredmeny
         ArrayList<UnitRoom> oldRoomWithoutNewRoom = getDifference(r1.getUnitRooms(),addableUnitRooms);
         //ellenorzom, hogy osszefuggoek lennének-e: ha igen:
         //id mindegy micsoda, itt igazabol nem hasznalom
@@ -186,6 +196,7 @@ public class Map extends Updatable {
         }
         return false;
     }
+
     public void setByDoorAdjacentRooms(Room r){
         r.getDoorAdjacentRooms().clear();
         //tesztelesre meg jo lehet
@@ -204,7 +215,6 @@ public class Map extends Updatable {
 
 
     }
-
 
     public static ArrayList<UnitRoom> getDifference(ArrayList<UnitRoom> u1, ArrayList<UnitRoom> u2)
     {
@@ -246,7 +256,8 @@ public class Map extends Updatable {
     }
 
 
-    //BFS, ellenorzi hogy a graf osszefuggo-e
+    //BFS, ellenorzi hogy a graf osszefuggo-e, iranyitott graf eseten is
+    //meg lehetne csinalni T parameterrel is, de akkor kellene egy getAdjacentrooms fv az interfaceba
     private  boolean isGraphKohernt(ArrayList<Room> graphNodes){
         Queue<Room> queue = new LinkedList<>();
         ArrayList<Room> visited = new ArrayList<>();
@@ -271,6 +282,7 @@ public class Map extends Updatable {
 
     //function hogy megtalaljam a legkisebb sorindexet a tombben, viszonyitasi parameter lesz.
     // splitRooms func-on belül használva
+    //ez a fv athelyezve a room osztalyba es egy kicsit kiegeszitve az optimalisabb split miatt
     private int getRoomWithLowestRowIdx(Room r1) {
         UnitRoom min = unitRooms[mapRowSize-1][mapColumnSize-1];
         for(UnitRoom unitRoom : r1.getUnitRooms())
@@ -282,18 +294,7 @@ public class Map extends Updatable {
         }
         return min.getRowNum();
     }
-    //function hogy megtalaljam azon UnitRoomokat, amik egy adott szamu soraban vannak a szobanaka alulrol nezve, amit a distance hataroz meg
-    // splitRooms func-on belül használva
-    private ArrayList<UnitRoom> getUnitRoomsWithXDistanceFromLowestRowIdxInOrderByColumn(Room r1, int lowestRowIdx, int distance) {
-        ArrayList<UnitRoom> ret = new ArrayList<>();
-        for(UnitRoom unitRoom: r1.getUnitRooms()){
-            if(unitRoom.getRowNum()==lowestRowIdx+distance){
-                ret.add(unitRoom);
-            }
-        }
-        ret.sort(Comparator.comparing(UnitRoom::getColNum));
-        return ret;
-    }
+
 
     //ez a fv a mapgenerátorban is hasonlóan szerepel (colliderek és imagek nélkül)
     private void mergeRooms(Room r1, Room r2, Isten isten) {
