@@ -113,7 +113,7 @@ public class EdgeManager {
         EdgeBetweenRooms newEdge = new EdgeBetweenRooms(oldRoom,newRoom);
         addEdge(newEdge);
         //az uj szobabol meg nem minden szobaba lesz ajto
-        //TODO egy ritka eset kiszurese
+        //TODO
         //ha e nem lehet ajtot addolni ellenorizni kell az összefuggoseget es ha nem lenne az akkor a split meghiusul
         addDoor(getEdgeBetweenRooms(oldRoom, newRoom));
 
@@ -169,6 +169,7 @@ public class EdgeManager {
                         EdgeBetweenRooms edgeToAdd = new EdgeBetweenRooms(newRoom, oldRoomNodeRoom);
                         edgesToAdd.add(edgeToAdd);
                         //uj ajto ha deleteltuk az oldroombol
+                        //TODO
                         if(!getEdgeBetweenRooms(oldRoom, oldRoomNodeRoom).hasDoor()) addDoor(getEdgeBetweenRooms(oldRoom, oldRoomNodeRoom));
 
                     } else if (!wasInOldRoom && wasInNewRoom) { //na csak az ujban --> csak a noderoom valtozik regirol az ujra
@@ -184,6 +185,7 @@ public class EdgeManager {
         }
         for(EdgeBetweenRooms edge : edgesToAdd){
             addEdge(edge);
+            //TODO
             addDoor(getEdgeBetweenRooms(edge.getNodeRooms().get(0), edge.getNodeRooms().get(1)));
         }
 
@@ -219,6 +221,7 @@ public class EdgeManager {
     }
     //this function add one door to an edge
     //ha mar minden erintett unitroomhoz tartozik ajot, akkor nem addol es hamissal ter vissza
+    //fontos hogy a dooradjacenteket is frissitsuk
     public boolean addDoor(EdgeBetweenRooms edge) {
         if(edge == null){
             System.out.println("door is no edge between the given rooms");
@@ -235,8 +238,6 @@ public class EdgeManager {
         {
             //egy unitroomban csek egyik iranyba nyilhat ajto!
             if(edge.switchWallToDoor(edge.getWalls().get(randomIndex), isten)) {
-                edge.getNodeRooms().get(0).getDoorAdjacentRooms().add(edge.getNodeRooms().get(1));
-                edge.getNodeRooms().get(1).getDoorAdjacentRooms().add(edge.getNodeRooms().get(0));
                 return true;
             }
         }
@@ -255,10 +256,14 @@ public class EdgeManager {
                 }
             }
         }
-
+        Collections.shuffle(roomEdges);
         for(EdgeBetweenRooms edge : roomEdges){
             if(!edge.hasDoor()) {
-                addDoor(edge);
+                if(addDoor(edge)) {
+                    edge.getNodeRooms().get(0).getDoorAdjacentRooms().add(edge.getNodeRooms().get(1));
+                    edge.getNodeRooms().get(1).getDoorAdjacentRooms().add(edge.getNodeRooms().get(0));
+                }
+
             }
         }
     }

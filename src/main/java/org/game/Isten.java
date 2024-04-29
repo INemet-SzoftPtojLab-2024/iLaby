@@ -39,7 +39,7 @@ public class Isten {
      */
     public Isten() {
         inventory=new Inventory(5);
-        map=new Map(10, 10, 4);
+        map=new Map(10, 10, 7);
         player = new Player();
         itemManager=new ItemManager();
         inputHandler = new Input();

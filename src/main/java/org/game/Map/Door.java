@@ -4,6 +4,7 @@ import main.java.org.game.Graphics.Image;
 import main.java.org.game.Isten;
 import main.java.org.game.physics.Collider;
 import main.java.org.game.physics.ColliderGroup;
+import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 
 public class Door extends EdgePiece {
@@ -17,10 +18,10 @@ public class Door extends EdgePiece {
     }
 
     public void open(){
-        collider.setSolidity(true);
+        collider.setSolidity(false);
     }
     public void close(){
-        collider.setSolidity(false);
+        collider.setSolidity(true);
     }
 
     @Override
@@ -37,10 +38,10 @@ public class Door extends EdgePiece {
         unitRoomsBetween.get(1).setHasDoor(false);
     }
     public boolean isOpened(){
-        return collider.isSolid();
+        return !collider.isSolid();
     }
     public boolean isClosed(){
-        return !collider.isSolid();
+        return collider.isSolid();
     }
 
 }

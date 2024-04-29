@@ -74,29 +74,30 @@ public class Map extends Updatable {
 
                 }
                     //TESTCASE 2:
-                if (sec % 6 == 0) {
+                if (sec % 4 == 0) {
                     Collections.shuffle(rooms);
                     mergeRooms(rooms.get(0), rooms.get(0).getPhysicallyAdjacentRooms().get(0), isten);
                     System.out.println("r1 adjacentrooms Number: " + rooms.get(0).getPhysicallyAdjacentRooms().size());
-                    if(!isGraphKohernt(rooms)) System.err.println("The Graph is not coherent after merge!");
+                    //if(!isGraphKohernt(rooms)) System.err.println("The Graph is not coherent after merge!");
 
                 }
                     //TESTCASE 3:
-                /* if((sec+2)%4==0) {
+                if((sec+2)%4==0) {
                     for (Room splittable : rooms) {
                         if (splitRooms(splittable, isten)) {
                             //System.out.println("sikerult a split");
                             System.out.println(splittable.getID() + " adjacentrooms: " + splittable.getPhysicallyAdjacentRooms().size());
+                            System.out.println(splittable.getID() + " Dooradjacentrooms: " + splittable.getDoorAdjacentRooms().size());
                             printMap();
                             stop = true;
                             break;
                         }
                     }
-                }*/
-               if(!isGraphKohernt(rooms) || !kruskalForCheckingIfGraphIsCoherent(rooms) ) {
+                }
+               if(!kruskalForCheckingIfGraphIsCoherent(rooms) ) {
                     stop = true;
-                    if(!kruskalForCheckingIfGraphIsCoherent(rooms)) System.out.println("not coherent kruskal");
                     System.err.println("The Graph is not coherent!");
+                    if(!isGraphKohernt(rooms)) System.out.println("not coherent isGraphKoherent");
                 }
                 sec++;
                 delta = 0;
@@ -164,6 +165,7 @@ public class Map extends Updatable {
             }
             rooms.add(newRoom);
             newRoom.setPhysicallyAdjacentRooms();
+            newRoom.getPhysicallyAdjacentRooms().remove(r1);
             r1.setPhysicallyAdjacentRooms();
 
             //set the images
@@ -176,8 +178,12 @@ public class Map extends Updatable {
             // the new edge has a door if it is possible
             // if door is not added, check if the map is koherent
             edgeManager.updateEdgesAfterSplit(r1, newRoom);
+
+
             //a splitelt szoba es az uj szoba kozott ketszer lesz??
             setByDoorAdjacentRooms(newRoom);
+            //hogy csak egyszer addoljuk hozza, de csak ket iranyu ajtoknal van igy
+            newRoom.getDoorAdjacentRooms().remove(r1);
             setByDoorAdjacentRooms(r1);
             return true;
         }
@@ -191,6 +197,7 @@ public class Map extends Updatable {
         for(Room adjacentRoom : r.getPhysicallyAdjacentRooms()){
             if(edgeManager.getEdgeBetweenRooms(r,adjacentRoom).hasDoor())
             {
+                //az add door miatt mar benne lehet
                 r.getDoorAdjacentRooms().add(adjacentRoom);
                 adjacentRoom.getDoorAdjacentRooms().add(r);
 
