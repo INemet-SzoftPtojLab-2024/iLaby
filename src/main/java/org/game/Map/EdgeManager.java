@@ -3,8 +3,10 @@ package main.java.org.game.Map;
 import lombok.Getter;
 import lombok.Setter;
 import main.java.org.game.Isten;
+import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -14,7 +16,7 @@ import java.util.Collections;
  * This class is responsible for all the Walls(edges), between the rooms. It contains the doors too.
  */
 //otlet: minden roomba a hozza tartozo edget eltarolni(lehet folosleges), vagy ez mar atvenne az edge manager szerepet?!
-public class EdgeManager {
+public class EdgeManager extends Updatable {
     private Isten isten;
     private ArrayList<EdgeBetweenRooms> roomEdges;
     public EdgeManager(Isten isten){
@@ -279,5 +281,34 @@ public class EdgeManager {
     }
 
 
+    @Override
+    public void onStart(Isten isten) {
 
+    }
+
+
+    @Override
+    public void onUpdate(Isten isten, double deltaTime) {
+        for(EdgeBetweenRooms edge: roomEdges){
+            for(EdgePiece ep : edge.getWalls()){
+                if(ep.isDoor()){
+                    Door door = (Door)ep;
+                    if(isten.getInputHandler().isKeyReleased(KeyEvent.VK_O) && door.isPlayerAtDoor(isten)){
+                        //TODO itt kell chekkolni hogy kinyilhat, mivel lehet egyiranyu
+                        door.open();
+                    }
+                    if(door.isOpened()){
+                        door.increaseTimeSinceOpen(deltaTime);
+                    }
+
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public void onDestroy() {
+
+    }
 }

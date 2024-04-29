@@ -21,6 +21,7 @@ public class Map extends Updatable {
     @Override
     public void onStart(Isten isten) {
         this.edgeManager = new EdgeManager(isten);
+        isten.addUpdatable(edgeManager);
         this.mapgenerator = new Mapgenerator(this, isten);
         mapgenerator.generate(minRoomSize);
 
@@ -38,11 +39,9 @@ public class Map extends Updatable {
     }
 
     //for testing
-    boolean merged = false;
     double delta = 0;
     int sec = 0;
-    int r = 0;
-    boolean stop = false;
+    boolean stop = true;
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
         //for testing
@@ -53,7 +52,7 @@ public class Map extends Updatable {
 
         if(!stop) {
             delta += deltaTime;
-            if (delta > 2) {
+            if (delta > 0.5) {
 
 
                 //TESTCASE 1:::
@@ -64,7 +63,6 @@ public class Map extends Updatable {
                 else{
                     if(TakeOutDoor(isten)) {
                         //stop = true;
-                        printMap();
                         System.out.println("edgeNum: "+edgeManager.getRoomEdges().size());
                         System.out.println("doorNum: "+edgeManager.getDoorNum());
                         System.out.println("ajtokivetel tortent");
@@ -88,8 +86,7 @@ public class Map extends Updatable {
                             //System.out.println("sikerult a split");
                             System.out.println(splittable.getID() + " adjacentrooms: " + splittable.getPhysicallyAdjacentRooms().size());
                             System.out.println(splittable.getID() + " Dooradjacentrooms: " + splittable.getDoorAdjacentRooms().size());
-                            printMap();
-                            stop = true;
+                            //stop = true;
                             break;
                         }
                     }

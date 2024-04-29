@@ -18,7 +18,7 @@ public abstract class EdgePiece {
 
     protected Image image;
 
-    protected Vec2 position;
+    protected Vec2 position; // ez egyenlo az image positiojaval
     //has maximal two elements, it contains the unitrooms between the wallpiece is
     protected ArrayList<UnitRoom> unitRoomsBetween;
 
@@ -63,6 +63,28 @@ public abstract class EdgePiece {
 
     public Vec2 getPosition() {
         return position;
+    }
+    public Vec2 getMidPosition(){
+        Vec2 midPos = new Vec2(0);
+        if(unitRoomsBetween.size() == 1){
+            //jobb vagy bal szel
+           if(position.x == -0.5f) midPos=  new Vec2(0,position.y + 0.5f);
+           else if(position.x == unitRoomsBetween.get(0).getColNum() - 0.5f) midPos= new Vec2(unitRoomsBetween.get(0).getColNum(),position.y + 0.5f);
+           //also vagy felso
+           if(position.y == -0.5f) midPos= new Vec2(position.x + 0.5f, 0);
+           else if(position.y == unitRoomsBetween.get(0).getRowNum() - 0.5f) midPos= new Vec2(position.x + 0.5f,unitRoomsBetween.get(0).getRowNum());
+        }
+        else{
+            if(unitRoomsBetween.get(0).getRowNum() == unitRoomsBetween.get(1).getRowNum()){
+                float x = Math.max(unitRoomsBetween.get(0).getColNum(), unitRoomsBetween.get(1).getColNum());
+                midPos= new Vec2(x,unitRoomsBetween.get(0).getRowNum() + 0.5f);
+            }
+            else {
+                float y =  Math.max(unitRoomsBetween.get(0).getRowNum(), unitRoomsBetween.get(1).getRowNum());
+                midPos= new Vec2(unitRoomsBetween.get(0).getColNum() + 0.5f,y);
+            }
+        }
+        return midPos;
     }
 
     public ArrayList<UnitRoom> getUnitRoomsBetween() {
