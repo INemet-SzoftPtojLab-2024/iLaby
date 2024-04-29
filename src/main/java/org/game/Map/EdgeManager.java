@@ -113,6 +113,8 @@ public class EdgeManager {
         EdgeBetweenRooms newEdge = new EdgeBetweenRooms(oldRoom,newRoom);
         addEdge(newEdge);
         //az uj szobabol meg nem minden szobaba lesz ajto
+        //TODO egy ritka eset kiszurese
+        //ha e nem lehet ajtot addolni ellenorizni kell az összefuggoseget es ha nem lenne az akkor a split meghiusul
         addDoor(getEdgeBetweenRooms(oldRoom, newRoom));
 
         int oldRoomID = oldRoom.getID();
@@ -187,6 +189,7 @@ public class EdgeManager {
 
     }
 
+    //ajto nelkul ad egy falat a ket szoba koze
     public void addEdge(EdgeBetweenRooms newEdge){
         Vec2 horizontalScale = new Vec2(1f, 0.1f); //vizszintes
         Vec2 verticalScale = new Vec2(0.1f, 1f); //fuggoleges
@@ -215,14 +218,13 @@ public class EdgeManager {
         isten.getPhysicsEngine().addColliderGroup(newEdge.getColliderGroup());
     }
     //this function add one door to an edge
-    //ha mar minden erintett unitroomhoz tartozik ajot, akkor nem addol
-
-    public void addDoor(EdgeBetweenRooms edge) {
+    //ha mar minden erintett unitroomhoz tartozik ajot, akkor nem addol es hamissal ter vissza
+    public boolean addDoor(EdgeBetweenRooms edge) {
         if(edge == null){
             System.out.println("door is no edge between the given rooms");
-            return;
+            return false;
         }
-        if(edge.hasDoor()) return;
+        if(edge.hasDoor()) return false;
 
         ArrayList<Integer> random = new ArrayList<>();
         for(int i = 0; i < edge.getWalls().size(); i++){
@@ -233,9 +235,12 @@ public class EdgeManager {
         {
             //egy unitroomban csek egyik iranyba nyilhat ajto!
             if(edge.switchWallToDoor(edge.getWalls().get(randomIndex), isten)) {
-                break;
+                edge.getNodeRooms().get(0).getDoorAdjacentRooms().add(edge.getNodeRooms().get(1));
+                edge.getNodeRooms().get(1).getDoorAdjacentRooms().add(edge.getNodeRooms().get(0));
+                return true;
             }
         }
+        return false;
     }
 
     //elofordolhat hogy egy edge nem kap ajtot!!
@@ -243,7 +248,11 @@ public class EdgeManager {
     public void initDoors(){
         for(EdgeBetweenRooms edge : roomEdges){
             if(edge.getWalls().size() == 1){
-                edge.switchWallToDoor(edge.getWalls().get(0), isten);
+                if(edge.switchWallToDoor(edge.getWalls().get(0), isten)){
+                    //ha tudtunk ajtot adni, akkor mehet az ajtoszomszedossagi listaba
+                    edge.getNodeRooms().get(0).getDoorAdjacentRooms().add(edge.getNodeRooms().get(1));
+                    edge.getNodeRooms().get(1).getDoorAdjacentRooms().add(edge.getNodeRooms().get(0));
+                }
             }
         }
 

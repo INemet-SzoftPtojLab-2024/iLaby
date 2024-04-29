@@ -42,17 +42,19 @@ public class Map extends Updatable {
     double delta = 0;
     int sec = 0;
     int r = 0;
-    boolean stopmerge = false;
+    boolean stop = false;
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
         //for testing
         if(isten.getInputHandler().isKeyReleased(KeyEvent.VK_SPACE)){
-            stopmerge = !stopmerge;
-            //if(stopmerge) printMap();
+            stop = !stop;
+            //if(stop) printMap();
         }
-        if(!stopmerge) {
+
+        if(!stop) {
             delta += deltaTime;
             if (delta > 2) {
+
 
                 //TESTCASE 1:::
                 if(sec %3==0){
@@ -61,7 +63,7 @@ public class Map extends Updatable {
                 }
                 else{
                     if(TakeOutDoor(isten)) {
-                        //stopmerge = true;
+                        //stop = true;
                         printMap();
                         System.out.println("edgeNum: "+edgeManager.getRoomEdges().size());
                         System.out.println("doorNum: "+edgeManager.getDoorNum());
@@ -72,27 +74,27 @@ public class Map extends Updatable {
 
                 }
                     //TESTCASE 2:
-                /*if (sec % 6 == 0) {
+                if (sec % 6 == 0) {
                     Collections.shuffle(rooms);
                     mergeRooms(rooms.get(0), rooms.get(0).getPhysicallyAdjacentRooms().get(0), isten);
                     System.out.println("r1 adjacentrooms Number: " + rooms.get(0).getPhysicallyAdjacentRooms().size());
                     if(!isGraphKohernt(rooms)) System.err.println("The Graph is not coherent after merge!");
 
-                }*/
+                }
                     //TESTCASE 3:
-                 /*if((cnt+2)%4==0) {
+                /* if((sec+2)%4==0) {
                     for (Room splittable : rooms) {
                         if (splitRooms(splittable, isten)) {
                             //System.out.println("sikerult a split");
                             System.out.println(splittable.getID() + " adjacentrooms: " + splittable.getPhysicallyAdjacentRooms().size());
                             printMap();
-                            stopmerge = true;
+                            stop = true;
                             break;
                         }
                     }
                 }*/
-                if(!isGraphKohernt(rooms) || !kruskalForCheckingIfGraphIsCoherent(rooms) ) {
-                    stopmerge = true;
+               if(!isGraphKohernt(rooms) || !kruskalForCheckingIfGraphIsCoherent(rooms) ) {
+                    stop = true;
                     if(!kruskalForCheckingIfGraphIsCoherent(rooms)) System.out.println("not coherent kruskal");
                     System.err.println("The Graph is not coherent!");
                 }
@@ -117,13 +119,13 @@ public class Map extends Updatable {
         }
     }
 
-    //csak akkor ha minden ajto nyitva van!!
     //a slitelesnel csak a minroomsize fele engedelyezett
+
     private boolean splitRooms(Room r1, Isten isten)
     {
         if(r1.getUnitRooms().size() < minRoomSize) return false;
         //egyenlőre minden szoba ami splittel lesz createlve ilyen type-val rendelkezik
-        int newID = generateNewRoomID(); //már kész van, teszt miatt nincs hasznalva
+        int newID = generateNewRoomID();
         Room newRoom = new Room(newID);
         int lowestRowIdx = getRoomWithLowestRowIdx(r1);
         ArrayList<UnitRoom> addableUnitRooms = new ArrayList<>();
@@ -170,7 +172,11 @@ public class Map extends Updatable {
             }
             //update nodeRooms and generate the new ones
             //also updates the images and colliders
+            //TODO
+            // the new edge has a door if it is possible
+            // if door is not added, check if the map is koherent
             edgeManager.updateEdgesAfterSplit(r1, newRoom);
+            //a splitelt szoba es az uj szoba kozott ketszer lesz??
             setByDoorAdjacentRooms(newRoom);
             setByDoorAdjacentRooms(r1);
             return true;
@@ -314,7 +320,7 @@ public class Map extends Updatable {
 
         //vagy ez kell ide, vagy a feltetel, de igazabol mindegy, hadd maradjon  mind2,de a feltetel jobb,
         // mert a kikommentelt kodresz egyel lejjebb lehet errort dobna
-        //r2.getDoorAdjacentRooms().remove(r1);
+        r2.getDoorAdjacentRooms().remove(r1);
         r2.getPhysicallyAdjacentRooms().remove(r1);
         //vegigiteralunk az r2 fizikalis szomszedossagi listajan
         for(Room adj : r2.getPhysicallyAdjacentRooms()){
@@ -325,7 +331,7 @@ public class Map extends Updatable {
             }
             //kivesszük magának r2 szomszédjának a fiz szomszédossági listájából r2-t
             adj.getPhysicallyAdjacentRooms().remove(r2);
-            adj.getDoorAdjacentRooms().remove(r2);//!!!!!!!!!!!!!!!!!!!!!!!!!!!4
+            adj.getDoorAdjacentRooms().remove(r2);//!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //vegul ha r1 nem tartalmazzaa a fiz szomszedossagi listajaban r2 szomszedjat, akkor r1 szomszedjava tesszuk
             if(!adj.getPhysicallyAdjacentRooms().contains(r1)) {
                 adj.getPhysicallyAdjacentRooms().add(r1);

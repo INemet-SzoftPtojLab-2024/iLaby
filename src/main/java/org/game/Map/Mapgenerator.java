@@ -121,7 +121,8 @@ public class Mapgenerator {
         for(Room room: map.getRooms()) {
             isten.addUpdatable(room);
             // itt még minden szoba fizikálisan és logikailag is szomszédos
-            room.setDoorAdjacentRooms(room.getPhysicallyAdjacentRooms());
+            //ez nem igaz, mert ha egy unitroomhoz tobb ajtot kene adni, akkor kevesebb door lesz mint edge
+            //room.setDoorAdjacentRooms(room.getPhysicallyAdjacentRooms());
         }
 
     }
