@@ -205,6 +205,8 @@ public class Isten {
         updatables.add(new TimeCounter());
         updatables.add(new Help());
         updatables.add(new GameMenu());
+
+        updatables.add(new Minimap(200,200,20,2));
     }
 
     /**
