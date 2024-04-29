@@ -4,8 +4,7 @@ import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.ImageUI;
 import main.java.org.game.Graphics.Renderable;
 import main.java.org.game.Isten;
-import main.java.org.game.Map.Room;
-import main.java.org.game.Map.UnitRoom;
+import main.java.org.game.Map.*;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 
@@ -24,6 +23,7 @@ public class Minimap extends Updatable {
     private final int height;
 
     private final int pixelsPerUnit;
+    private final int wallWidthInPixels;
 
     private ImageUI displayedImage=null;
     private BufferedImage displayedImageData;
@@ -32,13 +32,14 @@ public class Minimap extends Updatable {
     private final Object syncObject=new Object();
     private boolean canRerender=true;
 
-    public Minimap(int displayedScale, int res, int pixelsPerUnit)
+    public Minimap(int displayedScale, int res, int pixelsPerUnit, int wallWidthInPixels)
     {
         this.displayedScale=displayedScale;
 
         this.width=res;
         this.height=res;
         this.pixelsPerUnit=pixelsPerUnit;
+        this.wallWidthInPixels=wallWidthInPixels;
 
         rawData=new int[4*res*res];
         displayedImageData=new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_ARGB);
@@ -77,11 +78,7 @@ public class Minimap extends Updatable {
 
     private void draw(Isten isten)
     {
-        Arrays.fill(rawData,0);
-
-        ArrayList<Room> rooms = isten.getMap().getRooms();
-        if(rooms==null)
-            rooms=new ArrayList<>();
+        Arrays.fill(rawData,0);//reset the content of the image
 
         final Vec2 playerPos=isten.getPlayer().getPlayerCollider().getPosition().clone();
 
@@ -90,36 +87,106 @@ public class Minimap extends Updatable {
         final Vec2 covered=Vec2.subtract(upperBound,lowerBound);
         final Vec2 onePerCovered=new Vec2(1/covered.x, 1/covered.y);
 
+        ArrayList<Room> rooms = isten.getMap().getRooms();
+        if(rooms==null)
+            rooms=new ArrayList<>();
+
         for(int i=0;i<rooms.size();i++)
         {
-            int roomColour= (421537*i)%256;
-
+            //draw unit rooms
             ArrayList<UnitRoom> unitRooms=rooms.get(i).getUnitRooms();
             for(int j=0;j<unitRooms.size();j++)
             {
                 Vec2 startPos=unitRooms.get(j).getPosition().clone();
-                startPos.x-=0.5f+playerPos.x;
-                startPos.y-=0.5f+playerPos.y;
+                startPos.x-=0.5f+lowerBound.x;
+                startPos.y-=0.5f+lowerBound.y;
 
-                if(startPos.x+1<lowerBound.x||startPos.y+1<lowerBound.y||startPos.x>upperBound.x||startPos.y>upperBound.y)
+                if(startPos.x+1<0||startPos.y+1<0||startPos.x>covered.x||startPos.y>covered.y)
                     continue;
 
-                startPos.x-=lowerBound.x;
-                startPos.y-=lowerBound.y;
                 startPos.y=covered.y-startPos.y-1;
 
                 int drawX, drawY;
-                drawX=Math.round(width*startPos.x* onePerCovered.x)-1;
-                drawY=Math.round(height* startPos.y* onePerCovered.y)-1;
+                drawX=Math.round(width*startPos.x* onePerCovered.x);
+                drawY=Math.round(height* startPos.y* onePerCovered.y);
 
-                for(int k=drawY>-1?drawY:0;k<height&&k<drawY+pixelsPerUnit+1;k++)
+                for(int k=drawY>-1?drawY:0;k<height&&k<drawY+pixelsPerUnit;k++)
                 {
-                    for(int l=drawX>-1?drawX:0;l<width&&l<drawX+pixelsPerUnit+1;l++)
+                    for(int l=drawX>-1?drawX:0;l<width&&l<drawX+pixelsPerUnit;l++)
                     {
                         int index=4*(width*k+l);
-                        rawData[index++]=roomColour;
-                        rawData[index++]=roomColour;
-                        rawData[index++]=roomColour;
+                        rawData[index++]=0;
+                        rawData[index++]=0;
+                        rawData[index++]=0;
+                        rawData[index]=255;
+                    }
+                }
+            }
+        }
+
+        //edging intensifies (drawing edges)
+        ArrayList<EdgeBetweenRooms> edges =isten.getMap().getEdgeManager().getRoomEdges();
+        for(int i=0;i<edges.size();i++)
+        {
+            ArrayList<EdgePiece> edgePieces=edges.get(i).getWalls();
+
+            for(int j=0;j<edgePieces.size();j++)
+            {
+                Vec2 startPos=edgePieces.get(j).getCollider().getPosition().clone();
+                Vec2 scale=edgePieces.get(j).getCollider().getScale();
+                startPos.x-=0.5f*scale.x+lowerBound.x;
+                startPos.y-=0.5f*scale.y+lowerBound.y;
+
+                if(startPos.x+1<0||startPos.y+1<0||startPos.x>covered.x||startPos.y>covered.y)
+                    continue;
+
+                startPos.y=covered.y-startPos.y-scale.y;
+
+                int drawX, drawY;
+                drawX=Math.round(width*startPos.x* onePerCovered.x);
+                drawY=Math.round(height* startPos.y* onePerCovered.y)+1;
+
+                int drawEndX=Math.round(scale.x*pixelsPerUnit);
+                int drawEndY=Math.round(scale.y*pixelsPerUnit);
+
+                if(drawEndX>drawEndY)
+                {
+                    drawX--;
+                    drawEndX+=drawX+wallWidthInPixels/2;
+                    drawEndY=drawY+wallWidthInPixels;
+                }
+                else
+                {
+                    drawY--;
+                    drawEndY+=drawY;
+                    drawEndX=drawX+wallWidthInPixels;
+                }
+
+                if(drawX<0)
+                    drawX=0;
+                if(drawY<0)
+                    drawY=0;
+                if(drawEndX>width)
+                    drawEndX=width;
+                if(drawEndY>height)
+                    drawEndY=height;
+
+                int r=255, g=255,b=255;
+                if(edgePieces.get(j) instanceof Door)
+                {
+                    //r=255;
+                    g=205;
+                    b=0;
+                }
+
+                for(int k=drawY;k<drawEndY;k++)
+                {
+                    for(int l=drawX;l<drawEndX;l++)
+                    {
+                        int index=4*(width*k+l);
+                        rawData[index++]=255;
+                        rawData[index++]=255;
+                        rawData[index++]=255;
                         rawData[index]=255;
                     }
                 }

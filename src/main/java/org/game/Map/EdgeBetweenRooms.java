@@ -28,6 +28,8 @@ public class EdgeBetweenRooms {
 
     public void addNewWall(Vec2 position, Vec2 scale,UnitRoom ur1 ,UnitRoom ur2 , Isten isten){
         String wallPath = "./assets/walls/wall_mid.png";
+        scale.x=Math.abs(scale.x);
+        scale.y=Math.abs(scale.y);
         Collider wallCollider = new Collider(position,scale);
         colliderGroup.addCollider(wallCollider);
         Wall newWall = new Wall(wallCollider, position, ur1, ur2);
