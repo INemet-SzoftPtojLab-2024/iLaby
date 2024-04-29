@@ -18,7 +18,7 @@ public class GameMenu extends Updatable {
     public void onStart(Isten isten) {
         AudioManager.preloadSound("./assets/audio/click.ogg");
 
-        escape = new ButtonUI(new Vec2(0, 100), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Escape", "./assets/Bavarian.otf", 50);
+        escape = new ButtonUI(new Vec2(0, 100), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Escape", "./assets/Monocraft.ttf", 50);
 
         escape.setAlignment(Renderable.CENTER,Renderable.CENTER);
         escape.setVisibility(false);

@@ -63,7 +63,7 @@ public class Player extends Entity {
         activeImage = 0;
         motivational = null;
         time = 0.0f;
-        playerName = new Text(name, new Vec2(0, 0), "./assets/Bavarian.otf", 15, 0, 0, 255);
+        playerName = new Text(name, new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 0, 0, 255);
         playerName.setShadowOn(false);
         alive = true;
         spawnPosition = new Vec2(0,0);
