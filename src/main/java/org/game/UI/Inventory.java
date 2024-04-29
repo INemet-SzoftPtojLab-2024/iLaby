@@ -122,7 +122,10 @@ public class Inventory extends Updatable {
         for (int i = 0; i < 5; i++) {
             if(storedItems.get(i)==null){
                 storedItems.set(i,item);
-                tmp=new ImageUI(getSlotLocation(i+1),new Vec2(iconSize-10,iconSize-10),item.getImagePath());
+                tmp= item.getInventoryImage();
+                tmp.setPosition(getSlotLocation(i+1));
+                tmp.setScale(new Vec2(iconSize-10,iconSize-10));
+                        //new ImageUI(getSlotLocation(i+1),new Vec2(iconSize-10,iconSize-10),item.getImagePath());
                 itemIcons.set(i,tmp);
                 if(item.getClass().equals(Gasmask.class))
                 {
@@ -136,13 +139,14 @@ public class Inventory extends Updatable {
             storedItems.get(selectedSlot-1).dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
             storedItems.set(selectedSlot - 1, item);
             itemIcons.get(selectedSlot-1).setVisibility(false);
-            tmp=new ImageUI(getSlotLocation(selectedSlot),new Vec2(iconSize-10,iconSize-10),item.getImagePath());
+            tmp= item.getInventoryImage();
+            tmp.setPosition(getSlotLocation(selectedSlot));
+            tmp.setScale(new Vec2(iconSize-10,iconSize-10));
             itemIcons.set(selectedSlot - 1,tmp);
         }
         tmp.setAlignment(Renderable.CENTER,Renderable.BOTTOM);
         tmp.setVisibility(true);
         tmp.setSortingLayer(-69);
-        isten.getRenderer().addRenderable(tmp);
     }
 
     /**

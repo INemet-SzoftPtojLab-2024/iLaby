@@ -22,12 +22,20 @@ public class Gasmask extends Item {
         image = new Image(new Vec2(-10,-10), scale, imagePath);
         isten.getRenderer().addRenderable(image);
         image.setVisibility(false);
+
+        inventoryImage = new ImageUI(new Vec2(-10,-10), new Vec2(),imagePath);
+        isten.getRenderer().addRenderable(inventoryImage);
+        inventoryImage.setVisibility(false);
+
         capacity = 100.0f;
         equipped = false;
-        capacityBar = new ImageUI();
-        capacityBarBackground = new ImageUI();
+        capacityBar = new ImageUI(new Vec2(-10,-10), new Vec2(60.0f / 100.0f * capacity,40), "./assets/ui/gasmask_capacity_bar.png");
+        capacityBarBackground = new ImageUI(new Vec2(-10,-10), new Vec2(65,50), "./assets/ui/gasmask_capacity_bar_background.png");
         capacityBar.setVisibility(false);
         capacityBarBackground.setVisibility(false);
+
+        isten.getRenderer().addRenderable(capacityBar);
+        isten.getRenderer().addRenderable(capacityBarBackground);
     }
     @Override
     public void pickUpInInventory(){
@@ -38,14 +46,10 @@ public class Gasmask extends Item {
         Vec2 barPosition = new Vec2(slotPosition.x, slotPosition.y + 35);
 
 
-        capacityBar = new ImageUI(null, new Vec2(60.0f / 100.0f * capacity,40), "./assets/ui/gasmask_capacity_bar.png");
-        capacityBarBackground = new ImageUI(null, new Vec2(65,50), "./assets/ui/gasmask_capacity_bar_background.png");
         capacityBar.setAlignment(Renderable.CENTER, Renderable.BOTTOM);
         capacityBarBackground.setAlignment(Renderable.CENTER, Renderable.BOTTOM);
         capacityBar.setSortingLayer(-80);
         capacityBarBackground.setSortingLayer(-79);
-        isten.getRenderer().addRenderable(capacityBar);
-        isten.getRenderer().addRenderable(capacityBarBackground);
 
         capacityBar.setPosition(barPosition);
         capacityBarBackground.setPosition(barPosition);
