@@ -1,18 +1,10 @@
 package main.java.org.networking;
 
-import main.java.org.entities.villain.Villain;
 import main.java.org.game.Isten;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import javax.xml.crypto.Data;
-import java.io.IOException;
 import java.net.*;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +13,6 @@ import main.java.org.linalg.Vec2;
 import main.java.org.networking.Packet.PacketTypes;
 
 public class GameServer extends Thread {
-
     private ArrayList<ServerSideHandler> serverSideHandlers;
     private VillainHandler villainHandler;
     private MapHandler mapHandler;
@@ -36,12 +27,10 @@ public class GameServer extends Thread {
     //Notification for gamemanager, that the server is initialized, so it can enter the gameloop
     SharedObject InitializationLock;
 
-
     //Just values, not references for the actual players
     //When changing something in one of the connectedPlayers it won't change anything on the actual players in updatable
     private List<PlayerMP> connectedPlayers = new ArrayList<>();
     public GameServer(Isten isten) {
-        //System.out.println("SERVER CONST");
         this.isten = isten;
         InitializationLock = new SharedObject();
         try {
@@ -69,7 +58,6 @@ public class GameServer extends Thread {
     }
 
     private void startServer() {
-
         serverSideHandlers = new ArrayList<ServerSideHandler>();
         mapHandler = new MapHandler();
         timeHandler = new TimeHandler();
@@ -101,7 +89,6 @@ public class GameServer extends Thread {
 
     //Parse packet to string
     private void parsePacket(byte[] data, InetAddress address, int port) {
-
         String message = new String(data).trim();
         PacketTypes type = Packet.lookupPacket(message.substring(0,2));
         Packet packet = null;
@@ -136,6 +123,7 @@ public class GameServer extends Thread {
                 isten.getUpdatables().get(i).getChests().get(packet.chestIndex).open();
             }
         }
+        sendDataToAllClients(packet.getData());
     }
 
     //handle Animation Packet
