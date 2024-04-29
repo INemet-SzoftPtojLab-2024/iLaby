@@ -44,6 +44,7 @@ public class Player extends Entity {
     float speed;
     int stillImage1;
     int stillImage2;
+    double dTime;
 
 
     public Player() {
@@ -64,6 +65,7 @@ public class Player extends Entity {
         speed = 2;
         stillImage1 = 0;
         stillImage2 = 0;
+        dTime=0.0;
     }
 
     public Player(String name) {
@@ -84,6 +86,7 @@ public class Player extends Entity {
         speed = 2;
         stillImage1 =0;
         stillImage2 =0;
+        dTime=0.0;
     }
 
     @Override
@@ -158,15 +161,17 @@ public class Player extends Entity {
         AudioManager.preloadSound("./assets/audio/playersound.ogg");
         AudioManager.preloadSound("./assets/audio/died.ogg");
     }
-    public void setImage(boolean isFainted)
+    public void setImage(boolean fainted)
     {
-        if(isFainted)
+        if(fainted)
         {
             playerImage.get(activeImage).setVisibility(false);
             playerImageFainted.get(activeImage).setVisibility(true);
             playerImage=playerImageFainted;
         }
         else{
+            playerImage.get(5).setVisibility(false);
+            playerImage.get(6).setVisibility(false);
             playerImage.get(activeImage).setVisibility(false);
             playerImageNormal.get(activeImage).setVisibility(true);
             playerImage=playerImageNormal;
@@ -176,16 +181,13 @@ public class Player extends Entity {
     public void onUpdate(Isten isten, double deltaTime) {
         if(isFainted)
         {
-            if(faintingTime > 15 )
+            if(faintingTime > 30 )
             {
                 faintingTime=0;
                 setImage(false);
                 isFainted = false;
                 setPlayerImage++;
                 speed=2;
-            }
-            else{
-                faintingTime+=deltaTime;
             }
         }
         //called every frame
@@ -211,6 +213,7 @@ public class Player extends Entity {
                     }
                     if (currentRoom != null && currentRoom.getRoomType() == RoomType.GAS) {
                         if(!isten.getInventory().getExistenceOfGasMask()) {
+                            faintingTime=0;
                             if(setPlayerImage % 2 == 0)
                             {
                                 setImage(true);
@@ -238,6 +241,9 @@ public class Player extends Entity {
                                 }
                             }
                         }
+                    }
+                    else{
+                        faintingTime+=deltaTime;
                     }
                 }
             }
@@ -269,51 +275,65 @@ public class Player extends Entity {
             //animation
 
             time += deltaTime;
-
-            if(isFainted && playerCollider.getVelocity().magnitude() == 0.0f)
-            {
-                if(activeImage == 1){
-                    if(stillImage1 % 50 == 0)
-                    {
-                        playerImage.get(5).setVisibility(false);
-                        playerImage.get(activeImage).setVisibility(true);
-                    }
-                    else if(stillImage1 % 101 == 0){
-                        playerImage.get(activeImage).setVisibility(false);
-                        playerImage.get(5).setVisibility(true);
-                    }
-                    stillImage1++;
-                    time = 0.0f;
-                }
-                if(activeImage == 3){
-                    if(stillImage2 % 50 == 0)
-                    {
-                        playerImage.get(6).setVisibility(false);
-                        playerImage.get(activeImage).setVisibility(true);
-                    }
-                    else if(stillImage2 % 101 == 0){
-                        playerImage.get(activeImage).setVisibility(false);
-                        playerImage.get(6).setVisibility(true);
-                    }
-                    stillImage2++;
-                    time = 0.0f;
-                }
-            }
-
+            dTime-=deltaTime;
             if (time > 0.2f / run) { //after this much time does the animation changes
                 if(isFainted) {
                     playerImage.get(5).setVisibility(false);
                     playerImage.get(6).setVisibility(false);
+                    int prev = activeImage;
+                    if (playerCollider.getVelocity().x > 0) activeImage = 0;
+                    else if (playerCollider.getVelocity().x < 0) activeImage = 2;
+                    else if (prev > 1 && prev < 5) activeImage = 2;
+                    else activeImage = 0;
+                    if ((prev % 2 == 0 || playerCollider.getVelocity().magnitude() == 0.0f) && prev!=5 && prev!=6) activeImage++;
+                    playerImage.get(prev).setVisibility(false);
+                    playerImage.get(activeImage).setVisibility(true);
+                    time = 0.0f;
                 }
-                int prev = activeImage;
-                if (playerCollider.getVelocity().x > 0) activeImage = 0;
-                else if (playerCollider.getVelocity().x < 0) activeImage = 2;
-                else if (prev > 1 && prev < 5) activeImage = 2;
-                else activeImage = 0;
-                if ((prev % 2 == 0 || playerCollider.getVelocity().magnitude() == 0.0f) && prev!=5 && prev!=6) activeImage++;
-                playerImage.get(prev).setVisibility(false);
-                playerImage.get(activeImage).setVisibility(true);
-                time = 0.0f;
+                if(isFainted && playerCollider.getVelocity().magnitude() == 0.0f) {
+
+                    if(activeImage == 1){
+                        if(stillImage1 % 2 == 0 && dTime < 0.0)
+                        {
+                            playerImage.get(5).setVisibility(false);
+                            playerImage.get(activeImage).setVisibility(true);
+                            stillImage1++;
+                            dTime=0.2;
+                        }
+                        else if(stillImage1 % 2 == 1 && dTime < 0.0){
+                            playerImage.get(activeImage).setVisibility(false);
+                            playerImage.get(5).setVisibility(true);
+                            stillImage1++;
+                            dTime=0.2;
+                        }
+                    }
+                    if(activeImage == 3){
+                        if(stillImage2 % 2 == 0 && dTime < 0.0)
+                        {
+                            playerImage.get(6).setVisibility(false);
+                            playerImage.get(activeImage).setVisibility(true);
+                            stillImage2++;
+                            dTime=0.2;
+                        }
+                        else if(stillImage2 % 2 == 1 && dTime < 0.0){
+                            playerImage.get(activeImage).setVisibility(false);
+                            playerImage.get(6).setVisibility(true);
+                            stillImage2++;
+                            dTime=0.2;
+                        }
+                    }
+                }
+                if(!isFainted){
+                    int prev = activeImage;
+                    if (playerCollider.getVelocity().x > 0) activeImage = 0;
+                    else if (playerCollider.getVelocity().x < 0) activeImage = 2;
+                    else if (prev > 1) activeImage = 2;
+                    else activeImage = 0;
+                    if (prev % 2 == 0 || playerCollider.getVelocity().magnitude() == 0.0f) activeImage++;
+                    playerImage.get(prev).setVisibility(false);
+                    playerImage.get(activeImage).setVisibility(true);
+                    time = 0.0f;
+                }
             }
 
             //move image

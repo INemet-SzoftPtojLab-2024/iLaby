@@ -33,6 +33,7 @@ public class Villain extends Entity {
     private double sum;
     private int id;
     private int stillImage;
+    private double dTime;
 
     public Villain(String name, int ID) {
         villainCollider = null;
@@ -46,6 +47,7 @@ public class Villain extends Entity {
         room = null;
         id=ID;
         stillImage=0;
+        dTime=0.0;
     }
 
     @Override
@@ -210,6 +212,7 @@ public class Villain extends Entity {
             }
         }
         else{
+            dTime-=deltaTime;
             images.get(0).setVisibility(false);
             if(stillImage==0)
             {
@@ -217,16 +220,18 @@ public class Villain extends Entity {
                 images.get(2).setPosition(villainCollider.getPosition());
                 images.get(1).setVisibility(true);
             }
-
-            stillImage++;
-            if(stillImage % 100 == 0)
+            if(stillImage % 2 == 0 && dTime<0.0)
             {
                 images.get(1).setVisibility(false);
                 images.get(2).setVisibility(true);
+                stillImage++;
+                dTime=0.2;
             }
-            else if(stillImage % 201 == 0){
+            else if(stillImage % 2 == 1 && dTime<0.0){
                 images.get(2).setVisibility(false);
                 images.get(1).setVisibility(true);
+                stillImage++;
+                dTime=0.2;
             }
 
         }
