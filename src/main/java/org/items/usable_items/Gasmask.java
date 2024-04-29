@@ -49,8 +49,8 @@ public class Gasmask extends Item {
 
         capacityBar.setPosition(barPosition);
         capacityBarBackground.setPosition(barPosition);
-        capacityBar.setVisibility(false);
-        capacityBarBackground.setVisibility(false);
+        capacityBar.setVisibility(true);
+        capacityBarBackground.setVisibility(true);
     }
     @Override
     public void dropOnGround(Vec2 pos){
@@ -74,20 +74,16 @@ public class Gasmask extends Item {
             resizeBar(capacity);
         }
     }
-    @Override
-    public void use(){
-        if (!isten.getInventory().getExistenceOfGasMask() && !equipped) {
-            equipped = true;
-            isten.getInventory().setGasmaskEquipped(true);
-            capacityBar.setVisibility(true);
-            capacityBarBackground.setVisibility(true);
-        }
-        else if(equipped){
-            equipped = false;
-            isten.getInventory().setGasmaskEquipped(false);
-            capacityBar.setVisibility(false);
-            capacityBarBackground.setVisibility(false);
-        }
+
+    public void setCapacityBar(){
+
+        capacityBar.setVisibility(true);
+        capacityBarBackground.setVisibility(true);
+    }
+    public void deleteCapacityBar()
+    {
+        capacityBar.setVisibility(false);
+        capacityBarBackground.setVisibility(false);
     }
     public void resizeBar(float percent){
         float width = 60.0f / 100.0f * percent;

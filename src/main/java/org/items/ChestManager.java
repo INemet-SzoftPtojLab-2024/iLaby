@@ -95,7 +95,7 @@ public class ChestManager extends Updatable {
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-        if(isten.getInputHandler().isKeyDown(KeyEvent.VK_E)){
+        if(isten.getInputHandler().isKeyReleased(KeyEvent.VK_E)){
             Vec2 playerPostion = isten.getPlayer().getPlayerCollider().getPosition();
             for(var chest : chests){
                 Vec2 playerChestVector = Vec2.subtract(playerPostion,chest.getPosition());

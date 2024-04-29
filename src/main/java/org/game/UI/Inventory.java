@@ -124,6 +124,10 @@ public class Inventory extends Updatable {
                 storedItems.set(i,item);
                 tmp=new ImageUI(getSlotLocation(i+1),new Vec2(iconSize-10,iconSize-10),item.getImagePath());
                 itemIcons.set(i,tmp);
+                if(item.getClass().equals(Gasmask.class))
+                {
+                    hasGasmaskEquipped = true;
+                }
                 break;
             }
         }
@@ -139,15 +143,6 @@ public class Inventory extends Updatable {
         tmp.setVisibility(true);
         tmp.setSortingLayer(-69);
         isten.getRenderer().addRenderable(tmp);
-
-        for (Item item1 : storedItems){
-            if (item1 !=null && item1.getClass().equals(Gasmask.class)){
-                Gasmask gasmask = (Gasmask) item1;
-                if (gasmask.isEquipped()){
-                    hasGasmaskEquipped = true;
-                }
-            }
-        }
     }
 
     /**
@@ -213,28 +208,34 @@ public class Inventory extends Updatable {
         return hasGasmaskEquipped;
     }
 
-    public void destroyGasMask(){
-        if (hasGasmaskEquipped){
-            for (int i = 0; i < storedItems.size(); i++){
-                if (storedItems.get(i) != null && storedItems.get(i).getClass().equals(Gasmask.class)){
+    public void useMask(double deltaTime)
+    {
+        if(hasGasmaskEquipped) {
+            for (int i = 0; i < 5; i++) {
+
+                if (storedItems.get(i) != null && storedItems.get(i).getClass().equals(Gasmask.class)) {
                     Gasmask gasmask = (Gasmask) storedItems.get(i);
-                    if (gasmask.isEquipped()){
+                    if (gasmask.getCapacity() == 0) {
+                        gasmask.deleteCapacityBar();
                         storedItems.remove(i);
                         storedItems.add(i, null);
                         isten.getRenderer().deleteRenderable(itemIcons.get(i));
+                        hasGasmaskEquipped = false;
+                    } else {
+                        gasmask.setEquipped(true);
+                        //gasmask.setCapacityBar();
+                        gasmask.useMask(deltaTime);
+                        hasGasmaskEquipped = true;
                     }
-                }
-            }
-            hasGasmaskEquipped = false;
-            for (int i = 0; i < storedItems.size(); i++) {
-                if (storedItems.get(i) != null && storedItems.get(i).getClass().equals(Gasmask.class)) {
-                    Gasmask gasmask = (Gasmask) storedItems.get(i);
-                    gasmask.use();
                     break;
                 }
             }
+            for (int i = 0; i < 5; i++) {
+                if (storedItems.get(i) != null && storedItems.get(i).getClass().equals(Gasmask.class)) hasGasmaskEquipped=true;
+            }
         }
     }
+
     public void removeCamembert(){
         for (int i = 0; i < storedItems.size(); i++){
             if (storedItems.get(i) != null && storedItems.get(i).getClass().equals(Camembert.class)){

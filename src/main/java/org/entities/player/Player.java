@@ -230,16 +230,7 @@ public class Player extends Entity {
                             isten.getInventory().dropAllItems(isten);
                         }
                         else{
-                            for(main.java.org.items.Item item : isten.getInventory().getStoredItems()){
-                                if (item != null && item.getClass().equals(Gasmask.class)){
-                                    Gasmask gasmask = (Gasmask) item;
-                                    gasmask.useMask(deltaTime);
-                                    if (gasmask.getCapacity() <= 0){
-                                        isten.getInventory().destroyGasMask();
-                                        break;
-                                    }
-                                }
-                            }
+                            isten.getInventory().useMask(deltaTime);
                         }
                     }
                     else{
