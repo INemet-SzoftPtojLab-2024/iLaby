@@ -7,6 +7,8 @@ import main.java.org.game.physics.Collider;
 import main.java.org.game.physics.ColliderGroup;
 import main.java.org.items.Chest;
 import main.java.org.items.ChestManager;
+import main.java.org.items.Item;
+import main.java.org.items.ItemManager;
 import main.java.org.linalg.Vec2;
 
 import java.io.IOException;
@@ -16,6 +18,7 @@ public class GameClient extends Thread {
     private InetAddress ipAddress;
     private DatagramSocket socket;
     Isten isten;
+
     public GameClient(Isten isten, String ipAddress) {
         this.isten = isten;
         try {
@@ -45,8 +48,6 @@ public class GameClient extends Thread {
     }
 
     private void parsePacket(byte[] data, InetAddress address, int port) {
-
-        //System.out.println("Parse packet client");
         String message = new String(data).trim();
         Packet.PacketTypes type = Packet.lookupPacket(message.substring(0,2));
         Packet packet = null;
@@ -93,6 +94,10 @@ public class GameClient extends Thread {
                 packet = new Packet11ChestOpened(data);
                 handleChestOpened((Packet11ChestOpened) packet);
                 break;
+            case ITEMPICKEDUP:
+                packet = new Packet12ItemPickedUp(data);
+                handleItemPickedUp((Packet12ItemPickedUp) packet);
+                break;
             case WALL:
                 //System.out.println("GOT WALL PACKET");
                 packet = new Packet20Wall(data);
@@ -105,6 +110,15 @@ public class GameClient extends Thread {
         }
     }
 
+    private void handleItemPickedUp(Packet12ItemPickedUp packet) {
+        for(int i = 0; i < isten.getUpdatables().size(); i++) {
+            if(isten.getUpdatable(i).getClass() == ItemManager.class) {
+                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).setLocation(Item.Location.INVENTORY);
+                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).getImage().setVisibility(false);
+            }
+        }
+    }
+
     private void handleChestOpened(Packet11ChestOpened packet) {
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ChestManager.class) {
@@ -112,6 +126,7 @@ public class GameClient extends Thread {
             }
         }
     }
+
     private int chestGenCount = 0;
     private void handleChestGeneration(Packet10ChestGeneration packet) {
         if(isten.getSocketServer() != null) return;
@@ -131,7 +146,6 @@ public class GameClient extends Thread {
             chestColliders.addCollider(c);
         }
         isten.getPhysicsEngine().addColliderGroup(chestColliders);
-
     }
 
     private void handleDeath(Packet21Death packet) {
@@ -148,9 +162,6 @@ public class GameClient extends Thread {
     }
 
     private void handleWall(Packet20Wall packet) {
-
-        //if(isten.getSocketServer() != null) return;
-
         Vec2 pos = new Vec2(packet.getPosX(), packet.getPosY());
         Vec2 scale = new Vec2(packet.getScaleX(), packet.getScaleY());
         boolean isDoor = packet.isDoor();
@@ -165,8 +176,8 @@ public class GameClient extends Thread {
             } finally {
                 hm.lock.unlock(); // Release the lock
             }
-
     }
+
     private void handleUnitRoom(Packet04UnitRoom packet) {
         Vec2 position = new Vec2(packet.getX(), packet.getY());
         int type = packet.getType();
@@ -181,15 +192,13 @@ public class GameClient extends Thread {
             }
         }
     }
+
     private void handleTimer(Packet07Timer packet) {
         double timeRemaining = packet.timeRemaining;
         TimeCounter.setTimeRemaining(timeRemaining);
     }
 
     private void handleVillainMove(Packet06VillainMove packet) {
-
-        //if(isten.getSocketServer() != null) return;
-
         String villainName = packet.getVillainName();
         Vec2 position = new Vec2(packet.getX(), packet.getY());
 
@@ -206,7 +215,6 @@ public class GameClient extends Thread {
     }
 
     private void handleVillain(Packet05Villain packet) {
-
         String villainName = packet.getVillainName();
         Vec2 position = packet.getPosition();
         String imagePath = packet.getImagePath();
@@ -223,7 +231,6 @@ public class GameClient extends Thread {
             } finally {
                 hm.lock.unlock(); // Release the lock
             }
-
     }
 
     private void handleAnimation(Packet03Animation packet) {
@@ -253,6 +260,7 @@ public class GameClient extends Thread {
             hm.lock.unlock();
         }
     }
+
     private void handleMove(Packet02Move packet) {
         String username = packet.getUsername();
 

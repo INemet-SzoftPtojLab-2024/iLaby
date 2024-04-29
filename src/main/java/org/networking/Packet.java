@@ -13,6 +13,7 @@ public abstract class Packet {
         TIMER(07),
         CHESTGENERATION(10),
         CHESTOPENED(11),
+        ITEMPICKEDUP(12),
         WALL(20),
         DEATH(21);
         private int packetId;

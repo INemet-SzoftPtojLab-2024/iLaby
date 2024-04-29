@@ -95,7 +95,7 @@ public class ChestManager extends Updatable {
                 double playerChestDistance = sqrt(Vec2.dot(playerChestVector,playerChestVector));
                 if(playerChestDistance <= 0.5 && !chest.isOpened()){
                     chest.open();
-                    if(isten.getSocketServer() != null) isten.getSocketServer().sendDataToAllClients(("11"+index).getBytes());
+                    isten.getSocketClient().sendData(("11"+index).getBytes());
                     break;
                 }
                 index++;

@@ -31,6 +31,7 @@ public class ItemManager extends Updatable {
                     double playerItemDistance = sqrt(Vec2.dot(playerItemVector, playerItemVector));
                     if (playerItemDistance <= 0.3) {
                         items.get(i).pickUpInInventory();
+                        isten.getSocketClient().sendData(("12" + i).getBytes());;
                         break;
                     }
                 }
@@ -39,7 +40,8 @@ public class ItemManager extends Updatable {
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroy() {}
 
-    }
+    @Override
+    public ArrayList<Item> getItems() { return items; }
 }
