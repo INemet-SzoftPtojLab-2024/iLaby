@@ -197,4 +197,5 @@ public class UnitRoom implements Graph<UnitRoom>{
     public UnitRoom getRightNeighbor() {
         return RightNeighbor;
     }
+
 }

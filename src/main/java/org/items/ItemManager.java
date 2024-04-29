@@ -11,7 +11,7 @@ import static java.lang.Math.sqrt;
 
 public class ItemManager extends Updatable {
     private Isten isten;
-    private ArrayList<Item> items;
+    private ArrayList<Item> items = new ArrayList<>();
     public void addItem(Item item){
         items.add(item);
     }
@@ -19,7 +19,6 @@ public class ItemManager extends Updatable {
     @Override
     public void onStart(Isten isten) {
         this.isten=isten;
-        items=new ArrayList<>();
     }
 
     @Override
