@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.java.org.items.ChestManager;
+import main.java.org.items.Item;
+import main.java.org.items.ItemManager;
 import main.java.org.linalg.Vec2;
 import main.java.org.networking.Packet.PacketTypes;
 
@@ -114,7 +116,22 @@ public class GameServer extends Thread {
             case CHESTOPENED:
                 packet = new Packet11ChestOpened(data);
                 handleChestOpened((Packet11ChestOpened) packet);
+                break;
+            case ITEMPICKEDUP:
+                packet = new Packet12ItemPickedUp(data);
+                handleItemPickedUp((Packet12ItemPickedUp) packet);
+                break;
         }
+    }
+
+    private void handleItemPickedUp(Packet12ItemPickedUp packet) {
+        for(int i = 0; i < isten.getUpdatables().size(); i++) {
+            if(isten.getUpdatable(i).getClass() == ItemManager.class) {
+                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).setLocation(Item.Location.INVENTORY);
+                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).getImage().setVisibility(false);
+            }
+        }
+        sendDataToAllClients(packet.getData());
     }
 
     private void handleChestOpened(Packet11ChestOpened packet) {

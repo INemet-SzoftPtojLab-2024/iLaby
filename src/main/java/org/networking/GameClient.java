@@ -7,6 +7,8 @@ import main.java.org.game.physics.Collider;
 import main.java.org.game.physics.ColliderGroup;
 import main.java.org.items.Chest;
 import main.java.org.items.ChestManager;
+import main.java.org.items.Item;
+import main.java.org.items.ItemManager;
 import main.java.org.linalg.Vec2;
 
 import java.io.IOException;
@@ -92,6 +94,10 @@ public class GameClient extends Thread {
                 packet = new Packet11ChestOpened(data);
                 handleChestOpened((Packet11ChestOpened) packet);
                 break;
+            case ITEMPICKEDUP:
+                packet = new Packet12ItemPickedUp(data);
+                handleItemPickedUp((Packet12ItemPickedUp) packet);
+                break;
             case WALL:
                 //System.out.println("GOT WALL PACKET");
                 packet = new Packet20Wall(data);
@@ -104,6 +110,15 @@ public class GameClient extends Thread {
         }
     }
 
+    private void handleItemPickedUp(Packet12ItemPickedUp packet) {
+        for(int i = 0; i < isten.getUpdatables().size(); i++) {
+            if(isten.getUpdatable(i).getClass() == ItemManager.class) {
+                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).setLocation(Item.Location.INVENTORY);
+                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).getImage().setVisibility(false);
+            }
+        }
+    }
+
     private void handleChestOpened(Packet11ChestOpened packet) {
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ChestManager.class) {
@@ -111,6 +126,7 @@ public class GameClient extends Thread {
             }
         }
     }
+
     private int chestGenCount = 0;
     private void handleChestGeneration(Packet10ChestGeneration packet) {
         if(isten.getSocketServer() != null) return;
