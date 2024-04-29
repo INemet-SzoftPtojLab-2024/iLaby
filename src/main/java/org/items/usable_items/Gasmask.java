@@ -11,6 +11,8 @@ import main.java.org.game.UI.Inventory;
 import main.java.org.items.Item;
 import main.java.org.linalg.Vec2;
 
+import java.util.Objects;
+
 public class Gasmask extends Item {
     private ImageUI capacityBar;
     private ImageUI capacityBarBackground;
@@ -42,14 +44,15 @@ public class Gasmask extends Item {
         super.pickUpInInventory();
         Inventory inv = isten.getInventory();
 
-        Vec2 slotPosition = inv.getStoringSlotPosition(this);
-        Vec2 barPosition = new Vec2(slotPosition.x, slotPosition.y + 35);
-
-
         capacityBar.setAlignment(Renderable.CENTER, Renderable.BOTTOM);
         capacityBarBackground.setAlignment(Renderable.CENTER, Renderable.BOTTOM);
         capacityBar.setSortingLayer(-80);
         capacityBarBackground.setSortingLayer(-79);
+
+        Vec2 slotPosition = inv.getStoringSlotPosition(this);
+        if(slotPosition.x == 0.0 && slotPosition.y==0.0)return;
+        System.out.println(slotPosition.x +" " + slotPosition.y);
+        Vec2 barPosition = new Vec2(slotPosition.x, slotPosition.y + 35);
 
         capacityBar.setPosition(barPosition);
         capacityBarBackground.setPosition(barPosition);

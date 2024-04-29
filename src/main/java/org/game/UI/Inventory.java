@@ -138,6 +138,10 @@ public class Inventory extends Updatable {
             //
             storedItems.get(selectedSlot-1).dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
             storedItems.set(selectedSlot - 1, item);
+            if(item.getClass().equals(Gasmask.class))
+            {
+                hasGasmaskEquipped = true;
+            }
             itemIcons.get(selectedSlot-1).setVisibility(false);
             tmp= item.getInventoryImage();
             tmp.setPosition(getSlotLocation(selectedSlot));
