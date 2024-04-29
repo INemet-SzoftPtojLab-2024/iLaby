@@ -58,6 +58,7 @@ public class Gasmask extends Item {
         if (capacityBar != null && capacityBarBackground != null){
             capacityBar.setVisibility(false);
             capacityBarBackground.setVisibility(false);
+            if (equipped) isten.getInventory().setGasmaskEquipped(false);
             equipped = false;
         }
     }
@@ -75,11 +76,17 @@ public class Gasmask extends Item {
     }
     @Override
     public void use(){
-        if (!isten.getInventory().getExistenceOfGasMask()) {
+        if (!isten.getInventory().getExistenceOfGasMask() && !equipped) {
             equipped = true;
             isten.getInventory().setGasmaskEquipped(true);
             capacityBar.setVisibility(true);
             capacityBarBackground.setVisibility(true);
+        }
+        else if(equipped){
+            equipped = false;
+            isten.getInventory().setGasmaskEquipped(false);
+            capacityBar.setVisibility(false);
+            capacityBarBackground.setVisibility(false);
         }
     }
     public void resizeBar(float percent){

@@ -142,7 +142,7 @@ public class Inventory extends Updatable {
 
         for (Item item1 : storedItems){
             if (item1 !=null && item1.getClass().equals(Gasmask.class)){
-                Gasmask gasmask = (Gasmask) item;
+                Gasmask gasmask = (Gasmask) item1;
                 if (gasmask.isEquipped()){
                     hasGasmaskEquipped = true;
                 }
