@@ -85,9 +85,7 @@ public class Villain extends Entity {
         images.add(new Image(new Vec2(), faintedScale, "./assets/villain/villain" + imagePath + "_fainted1.png"));
         images.add(new Image(new Vec2(), faintedScale, "./assets/villain/villain" + imagePath + "_fainted2.png"));
 
-        float[] data = randomPositions(isten.getMap().getRooms());
 
-        position = new Vec2(data[0], data[1]);
         villainCollider = new Collider(position, villainScale);
         villainCollider.setMovability(true);
         isten.getPhysicsEngine().addCollider(villainCollider);
@@ -266,14 +264,15 @@ public class Villain extends Entity {
         }
     }
 
-    public float[] randomPositions(ArrayList<Room> rooms) {
+    public Vec2 randomPositions(ArrayList<Room> rooms) {
         //Collections.shuffle(rooms);
         Random rand = new Random();
 
         Room selectedRoom;
 
         do {
-            selectedRoom = rooms.get(rand.nextInt(rooms.size() - 1));
+            random1 = rand.nextInt(rooms.size() - 1);
+            selectedRoom = rooms.get(random1);
         } while (roomsWithVillains.contains(selectedRoom) || isStartUnitRoomInRoom(selectedRoom) || selectedRoom.getRoomType() == RoomType.GAS);
 
         random2 = rand.nextInt(selectedRoom.getUnitRooms().size());
@@ -281,7 +280,7 @@ public class Villain extends Entity {
         roomsWithVillains.add(selectedRoom);
         room = selectedRoom;
 
-        return new float[]{random1, random2, selectedUnitRoom.getPosition().x, selectedUnitRoom.getPosition().y};
+        return selectedUnitRoom.getPosition();
     }
 
     public void setRoomForVillain(ArrayList<Room> rooms, int selectedRoomIndex, int selectedUnitRoomIndex) {

@@ -42,10 +42,7 @@ public class VillainHandler extends ServerSideHandler {
         villainSkeletons.add(new Villain("Csuka",  "2"));
 
         for(Villain villain: villainSkeletons) {
-            float[] data = villain.randomPositions(isten.getMap().getRooms());
-            //int random1 = (int)data[0];
-            //int random2 = (int)data[1];
-            villain.setPosition(new Vec2(data[2], data[3]));
+            villain.setPosition(villain.randomPositions(isten.getMap().getRooms()));
         }
 
     }
