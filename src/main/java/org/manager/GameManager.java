@@ -63,11 +63,10 @@ public class GameManager {
         PlayerPrefs.load();
 
         //game stuff
-
+        Isten2 isten2 = new Isten2();
         while (true) {
             switch (stage) {
                 case MAIN_MENU:
-                    Isten2 isten2 = new Isten2();
                     changePanel(isten2.getRenderer());
                     isten2.init();
 
@@ -88,13 +87,14 @@ public class GameManager {
 
                     PlayerPrefs.save();
                     break;
-                case SOLO_INGAME:
+                case INGAME:
                     Isten isten = new Isten();
                     changePanel(isten.getRenderer());//ez az isten.init elott fusson
-                    isten.init();
+                    if(((MainMenu)isten2.getUpdatable(0)).isMulti()) isten.initMP();
+                    else isten.init();
 
                     //Wait for the server to initialize (only on server side)
-                    if (isten.getSocketServer() != null) {
+                    if(isten.getSocketServer() != null) {
                         SharedObject serverInitLock = isten.getSocketServer().getInitializationLock();
                         try {
                             serverInitLock.waitForNotification();
@@ -105,45 +105,12 @@ public class GameManager {
 
 
                     long lastFrame = System.nanoTime();
-                    while (stage == GameStage.SOLO_INGAME) {
+                    while (stage == GameStage.INGAME) {
                         long currentTime = System.nanoTime();
                         double deltaTime = (currentTime - lastFrame) * 0.000000001;
                         lastFrame = currentTime;
 
                         isten.update(deltaTime);
-
-                        try {
-                            Thread.sleep(1);
-                        } catch (Exception amogus) { //do not remove plz
-                        }
-                    }
-                    AudioManager.closeAllSounds();
-                    AudioManager.unloadPreloadedSounds();
-
-                    PlayerPrefs.save();
-                    break;
-                case MULTI_INGAME:
-                    Isten isten3 = new Isten();
-                    changePanel(isten3.getRenderer());//ez az isten.init elott fusson
-                    isten3.initMP();
-
-                    //Wait for the server to initialize (only on server side)
-                    if (isten3.getSocketServer() != null) {
-                        SharedObject serverInitLock = isten3.getSocketServer().getInitializationLock();
-                        try {
-                            serverInitLock.waitForNotification();
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-
-                    long lastFrame3 = System.nanoTime();
-                    while (stage == GameStage.MULTI_INGAME) {
-                        long currentTime = System.nanoTime();
-                        double deltaTime = (currentTime - lastFrame3) * 0.000000001;
-                        lastFrame3 = currentTime;
-
-                        isten3.update(deltaTime);
                         try {
                             Thread.sleep(1);
                         } catch (Exception amogus) { //do not remove plz
@@ -167,6 +134,6 @@ public class GameManager {
     }
 
     public enum GameStage {
-        MAIN_MENU, SOLO_INGAME, MULTI_INGAME, EXIT
+        MAIN_MENU, INGAME, EXIT
     }
 }

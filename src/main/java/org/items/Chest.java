@@ -3,13 +3,12 @@ package main.java.org.items;
 import lombok.Setter;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Isten;
-
 import main.java.org.game.physics.Collider;
 import main.java.org.items.usable_items.*;
-
 import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Chest {
     private final int maxAmountOfItems=3;
@@ -17,9 +16,7 @@ public class Chest {
     private final Isten isten;
     private boolean isOpened;//once a chest is opened, cant be closed anymore; default:false
     private ArrayList<Item> storedItems;
-
-    private Image chestClosedImage;
-    private Image chestOpenedImage;
+    private Image chestImage;
     private Vec2 pos;
     private final Vec2 scale=new Vec2(0.4f,0.4f);
     private int chestType;
@@ -41,40 +38,22 @@ public class Chest {
         }
         else storedItems=items;*/
         isOpened=false;
-        chestClosedImage =null;
+        chestImage=null;
         switch(this.heading){
-            case RIGHT:  {
-                chestClosedImage =new Image(pos,scale,"./assets/items/chest/chest_closed_right.png");
-                chestOpenedImage =new Image(pos,scale,"./assets/items/chest/chest_opened_right.png");
-                break;
-            }
-            case DOWN: {
-                chestClosedImage = new Image(pos, scale, "./assets/items/chest/chest_closed_down.png");
-                chestOpenedImage =new Image(pos,scale,"./assets/items/chest/chest_opened_down.png");
-                break;
-            }
-            case LEFT: {
-                chestClosedImage = new Image(pos, scale, "./assets/items/chest/chest_closed_left.png");
-                chestOpenedImage =new Image(pos,scale,"./assets/items/chest/chest_opened_left.png");
-                break;
-            }
-            case UP: {
-                chestClosedImage = new Image(pos, scale, "./assets/items/chest/chest_closed_up.png");
-                chestOpenedImage =new Image(pos,scale,"./assets/items/chest/chest_opened_up.png");
-                break;
-            }
+            case RIGHT:  chestImage=new Image(pos,scale,"./assets/items/chest/chest_closed_right.png");break;
+            case DOWN:  chestImage=new Image(pos,scale,"./assets/items/chest/chest_closed_down.png");break;
+            case LEFT:  chestImage=new Image(pos,scale,"./assets/items/chest/chest_closed_left.png");break;
+            case UP:  chestImage=new Image(pos,scale,"./assets/items/chest/chest_closed_up.png");break;
         }
-        chestClosedImage.setVisibility(true);
-        chestOpenedImage.setVisibility(false);
-        isten.getRenderer().addRenderable(chestClosedImage);
-        isten.getRenderer().addRenderable(chestOpenedImage);
+        chestImage.setVisibility(true);
+        isten.getRenderer().addRenderable(chestImage);
     }
 
     public void fillChest() {
         switch (chestType) {
             case 0:
                 storedItems.add(new Gasmask(isten));
-                storedItems.add(new Camembert(isten));
+                storedItems.add(new Camambert(isten));
                 storedItems.add(new Transistor(isten));
                 break;
             case 1:
@@ -84,7 +63,7 @@ public class Chest {
                 break;
             case 2:
                 storedItems.add(new Gasmask(isten));
-                storedItems.add(new Camembert(isten));
+                storedItems.add(new Camambert(isten));
                 break;
             case 3:
                 storedItems.add(new Gasmask(isten));
@@ -101,10 +80,10 @@ public class Chest {
     }
 
     public void open() {
-        chestClosedImage.setVisibility(false);
+        chestImage.setVisibility(false);
         switch(heading){
             case RIGHT: {
-                //chestClosedImage = new Image(pos, scale, "./assets/items/chest/chest_opened_right.png");
+                chestImage = new Image(pos, scale, "./assets/items/chest/chest_opened_right.png");
                 if(storedItems.size()==1||storedItems.size()==3)storedItems.get(0).dropOnGround(new Vec2(pos.x+0.4f,pos.y));
                 else {
                     storedItems.get(0).dropOnGround(new Vec2(pos.x+0.3f,pos.y-0.3f));
@@ -117,7 +96,7 @@ public class Chest {
                 break;
             }
             case DOWN: {
-                //chestClosedImage = new Image(pos, scale, "./assets/items/chest/chest_opened_down.png");
+                chestImage = new Image(pos, scale, "./assets/items/chest/chest_opened_down.png");
                 if(storedItems.size()==1||storedItems.size()==3)storedItems.get(0).dropOnGround(new Vec2(pos.x,pos.y-0.4f));
                 else {
                     storedItems.get(0).dropOnGround(new Vec2(pos.x+0.3f,pos.y-0.3f));
@@ -130,7 +109,7 @@ public class Chest {
                 break;
             }
             case LEFT: {
-                //chestClosedImage = new Image(pos, scale, "./assets/items/chest/chest_opened_left.png");
+                chestImage = new Image(pos, scale, "./assets/items/chest/chest_opened_left.png");
                 if(storedItems.size()==1||storedItems.size()==3)storedItems.get(0).dropOnGround(new Vec2(pos.x-0.4f,pos.y));
                 else {
                     storedItems.get(0).dropOnGround(new Vec2(pos.x-0.3f,pos.y+0.3f));
@@ -143,7 +122,7 @@ public class Chest {
                 break;
             }
             case UP: {
-                //chestClosedImage = new Image(pos, scale, "./assets/items/chest/chest_opened_up.png");
+                chestImage = new Image(pos, scale, "./assets/items/chest/chest_opened_up.png");
                 if(storedItems.size()==1||storedItems.size()==3)storedItems.get(0).dropOnGround(new Vec2(pos.x,pos.y+0.4f));
                 else {
                     storedItems.get(0).dropOnGround(new Vec2(pos.x-0.3f,pos.y+0.3f));
@@ -156,8 +135,8 @@ public class Chest {
                 break;
             }
         }
-        chestClosedImage.setVisibility(false);
-        chestOpenedImage.setVisibility(true);
+        isten.getRenderer().addRenderable(chestImage);
+        chestImage.setVisibility(true);
         isOpened = true;
 
     }

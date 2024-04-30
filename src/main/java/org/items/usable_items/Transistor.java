@@ -1,7 +1,6 @@
 package main.java.org.items.usable_items;
 
 import main.java.org.game.Graphics.Image;
-import main.java.org.game.Graphics.ImageUI;
 import main.java.org.game.Graphics.Renderable;
 import main.java.org.game.Graphics.TextUI;
 import main.java.org.game.Isten;
@@ -25,12 +24,7 @@ public class Transistor extends Item {
         image.setVisibility(false);
         activatedImage.setVisibility(false);
 
-
-        inventoryImage = new ImageUI(new Vec2(-10,-10), new Vec2(),imagePath);
-        isten.getRenderer().addRenderable(inventoryImage);
-        inventoryImage.setVisibility(false);
-
-        countText = new TextUI("2", new Vec2(0,0), "./assets/Monocraft.ttf", 15, 255, 255, 255);
+        countText = new TextUI("2", new Vec2(0,0), "./assets/Bavarian.otf", 15, 255, 255, 255);
         countText.setVisibility(false);
         countText.setAlignment(Renderable.CENTER, Renderable.BOTTOM);
         countText.setSortingLayer(-80);

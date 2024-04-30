@@ -1,13 +1,10 @@
 package main.java.org.game.UI;
 
-import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.ImageUI;
 import main.java.org.game.Graphics.Renderable;
 import main.java.org.game.Isten;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.items.Item;
-import main.java.org.items.usable_items.Camembert;
-import main.java.org.items.usable_items.Gasmask;
 import main.java.org.linalg.Vec2;
 
 import java.awt.event.KeyEvent;
@@ -25,9 +22,6 @@ public class Inventory extends Updatable {
      */
     private int selectedSlot;
     private  Isten isten;
-    private boolean hasGasmaskEquipped;
-    private boolean camembertTriggered;
-    private Camembert camembert;
 
 
     public Inventory(int size){
@@ -38,9 +32,6 @@ public class Inventory extends Updatable {
         for (int i = 0; i < 5; i++) {storedItems.add(null);}
         for (int i = 0; i < 5; i++) {itemIcons.add(null);}
         selectedSlot=1;
-        hasGasmaskEquipped =false;
-        camembertTriggered = false;
-        camembert = null;
     }
 
     @Override
@@ -66,6 +57,7 @@ public class Inventory extends Updatable {
             isten.getRenderer().addRenderable(inventoryIcon);
             inventoryIcons.add(inventoryIcon);
         }
+
     }
 
     @Override
@@ -97,8 +89,8 @@ public class Inventory extends Updatable {
             useSelectedItem();
         }
         if(isten.getInputHandler().isKeyDown(KeyEvent.VK_R)&&storedItems.get(selectedSlot-1)!=null){
-            storedItems.get(selectedSlot - 1).dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
-            storedItems.set(selectedSlot - 1, null);
+            storedItems.get(selectedSlot-1).dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
+            storedItems.set(selectedSlot-1,null);
             tmp = new ImageUI(getSlotLocation(selectedSlot ), new Vec2(iconSize), "./assets/ui/inventorySlot_Selected.png");
             inventoryIcons.set(selectedSlot - 1, tmp);
             tmp.setAlignment(Renderable.CENTER, Renderable.BOTTOM);
@@ -107,9 +99,6 @@ public class Inventory extends Updatable {
             isten.getRenderer().addRenderable(tmp);
             itemIcons.get(selectedSlot-1).setVisibility(false);
 
-        }
-        if (camembertTriggered && camembert!=null){
-            camembert.useCamembert(deltaTime);
         }
     }
 
@@ -122,35 +111,22 @@ public class Inventory extends Updatable {
         for (int i = 0; i < 5; i++) {
             if(storedItems.get(i)==null){
                 storedItems.set(i,item);
-                tmp= item.getInventoryImage();
-                tmp.setPosition(getSlotLocation(i+1));
-                tmp.setScale(new Vec2(iconSize-10,iconSize-10));
-                        //new ImageUI(getSlotLocation(i+1),new Vec2(iconSize-10,iconSize-10),item.getImagePath());
+                tmp=new ImageUI(getSlotLocation(i+1),new Vec2(iconSize-10,iconSize-10),item.getImagePath());
                 itemIcons.set(i,tmp);
-                if(item.getClass().equals(Gasmask.class))
-                {
-                    hasGasmaskEquipped = true;
-                }
                 break;
             }
         }
         if(tmp==null) {
-            //
             storedItems.get(selectedSlot-1).dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
             storedItems.set(selectedSlot - 1, item);
-            if(item.getClass().equals(Gasmask.class))
-            {
-                hasGasmaskEquipped = true;
-            }
             itemIcons.get(selectedSlot-1).setVisibility(false);
-            tmp= item.getInventoryImage();
-            tmp.setPosition(getSlotLocation(selectedSlot));
-            tmp.setScale(new Vec2(iconSize-10,iconSize-10));
+            tmp=new ImageUI(getSlotLocation(selectedSlot),new Vec2(iconSize-10,iconSize-10),item.getImagePath());
             itemIcons.set(selectedSlot - 1,tmp);
         }
         tmp.setAlignment(Renderable.CENTER,Renderable.BOTTOM);
         tmp.setVisibility(true);
         tmp.setSortingLayer(-69);
+        isten.getRenderer().addRenderable(tmp);
     }
 
     /**
@@ -176,93 +152,7 @@ public class Inventory extends Updatable {
     public void useSelectedItem(){
         Item selectedItem = storedItems.get(selectedSlot-1);
         if(selectedItem != null){
-            if (selectedItem.getClass().equals(Camembert.class)){
-                camembert = (Camembert) selectedItem;
-                camembertTriggered = true;
-            }
-            else{
-                selectedItem.use();
-            }
+            selectedItem.use();
         }
-    }
-
-    public List<Item> getStoredItems() {
-        return storedItems;
-    }
-    public int getStoredItemsSize()
-    {
-        int count=0;
-        for(int i = 0; i < 5 ; i++)
-        {
-            if(storedItems.get(i) !=null)
-            {
-                count++;
-            }
-        }
-        return count;
-    }
-    public void dropAllItems(Isten isten)
-    {
-        storedItems.clear();
-        for (int i = 0; i < 5; i++) {storedItems.add(null);}
-        for (Image im : itemIcons) {
-            isten.getRenderer().deleteRenderable(im);
-        }
-        selectedSlot=1;
-        hasGasmaskEquipped =false;
-    }
-    public boolean getExistenceOfGasMask()
-    {
-        return hasGasmaskEquipped;
-    }
-
-    public void useMask(double deltaTime)
-    {
-        if(hasGasmaskEquipped) {
-            for (int i = 0; i < 5; i++) {
-
-                if (storedItems.get(i) != null && storedItems.get(i).getClass().equals(Gasmask.class)) {
-                    Gasmask gasmask = (Gasmask) storedItems.get(i);
-                    if (gasmask.getCapacity() == 0) {
-                        gasmask.deleteCapacityBar();
-                        storedItems.remove(i);
-                        storedItems.add(i, null);
-                        isten.getRenderer().deleteRenderable(itemIcons.get(i));
-                        hasGasmaskEquipped = false;
-                    } else {
-                        gasmask.setEquipped(true);
-                        //gasmask.setCapacityBar();
-                        gasmask.useMask(deltaTime);
-                        hasGasmaskEquipped = true;
-                    }
-                    break;
-                }
-            }
-            for (int i = 0; i < 5; i++) {
-                if (storedItems.get(i) != null && storedItems.get(i).getClass().equals(Gasmask.class)) hasGasmaskEquipped=true;
-            }
-        }
-    }
-
-    public void removeCamembert(){
-        for (int i = 0; i < storedItems.size(); i++){
-            if (storedItems.get(i) != null && storedItems.get(i).getClass().equals(Camembert.class)){
-                storedItems.remove(i);
-                storedItems.add(i, null);
-                isten.getRenderer().deleteRenderable(itemIcons.get(i));
-            }
-        }
-    }
-
-    public void setCamembertTriggered(boolean camembertTriggered) {
-        this.camembertTriggered = camembertTriggered;
-    }
-
-    public void setCamembert(Camembert camembert) {
-        this.camembert = camembert;
-    }
-
-    public void setGasmaskEquipped(boolean hasGasmaskEquipped) {
-        this.hasGasmaskEquipped = hasGasmaskEquipped;
     }
 }
