@@ -25,6 +25,7 @@ public class Transistor extends Item {
         image.setVisibility(false);
         activatedImage.setVisibility(false);
 
+
         inventoryImage = new ImageUI(new Vec2(-10,-10), new Vec2(),imagePath);
         isten.getRenderer().addRenderable(inventoryImage);
         inventoryImage.setVisibility(false);

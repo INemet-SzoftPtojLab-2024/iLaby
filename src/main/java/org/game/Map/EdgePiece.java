@@ -64,6 +64,7 @@ public abstract class EdgePiece {
     public Vec2 getPosition() {
         return position;
     }
+    public Image getImage() {return image;}
 
     public ArrayList<UnitRoom> getUnitRoomsBetween() {
         return unitRoomsBetween;

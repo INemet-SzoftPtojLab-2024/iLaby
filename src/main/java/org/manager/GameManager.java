@@ -5,6 +5,8 @@ import main.java.org.game.Audio.AudioManager;
 import main.java.org.game.Isten;
 import main.java.org.game.Isten2;
 import main.java.org.game.PlayerPrefs.PlayerPrefs;
+import main.java.org.game.UI.MainMenu;
+import main.java.org.networking.SharedObject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,6 +14,7 @@ import java.awt.event.WindowEvent;
 
 public class GameManager {
 
+    private boolean multi;
     private JFrame frame;
     private JPanel currentPanel;
 
@@ -60,10 +63,10 @@ public class GameManager {
         PlayerPrefs.load();
 
         //game stuff
+        Isten2 isten2 = new Isten2();
         while (true) {
             switch (stage) {
                 case MAIN_MENU:
-                    Isten2 isten2 = new Isten2();
                     changePanel(isten2.getRenderer());
                     isten2.init();
 
@@ -87,7 +90,19 @@ public class GameManager {
                 case INGAME:
                     Isten isten = new Isten();
                     changePanel(isten.getRenderer());//ez az isten.init elott fusson
-                    isten.init();
+                    if(((MainMenu)isten2.getUpdatable(0)).isMulti()) isten.initMP();
+                    else isten.init();
+
+                    //Wait for the server to initialize (only on server side)
+                    if(isten.getSocketServer() != null) {
+                        SharedObject serverInitLock = isten.getSocketServer().getInitializationLock();
+                        try {
+                            serverInitLock.waitForNotification();
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
 
                     long lastFrame = System.nanoTime();
                     while (stage == GameStage.INGAME) {

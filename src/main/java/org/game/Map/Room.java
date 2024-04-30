@@ -1,13 +1,7 @@
 package main.java.org.game.Map;
 
-import lombok.Setter;
-import lombok.Getter;
-import main.java.org.game.Graphics.Image;
 import main.java.org.game.Isten;
-import main.java.org.game.physics.Collider;
-import main.java.org.game.physics.ColliderGroup;
 import main.java.org.game.updatable.Updatable;
-import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 
@@ -95,6 +89,7 @@ public class Room extends Updatable implements Graph<Room>{
 
     public void setMaxPlayerCount(int maxPlayerCount) {this.maxPlayerCount = maxPlayerCount;}
     public RoomType getRoomType() {return roomType;}
+  
     public boolean isUnitRoomInSameRoomAsStartRoom(Vec2 position)
     {
         boolean isUnitRoomInRoom=false;
@@ -110,4 +105,9 @@ public class Room extends Updatable implements Graph<Room>{
         }
         return isStartUnitRoomInRoom && isUnitRoomInRoom;
     }
+
+    public void setRoomType(RoomType type) {
+        this.roomType = type;
+    }
+
 }

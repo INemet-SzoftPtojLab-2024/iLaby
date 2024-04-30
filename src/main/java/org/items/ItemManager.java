@@ -15,7 +15,7 @@ import static java.lang.Math.sqrt;
 
 public class ItemManager extends Updatable {
     private Isten isten;
-    private ArrayList<Item> items;
+    private ArrayList<Item> items = new ArrayList<>();
     public void addItem(Item item){
         items.add(item);
     }
@@ -23,11 +23,11 @@ public class ItemManager extends Updatable {
     @Override
     public void onStart(Isten isten) {
         this.isten=isten;
-        items=new ArrayList<>();
     }
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
+
         Room currentRoom = null;
         for (Updatable u : isten.getUpdatables()) {
             if (u.getClass().equals(Villain.class)) {
@@ -55,6 +55,7 @@ public class ItemManager extends Updatable {
                             items.get(i).pickUpInInventory();
                             break;
                         }
+
                     }
                 }
             }
@@ -62,7 +63,8 @@ public class ItemManager extends Updatable {
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroy() {}
 
-    }
+    @Override
+    public ArrayList<Item> getItems() { return items; }
 }
