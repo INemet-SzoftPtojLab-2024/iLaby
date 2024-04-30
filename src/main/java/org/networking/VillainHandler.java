@@ -30,16 +30,16 @@ public class VillainHandler extends ServerSideHandler {
     public void createVillains() {
 
 
-        villainSkeletons.add(new Villain("Villain1", "./assets/villain/villain1.png"));
-        villainSkeletons.add(new Villain("Villain2",  "./assets/villain/villain1.png"));
-        villainSkeletons.add(new Villain("Villain3",  "./assets/villain/villain1.png"));
-        villainSkeletons.add(new Villain("Villain4",  "./assets/villain/villain1.png"));
-        villainSkeletons.add(new Villain("Villain5",  "./assets/villain/villain1.png"));
-        villainSkeletons.add(new Villain("Villain6",  "./assets/villain/villain1.png"));
-        villainSkeletons.add(new Villain("Villain7",  "./assets/villain/villain3.png"));
-        villainSkeletons.add(new Villain("Villain8",  "./assets/villain/villain3.png"));
-        villainSkeletons.add(new Villain("Gajdos",  "./assets/villain/villain1.png"));
-        villainSkeletons.add(new Villain("Csuka",  "./assets/villain/villain2.png"));
+        villainSkeletons.add(new Villain("Villain1", "3"));
+        villainSkeletons.add(new Villain("Villain2",  "3"));
+        villainSkeletons.add(new Villain("Villain3",  "3"));
+        villainSkeletons.add(new Villain("Villain4",  "3"));
+        villainSkeletons.add(new Villain("Villain5",  "3"));
+        villainSkeletons.add(new Villain("Villain6",  "3"));
+        villainSkeletons.add(new Villain("Villain7",  "3"));
+        villainSkeletons.add(new Villain("Villain8",  "3"));
+        villainSkeletons.add(new Villain("Gajdos",  "1"));
+        villainSkeletons.add(new Villain("Csuka",  "2"));
 
         for(Villain villain: villainSkeletons) {
             float[] data = villain.randomPositions(isten.getMap().getRooms());

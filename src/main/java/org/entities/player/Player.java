@@ -12,15 +12,12 @@ import main.java.org.game.Isten;
 import main.java.org.game.UI.TimeCounter;
 import main.java.org.game.physics.Collider;
 import main.java.org.linalg.Vec2;
-import main.java.org.networking.Packet03Animation;
+
 import main.java.org.game.Map.Room;
 import main.java.org.game.Map.RoomType;
 import main.java.org.game.Map.UnitRoom;
 import main.java.org.game.PlayerPrefs.PlayerPrefs;
 import main.java.org.game.updatable.Updatable;
-
-import main.java.org.items.usable_items.Gasmask;
-import main.java.org.linalg.Vec2;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -64,7 +61,7 @@ public class Player extends Entity {
         motivational = null;
         activeImage = 0;
         time = 0.0f;
-        playerName = new Text(PlayerPrefs.getString("name"), new Vec2(0, 0), "./assets/Bavarian.otf", 15, 0, 0, 255);
+        playerName = new Text(PlayerPrefs.getString("name"), new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 0, 0, 255);
         playerName.setShadowOn(false);
         alive = true;
 

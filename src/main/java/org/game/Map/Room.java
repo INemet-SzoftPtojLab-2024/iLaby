@@ -2,6 +2,7 @@ package main.java.org.game.Map;
 
 import main.java.org.game.Isten;
 import main.java.org.game.updatable.Updatable;
+import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 

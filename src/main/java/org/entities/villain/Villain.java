@@ -48,13 +48,14 @@ public class Villain extends Entity {
         villainImage = null;
         time = 0.0f;
         villainName = null;
-        direction=1;
+        direction = 1;
         velocity = 0.5f;
         sum = 0.0;
         room = null;
     }
+
     public Villain(String name, String iP) {
-        this(name, new Vec2(0,0), iP);
+        this(name, new Vec2(0, 0), iP);
     }
 
     public Villain(String name, Vec2 pos, String iP) {
@@ -63,47 +64,47 @@ public class Villain extends Entity {
         time = 0.0f;
         villainName = new Text(name, new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 255, 0, 0);
         villainName.setShadowOn(false);
-        images=new ArrayList<>();
-        stillImage=0;
-        dTime=0.0;
-        direction=1;
+        images = new ArrayList<>();
+        stillImage = 0;
+        dTime = 0.0;
+        direction = 1;
         position = pos;
         imagePath = iP;
         velocity = 0.5f;
         sum = 0.0;
         room = null;
     }
-  
+
     @Override
     public void onStart(Isten isten) {
 
         Vec2 villainScale = new Vec2(0.6f, 0.6f);
         Vec2 faintedScale = new Vec2(0.7f, 0.7f);
 
-        images.add(new Image(new Vec2(), villainScale, "./assets/villain/villain"+id+".png"));
-        images.add(new Image(new Vec2(), faintedScale, "./assets/villain/villain"+id+"_fainted1.png"));
-        images.add(new Image(new Vec2(), faintedScale, "./assets/villain/villain"+id+"_fainted2.png"));
+        images.add(new Image(new Vec2(), villainScale, "./assets/villain/villain" + imagePath + ".png"));
+        images.add(new Image(new Vec2(), faintedScale, "./assets/villain/villain" + imagePath + "_fainted1.png"));
+        images.add(new Image(new Vec2(), faintedScale, "./assets/villain/villain" + imagePath + "_fainted2.png"));
 
-        position = randomPositions(isten.getMap().getRooms());
+        float[] data = randomPositions(isten.getMap().getRooms());
+
+        position = new Vec2(data[0], data[1]);
         villainCollider = new Collider(position, villainScale);
-
         villainCollider.setMovability(true);
         isten.getPhysicsEngine().addCollider(villainCollider);
 
-        for (int i = 0; i< 3; i++) {
-            if(i == 0)
-            {
-                villainImage= images.get(0);
+        for (int i = 0; i < 3; i++) {
+            if (i == 0) {
+                villainImage = images.get(0);
                 images.get(i).setSortingLayer(-60);
                 images.get(i).setVisibility(true);
                 isten.getRenderer().addRenderable(images.get(i));
-            }
-            else{
+            } else {
                 images.get(i).setSortingLayer(-60);
                 images.get(i).setVisibility(false);
                 isten.getRenderer().addRenderable(images.get(i));
             }
         }
+
         if (villainName != null) {
             villainName.setVisibility(true);
 
@@ -136,14 +137,14 @@ public class Villain extends Entity {
     }
 
     public void move(Isten isten, double deltaTime) {
-      if(!isInGasRoom(isten)) {
-        sum += deltaTime;
-        Vec2 playerPosition = villainCollider.getPosition();
-        Random random = new Random();
-        villainImage.setPosition(playerPosition);
-        villainName.setPosition(Vec2.sum(playerPosition, new Vec2(0, (float) 0.5)));
+        if (!isInGasRoom(isten)) {
+            sum += deltaTime;
+            Vec2 playerPosition = villainCollider.getPosition();
+            Random random = new Random();
+            villainImage.setPosition(playerPosition);
+            villainName.setPosition(Vec2.sum(playerPosition, new Vec2(0, (float) 0.5)));
 
-        
+
             if (sum < 2) return;
             Map map = isten.getMap();
 
@@ -243,28 +244,24 @@ public class Villain extends Entity {
                         break;
                 }
             }
-        }
-        else{
-            dTime-=deltaTime;
+        } else {
+            dTime -= deltaTime;
             images.get(0).setVisibility(false);
-            if(stillImage==0)
-            {
+            if (stillImage == 0) {
                 images.get(1).setPosition(villainCollider.getPosition());
                 images.get(2).setPosition(villainCollider.getPosition());
                 images.get(1).setVisibility(true);
             }
-            if(stillImage % 2 == 0 && dTime<0.0)
-            {
+            if (stillImage % 2 == 0 && dTime < 0.0) {
                 images.get(1).setVisibility(false);
                 images.get(2).setVisibility(true);
                 stillImage++;
-                dTime=0.2;
-            }
-            else if(stillImage % 2 == 1 && dTime<0.0){
+                dTime = 0.2;
+            } else if (stillImage % 2 == 1 && dTime < 0.0) {
                 images.get(2).setVisibility(false);
                 images.get(1).setVisibility(true);
                 stillImage++;
-                dTime=0.2;
+                dTime = 0.2;
             }
         }
     }
@@ -277,12 +274,13 @@ public class Villain extends Entity {
 
         do {
             selectedRoom = rooms.get(rand.nextInt(rooms.size() - 1));
-        } while (roomsWithVillains.contains(selectedRoom) || isStartUnitRoomInRoom(selectedRoom)|| selectedRoom.getRoomType()== RoomType.GAS);
+        } while (roomsWithVillains.contains(selectedRoom) || isStartUnitRoomInRoom(selectedRoom) || selectedRoom.getRoomType() == RoomType.GAS);
 
         random2 = rand.nextInt(selectedRoom.getUnitRooms().size());
         UnitRoom selectedUnitRoom = selectedRoom.getUnitRooms().get(random2);
         roomsWithVillains.add(selectedRoom);
         room = selectedRoom;
+
         return new float[]{random1, random2, selectedUnitRoom.getPosition().x, selectedUnitRoom.getPosition().y};
     }
 
@@ -301,8 +299,8 @@ public class Villain extends Entity {
         }
         return false;
     }
-    public boolean isInGasRoom(Isten isten)
-    {
+
+    public boolean isInGasRoom(Isten isten) {
         Room currentRoom = null;
         for (Room room : isten.getMap().getRooms()) {
             for (UnitRoom unitRoom : room.getUnitRooms()) {
@@ -314,9 +312,10 @@ public class Villain extends Entity {
                 }
             }
         }
-        if(currentRoom!= null && currentRoom.getRoomType()== RoomType.GAS)return true;
+        if (currentRoom != null && currentRoom.getRoomType() == RoomType.GAS) return true;
         else return false;
     }
+
     @Override
     public void onDestroy() {
     }
@@ -347,6 +346,7 @@ public class Villain extends Entity {
         villainImage = image;
         isten.getRenderer().addRenderable(villainImage);
     }
+
     public Room getRoom() {
         return room;
     }
