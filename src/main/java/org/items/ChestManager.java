@@ -4,7 +4,6 @@ import lombok.Getter;
 import main.java.org.game.Isten;
 import main.java.org.game.Map.Map;
 import main.java.org.game.Map.UnitRoom;
-import main.java.org.game.Map.Wall;
 import main.java.org.game.physics.Collider;
 import main.java.org.game.physics.ColliderGroup;
 import main.java.org.game.updatable.Updatable;
@@ -87,7 +86,7 @@ public class ChestManager extends Updatable {
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-        if(isten.getInputHandler().isKeyDown(KeyEvent.VK_E)){
+        if(isten.getInputHandler().isKeyReleased(KeyEvent.VK_E)){
             Vec2 playerPostion = isten.getPlayer().getPlayerCollider().getPosition();
             int index = 0;
             for(var chest : chests){

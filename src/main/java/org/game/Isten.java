@@ -52,8 +52,8 @@ public class Isten {
      */
     public Isten() {
         inventory=new Inventory(5);
-        map=new Map(20, 20, 10);
-        chestManager = new ChestManager(75);
+        map=new Map(100, 100, 10);
+        chestManager = new ChestManager(123);
         itemManager=new ItemManager();
         inputHandler = new Input();
         camera = new Camera();
@@ -100,7 +100,6 @@ public class Isten {
                 u.onStart(this);
             }
 
-
         //call onUpdates
         for (Updatable u : updatables)
             u.onUpdate(this, deltaTime);
@@ -116,7 +115,6 @@ public class Isten {
         //Manage handlers of client
         handlerManager.executeTasks();
 
-
         //calculate render positions, check for UI inputs and then render
         renderer.calculateRenderedPositions();
         renderer.processUIInputs(inputHandler);
@@ -129,7 +127,7 @@ public class Isten {
 
     public void initMP() {
         //Set localPlayer to true, so that only this player can be moved and followed by the camera on this client
-        player = new PlayerMP(JOptionPane.showInputDialog(this.getRenderer(),"Username"),null,-1);
+        player = new PlayerMP(PlayerPrefs.getString("name"),null,-1);
 
 
         player.localPlayer = true;
@@ -159,7 +157,7 @@ public class Isten {
     }
     public void init() {
         //Create own player
-        player = new PlayerMP(JOptionPane.showInputDialog(this.getRenderer(),"Username"),null,-1);
+        player = new PlayerMP(PlayerPrefs.getString("name"),null,-1);
 
         player.localPlayer = true;
 
@@ -200,7 +198,6 @@ public class Isten {
         updatables.add(map);
 
         updatables.add(chestManager);//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
-
 
         updatables.add(new TimeCounter());
         updatables.add(new Help());

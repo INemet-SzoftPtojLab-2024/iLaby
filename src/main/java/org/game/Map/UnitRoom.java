@@ -76,6 +76,10 @@ public class UnitRoom implements Graph<UnitRoom>{
     public void addRightImage(Isten isten){
 
         int j;
+        if(ownerRoom.isUnitRoomInSameRoomAsStartRoom(position) && ownerRoom.getRoomType()==RoomType.GAS)
+        {
+            ownerRoom.setRoomType(true);
+        }
         //TODO EVIKE
         switch (ownerRoom.roomType){
             case GAS -> j = 1;
@@ -90,7 +94,11 @@ public class UnitRoom implements Graph<UnitRoom>{
         String path = "./assets/floors/floor" + j + ".png";
         setNewImage(path, isten);
     }
-
+    public void setUnitRoomToGasUnitRoom(Isten isten)
+    {
+        String path = "./assets/floors/floor1.png";
+        setNewImage(path, isten);
+    }
 
     public boolean isTopEdge(){
         if(TopNeighbor == null) return true;

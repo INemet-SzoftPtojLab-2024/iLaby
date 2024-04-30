@@ -26,6 +26,7 @@ public abstract class Item {
     protected Image image;
     protected final Isten isten;
     protected String imagePath;
+    protected ImageUI inventoryImage;
 
     private LocalDateTime droppedAt;
     public Item(Isten isten,Vec2 scale){
@@ -62,6 +63,10 @@ public abstract class Item {
     public String getImagePath(){return imagePath;}
     public Vec2 getPosition(){return position;}
     public Location getLocation(){return location;}
+
+    public ImageUI getInventoryImage(){return inventoryImage;}
+
     public void setLocation(Location loc) { location = loc; }
     public Image getImage() { return image; }
+
 }
