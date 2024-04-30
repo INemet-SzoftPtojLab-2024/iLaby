@@ -121,7 +121,23 @@ public class GameServer extends Thread {
                 packet = new Packet12ItemPickedUp(data);
                 handleItemPickedUp((Packet12ItemPickedUp) packet);
                 break;
+            case ITEMDROPPED:
+                packet = new Packet13ItemDropped(data);
+                handleItemDropped((Packet13ItemDropped) packet);
+                break;
         }
+    }
+
+    private void handleItemDropped(Packet13ItemDropped packet) {
+        for(int i = 0; i < isten.getUpdatables().size(); i++) {
+            if(isten.getUpdatable(i).getClass() == ItemManager.class) {
+                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).setLocation(Item.Location.GROUND);
+                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).getImage().setVisibility(true);
+                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).getImage().setPosition(packet.pos);
+                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).setPosition(packet.pos);
+            }
+        }
+        sendDataToAllClients(packet.getData());
     }
 
     private void handleItemPickedUp(Packet12ItemPickedUp packet) {
