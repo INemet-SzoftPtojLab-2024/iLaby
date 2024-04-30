@@ -96,7 +96,7 @@ public class UnitRoom implements Graph<UnitRoom>{
     }
     public void setUnitRoomToGasUnitRoom(Isten isten)
     {
-        String path = "./assets/rooms/1.png";
+        String path = "./assets/floors/floor1.png";
         setNewImage(path, isten);
     }
 
