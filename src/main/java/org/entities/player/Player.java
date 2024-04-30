@@ -42,10 +42,6 @@ public class Player extends Entity {
     int setPlayerImage;
     boolean isFainted;
     float speed;
-    int stillImage1;
-    int stillImage2;
-    double dTime;
-
 
     protected Vec2 spawnPosition;
     protected int run = 1;
@@ -69,9 +65,6 @@ public class Player extends Entity {
         setPlayerImage = 0;
         isFainted = false;
         speed = 2;
-        stillImage1 = 0;
-        stillImage2 = 0;
-        dTime = 0.0;
 
         spawnPosition = new Vec2(0, 0);
     }
@@ -92,9 +85,6 @@ public class Player extends Entity {
         setPlayerImage = 0;
         isFainted = false;
         speed = 2;
-        stillImage1 = 0;
-        stillImage2 = 0;
-        dTime = 0.0;
         spawnPosition = new Vec2(0, 0);
     }
 
@@ -115,38 +105,24 @@ public class Player extends Entity {
         playerCollider.setMovability(true);
         isten.getPhysicsEngine().addCollider(playerCollider);//register collider in the physics engine
 
-        playerImageNormal = new ArrayList<>();
-        playerImageNormal.add(new Image(new Vec2(), playerScale, "./assets/character/character" + PlayerPrefs.getInt("skin") + "_right1.png"));
-        playerImageNormal.add(new Image(new Vec2(), playerScale, "./assets/character/character" + PlayerPrefs.getInt("skin") + "_right2.png"));
-        playerImageNormal.add(new Image(new Vec2(), playerScale, "./assets/character/character" + PlayerPrefs.getInt("skin") + "_left1.png"));
-        playerImageNormal.add(new Image(new Vec2(), playerScale, "./assets/character/character" + PlayerPrefs.getInt("skin") + "_left2.png"));
-        playerImageNormal.add(new Image(new Vec2(), playerScale, "./assets/character/character" + PlayerPrefs.getInt("skin") + "_ded.png"));
+        playerImage = new ArrayList<>();
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character" + skinID + "_right1.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character" + skinID + "_right2.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character" + skinID + "_left1.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character" + skinID + "_left2.png"));
+        playerImage.add(new Image(new Vec2(), faintedScale, "./assets/character/character" + skinID + "_right1_fainted.png"));
+        playerImage.add(new Image(new Vec2(), faintedScale, "./assets/character/character" + skinID + "_right2_fainted1.png"));
+        playerImage.add(new Image(new Vec2(), faintedScale, "./assets/character/character" + skinID + "_left1_fainted.png"));
+        playerImage.add(new Image(new Vec2(), faintedScale, "./assets/character/character" + skinID + "_left2_fainted1.png"));
+        playerImage.add(new Image(new Vec2(), faintedScale, "./assets/character/character" + skinID + "_right2_fainted2.png"));
+        playerImage.add(new Image(new Vec2(), faintedScale, "./assets/character/character" + skinID + "_left2_fainted2.png"));
+        playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character" + skinID + "_ded.png"));
 
-        for (Image im : playerImageNormal) {
+        for (Image im : playerImage) {
             im.setSortingLayer(-69);
             im.setVisibility(false);
             isten.getRenderer().addRenderable(im);//register images in the renderer
         }
-        playerImageNormal.get(playerImageNormal.size() - 1).setSortingLayer(-67);
-
-        playerImageFainted = new ArrayList<>();
-        playerImageFainted.add(new Image(new Vec2(), faintedScale, "./assets/character/character" + PlayerPrefs.getInt("skin") + "_right1_fainted.png"));
-        playerImageFainted.add(new Image(new Vec2(), faintedScale, "./assets/character/character" + PlayerPrefs.getInt("skin") + "_right2_fainted1.png"));
-        playerImageFainted.add(new Image(new Vec2(), faintedScale, "./assets/character/character" + PlayerPrefs.getInt("skin") + "_left1_fainted.png"));
-        playerImageFainted.add(new Image(new Vec2(), faintedScale, "./assets/character/character" + PlayerPrefs.getInt("skin") + "_left2_fainted1.png"));
-        playerImageFainted.add(new Image(new Vec2(), playerScale, "./assets/character/character" + PlayerPrefs.getInt("skin") + "_ded.png"));
-        playerImageFainted.add(new Image(new Vec2(), faintedScale, "./assets/character/character" + PlayerPrefs.getInt("skin") + "_right2_fainted2.png"));
-        playerImageFainted.add(new Image(new Vec2(), faintedScale, "./assets/character/character" + PlayerPrefs.getInt("skin") + "_left2_fainted2.png"));
-
-        for (Image im : playerImageFainted) {
-            im.setSortingLayer(-69);
-            im.setVisibility(false);
-            isten.getRenderer().addRenderable(im);//register images in the renderer
-        }
-        playerImageFainted.get(playerImageFainted.size() - 1).setSortingLayer(-67);
-
-
-        playerImage = playerImageNormal;
 
         death = new ImageUI(new Vec2(0, 0), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/character/ded.png");
         death.setSortingLayer(-70);
@@ -177,33 +153,19 @@ public class Player extends Entity {
         AudioManager.preloadSound("./assets/audio/died.ogg");
     }
 
-    public void setImage(boolean fainted) {
-        if (fainted) {
-            playerImage.get(activeImage).setVisibility(false);
-            playerImageFainted.get(activeImage).setVisibility(true);
-            playerImage = playerImageFainted;
-        } else {
-            playerImage.get(5).setVisibility(false);
-            playerImage.get(6).setVisibility(false);
-            playerImage.get(activeImage).setVisibility(false);
-            playerImageNormal.get(activeImage).setVisibility(true);
-            playerImage = playerImageNormal;
-        }
-    }
-
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-        if (isFainted) {
-            if (faintingTime > 10) {
-                faintingTime = 0;
-                setImage(false);
-                isFainted = false;
-                setPlayerImage++;
-                speed = 2;
-            }
-        }
         //called every frame
         if (alive) {
+
+            if (isFainted) {
+                if (faintingTime > 10) {
+                    faintingTime = 0;
+                    isFainted = false;
+                    speed = 2;
+                }
+            }
+
             Room currentRoom = null;
 
             for (Room room : isten.getMap().getRooms()) {
@@ -219,12 +181,8 @@ public class Player extends Entity {
             if (currentRoom != null && currentRoom.getRoomType() == RoomType.GAS) {
                 if (!isten.getInventory().getExistenceOfGasMask()) {
                     faintingTime = 0;
-                    if (setPlayerImage % 2 == 0) {
-                        setImage(true);
-                        isFainted = true;
-                        setPlayerImage++;
-                        speed = 1;
-                    }
+                    isFainted = true;
+                    speed = 1;
                     for (int i = 0; i < 5; i++) {
                         if (isten.getInventory().getStoredItems().get(i) != null) {
                             isten.getInventory().getStoredItems().get(i).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(i + 1).getPosition().x, currentRoom.getUnitRooms().get(i + 1).getPosition().y));
@@ -265,62 +223,26 @@ public class Player extends Entity {
             //animation
 
             time += deltaTime;
-            dTime -= deltaTime;
             if (time > 0.2f / run) { //after this much time does the animation changes
-                if (isFainted) {
-                    playerImage.get(5).setVisibility(false);
-                    playerImage.get(6).setVisibility(false);
-                    int prev = activeImage;
-                    if (playerCollider.getVelocity().x > 0) activeImage = 0;
-                    else if (playerCollider.getVelocity().x < 0) activeImage = 2;
-                    else if (prev > 1 && prev < 5) activeImage = 2;
-                    else activeImage = 0;
-                    if ((prev % 2 == 0 || playerCollider.getVelocity().magnitude() == 0.0f) && prev != 5 && prev != 6)
-                        activeImage++;
-                    playerImage.get(prev).setVisibility(false);
-                    playerImage.get(activeImage).setVisibility(true);
-                    time = 0.0f;
-                }
+                int prev = activeImage;
                 if (isFainted && playerCollider.getVelocity().magnitude() == 0.0f) {
 
-                    if (activeImage == 1) {
-                        if (stillImage1 % 2 == 0 && dTime < 0.0) {
-                            playerImage.get(5).setVisibility(false);
-                            playerImage.get(activeImage).setVisibility(true);
-                            stillImage1++;
-                            dTime = 0.2;
-                        } else if (stillImage1 % 2 == 1 && dTime < 0.0) {
-                            playerImage.get(activeImage).setVisibility(false);
-                            playerImage.get(5).setVisibility(true);
-                            stillImage1++;
-                            dTime = 0.2;
-                        }
-                    }
-                    if (activeImage == 3) {
-                        if (stillImage2 % 2 == 0 && dTime < 0.0) {
-                            playerImage.get(6).setVisibility(false);
-                            playerImage.get(activeImage).setVisibility(true);
-                            stillImage2++;
-                            dTime = 0.2;
-                        } else if (stillImage2 % 2 == 1 && dTime < 0.0) {
-                            playerImage.get(activeImage).setVisibility(false);
-                            playerImage.get(6).setVisibility(true);
-                            stillImage2++;
-                            dTime = 0.2;
-                        }
-                    }
-                }
-                if (!isFainted) {
-                    int prev = activeImage;
+                    if (prev > 1 && prev < 4 || prev > 5 && prev < 8 || prev == 9) activeImage = 7;
+                    else activeImage = 5;
+                    if (prev == 5) activeImage = 8;
+                    if (prev == 7) activeImage = 9;
+
+                } else {
                     if (playerCollider.getVelocity().x > 0) activeImage = 0;
                     else if (playerCollider.getVelocity().x < 0) activeImage = 2;
-                    else if (prev > 1) activeImage = 2;
+                    else if (prev > 1 && prev < 4 || prev > 5 && prev < 8) activeImage = 2;
                     else activeImage = 0;
                     if (prev % 2 == 0 || playerCollider.getVelocity().magnitude() == 0.0f) activeImage++;
-                    playerImage.get(prev).setVisibility(false);
-                    playerImage.get(activeImage).setVisibility(true);
-                    time = 0.0f;
+                    if (isFainted) activeImage += 4;
                 }
+                playerImage.get(prev).setVisibility(false);
+                playerImage.get(activeImage).setVisibility(true);
+                time = 0.0f;
                 sendAnimationData(isten);
             }
 
@@ -337,7 +259,7 @@ public class Player extends Entity {
             if (localPlayer) isten.getCamera().setPosition(playerCollider.getPosition());
 
             //play sound
-            if (!AudioManager.isPlaying(playerSound))
+            if (!AudioManager.isPlaying(playerSound) && localPlayer)
                 playerSound = AudioManager.playSound("./assets/audio/playersound.ogg");
 
             if (TimeCounter.getTimeRemaining() < 0 && alive) {
@@ -350,9 +272,9 @@ public class Player extends Entity {
             if (!AudioManager.isPlaying(playerSound) && localPlayer)
                 playerSound = AudioManager.playSound("./assets/audio/died.ogg");
 
-            if (activeImage != 4) {
+            if (activeImage != 10) {
                 playerImage.get(activeImage).setVisibility(false);
-                activeImage = 4;
+                activeImage = 10;
                 playerImage.get(activeImage).setVisibility(true);
                 if (localPlayer) {
                     death.setVisibility(true);
@@ -388,8 +310,7 @@ public class Player extends Entity {
                 }
             }
             return false;
-        }
-        else return true;
+        } else return true;
     }
 
     @Override
