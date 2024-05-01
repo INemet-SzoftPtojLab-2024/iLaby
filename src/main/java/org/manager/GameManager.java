@@ -5,8 +5,6 @@ import main.java.org.game.Audio.AudioManager;
 import main.java.org.game.Isten;
 import main.java.org.game.Isten2;
 import main.java.org.game.PlayerPrefs.PlayerPrefs;
-import main.java.org.game.UI.MainMenu;
-import main.java.org.networking.SharedObject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +12,6 @@ import java.awt.event.WindowEvent;
 
 public class GameManager {
 
-    private boolean multi;
     private JFrame frame;
     private JPanel currentPanel;
 
@@ -63,7 +60,6 @@ public class GameManager {
         PlayerPrefs.load();
 
         //game stuff
-
         while (true) {
             switch (stage) {
                 case MAIN_MENU:
@@ -88,62 +84,18 @@ public class GameManager {
 
                     PlayerPrefs.save();
                     break;
-                case SOLO_INGAME:
+                case INGAME:
                     Isten isten = new Isten();
                     changePanel(isten.getRenderer());//ez az isten.init elott fusson
                     isten.init();
 
-                    //Wait for the server to initialize (only on server side)
-                    if (isten.getSocketServer() != null) {
-                        SharedObject serverInitLock = isten.getSocketServer().getInitializationLock();
-                        try {
-                            serverInitLock.waitForNotification();
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-
-
                     long lastFrame = System.nanoTime();
-                    while (stage == GameStage.SOLO_INGAME) {
+                    while (stage == GameStage.INGAME) {
                         long currentTime = System.nanoTime();
                         double deltaTime = (currentTime - lastFrame) * 0.000000001;
                         lastFrame = currentTime;
 
                         isten.update(deltaTime);
-
-                        try {
-                            Thread.sleep(1);
-                        } catch (Exception amogus) { //do not remove plz
-                        }
-                    }
-                    AudioManager.closeAllSounds();
-                    AudioManager.unloadPreloadedSounds();
-
-                    PlayerPrefs.save();
-                    break;
-                case MULTI_INGAME:
-                    Isten isten3 = new Isten();
-                    changePanel(isten3.getRenderer());//ez az isten.init elott fusson
-                    isten3.initMP();
-
-                    //Wait for the server to initialize (only on server side)
-                    if (isten3.getSocketServer() != null) {
-                        SharedObject serverInitLock = isten3.getSocketServer().getInitializationLock();
-                        try {
-                            serverInitLock.waitForNotification();
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-
-                    long lastFrame3 = System.nanoTime();
-                    while (stage == GameStage.MULTI_INGAME) {
-                        long currentTime = System.nanoTime();
-                        double deltaTime = (currentTime - lastFrame3) * 0.000000001;
-                        lastFrame3 = currentTime;
-
-                        isten3.update(deltaTime);
                         try {
                             Thread.sleep(1);
                         } catch (Exception amogus) { //do not remove plz
@@ -167,6 +119,6 @@ public class GameManager {
     }
 
     public enum GameStage {
-        MAIN_MENU, SOLO_INGAME, MULTI_INGAME, EXIT
+        MAIN_MENU, INGAME, EXIT
     }
 }

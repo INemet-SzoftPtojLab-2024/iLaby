@@ -1,11 +1,6 @@
 package main.java.org.game.updatable;
 
 import main.java.org.game.Isten;
-import main.java.org.items.Chest;
-import main.java.org.items.Item;
-
-import java.util.ArrayList;
-import java.util.Vector;
 
 public abstract class Updatable {
 
@@ -24,7 +19,4 @@ public abstract class Updatable {
     public final void setInitializedTrue(){this.isInitialized=true;}
     public final boolean isDestroyed(){return this.isDestroyed;}
     public final void setDestroyedTrue(){this.isDestroyed=true;}
-
-    public Vector<Chest> getChests() { return null; }
-    public ArrayList<Item> getItems() { return null; }
 }

@@ -1,12 +1,18 @@
 
-D
-java:S21899""Add an end condition to this loop.(˜ïˆÿÿÿÿÿ8Å§ß™î1
+a
+java:S13016"KReplace this "switch" statement by "if" statements to increase readability.(ğÒÕ¥
+7
+java:S21894""Add an end condition to this loop.(¤èÄ7
+v
+java:S1450"[Remove the "currentPanel" field and declare it as a local variable in the relevant methods.(»·´…üÿÿÿÿ
 _
-java:S3252"IUse static access with "javax.swing.WindowConstants" for "EXIT_ON_CLOSE".(¢¡´
-V	java:S1254"<This block of commented-out lines of code should be removed.(Çë“ûÿÿÿÿ
-o
-java:S37768"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(“‡ğä8—¨ß™î1
-€
-java:S2142I"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(Ô ×øÿÿÿÿ8£¨ß™î1
-€
-java:S2142]"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(Ô ×øÿÿÿÿ8¬¨ß™î1
+java:S3252"IUse static access with "javax.swing.WindowConstants" for "EXIT_ON_CLOSE".(¢¡´
+V	java:S125."<This block of commented-out lines of code should be removed.(Çë“ûÿÿÿÿ
+n	java:S1316"YComplete cases by adding the missing enum constants or add a default case to this switch.(ğÒÕ¥
+t
+java:S2142E"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(»ºŒ£
+>	java:S108E")Either remove or fill this block of code.(»ºŒ£
+`
+java:S1128"ERemove this unused import 'main.java.org.game.Graphics.GameRenderer'.(×í¤¹üÿÿÿÿ
+K
+java:S1068"0Remove this unused "currentPanel" private field.(»·´…üÿÿÿÿ

@@ -35,23 +35,23 @@ public class MainMenu extends Updatable {
         multi = false;
         character = false;
 
-        images.add(new ImageUI(new Vec2(0, -275), new Vec2(600, 200), "./assets/ui/logo.png"));
+        images.add(new ImageUI(new Vec2(0, -300), new Vec2(600, 150), "./assets/ui/logo.png"));
         images.add(new ImageUI(new Vec2(0, 375), new Vec2(300, 50), "./assets/ui/developer_logo.png"));
         images.add(new ImageUI(new Vec2(0, 0), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/ui/menu_background.jpg"));
 
-        for (int i = 0; i < 3; i++) {
-            charImages.add(new ImageUI(new Vec2(0, 75), new Vec2(200, 200), "./assets/character/character" + i + "_right1.png"));
+        for(int i=0;i<2;i++){
+            charImages.add(new ImageUI(new Vec2(0, 75), new Vec2(200, 200), "./assets/character/character"+i+"_right1.png"));
         }
 
-        buttons.add(new ButtonUI(new Vec2(0, -125), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Solo", "./assets/Monocraft.ttf", 45));
-        buttons.add(new ButtonUI(new Vec2(0, 0), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Multi", "./assets/Monocraft.ttf", 45));
-        buttons.add(new ButtonUI(new Vec2(0, 125), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Character", "./assets/Monocraft.ttf", 45));
-        buttons.add(new ButtonUI(new Vec2(0, 250), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Exit", "./assets/Monocraft.ttf", 45));
-        buttons.add(new ButtonUI(new Vec2(0, 275), new Vec2(275, 100), "./assets/ui/button_background.jpg", "Back", "./assets/Monocraft.ttf", 45));
-        buttons.add(new ButtonUI(new Vec2(0, -125), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Easy-peasy", "./assets/Monocraft.ttf", 45));
-        buttons.add(new ButtonUI(new Vec2(0, 0), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Casual", "./assets/Monocraft.ttf", 45));
-        buttons.add(new ButtonUI(new Vec2(0, 125), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Never", "./assets/Monocraft.ttf", 45));
-        buttons.add(new ButtonUI(new Vec2(175, -125), new Vec2(275, 90), "./assets/ui/button_background.jpg", "Change", "./assets/Monocraft.ttf", 45));
+        buttons.add(new ButtonUI(new Vec2(0, -125), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Solo", "./assets/Monocraft.ttf", 50));
+        buttons.add(new ButtonUI(new Vec2(0, 0), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Multi", "./assets/Monocraft.ttf", 50));
+        buttons.add(new ButtonUI(new Vec2(0, 125), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Character", "./assets/Monocraft.ttf", 50));
+        buttons.add(new ButtonUI(new Vec2(0, 250), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Exit", "./assets/Monocraft.ttf", 50));
+        buttons.add(new ButtonUI(new Vec2(0, 275), new Vec2(275, 100), "./assets/ui/button_background.jpg", "Back", "./assets/Monocraft.ttf", 50));
+        buttons.add(new ButtonUI(new Vec2(0, -125), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Easy-peasy", "./assets/Monocraft.ttf", 50));
+        buttons.add(new ButtonUI(new Vec2(0, 0), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Casual", "./assets/Monocraft.ttf", 50));
+        buttons.add(new ButtonUI(new Vec2(0, 125), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Never", "./assets/Monocraft.ttf", 50));
+        buttons.add(new ButtonUI(new Vec2(175, -125), new Vec2(275, 90), "./assets/ui/button_background.jpg", "Change", "./assets/Monocraft.ttf", 50));
         buttons.add(new ButtonUI(new Vec2(-250, 75), new Vec2(100, 100), "./assets/ui/arrow_left.png", "", "./assets/Monocraft.ttf", 50));
         buttons.add(new ButtonUI(new Vec2(250, 75), new Vec2(100, 100), "./assets/ui/arrow_right.png", "", "./assets/Monocraft.ttf", 50));
 
@@ -87,8 +87,6 @@ public class MainMenu extends Updatable {
         buttons.get(1).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
             multi = true;
-            TimeCounter.setTime(901);
-            GameManager.setStage(GameManager.GameStage.MULTI_INGAME);
         });
         buttons.get(2).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
@@ -113,40 +111,38 @@ public class MainMenu extends Updatable {
         buttons.get(5).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
             TimeCounter.setTime(901);
-            GameManager.setStage(GameManager.GameStage.SOLO_INGAME);
+            GameManager.setStage(GameManager.GameStage.INGAME);
         });
         buttons.get(6).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
             TimeCounter.setTime(601);
-            GameManager.setStage(GameManager.GameStage.SOLO_INGAME);
+            GameManager.setStage(GameManager.GameStage.INGAME);
         });
         buttons.get(7).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
             TimeCounter.setTime(11);
-            GameManager.setStage(GameManager.GameStage.SOLO_INGAME);
+            GameManager.setStage(GameManager.GameStage.INGAME);
         });
         buttons.get(8).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
             String name = JOptionPane.showInputDialog("Username");
-            if (name != null) {
-                if (!name.isEmpty()) {
-                    texts.get(0).setText(name);
-                    PlayerPrefs.setString("name", name);
-                }
+            if (!name.isEmpty()) {
+                texts.get(0).setText(name);
+                PlayerPrefs.setString("name", name);
             }
         });
         buttons.get(9).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
             if (activeCharImage > 0) activeCharImage--;
             else activeCharImage = charImages.size() - 1;
-            PlayerPrefs.setInt("skin", activeCharImage);
+            PlayerPrefs.setInt("skin",activeCharImage);
             for (int i = 0; i < charImages.size(); i++) charImages.get(i).setVisibility(i == activeCharImage);
         });
         buttons.get(10).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
-            if (activeCharImage < charImages.size() - 1) activeCharImage++;
+            if (activeCharImage < charImages.size()-1) activeCharImage++;
             else activeCharImage = 0;
-            PlayerPrefs.setInt("skin", activeCharImage);
+            PlayerPrefs.setInt("skin",activeCharImage);
             for (int i = 0; i < charImages.size(); i++) charImages.get(i).setVisibility(i == activeCharImage);
         });
 
@@ -186,9 +182,5 @@ public class MainMenu extends Updatable {
     @Override
     public void onDestroy() {
 
-    }
-
-    public boolean isMulti() {
-        return multi;
     }
 }

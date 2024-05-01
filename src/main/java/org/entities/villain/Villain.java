@@ -4,21 +4,15 @@ import main.java.org.entities.Entity;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.Text;
 import main.java.org.game.Isten;
-
 import main.java.org.game.Map.Map;
 import main.java.org.game.Map.Room;
 import main.java.org.game.Map.RoomType;
-
 import main.java.org.game.Map.UnitRoom;
 import main.java.org.game.physics.Collider;
 import main.java.org.linalg.Vec2;
 
-import main.java.org.game.Map.Map;
-import main.java.org.game.Map.Room;
-
 import java.util.ArrayList;
 import java.util.Collections;
-
 import java.util.Random;
 
 /**
@@ -26,53 +20,34 @@ import java.util.Random;
  */
 public class Villain extends Entity {
     static ArrayList<Room> roomsWithVillains = new ArrayList<>();
-    ArrayList<Image> images;
-    Image villainImage;
-    Collider villainCollider;
-    Text villainName;
-    float time;
-    int direction;
-    Vec2 position;
-    String imagePath;
-    float velocity;
-    double sum;
-    Room room;
-    UnitRoom currentUnitRoom;
-    UnitRoom prevUnitRoom;
-    int stillImage;
-    double dTime;
-    private int random1, random2;
+    private Image villainImage;
+    private Collider villainCollider;
+    private Text villainName;
+    private float time;
+    private Vec2 position;
+    private Room room;
+    private UnitRoom currentUnitRoom;
+    private UnitRoom prevUnitRoom;
+    private ArrayList<Image> images;
+    private float velocity;
+    private double sum;
+    private int id;
+    private int stillImage;
+    private double dTime;
 
-    public Villain() {
-        villainCollider = null;
-        villainImage = null;
-        time = 0.0f;
-        villainName = null;
-        direction = 1;
-        velocity = 0.5f;
-        sum = 0.0;
-        room = null;
-    }
-
-    public Villain(String name, String iP) {
-        this(name, new Vec2(0, 0), iP);
-    }
-
-    public Villain(String name, Vec2 pos, String iP) {
+    public Villain(String name, int ID) {
         villainCollider = null;
         villainImage = null;
         time = 0.0f;
         villainName = new Text(name, new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 255, 0, 0);
         villainName.setShadowOn(false);
-        images = new ArrayList<>();
-        stillImage = 0;
-        dTime = 0.0;
-        direction = 1;
-        position = pos;
-        imagePath = iP;
+        images=new ArrayList<>();
         velocity = 0.5f;
         sum = 0.0;
         room = null;
+        id=ID;
+        stillImage=0;
+        dTime=0.0;
     }
 
     @Override
@@ -81,37 +56,36 @@ public class Villain extends Entity {
         Vec2 villainScale = new Vec2(0.6f, 0.6f);
         Vec2 faintedScale = new Vec2(0.7f, 0.7f);
 
-        images.add(new Image(new Vec2(), villainScale, "./assets/villain/villain" + imagePath + ".png"));
-        images.add(new Image(new Vec2(), faintedScale, "./assets/villain/villain" + imagePath + "_fainted1.png"));
-        images.add(new Image(new Vec2(), faintedScale, "./assets/villain/villain" + imagePath + "_fainted2.png"));
+        images.add(new Image(new Vec2(), villainScale, "./assets/villain/villain"+id+".png"));
+        images.add(new Image(new Vec2(), faintedScale, "./assets/villain/villain"+id+"_fainted1.png"));
+        images.add(new Image(new Vec2(), faintedScale, "./assets/villain/villain"+id+"_fainted2.png"));
 
-
+        position = randomPositions(isten.getMap().getRooms());
         villainCollider = new Collider(position, villainScale);
+
         villainCollider.setMovability(true);
         isten.getPhysicsEngine().addCollider(villainCollider);
 
-        for (int i = 0; i < 3; i++) {
-            if (i == 0) {
-                villainImage = images.get(0);
+        for (int i = 0; i< 3; i++) {
+
+            if(i == 0)
+            {
+                villainImage= images.get(0);
                 images.get(i).setSortingLayer(-60);
                 images.get(i).setVisibility(true);
                 isten.getRenderer().addRenderable(images.get(i));
-            } else {
+            }
+            else{
                 images.get(i).setSortingLayer(-60);
                 images.get(i).setVisibility(false);
                 isten.getRenderer().addRenderable(images.get(i));
             }
         }
-
         if (villainName != null) {
             villainName.setVisibility(true);
-
             villainName.setSortingLayer(-60);
-
             isten.getRenderer().addRenderable(villainName);
         }
-        //isten.getCamera().setPixelsPerUnit(100);
-
         Map map = isten.getMap();
 
         for (Room room : map.getRooms()) {
@@ -129,18 +103,12 @@ public class Villain extends Entity {
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-        Vec2 villainPosition = villainCollider.getPosition();
-        villainImage.setPosition(villainPosition);
-        villainName.setPosition(Vec2.sum(villainPosition, new Vec2(0, (float) 0.5)));
-    }
-
-    public void move(Isten isten, double deltaTime) {
-        if (!isInGasRoom(isten)) {
+        if(!isInGasRoom(isten)) {
             sum += deltaTime;
-            Vec2 playerPosition = villainCollider.getPosition();
+            Vec2 villainPosition = villainCollider.getPosition();
             Random random = new Random();
-            villainImage.setPosition(playerPosition);
-            villainName.setPosition(Vec2.sum(playerPosition, new Vec2(0, (float) 0.5)));
+            villainImage.setPosition(villainPosition);
+            villainName.setPosition(Vec2.sum(villainPosition, new Vec2(0, (float) 0.5)));
 
 
             if (sum < 2) return;
@@ -242,52 +210,47 @@ public class Villain extends Entity {
                         break;
                 }
             }
-        } else {
-            dTime -= deltaTime;
+        }
+        else{
+            dTime-=deltaTime;
             images.get(0).setVisibility(false);
-            if (stillImage == 0) {
+            if(stillImage==0)
+            {
                 images.get(1).setPosition(villainCollider.getPosition());
                 images.get(2).setPosition(villainCollider.getPosition());
                 images.get(1).setVisibility(true);
             }
-            if (stillImage % 2 == 0 && dTime < 0.0) {
+            if(stillImage % 2 == 0 && dTime<0.0)
+            {
                 images.get(1).setVisibility(false);
                 images.get(2).setVisibility(true);
                 stillImage++;
-                dTime = 0.2;
-            } else if (stillImage % 2 == 1 && dTime < 0.0) {
+                dTime=0.2;
+            }
+            else if(stillImage % 2 == 1 && dTime<0.0){
                 images.get(2).setVisibility(false);
                 images.get(1).setVisibility(true);
                 stillImage++;
-                dTime = 0.2;
+                dTime=0.2;
             }
+
         }
     }
 
     public Vec2 randomPositions(ArrayList<Room> rooms) {
-        //Collections.shuffle(rooms);
+        Collections.shuffle(rooms);
         Random rand = new Random();
 
         Room selectedRoom;
 
         do {
-            random1 = rand.nextInt(rooms.size() - 1);
-            selectedRoom = rooms.get(random1);
-        } while (roomsWithVillains.contains(selectedRoom) || isStartUnitRoomInRoom(selectedRoom) || selectedRoom.getRoomType() == RoomType.GAS);
+            selectedRoom = rooms.get(rand.nextInt(rooms.size() - 1));
+        } while (roomsWithVillains.contains(selectedRoom) || isStartUnitRoomInRoom(selectedRoom)|| selectedRoom.getRoomType()== RoomType.GAS);
 
-        random2 = rand.nextInt(selectedRoom.getUnitRooms().size());
-        UnitRoom selectedUnitRoom = selectedRoom.getUnitRooms().get(random2);
+        UnitRoom selectedUnitRoom = selectedRoom.getUnitRooms().get(rand.nextInt(selectedRoom.getUnitRooms().size()));
         roomsWithVillains.add(selectedRoom);
         room = selectedRoom;
-
-        return selectedUnitRoom.getPosition();
-    }
-
-    public void setRoomForVillain(ArrayList<Room> rooms, int selectedRoomIndex, int selectedUnitRoomIndex) {
-        Room selectedRoom = rooms.get(selectedRoomIndex);
-        UnitRoom selectedUnitRoom = selectedRoom.getUnitRooms().get(selectedUnitRoomIndex);
-        roomsWithVillains.add(selectedRoom);
-        room = selectedRoom;
+        return new Vec2(selectedUnitRoom.getPosition().x, selectedUnitRoom.getPosition().y);
     }
 
     boolean isStartUnitRoomInRoom(Room room) {
@@ -298,8 +261,8 @@ public class Villain extends Entity {
         }
         return false;
     }
-
-    public boolean isInGasRoom(Isten isten) {
+    public boolean isInGasRoom(Isten isten)
+    {
         Room currentRoom = null;
         for (Room room : isten.getMap().getRooms()) {
             for (UnitRoom unitRoom : room.getUnitRooms()) {
@@ -311,62 +274,14 @@ public class Villain extends Entity {
                 }
             }
         }
-        if (currentRoom != null && currentRoom.getRoomType() == RoomType.GAS) return true;
+        if(currentRoom!= null && currentRoom.getRoomType()== RoomType.GAS)return true;
         else return false;
     }
-
     @Override
     public void onDestroy() {
     }
 
-
-    public String getVillainName() {
-        return villainName.getText();
-    }
-
-    public Vec2 getPosition() {
-        return position;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public Collider getVillainCollider() {
-        return villainCollider;
-    }
-
-    public void setVillainCollider(Isten isten, Collider collider) {
-        villainCollider = collider;
-        isten.getPhysicsEngine().addCollider(villainCollider);//register collider in the physics engine
-    }
-
-    public void setVillainImage(Isten isten, Image image) {
-        villainImage = image;
-        isten.getRenderer().addRenderable(villainImage);
-    }
-
     public Room getRoom() {
         return room;
-    }
-
-    public void setPosition(Vec2 vec2) {
-        position = vec2;
-    }
-
-    public int getRandom1() {
-        return random1;
-    }
-
-    public int getRandom2() {
-        return random2;
-    }
-
-    public void setRandom1(int random1) {
-        this.random1 = random1;
-    }
-
-    public void setRandom2(int random2) {
-        this.random2 = random2;
     }
 }

@@ -1,6 +1,5 @@
 package main.java.org.items;
 
-import jdk.jshell.execution.LoaderDelegate;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.ImageUI;
 import main.java.org.game.Isten;
@@ -35,7 +34,6 @@ public abstract class Item {
         position=null;
         droppedAt = null;
         this.isten=isten;
-
         isten.getItemManager().addItem(this);
     }
     public void dropOnGround(Vec2 pos){
@@ -65,8 +63,4 @@ public abstract class Item {
     public Location getLocation(){return location;}
 
     public ImageUI getInventoryImage(){return inventoryImage;}
-
-    public void setLocation(Location loc) { location = loc; }
-    public Image getImage() { return image; }
-
 }

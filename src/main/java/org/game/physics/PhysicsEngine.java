@@ -29,7 +29,6 @@ public class PhysicsEngine
         //clear collision tags
         for(Collider c : simulatedColliders)
             c.clearCollisionHistory();
-
         for(ColliderGroup cg: colliderGroups)
             for(Collider c: cg.getColliders())
                 c.clearCollisionHistory();

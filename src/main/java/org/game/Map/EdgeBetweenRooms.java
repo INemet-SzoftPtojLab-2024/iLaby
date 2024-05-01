@@ -26,10 +26,8 @@ public class EdgeBetweenRooms {
         this.colliderGroup = new ColliderGroup();
     }
 
-    public void addNewWall(Vec2 position, Vec2 scale,UnitRoom ur1 ,UnitRoom ur2 , Isten isten){
-        String wallPath = "./assets/walls/wall_mid.png";
-        scale.x=Math.abs(scale.x);
-        scale.y=Math.abs(scale.y);
+    public void addNewWall(Vec2 position, Vec2 scale,UnitRoom ur1 ,UnitRoom ur2 ,Isten isten){
+        String wallPath = "./assets/rooms/11.png";
         Collider wallCollider = new Collider(position,scale);
         colliderGroup.addCollider(wallCollider);
         Wall newWall = new Wall(wallCollider, position, ur1, ur2);
@@ -42,7 +40,7 @@ public class EdgeBetweenRooms {
         //egy unitroomba csak az egyik iranyba nyilhat ajto
         if(wallToSwitch.getUnitRoomsBetween().get(0).hasDoor() || wallToSwitch.getUnitRoomsBetween().get(1).hasDoor()) return false;
 
-        String doorPath = "./assets/doors/doors_leaf_closed.png";
+        String doorPath = "./assets/rooms/10.png";
         wallToSwitch.collider.setSolidity(false);
 
         //wallToSwitch.setNewImage(doorPath, wallToSwitch.image.getScale(),isten);
@@ -59,7 +57,7 @@ public class EdgeBetweenRooms {
         return true;
     }
     public void switchDoorToWall(EdgePiece doorToSwitch, Isten isten){
-        String wallPath = "./assets/walls/wall_mid.png";
+        String wallPath = "./assets/rooms/11.png";
         doorToSwitch.collider.setSolidity(true);
         isten.getRenderer().deleteRenderable(doorToSwitch.image);
 

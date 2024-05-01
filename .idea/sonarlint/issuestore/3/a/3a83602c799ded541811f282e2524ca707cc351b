@@ -1,53 +1,18 @@
 
-“
-java:S1319‰"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(¡İ·èûÿÿÿÿ8”âã™î1
-…
-java:S1319‰"bThe type of "u1" should be an interface such as "List" rather than the implementation "ArrayList".(¡İ·èûÿÿÿÿ8”âã™î1
-…
-java:S1319‰"bThe type of "u2" should be an interface such as "List" rather than the implementation "ArrayList".(¡İ·èûÿÿÿÿ8•âã™î1
-ƒ
-java:S1319Ç"eThe type of "rooms" should be an interface such as "List" rather than the implementation "ArrayList".(ÕÖ®ö8•âã™î1
-“
-java:S1319Í"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(†İÂ˜üÿÿÿÿ8–âã™î1
-r	java:S117^"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(©Æ˜Èıÿÿÿÿ8–âã™î1
 u	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš8§¿Ş¥ã1
+
+java:S11865"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(í®8ª¿Ş¥ã1
 £
-java:S1186D"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(İßéàúÿÿÿÿ8ª¿Ş¥ã1
-x
-java:S1450"[Remove the "mapgenerator" field and declare it as a local variable in the relevant methods.(¬Ï‡¸8Ìêã™î1
-X	java:S125"<This block of commented-out lines of code should be removed.(ËÉÂà8Òêã™î1
-L	java:S106:"+Replace this use of System.out by a logger.(ªÓ¼áşÿÿÿÿ8Ùêã™î1
-X	java:S1253"<This block of commented-out lines of code should be removed.(°Ô†›8Úêã™î1
-L	java:S106;"+Replace this use of System.out by a logger.(ªÓ¼áşÿÿÿÿ8Üêã™î1
-X	java:S125<"<This block of commented-out lines of code should be removed.(ËÉÂà8İêã™î1
-]	java:S125Y"<This block of commented-out lines of code should be removed.(ğ¹Ì²ûÿÿÿÿ8ğêã™î1
-M	java:S106©"+Replace this use of System.out by a logger.(Õ¸Šûüÿÿÿÿ8™ëã™î1
-_
-java:S1126¯"AReplace this if-then-else statement by a single return statement.(úÀš°8™ëã™î1
-M	java:S106É"+Replace this use of System.out by a logger.(Õ¸Šûüÿÿÿÿ8£ëã™î1
-d
-java:S1126Ï"AReplace this if-then-else statement by a single return statement.(ÁêĞÿÿÿÿÿ8£ëã™î1
-M	java:S106ñ"+Replace this use of System.err by a logger.(•ªËßûÿÿÿÿ8­ëã™î1
-M	java:S106ô"+Replace this use of System.out by a logger.(Û¬†öşÿÿÿÿ8®ëã™î1
-Y	java:S125õ"<This block of commented-out lines of code should be removed.(ıÔ¶ó8¯ëã™î1
-X	java:S125ı"<This block of commented-out lines of code should be removed.(–œ8±ëã™î1
-^	java:S125…"<This block of commented-out lines of code should be removed.(â‚ˆ‰şÿÿÿÿ8³ëã™î1
-Y	java:S125‹"<This block of commented-out lines of code should be removed.(ŒÆÊı8¶ëã™î1
-Y	java:S125—"<This block of commented-out lines of code should be removed.(É¥¤º8»ëã™î1
-H	java:S106¥"+Replace this use of System.out by a logger.(–ÉÎÒ8Áëã™î1
-H	java:S106¨"+Replace this use of System.out by a logger.(–ÉÎÒ8Åëã™î1
-H	java:S106«"+Replace this use of System.out by a logger.(–ÉÎÒ8Æëã™î1
-M	java:S106®"+Replace this use of System.out by a logger.(ªÓ¼áşÿÿÿÿ8Çëã™î1
-M	java:S106¯"+Replace this use of System.out by a logger.(ªÓ¼áşÿÿÿÿ8Èëã™î1
-[
-java:S1128">Remove this unused import 'main.java.org.game.Graphics.Image'.(Äí·é8Íëã™î1
-b
-java:S1128"@Remove this unused import 'main.java.org.game.physics.Collider'.(Ïª³Õúÿÿÿÿ8Íëã™î1
+java:S1186:"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(İßéàúÿÿÿÿ8ª¿Ş¥ã1
+
+java:S1186>"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ç‰â"8ª¿Ş¥ã1
+£
+java:S1186B"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Á†°”üÿÿÿÿ8ª¿Ş¥ã1
+Z
+java:S1117"=Rename "unitRooms" which hides the field declared at line 14.(öĞÛ8¬¿Ş¥ã1
+N
+java:S1068"1Remove this unused "mapColumnSize" private field.(ÚŸ¶”8±¿Ş¥ã1
+K
+java:S1144>"/Remove this unused private "mergeRooms" method.(ç‰â"8±¿Ş¥ã1
 Q
-java:S1144T"/Remove this unused private "splitRooms" method.(óÇ”Àúÿÿÿÿ8Îëã™î1
-[
-java:S1144”"8Remove this unused private "wouldRoomBeCoherent" method.(è•ğìùÿÿÿÿ8Îëã™î1
-M
-java:S1144ï"/Remove this unused private "mergeRooms" method.(ú¦ß8Ïëã™î1
-P
-java:S1144¡"-Remove this unused private "printMap" method.(êß®ûÿÿÿÿ8Ïëã™î1
+java:S1144B"/Remove this unused private "splitRooms" method.(Á†°”üÿÿÿÿ8±¿Ş¥ã1

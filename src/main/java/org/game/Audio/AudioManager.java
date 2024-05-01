@@ -127,7 +127,7 @@ public final class AudioManager {
 
         activeSounds.get(index).clip.stop();
         activeSounds.get(index).clip.close();
-        if(activeSounds.size() > index) activeSounds.remove(index);
+        activeSounds.remove(index);
     }
 
     /**
