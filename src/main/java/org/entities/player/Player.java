@@ -81,7 +81,7 @@ public class Player extends Entity {
 
         Vec2 playerScale = new Vec2(0.5f, 0.5f);
 
-        playerCollider = new Collider(new Vec2(0, 0), playerScale);
+        playerCollider = new Collider(new Vec2(spawnPosition.x, spawnPosition.y), playerScale);
         playerCollider.setMovability(true);
         isten.getPhysicsEngine().addCollider(playerCollider);//register collider in the physics engine
 
@@ -91,7 +91,7 @@ public class Player extends Entity {
         playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+skinID+"_left1.png"));
         playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+skinID+"_left2.png"));
         playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character"+skinID+"_ded.png"));
-        death = new ImageUI(new Vec2(0, 0), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/character/ded.png");
+        death = new ImageUI(new Vec2(spawnPosition.x, spawnPosition.y), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/character/ded.png");
         death.setSortingLayer(-70);
         death.setVisibility(false);
         death.setAlignment(Renderable.CENTER, Renderable.CENTER);

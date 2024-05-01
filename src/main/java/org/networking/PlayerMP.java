@@ -19,6 +19,7 @@ public class PlayerMP extends Player {
         super(name, spawnPosition);
         this.ipAddress = ipAddress;
         this.port = port;
+        this.spawnPosition = spawnPosition;
     }
 
     @Override
