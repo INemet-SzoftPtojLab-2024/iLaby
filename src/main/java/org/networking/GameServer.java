@@ -133,10 +133,10 @@ public class GameServer extends Thread {
     private void handleItemDropped(Packet13ItemDropped packet) {
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ItemManager.class) {
-                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).setLocation(Item.Location.GROUND);
-                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).getImage().setVisibility(true);
-                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).getImage().setPosition(packet.pos);
-                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).setPosition(packet.pos);
+                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).setLocation(Item.Location.GROUND);
+                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).getImage().setVisibility(true);
+                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).getImage().setPosition(packet.getPos());
+                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).setPosition(packet.getPos());
             }
         }
         events.add(packet.getData());
@@ -146,8 +146,8 @@ public class GameServer extends Thread {
     private void handleItemPickedUp(Packet12ItemPickedUp packet) {
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ItemManager.class) {
-                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).setLocation(Item.Location.INVENTORY);
-                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).getImage().setVisibility(false);
+                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).setLocation(Item.Location.INVENTORY);
+                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).getImage().setVisibility(false);
             }
         }
         events.add(packet.getData());
@@ -157,7 +157,7 @@ public class GameServer extends Thread {
     private void handleChestOpened(Packet11ChestOpened packet) {
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ChestManager.class) {
-                isten.getUpdatables().get(i).getChests().get(packet.chestIndex).open();
+                isten.getUpdatables().get(i).getChests().get(packet.getChestIndex()).open();
             }
         }
         events.add(packet.getData());

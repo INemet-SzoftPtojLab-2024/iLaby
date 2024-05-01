@@ -1,7 +1,8 @@
 package main.java.org.networking;
 
 public class Packet11ChestOpened extends Packet {
-    int chestIndex;
+
+    private int chestIndex;
     public Packet11ChestOpened(byte[] data) {
         super(11);
         chestIndex = Integer.parseInt(readData(data));
@@ -17,4 +18,6 @@ public class Packet11ChestOpened extends Packet {
 
     @Override
     public byte[] getData() { return ("11" + chestIndex).getBytes(); }
+
+    public int getChestIndex() { return chestIndex; }
 }

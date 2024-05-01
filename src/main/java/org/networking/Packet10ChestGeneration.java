@@ -1,19 +1,12 @@
 package main.java.org.networking;
 
-import lombok.Getter;
-import lombok.Setter;
-import main.java.org.items.Chest;
-import main.java.org.items.Item;
 import main.java.org.linalg.Vec2;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Vector;
-
 public class Packet10ChestGeneration extends Packet {
-    int heading;
-    Vec2 pos = new Vec2();
-    int chestType;
+
+    private int heading;
+    private Vec2 pos = new Vec2();
+    private int chestType;
 
     public Packet10ChestGeneration(byte[] data) {
         super(10);
@@ -42,5 +35,11 @@ public class Packet10ChestGeneration extends Packet {
 
     @Override
     public byte[] getData() { return ("10" + heading + "," + pos.x + "," + pos.y + "," + chestType).getBytes(); }
+
+    public int getHeading() { return heading; }
+
+    public Vec2 getPos() { return pos; }
+
+    public int getChestType() { return chestType; }
 
 }

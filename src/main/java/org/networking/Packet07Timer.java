@@ -2,7 +2,7 @@ package main.java.org.networking;
 
 public class Packet07Timer extends Packet {
 
-    double timeRemaining;
+    private double timeRemaining;
     public Packet07Timer(byte[] data) {
         super(07);
         String dataArray = readData(data);

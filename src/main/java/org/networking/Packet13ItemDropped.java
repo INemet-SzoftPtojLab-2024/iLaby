@@ -3,8 +3,9 @@ package main.java.org.networking;
 import main.java.org.linalg.Vec2;
 
 public class Packet13ItemDropped extends Packet {
-    int itemIndex;
-    Vec2 pos = new Vec2();
+
+    private int itemIndex;
+    private Vec2 pos = new Vec2();
     public Packet13ItemDropped(byte[] data) {
         super(13);
         String[] dataArray = readData(data).split(",");
@@ -24,4 +25,8 @@ public class Packet13ItemDropped extends Packet {
 
     @Override
     public byte[] getData() { return ("13" + itemIndex + "," + pos.x + "," + pos.y).getBytes(); }
+
+    public int getItemIndex() { return itemIndex; }
+
+    public Vec2 getPos() { return pos; }
 }
