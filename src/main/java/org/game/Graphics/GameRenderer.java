@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.WritableRaster;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -151,7 +152,9 @@ public class GameRenderer extends JPanel implements ActionListener {
 
     private void sortRenderables()
     {
-        Collections.sort(renderables,new Renderable.SortingLayerComparator());
+        ArrayList<Renderable> renderablesCopy = new ArrayList<>(renderables);
+        renderablesCopy.sort(new Renderable.SortingLayerComparator());
+        renderables = renderablesCopy;
     }
 
     @Override

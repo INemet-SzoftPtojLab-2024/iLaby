@@ -5,15 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3506ab6d-0407-47f2-a7e8-78ebc867e577" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/GameClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/GameClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/GameServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/GameServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/Packet07Timer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet07Timer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/Packet10ChestGeneration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet10ChestGeneration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/Packet11ChestOpened.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet11ChestOpened.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/Packet12ItemPickedUp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet12ItemPickedUp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/Packet13ItemDropped.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet13ItemDropped.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Graphics/GameRenderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Graphics/GameRenderer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +92,7 @@
       <updated>1714562409879</updated>
       <workItem from="1714562410886" duration="908000" />
       <workItem from="1714578236379" duration="1812000" />
-      <workItem from="1714588181281" duration="685000" />
+      <workItem from="1714588181281" duration="1714000" />
     </task>
     <servers />
   </component>
