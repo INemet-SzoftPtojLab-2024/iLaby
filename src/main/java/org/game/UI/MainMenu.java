@@ -55,6 +55,8 @@ public class MainMenu extends Updatable {
         buttons.add(new ButtonUI(new Vec2(-250, 75), new Vec2(100, 100), "./assets/ui/arrow_left.png", "", "./assets/Monocraft.ttf", 50));
         buttons.add(new ButtonUI(new Vec2(250, 75), new Vec2(100, 100), "./assets/ui/arrow_right.png", "", "./assets/Monocraft.ttf", 50));
 
+        if(PlayerPrefs.hasKey("name")==false)
+            PlayerPrefs.setString("name", "name");
         texts.add(new TextUI(PlayerPrefs.getString("name"), new Vec2(-175, -125), 50, 0, 0, 255));
 
         for (int i = 0; i < images.size(); i++) {
@@ -69,7 +71,12 @@ public class MainMenu extends Updatable {
             i.setSortingLayer(-69);
             isten.getRenderer().addRenderable(i);
             i.setVisibility(false);
-            activeCharImage = PlayerPrefs.getInt("skin");
+            if(PlayerPrefs.hasKey("skin"))
+                activeCharImage = PlayerPrefs.getInt("skin");
+            else {
+                PlayerPrefs.setInt("skin",0);
+                activeCharImage=0;
+            }
         }
 
         for (ButtonUI r : buttons) {
