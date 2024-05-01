@@ -130,7 +130,7 @@ public class Minimap extends Updatable {
 
         //edging intensifies (drawing edges)
 
-        if(isten.getMap().getEdgeManager() != null) return;
+        if(isten.getMap().getEdgeManager() == null) return;
 
         ArrayList<EdgeBetweenRooms> edges =isten.getMap().getEdgeManager().getRoomEdges();
         for(int i=0;i<edges.size();i++)
