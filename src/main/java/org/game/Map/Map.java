@@ -19,7 +19,6 @@ public class Map extends Updatable {
     private final int minRoomSize;
     private boolean isGenerated = false;
     //private boolean
-
     @Override
     public void onStart(Isten isten) {
 
@@ -29,18 +28,18 @@ public class Map extends Updatable {
     }
 
     public void init(Isten isten) {
-        this.edgeManager = new EdgeManager(isten);
         this.mapgenerator = new Mapgenerator(this, isten);
         mapgenerator.generate(minRoomSize);
         isGenerated = true;
     }
 
-    public Map(int rowNumber, int columnNumber, int minRoomSize){
+    public Map(Isten isten, int rowNumber, int columnNumber, int minRoomSize){
         this.mapRowSize = rowNumber;
         this.mapColumnSize = columnNumber;
         this.minRoomSize = minRoomSize;
         //unitrooms is set in the generator --> onstart
         this.rooms = new ArrayList<>();
+        this.edgeManager = new EdgeManager(isten);
         initUnitRooms();
 
     }

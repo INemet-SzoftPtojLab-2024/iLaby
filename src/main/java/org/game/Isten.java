@@ -1,4 +1,4 @@
-package main.java.org.game;
+    package main.java.org.game;
 
 import main.java.org.entities.villain.Villain;
 import main.java.org.game.Camera.Camera;
@@ -52,7 +52,7 @@ public class Isten {
      */
     public Isten() {
         inventory=new Inventory(5);
-        map=new Map(20, 20, 10);
+        map=new Map(this, 20, 20, 10);
         chestManager = new ChestManager(75);
         itemManager=new ItemManager();
         inputHandler = new Input();

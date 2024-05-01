@@ -74,7 +74,7 @@ public class ChestManager extends Updatable {
                 case RIGHT: chestPos=new Vec2(placeableUnitRooms.get(randomUnitRoom).getPosition().x + 0.3f, placeableUnitRooms.get(randomUnitRoom).getPosition().y);break;
                 case BOTTOM: chestPos=new Vec2(placeableUnitRooms.get(randomUnitRoom).getPosition().x, placeableUnitRooms.get(randomUnitRoom).getPosition().y - 0.3f);break;
             };
-            //CHEST TÍPUSOK, a networking miatt sokkal egyszerűbb így az itemeket átadni --> Chest.java/fillChest
+            //CHEST TIPUSOK, a networking miatt sokkal egyszerubb így az itemeket atadni --> Chest.java/fillChest
             chests.add(new Chest(chestPos,isten,wall.ordinal(),rand.nextInt(5)));
             isThereChest.set(randomUnitRoom,true);
         }
