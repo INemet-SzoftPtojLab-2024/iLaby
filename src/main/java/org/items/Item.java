@@ -26,6 +26,7 @@ public abstract class Item {
     protected Image image;
     protected final Isten isten;
     protected String imagePath;
+    private int itemIndex;
 
     private LocalDateTime droppedAt;
     public Item(Isten isten,Vec2 scale){
@@ -34,6 +35,7 @@ public abstract class Item {
         position=null;
         droppedAt = null;
         this.isten=isten;
+        itemIndex = isten.getItemManager().getItems().size();
 
         isten.getItemManager().addItem(this);
     }
@@ -60,8 +62,13 @@ public abstract class Item {
 
     }
     public String getImagePath(){return imagePath;}
+
     public Vec2 getPosition(){return position;}
+    public void setPosition(Vec2 pos) { position=pos; }
     public Location getLocation(){return location;}
     public void setLocation(Location loc) { location = loc; }
+
     public Image getImage() { return image; }
+
+    public int getItemIndex() { return itemIndex; }
 }

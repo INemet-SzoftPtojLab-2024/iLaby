@@ -14,6 +14,7 @@ public abstract class Packet {
         CHESTGENERATION(10),
         CHESTOPENED(11),
         ITEMPICKEDUP(12),
+        ITEMDROPPED(13),
         WALL(20),
         DEATH(21);
         private int packetId;

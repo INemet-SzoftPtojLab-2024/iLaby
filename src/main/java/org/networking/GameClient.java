@@ -98,6 +98,10 @@ public class GameClient extends Thread {
                 packet = new Packet12ItemPickedUp(data);
                 handleItemPickedUp((Packet12ItemPickedUp) packet);
                 break;
+            case ITEMDROPPED:
+                packet = new Packet13ItemDropped(data);
+                handleItemDropped((Packet13ItemDropped) packet);
+                break;
             case WALL:
                 //System.out.println("GOT WALL PACKET");
                 packet = new Packet20Wall(data);
@@ -110,6 +114,17 @@ public class GameClient extends Thread {
         }
     }
 
+    private void handleItemDropped(Packet13ItemDropped packet) {
+        for(int i = 0; i < isten.getUpdatables().size(); i++) {
+            if(isten.getUpdatable(i).getClass() == ItemManager.class) {
+                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).setLocation(Item.Location.GROUND);
+                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).getImage().setVisibility(true);
+                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).getImage().setPosition(packet.pos);
+                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).setPosition(packet.pos);
+            }
+        }
+    }
+
     private void handleItemPickedUp(Packet12ItemPickedUp packet) {
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ItemManager.class) {
@@ -117,6 +132,8 @@ public class GameClient extends Thread {
                 isten.getUpdatables().get(i).getItems().get(packet.itemIndex).getImage().setVisibility(false);
             }
         }
+        //isten.getUpdatablesByType(ItemManager.class).getFirst().getItems().get(pack);
+
     }
 
     private void handleChestOpened(Packet11ChestOpened packet) {

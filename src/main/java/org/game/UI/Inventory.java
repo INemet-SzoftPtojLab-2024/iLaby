@@ -89,7 +89,12 @@ public class Inventory extends Updatable {
             useSelectedItem();
         }
         if(isten.getInputHandler().isKeyDown(KeyEvent.VK_R)&&storedItems.get(selectedSlot-1)!=null){
-            storedItems.get(selectedSlot-1).dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
+            Item actItem = storedItems.get(selectedSlot-1);
+            Vec2 actPos = isten.getPlayer().getPlayerCollider().getPosition();
+            actItem.dropOnGround(actPos);
+            isten.getSocketClient().sendData(("13" + actItem.getItemIndex() + ","
+                    + actPos.x + "," + actPos.y).getBytes());
+
             storedItems.set(selectedSlot-1,null);
             tmp = new ImageUI(getSlotLocation(selectedSlot ), new Vec2(iconSize), "./assets/ui/inventorySlot_Selected.png");
             inventoryIcons.set(selectedSlot - 1, tmp);
