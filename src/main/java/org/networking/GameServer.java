@@ -23,6 +23,8 @@ public class GameServer extends Thread {
     private ChestGenerationHandler chestGenerationHandler;
     private DatagramSocket socket;
 
+    private ArrayList<byte[]> events = new ArrayList<>();
+
     Isten isten;
     boolean isInitialized = false;
 
@@ -137,6 +139,7 @@ public class GameServer extends Thread {
                 isten.getUpdatables().get(i).getItems().get(packet.itemIndex).setPosition(packet.pos);
             }
         }
+        events.add(packet.getData());
         sendDataToAllClients(packet.getData());
     }
 
@@ -147,6 +150,7 @@ public class GameServer extends Thread {
                 isten.getUpdatables().get(i).getItems().get(packet.itemIndex).getImage().setVisibility(false);
             }
         }
+        events.add(packet.getData());
         sendDataToAllClients(packet.getData());
     }
 
@@ -156,6 +160,7 @@ public class GameServer extends Thread {
                 isten.getUpdatables().get(i).getChests().get(packet.chestIndex).open();
             }
         }
+        events.add(packet.getData());
         sendDataToAllClients(packet.getData());
     }
 
@@ -179,6 +184,7 @@ public class GameServer extends Thread {
         mapHandler.sendDataToClient(player);
         villainHandler.sendDataToClient(player);
         chestGenerationHandler.sendDataToClient(player);
+        for (byte[] data : events) sendDataToAllClients(data);
     }
 
     //handle Move Packet
