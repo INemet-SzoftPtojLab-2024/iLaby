@@ -7,6 +7,7 @@ import main.java.org.game.Graphics.Renderable;
 import main.java.org.game.Isten;
 import main.java.org.game.Map.*;
 import main.java.org.game.updatable.Updatable;
+import main.java.org.items.Chest;
 import main.java.org.linalg.Vec2;
 
 import java.awt.*;
@@ -15,6 +16,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Vector;
 
 public class Minimap extends Updatable {
 
@@ -281,24 +283,37 @@ public class Minimap extends Updatable {
                 {
                     int currentIndex=4*(i*width+j);
                     rawData[currentIndex++]=0;
-                    rawData[currentIndex++]=0;
                     rawData[currentIndex++]=255;
+                    rawData[currentIndex++]=0;
                     rawData[currentIndex]=255;
                 }
             }
         }while(69==420);
 
-        do{//draw enemies
-            ArrayList<Villain> villains=isten.getUpdatablesByType(Villain.class);
+        do{//draw enemies and chests
+            class Colon{int r; int g; int b; public Colon(int _r, int _g, int _b){r=_r;g=_g;b=_b;}}
 
             ArrayList<Vec2> positions=new ArrayList<>();
+            ArrayList<Colon> colours=new ArrayList<>();
+
+            //enemies
+            ArrayList<Villain> villains=isten.getUpdatablesByType(Villain.class);
+
             for(int i=0;i<villains.size();i++)
             {
-                positions.add(villains.get(i).getPosition());
+                positions.add(villains.get(i).getVillainCollider().getPosition());
+                colours.add(new Colon(255,0,0));
             }
 
+            //chests
+            Vector<Chest> chests = isten.getChestManager().getChests();
+            for(int i=0;i<chests.size();i++)
+            {
+                positions.add(chests.get(i).getPosition());
+                colours.add(new Colon(0,255,255));
+            }
 
-            for(int j=0;j<villains.size();j++)
+            for(int j=0;j<positions.size();j++)
             {
                 Vec2 startPos=positions.get(j).clone();
                 startPos.x-=lowerBound.x;
@@ -321,10 +336,12 @@ public class Minimap extends Updatable {
                 {
                     for(int l=drawX>-1?drawX:0;l<width&&l<drawEndX;l++)
                     {
+                        Colon col=colours.get(j);
+
                         int index=4*(width*k+l);
-                        rawData[index++]=255;
-                        rawData[index++]=0;
-                        rawData[index++]=0;
+                        rawData[index++]=col.r;
+                        rawData[index++]=col.g;
+                        rawData[index++]=col.b;
                         rawData[index]=255;
                     }
                 }
