@@ -1,10 +1,12 @@
 package main.java.org.game.UI;
 
+import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.ImageUI;
 import main.java.org.game.Graphics.Renderable;
 import main.java.org.game.Isten;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.items.Item;
+import main.java.org.items.usable_items.Gasmask;
 import main.java.org.linalg.Vec2;
 
 import java.awt.event.KeyEvent;
@@ -22,6 +24,7 @@ public class Inventory extends Updatable {
      */
     private int selectedSlot;
     private  Isten isten;
+    private boolean hasGasmaskEquipped;
 
 
     public Inventory(int size){
@@ -32,13 +35,12 @@ public class Inventory extends Updatable {
         for (int i = 0; i < 5; i++) {storedItems.add(null);}
         for (int i = 0; i < 5; i++) {itemIcons.add(null);}
         selectedSlot=1;
+        hasGasmaskEquipped =false;
     }
 
     @Override
     public void onStart(Isten isten) {
         this.isten=isten;
-        int windowWidth = isten.getRenderer().getWidth();
-        int windowHeight = isten.getRenderer().getHeight();
 
         ImageUI inventoryIcon= new ImageUI(getSlotLocation(1),
                 new Vec2(iconSize,iconSize), "./assets/ui/inventorySlot_Selected.png") ;
@@ -86,11 +88,13 @@ public class Inventory extends Updatable {
             isten.getRenderer().addRenderable(tmp);
         }
         if(isten.getInputHandler().isKeyDown(KeyEvent.VK_F)){
-            useSelectedItem();
+            useSelectedItem(deltaTime);
         }
         if(isten.getInputHandler().isKeyDown(KeyEvent.VK_R)&&storedItems.get(selectedSlot-1)!=null){
             Item actItem = storedItems.get(selectedSlot-1);
             Vec2 actPos = isten.getPlayer().getPlayerCollider().getPosition();
+            if(actItem instanceof Gasmask)
+                hasGasmaskEquipped=false;
             actItem.dropOnGround(actPos);
             isten.getSocketClient().sendData(("13" + actItem.getItemIndex() + ","
                     + actPos.x + "," + actPos.y).getBytes());
@@ -118,12 +122,20 @@ public class Inventory extends Updatable {
                 storedItems.set(i,item);
                 tmp=new ImageUI(getSlotLocation(i+1),new Vec2(iconSize-10,iconSize-10),item.getImagePath());
                 itemIcons.set(i,tmp);
+                if(item.getClass().equals(Gasmask.class))
+                {
+                    hasGasmaskEquipped = true;
+                }
                 break;
             }
         }
         if(tmp==null) {
             storedItems.get(selectedSlot-1).dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
             storedItems.set(selectedSlot - 1, item);
+            if(item.getClass().equals(Gasmask.class))
+            {
+                hasGasmaskEquipped = true;
+            }
             itemIcons.get(selectedSlot-1).setVisibility(false);
             tmp=new ImageUI(getSlotLocation(selectedSlot),new Vec2(iconSize-10,iconSize-10),item.getImagePath());
             itemIcons.set(selectedSlot - 1,tmp);
@@ -154,10 +166,40 @@ public class Inventory extends Updatable {
         return new Vec2();
     }
 
-    public void useSelectedItem(){
+    public void useSelectedItem(double deltatime){
         Item selectedItem = storedItems.get(selectedSlot-1);
         if(selectedItem != null){
-            selectedItem.use();
+            selectedItem.use(deltatime);
         }
+    }
+
+    public boolean getExistenceOfGasMask()
+    {
+        return hasGasmaskEquipped;
+    }
+
+    public void dropAllItems(Isten isten)
+    {
+        storedItems.clear();
+        for (int i = 0; i < 5; i++) {storedItems.add(null);}
+        for (Image im : itemIcons) {
+            isten.getRenderer().deleteRenderable(im);
+        }
+        selectedSlot=1;
+        hasGasmaskEquipped =false;
+    }
+
+    public List<Item> getStoredItems() {
+        return storedItems;
+    }
+    public int getSize(){
+        return size;
+    }
+    public void setGasmaskEquipped(boolean hasGasmaskEquipped) {
+        this.hasGasmaskEquipped = hasGasmaskEquipped;
+    }
+
+    public ArrayList<ImageUI> getItemIcons() {
+        return itemIcons;
     }
 }

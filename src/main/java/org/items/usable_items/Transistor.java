@@ -47,7 +47,7 @@ public class Transistor extends Item {
     }
 
     @Override
-    public void use(){
+    public void use(double deltatime){
         if(!used){
             countText.setVisibility(false);
             Vec2 playerPosition = isten.getPlayer().getPlayerCollider().getPosition();

@@ -23,7 +23,7 @@ public class ItemManager extends Updatable {
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-        if(isten.getInputHandler().isKeyDown(KeyEvent.VK_E)){
+        if(isten.getInputHandler().isKeyDown(KeyEvent.VK_E) && !isten.getPlayer().isFainted()){
             Vec2 playerPostion = isten.getPlayer().getPlayerCollider().getPosition();
             for(int i = 0; i < items.size(); i++){
                 if(items.get(i).location== Item.Location.GROUND) {

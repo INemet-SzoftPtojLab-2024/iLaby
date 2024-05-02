@@ -57,7 +57,7 @@ public abstract class Item {
         }
     }
 
-    public void use(){
+    public void use(double deltatime){
 
     }
     public String getImagePath(){return imagePath;}
