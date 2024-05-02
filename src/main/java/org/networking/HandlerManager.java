@@ -7,9 +7,7 @@ import java.net.InetAddress;
 import java.util.concurrent.locks.Lock;
 import main.java.org.game.Graphics.Text;
 import main.java.org.game.Isten;
-import main.java.org.game.Map.Map;
-import main.java.org.game.Map.Room;
-import main.java.org.game.Map.UnitRoom;
+import main.java.org.game.Map.*;
 import main.java.org.game.physics.Collider;
 import main.java.org.game.physics.ColliderGroup;
 import main.java.org.linalg.Vec2;
@@ -232,14 +230,19 @@ public class HandlerManager {
         ColliderGroup cg = new ColliderGroup();
         Collider collider = new Collider(wallData.pos, wallData.scale);
 
+        EdgePiece edgePiece;
+
         if (wallData.isDoor) {
             isten.getRenderer().addRenderable(new Image(wallData.pos, wallData.scale, "./assets/doors/doors_leaf_closed.png"));
             collider.setSolidity(false);
+            edgePiece = new Door(collider, collider.getPosition(), null, null);
+
         } else {
             isten.getRenderer().addRenderable(new Image(wallData.pos, wallData.scale, "./assets/walls/wall_mid.png"));
-
+            edgePiece = new Wall(collider, collider.getPosition(), null, null);
         }
 
+        isten.getMinimap().addEdgePiece(edgePiece);
         cg.addCollider(collider);
         isten.getPhysicsEngine().addColliderGroup(cg);
     }

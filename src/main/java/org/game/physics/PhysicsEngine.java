@@ -30,10 +30,21 @@ public class PhysicsEngine
         for(Collider c : simulatedColliders)
             c.clearCollisionHistory();
 
+        for (int i = 0; i < colliderGroups.size(); i++){
+            ColliderGroup cg = colliderGroups.get(i);
+            for(int j = 0; j < cg.getColliders().size(); j++) {
+                Collider c = cg.getColliders().get(j);
+                c.clearCollisionHistory();
+
+            }
+        }
+
+        /*
         for(ColliderGroup cg: colliderGroups)
             for(Collider c: cg.getColliders())
                 c.clearCollisionHistory();
 
+         */
         //move simulated colliders based on their velocity
         for(Collider c : simulatedColliders)
         {
@@ -44,6 +55,18 @@ public class PhysicsEngine
         }
 
         //resolve collisions between colliders in collidergroups and simulated colliders
+        for(int i = 0; i < simulatedColliders.size(); i++) {
+            Collider c = simulatedColliders.get(i);
+            for(int j = 0; j < colliderGroups.size(); j++) {
+                ColliderGroup cg = colliderGroups.get(j);
+                if(!cg.isColliderInBounds(c))
+                    continue;
+
+                ColliderGroup.resolveCollision(cg,c,false);
+            }
+        }
+
+        /*
         for(Collider c:simulatedColliders)
         {
             for(ColliderGroup cg :colliderGroups)
@@ -54,7 +77,7 @@ public class PhysicsEngine
                 ColliderGroup.resolveCollision(cg,c,false);
             }
         }
-
+        */
         //resolve collisions between simulated colliders
         int length=simulatedColliders.size();
         for(int i=0;i<length;i++)

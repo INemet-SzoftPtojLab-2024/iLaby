@@ -46,6 +46,7 @@ public class Isten {
 
     private PlayerMP player;
     private ChestManager chestManager;
+    private Minimap minimap;
     /**
      * Constructor for Isten.
      * Initializes the physics engine, game renderer, and list of updatables.
@@ -206,7 +207,8 @@ public class Isten {
         updatables.add(new Help());
         updatables.add(new GameMenu());
 
-        updatables.add(new Minimap(200,200,20,2));
+        minimap = new Minimap(200,200,20,2);
+        updatables.add(minimap);
     }
 
     /**
@@ -325,4 +327,7 @@ public class Isten {
     }
 
     public ChestManager getChestManager() { return chestManager; }
+    public Minimap getMinimap() {
+        return minimap;
+    }
 }
