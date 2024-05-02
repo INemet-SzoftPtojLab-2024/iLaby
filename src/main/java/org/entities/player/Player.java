@@ -40,6 +40,7 @@ public class Player extends Entity {
     Sound playerSound = null;
     double faintingTime;
     boolean isFainted;
+    boolean isInGasRoomButHasMask;
     float speed;
     protected Vec2 spawnPosition;
     protected int run = 1;
@@ -59,6 +60,7 @@ public class Player extends Entity {
         spawnPosition = new Vec2(0, 0);
         faintingTime = 0;
         isFainted = false;
+        isInGasRoomButHasMask = false;
         speed=2;
     }
 
@@ -106,6 +108,10 @@ public class Player extends Entity {
         playerImage.add(new Image(new Vec2(), faintedScale, "./assets/character/character" + skinID + "_left2_fainted1.png"));
         playerImage.add(new Image(new Vec2(), faintedScale, "./assets/character/character" + skinID + "_right2_fainted2.png"));
         playerImage.add(new Image(new Vec2(), faintedScale, "./assets/character/character" + skinID + "_left2_fainted2.png"));
+        playerImage.add(new Image(new Vec2(), faintedScale, "./assets/character/character" + skinID + "_right1_mask.png"));
+        playerImage.add(new Image(new Vec2(), faintedScale, "./assets/character/character" + skinID + "_right2_mask.png"));
+        playerImage.add(new Image(new Vec2(), faintedScale, "./assets/character/character" + skinID + "_left1_mask.png"));
+        playerImage.add(new Image(new Vec2(), faintedScale, "./assets/character/character" + skinID + "_left2_mask.png"));
         playerImage.add(new Image(new Vec2(), playerScale, "./assets/character/character" + skinID + "_ded.png"));
 
         for (Image im : playerImage) {
@@ -180,15 +186,19 @@ public class Player extends Entity {
                         }
                     }
                     isten.getInventory().dropAllItems(isten);
-                } else {
+                    isInGasRoomButHasMask = false;
+                }
+                else {
                     int index=0;
                     for(;index<isten.getInventory().getSize();index++){
                         if(isten.getInventory().getStoredItems().get(index) instanceof Gasmask) break;
                     }
+                    isInGasRoomButHasMask = true;
                     isten.getInventory().getStoredItems().get(index).use(deltaTime);
                 }
             } else {
                 faintingTime += deltaTime;
+                isInGasRoomButHasMask = false;
             }
 
             //move the character
@@ -219,15 +229,24 @@ public class Player extends Entity {
             time += deltaTime;
             if (time > 0.2f / run) { //after this much time does the animation changes
                 int prev = activeImage;
-                if (isFainted && playerCollider.getVelocity().magnitude() == 0.0f) {
-                    if (prev > 1 && prev < 4 || prev > 5 && prev < 8 || prev == 9) activeImage = 7;
+                boolean leftFacing = prev > 1 && prev < 4 || prev > 5 && prev < 8 || prev > 11 && prev < 14;
+                if (isFainted && playerCollider.getVelocity().magnitude() == 0.0f) { //fainted animation
+                    if (leftFacing|| prev == 9) activeImage = 7;
                     else activeImage = 5;
                     if (prev == 5) activeImage = 8;
                     if (prev == 7) activeImage = 9;
-                } else {
+                }
+                else if(isInGasRoomButHasMask){ //mask animation
+                    if (playerCollider.getVelocity().x > 0) activeImage = 10;
+                    else if (playerCollider.getVelocity().x < 0) activeImage = 12;
+                    else if (leftFacing) activeImage = 12;
+                    else activeImage = 10;
+                    if (prev % 2 == 0 || playerCollider.getVelocity().magnitude() == 0.0f) activeImage++;
+                }
+                else { //normal animation
                     if (playerCollider.getVelocity().x > 0) activeImage = 0;
                     else if (playerCollider.getVelocity().x < 0) activeImage = 2;
-                    else if (prev > 1 && prev < 4 || prev > 5 && prev < 8) activeImage = 2;
+                    else if (leftFacing) activeImage = 2;
                     else activeImage = 0;
                     if (prev % 2 == 0 || playerCollider.getVelocity().magnitude() == 0.0f) activeImage++;
                     if (isFainted) activeImage += 4;
@@ -259,15 +278,16 @@ public class Player extends Entity {
                 AudioManager.closeSound(playerSound);
             }
 
-        } else {
+        }
+        else {
 
             if (!AudioManager.isPlaying(playerSound) && localPlayer)
                 playerSound = AudioManager.playSound("./assets/audio/died.ogg");
 
-            if (activeImage != 10) {
+            if (activeImage != 14) {
                 playerCollider.setVelocity(new Vec2(0));
                 playerImage.get(activeImage).setVisibility(false);
-                activeImage = 10;
+                activeImage = 14;
                 playerImage.get(activeImage).setVisibility(true);
                 if (localPlayer) {
                     death.setVisibility(true);
