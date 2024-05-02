@@ -21,7 +21,7 @@ import java.util.Vector;
 public class Minimap extends Updatable {
 
     private int displayedScale;
-
+    private ArrayList<EdgePiece> edgePieces = new ArrayList<>();
     private final int width;
     private final int height;
 
@@ -132,70 +132,64 @@ public class Minimap extends Updatable {
 
         if(isten.getMap().getEdgeManager() == null) return;
 
-        ArrayList<EdgeBetweenRooms> edges =isten.getMap().getEdgeManager().getRoomEdges();
-        for(int i=0;i<edges.size();i++)
+        for(int j=0;j<edgePieces.size();j++)
         {
-            ArrayList<EdgePiece> edgePieces=edges.get(i).getWalls();
+            Vec2 startPos=edgePieces.get(j).getCollider().getPosition().clone();
+            Vec2 scale=edgePieces.get(j).getCollider().getScale();
+            startPos.x-=0.5f*scale.x+lowerBound.x;
+            startPos.y-=0.5f*scale.y+lowerBound.y;
 
-            for(int j=0;j<edgePieces.size();j++)
+            if(startPos.x+1<0||startPos.y+1<0||startPos.x>covered.x||startPos.y>covered.y)
+                continue;
+
+            startPos.y=covered.y-startPos.y-scale.y;
+
+            int drawX, drawY;
+            drawX=Math.round(width*startPos.x* onePerCovered.x);
+            drawY=Math.round(height* startPos.y* onePerCovered.y)+1;
+
+            int drawEndX=Math.round(scale.x*pixelsPerUnit);
+            int drawEndY=Math.round(scale.y*pixelsPerUnit);
+
+            if(drawEndX>drawEndY)
             {
-                Vec2 startPos=edgePieces.get(j).getCollider().getPosition().clone();
-                Vec2 scale=edgePieces.get(j).getCollider().getScale();
-                startPos.x-=0.5f*scale.x+lowerBound.x;
-                startPos.y-=0.5f*scale.y+lowerBound.y;
+                drawX--;
+                drawEndX+=drawX+wallWidthInPixels/2;
+                drawEndY=drawY+wallWidthInPixels;
+            }
+            else
+            {
+                drawY--;
+                drawEndY+=drawY;
+                drawEndX=drawX+wallWidthInPixels;
+            }
 
-                if(startPos.x+1<0||startPos.y+1<0||startPos.x>covered.x||startPos.y>covered.y)
-                    continue;
+            if(drawX<0)
+                drawX=0;
+            if(drawY<0)
+                drawY=0;
+            if(drawEndX>width)
+                drawEndX=width;
+            if(drawEndY>height)
+                drawEndY=height;
 
-                startPos.y=covered.y-startPos.y-scale.y;
+            int r=255, g=255,b=255;
+            if(edgePieces.get(j) instanceof Door)
+            {
+                //r=255;
+                g=205;
+                b=0;
+            }
 
-                int drawX, drawY;
-                drawX=Math.round(width*startPos.x* onePerCovered.x);
-                drawY=Math.round(height* startPos.y* onePerCovered.y)+1;
-
-                int drawEndX=Math.round(scale.x*pixelsPerUnit);
-                int drawEndY=Math.round(scale.y*pixelsPerUnit);
-
-                if(drawEndX>drawEndY)
+            for(int k=drawY;k<drawEndY;k++)
+            {
+                for(int l=drawX;l<drawEndX;l++)
                 {
-                    drawX--;
-                    drawEndX+=drawX+wallWidthInPixels/2;
-                    drawEndY=drawY+wallWidthInPixels;
-                }
-                else
-                {
-                    drawY--;
-                    drawEndY+=drawY;
-                    drawEndX=drawX+wallWidthInPixels;
-                }
-
-                if(drawX<0)
-                    drawX=0;
-                if(drawY<0)
-                    drawY=0;
-                if(drawEndX>width)
-                    drawEndX=width;
-                if(drawEndY>height)
-                    drawEndY=height;
-
-                int r=255, g=255,b=255;
-                if(edgePieces.get(j) instanceof Door)
-                {
-                    //r=255;
-                    g=205;
-                    b=0;
-                }
-
-                for(int k=drawY;k<drawEndY;k++)
-                {
-                    for(int l=drawX;l<drawEndX;l++)
-                    {
-                        int index=4*(width*k+l);
-                        rawData[index++]=r;
-                        rawData[index++]=g;
-                        rawData[index++]=b;
-                        rawData[index]=255;
-                    }
+                    int index=4*(width*k+l);
+                    rawData[index++]=r;
+                    rawData[index++]=g;
+                    rawData[index++]=b;
+                    rawData[index]=255;
                 }
             }
         }
@@ -386,5 +380,9 @@ public class Minimap extends Updatable {
             canRerender=true;
             currentThread=null;
         }
+    }
+
+    public void addEdgePiece(EdgePiece piece) {
+        edgePieces.add(piece);
     }
 }

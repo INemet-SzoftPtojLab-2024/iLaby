@@ -1,0 +1,374 @@
+Index: src/main/java/org/networking/GameClient.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package main.java.org.networking;\r\n\r\nimport main.java.org.game.Isten;\r\nimport main.java.org.game.Map.Map;\r\nimport main.java.org.game.UI.TimeCounter;\r\nimport main.java.org.game.physics.Collider;\r\nimport main.java.org.game.physics.ColliderGroup;\r\nimport main.java.org.items.Chest;\r\nimport main.java.org.items.ChestManager;\r\nimport main.java.org.items.Item;\r\nimport main.java.org.items.ItemManager;\r\nimport main.java.org.linalg.Vec2;\r\n\r\nimport java.io.IOException;\r\nimport java.net.*;\r\n\r\npublic class GameClient extends Thread {\r\n    private InetAddress ipAddress;\r\n    private DatagramSocket socket;\r\n    Isten isten;\r\n\r\n    public GameClient(Isten isten, String ipAddress) {\r\n        this.isten = isten;\r\n        try {\r\n            this.socket = new DatagramSocket();\r\n            this.ipAddress = InetAddress.getByName(ipAddress);\r\n        }\r\n        catch(SocketException e) {\r\n            e.printStackTrace();\r\n        }\r\n        catch(UnknownHostException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    public void run() {\r\n        while(true) {\r\n            byte[] data = new byte[1024];\r\n            DatagramPacket packet = new DatagramPacket(data, data.length);\r\n            try {\r\n                socket.receive(packet);\r\n            } catch (IOException e) {\r\n                throw new RuntimeException(e);\r\n            }\r\n            parsePacket(packet.getData(), packet.getAddress(), packet.getPort());\r\n\r\n        }\r\n    }\r\n\r\n    private void parsePacket(byte[] data, InetAddress address, int port) {\r\n        String message = new String(data).trim();\r\n        Packet.PacketTypes type = Packet.lookupPacket(message.substring(0,2));\r\n        Packet packet = null;\r\n        switch(type) {\r\n            default:\r\n                break;\r\n            case INVALID:\r\n                break;\r\n            case LOGIN:\r\n                packet = new Packet00Login(data);\r\n                handleLogin((Packet00Login) packet, address, port);\r\n                break;\r\n            case DISCONNECT:\r\n                break;\r\n            case MOVE:\r\n                packet = new Packet02Move(data);\r\n                handleMove((Packet02Move) packet);\r\n                break;\r\n            case ANIMATION:\r\n                packet = new Packet03Animation(data);\r\n                handleAnimation((Packet03Animation)packet);\r\n                break;\r\n            case UNITROOM:\r\n                packet = new Packet04UnitRoom(data);\r\n                handleUnitRoom((Packet04UnitRoom)packet);\r\n                break;\r\n            case VILLAIN:\r\n                packet = new Packet05Villain(data);\r\n                handleVillain((Packet05Villain)packet);\r\n                break;\r\n            case VILLAINMOVE:\r\n                packet = new Packet06VillainMove(data);\r\n                handleVillainMove((Packet06VillainMove) packet);\r\n                break;\r\n            case TIMER:\r\n                packet = new Packet07Timer(data);\r\n                handleTimer((Packet07Timer)packet);\r\n                break;\r\n            case CHESTGENERATION:\r\n                packet = new Packet10ChestGeneration(data);\r\n                handleChestGeneration((Packet10ChestGeneration) packet);\r\n                break;\r\n            case CHESTOPENED:\r\n                packet = new Packet11ChestOpened(data);\r\n                handleChestOpened((Packet11ChestOpened) packet);\r\n                break;\r\n            case ITEMPICKEDUP:\r\n                packet = new Packet12ItemPickedUp(data);\r\n                handleItemPickedUp((Packet12ItemPickedUp) packet);\r\n                break;\r\n            case ITEMDROPPED:\r\n                packet = new Packet13ItemDropped(data);\r\n                handleItemDropped((Packet13ItemDropped) packet);\r\n                break;\r\n            case WALL:\r\n                //System.out.println(\"GOT WALL PACKET\");\r\n                packet = new Packet20Wall(data);\r\n                handleWall((Packet20Wall) packet);\r\n                break;\r\n            case DEATH:\r\n                packet = new Packet21Death(data);\r\n                handleDeath((Packet21Death)packet);\r\n                break;\r\n        }\r\n    }\r\n\r\n    private void handleItemDropped(Packet13ItemDropped packet) {\r\n        for(int i = 0; i < isten.getUpdatables().size(); i++) {\r\n            if(isten.getUpdatable(i).getClass() == ItemManager.class) {\r\n                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).setLocation(Item.Location.GROUND);\r\n                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).getImage().setVisibility(true);\r\n                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).getImage().setPosition(packet.pos);\r\n                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).setPosition(packet.pos);\r\n            }\r\n        }\r\n    }\r\n\r\n    private void handleItemPickedUp(Packet12ItemPickedUp packet) {\r\n        for(int i = 0; i < isten.getUpdatables().size(); i++) {\r\n            if(isten.getUpdatable(i).getClass() == ItemManager.class) {\r\n                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).setLocation(Item.Location.INVENTORY);\r\n                isten.getUpdatables().get(i).getItems().get(packet.itemIndex).getImage().setVisibility(false);\r\n            }\r\n        }\r\n        //isten.getUpdatablesByType(ItemManager.class).getFirst().getItems().get(pack);\r\n\r\n    }\r\n\r\n    private void handleChestOpened(Packet11ChestOpened packet) {\r\n        for(int i = 0; i < isten.getUpdatables().size(); i++) {\r\n            if(isten.getUpdatable(i).getClass() == ChestManager.class) {\r\n                isten.getUpdatables().get(i).getChests().get(packet.chestIndex).open();\r\n            }\r\n        }\r\n    }\r\n\r\n    private int chestGenCount = 0;\r\n    private void handleChestGeneration(Packet10ChestGeneration packet) {\r\n        if(isten.getSocketServer() != null) return;\r\n\r\n        int chestIndex = 0;\r\n        for(int i = 0; i < isten.getUpdatables().size(); i++) {\r\n            if(isten.getUpdatable(i).getClass() == ChestManager.class) {\r\n                chestIndex = i;\r\n                isten.getUpdatables().get(i).getChests().add(new Chest(packet.pos,isten,packet.heading, packet.chestType));\r\n                chestGenCount++;\r\n            }\r\n        }\r\n\r\n        ColliderGroup chestColliders=new ColliderGroup();\r\n        for (int i = 0; i < isten.getUpdatables().get(chestIndex).getChests().size(); i++) {\r\n            Collider c=new Collider( isten.getUpdatables().get(chestIndex).getChests().get(i).getPosition(),new Vec2(0.15f,0.15f));\r\n            chestColliders.addCollider(c);\r\n        }\r\n        isten.getPhysicsEngine().addColliderGroup(chestColliders);\r\n    }\r\n\r\n    private void handleDeath(Packet21Death packet) {\r\n        String username = packet.getUsername();\r\n\r\n        for(int i = 0; i < isten.getUpdatables().size(); i++) {\r\n            if(isten.getUpdatable(i).getClass() == PlayerMP.class) {\r\n                PlayerMP playerMP = (PlayerMP)isten.getUpdatable(i);\r\n                if(playerMP.getUsername().equalsIgnoreCase(username)) {\r\n                    playerMP.setAlive(false);\r\n                }\r\n            }\r\n        }\r\n    }\r\n\r\n    private void handleWall(Packet20Wall packet) {\r\n        Vec2 pos = new Vec2(packet.getPosX(), packet.getPosY());\r\n        Vec2 scale = new Vec2(packet.getScaleX(), packet.getScaleY());\r\n        boolean isDoor = packet.isDoor();\r\n\r\n        HandlerManager hm = isten.getHandlerManager();\r\n        hm.lock.lock();\r\n            try {\r\n                // Critical section\r\n                // Access shared resources here\r\n                hm.addTask(HandlerManager.TaskType.Wall);\r\n                hm.addData(new HandlerManager.WallData(pos, scale, isDoor));\r\n            } finally {\r\n                hm.lock.unlock(); // Release the lock\r\n            }\r\n    }\r\n\r\n    private void handleUnitRoom(Packet04UnitRoom packet) {\r\n        Vec2 position = new Vec2(packet.getX(), packet.getY());\r\n        int type = packet.getType();\r\n        String path = \"./assets/floors/floor\" + (type+1) + \".png\";\r\n        Map map = isten.getMap();\r\n        for(int i = 0; i < map.getMapRowSize(); i++) {\r\n            for(int j = 0; j < map.getMapColumnSize(); j++) {\r\n                if(map.getUnitRooms()[i][j].getPosition().x == position.x &&\r\n                map.getUnitRooms()[i][j].getPosition().y == position.y) {\r\n                    map.getUnitRooms()[i][j].setNewImage(path, isten);\r\n                }\r\n            }\r\n        }\r\n    }\r\n\r\n    private void handleTimer(Packet07Timer packet) {\r\n        double timeRemaining = packet.timeRemaining;\r\n        TimeCounter.setTimeRemaining(timeRemaining);\r\n    }\r\n\r\n    private void handleVillainMove(Packet06VillainMove packet) {\r\n        String villainName = packet.getVillainName();\r\n        Vec2 position = new Vec2(packet.getX(), packet.getY());\r\n\r\n        HandlerManager hm = isten.getHandlerManager();\r\n        hm.lock.lock();\r\n            try {\r\n                // Critical section\r\n                // Access shared resources here\r\n                hm.addTask(HandlerManager.TaskType.VillainMove);\r\n                hm.addData(new HandlerManager.VillainMoveData(villainName, position));\r\n            } finally {\r\n                hm.lock.unlock(); // Release the lock\r\n            }\r\n    }\r\n\r\n    private void handleVillain(Packet05Villain packet) {\r\n        String villainName = packet.getVillainName();\r\n        Vec2 position = packet.getPosition();\r\n        String imagePath = packet.getImagePath();\r\n        int random1 = packet.getRandom1();\r\n        int random2 = packet.getRandom2();\r\n\r\n        HandlerManager hm = isten.getHandlerManager();\r\n        hm.lock.lock();\r\n            try {\r\n                // Critical section\r\n                // Access shared resources here\r\n                hm.addTask(HandlerManager.TaskType.Villain);\r\n                hm.addData(new HandlerManager.VillainData(villainName, position, imagePath, random1, random2));\r\n            } finally {\r\n                hm.lock.unlock(); // Release the lock\r\n            }\r\n    }\r\n\r\n    private void handleAnimation(Packet03Animation packet) {\r\n        int index = isten.getPlayerMPIndex(packet.getUsername());\r\n        PlayerMP player = (PlayerMP)isten.getUpdatable(index);\r\n        if(player == null || player.localPlayer || player.getPlayerImage() == null) return;\r\n        for(int i = 0; i < player.getPlayerImage().size(); i++) {\r\n            player.getPlayerImage().get(i).setVisibility(false);\r\n        }\r\n        player.setActiveImage(packet.getActiveImage());\r\n        if(!player.getPlayerImage().isEmpty() && packet.getActiveImage() < player.getPlayerImage().size()) player.getPlayerImage().get(packet.getActiveImage()).setVisibility(true);\r\n    }\r\n\r\n    private void handleLogin(Packet00Login packet, InetAddress address, int port) {\r\n        PlayerMP player = null;\r\n        Vec2 position = new Vec2(packet.getX(), packet.getY());\r\n        String username = packet.getUsername();\r\n        int skinID = packet.getSkinID();\r\n\r\n        HandlerManager hm = isten.getHandlerManager();\r\n        hm.lock.lock();\r\n        try {\r\n            hm.addTask(HandlerManager.TaskType.Login);\r\n            hm.addData(new HandlerManager.LoginData(username, address, port, position, skinID));\r\n        }\r\n        finally {\r\n            hm.lock.unlock();\r\n        }\r\n    }\r\n\r\n    private void handleMove(Packet02Move packet) {\r\n        String username = packet.getUsername();\r\n\r\n        int index = isten.getPlayerMPIndex(username);\r\n        PlayerMP player = (PlayerMP)isten.getUpdatable(index);\r\n        if(player == null) return;\r\n        if(player.getPlayerCollider() != null) player.getPlayerCollider().setPosition(new Vec2(packet.getX(), packet.getY()));\r\n    }\r\n\r\n    public void sendData(byte[] data) {\r\n        DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, 1331);\r\n        try {\r\n            socket.send(packet);\r\n        } catch (IOException e) {\r\n            throw new RuntimeException(e);\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/networking/GameClient.java b/src/main/java/org/networking/GameClient.java
+--- a/src/main/java/org/networking/GameClient.java	(revision 50dea416be2d980ce725745a881d3db402e74354)
++++ b/src/main/java/org/networking/GameClient.java	(date 1714588707202)
+@@ -295,4 +295,5 @@
+             throw new RuntimeException(e);
+         }
+     }
++
+ }
+Index: src/main/java/org/items/Item.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package main.java.org.items;\r\n\r\nimport jdk.jshell.execution.LoaderDelegate;\r\nimport main.java.org.game.Graphics.Image;\r\nimport main.java.org.game.Graphics.ImageUI;\r\nimport main.java.org.game.Isten;\r\nimport main.java.org.linalg.Vec2;\r\n\r\nimport java.time.LocalDateTime;\r\n\r\n/*TVSZ denevérbőrre nyomtatott példányai\r\nGasmask\r\nTransistor\r\nLogarléc\r\nSöröspohár, rongy (adott ideig véd a boss-tól)\r\nCamambert (gázszobát csinál, bénítja a boss-t)*/\r\npublic abstract class Item {\r\n    public enum Location {\r\n        CHEST,\r\n        GROUND,\r\n        INVENTORY\r\n    };\r\n    protected final Vec2 scale;\r\n    protected Location location;\r\n    protected Vec2 position;\r\n    protected Image image;\r\n    protected final Isten isten;\r\n    protected String imagePath;\r\n    private int itemIndex;\r\n\r\n    private LocalDateTime droppedAt;\r\n    public Item(Isten isten,Vec2 scale){\r\n        this.scale=scale;\r\n        location=Location.CHEST;\r\n        position=null;\r\n        droppedAt = null;\r\n        this.isten=isten;\r\n        itemIndex = isten.getItemManager().getItems().size();\r\n\r\n        isten.getItemManager().addItem(this);\r\n    }\r\n    public void dropOnGround(Vec2 pos){\r\n        if(!location.equals(Location.GROUND)){\r\n            location = Location.GROUND;\r\n            position = pos;\r\n            image.setPosition(pos);\r\n            image.setVisibility(true);\r\n            droppedAt = LocalDateTime.now();\r\n        }\r\n    }\r\n    public void pickUpInInventory(){\r\n        //Pics up an item if it is not in the inventory, and it has been dropped for more than 200 millisec\r\n        //1 ms = 1000000 ns :)\r\n        if((!location.equals(Location.INVENTORY) && droppedAt.isBefore((LocalDateTime.now()).minusNanos(200000000)))) {\r\n            location = Location.INVENTORY;\r\n            image.setVisibility(false);\r\n            isten.getInventory().addItem(this);\r\n        }\r\n    }\r\n\r\n    public void use(){\r\n\r\n    }\r\n    public String getImagePath(){return imagePath;}\r\n\r\n    public Vec2 getPosition(){return position;}\r\n    public void setPosition(Vec2 pos) { position=pos; }\r\n    public Location getLocation(){return location;}\r\n    public void setLocation(Location loc) { location = loc; }\r\n\r\n    public Image getImage() { return image; }\r\n\r\n    public int getItemIndex() { return itemIndex; }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/items/Item.java b/src/main/java/org/items/Item.java
+--- a/src/main/java/org/items/Item.java	(revision 50dea416be2d980ce725745a881d3db402e74354)
++++ b/src/main/java/org/items/Item.java	(date 1714578287735)
+@@ -1,6 +1,5 @@
+ package main.java.org.items;
+ 
+-import jdk.jshell.execution.LoaderDelegate;
+ import main.java.org.game.Graphics.Image;
+ import main.java.org.game.Graphics.ImageUI;
+ import main.java.org.game.Isten;
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"GradleSettings\">\r\n    <option name=\"linkedExternalProjectsSettings\">\r\n      <GradleProjectSettings>\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\r\n        <option name=\"gradleJvm\" value=\"17\" />\r\n        <option name=\"modules\">\r\n          <set>\r\n            <option value=\"$PROJECT_DIR$\" />\r\n          </set>\r\n        </option>\r\n      </GradleProjectSettings>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/gradle.xml b/.idea/gradle.xml
+--- a/.idea/gradle.xml	(revision 50dea416be2d980ce725745a881d3db402e74354)
++++ b/.idea/gradle.xml	(date 1714589374642)
+@@ -1,5 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="GradleMigrationSettings" migrationVersion="1" />
+   <component name="GradleSettings">
+     <option name="linkedExternalProjectsSettings">
+       <GradleProjectSettings>
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"3506ab6d-0407-47f2-a7e8-78ebc867e577\" name=\"Changes\" comment=\"\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/org/game/UI/Minimap.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/org/game/UI/Minimap.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ExternalProjectsData\">\r\n    <projectState path=\"$PROJECT_DIR$\">\r\n      <ProjectState />\r\n    </projectState>\r\n  </component>\r\n  <component name=\"ExternalProjectsManager\">\r\n    <system id=\"GRADLE\">\r\n      <state>\r\n        <task path=\"$PROJECT_DIR$\">\r\n          <activation />\r\n        </task>\r\n        <projects_view />\r\n      </state>\r\n    </system>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 8\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2frbzqFlsraLkUjUjuqMYUBt0BV\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"Gradle.iLaby [run].executor\": \"Run\",\r\n    \"RunOnceActivity.OpenProjectViewOnStart\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"WebServerToolWindowFactoryState\": \"false\",\r\n    \"git-widget-placeholder\": \"main\",\r\n    \"last_opened_file_path\": \"D:/ploglamoszasssssz/java/cucc/iLaby\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.detected.package.tslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"settings.editor.selected.configurable\": \"reference.settingsdialog.project.gradle\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"iLaby [run]\" type=\"GradleRunConfiguration\" factoryName=\"Gradle\" singleton=\"false\" nameIsGenerated=\"true\">\r\n      <ExternalSystemSettings>\r\n        <option name=\"executionName\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\r\n        <option name=\"externalSystemIdString\" value=\"GRADLE\" />\r\n        <option name=\"scriptParameters\" value=\"\" />\r\n        <option name=\"taskDescriptions\">\r\n          <list />\r\n        </option>\r\n        <option name=\"taskNames\">\r\n          <list>\r\n            <option value=\"run\" />\r\n          </list>\r\n        </option>\r\n        <option name=\"vmOptions\" />\r\n      </ExternalSystemSettings>\r\n      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>\r\n      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>\r\n      <DebugAllEnabled>false</DebugAllEnabled>\r\n      <RunAsTest>false</RunAsTest>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"3506ab6d-0407-47f2-a7e8-78ebc867e577\" name=\"Changes\" comment=\"\" />\r\n      <created>1714562409879</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1714562409879</updated>\r\n      <workItem from=\"1714562410886\" duration=\"908000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 50dea416be2d980ce725745a881d3db402e74354)
++++ b/.idea/workspace.xml	(date 1714659210573)
+@@ -5,8 +5,12 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="3506ab6d-0407-47f2-a7e8-78ebc867e577" name="Changes" comment="">
++      <change afterPath="$PROJECT_DIR$/test/MultiplayerTester.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/UI/Minimap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/UI/Minimap.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/org/items/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/items/Item.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/GameClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/GameClient.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/HandlerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/HandlerManager.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -27,6 +31,13 @@
+         <projects_view />
+       </state>
+     </system>
++  </component>
++  <component name="FileTemplateManagerImpl">
++    <option name="RECENT_TEMPLATES">
++      <list>
++        <option value="Class" />
++      </list>
++    </option>
+   </component>
+   <component name="Git.Settings">
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+@@ -42,23 +53,106 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "Gradle.iLaby [run].executor": "Run",
+-    "RunOnceActivity.OpenProjectViewOnStart": "true",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "WebServerToolWindowFactoryState": "false",
+-    "git-widget-placeholder": "main",
+-    "last_opened_file_path": "D:/ploglamoszasssssz/java/cucc/iLaby",
+-    "node.js.detected.package.eslint": "true",
+-    "node.js.detected.package.tslint": "true",
+-    "node.js.selected.package.eslint": "(autodetect)",
+-    "node.js.selected.package.tslint": "(autodetect)",
+-    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+-    "vue.rearranger.settings.migration": "true"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
++    &quot;Gradle.MultiplayerTester.executor&quot;: &quot;Run&quot;,
++    &quot;Gradle.MultiplayerTester.testPacket01.executor&quot;: &quot;Run&quot;,
++    &quot;Gradle.MultiplayerTester.testPacket02Constructor.executor&quot;: &quot;Run&quot;,
++    &quot;Gradle.iLaby [run].executor&quot;: &quot;Run&quot;,
++    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
++    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
++    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
++    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
++    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
++    &quot;last_opened_file_path&quot;: &quot;C:/Users/kuruc/Downloads/junit-4.13.2.jar&quot;,
++    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
++    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
++    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
++    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
++    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
++    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
++    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
++    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
++    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+   }
+-}]]></component>
+-  <component name="RunManager">
++}</component>
++  <component name="RunManager" selected="Gradle.iLaby [run]">
++    <configuration name="MultiplayerTester" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
++      <ExternalSystemSettings>
++        <option name="executionName" />
++        <option name="externalProjectPath" value="$PROJECT_DIR$" />
++        <option name="externalSystemIdString" value="GRADLE" />
++        <option name="scriptParameters" value="" />
++        <option name="taskDescriptions">
++          <list />
++        </option>
++        <option name="taskNames">
++          <list>
++            <option value=":test" />
++            <option value="--tests" />
++            <option value="&quot;MultiplayerTester&quot;" />
++          </list>
++        </option>
++        <option name="vmOptions" />
++      </ExternalSystemSettings>
++      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
++      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
++      <DebugAllEnabled>false</DebugAllEnabled>
++      <RunAsTest>true</RunAsTest>
++      <method v="2" />
++    </configuration>
++    <configuration name="MultiplayerTester.testPacket01" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
++      <ExternalSystemSettings>
++        <option name="executionName" />
++        <option name="externalProjectPath" value="$PROJECT_DIR$" />
++        <option name="externalSystemIdString" value="GRADLE" />
++        <option name="scriptParameters" value="" />
++        <option name="taskDescriptions">
++          <list />
++        </option>
++        <option name="taskNames">
++          <list>
++            <option value=":test" />
++            <option value="--tests" />
++            <option value="&quot;MultiplayerTester.testPacket01&quot;" />
++          </list>
++        </option>
++        <option name="vmOptions" />
++      </ExternalSystemSettings>
++      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
++      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
++      <DebugAllEnabled>false</DebugAllEnabled>
++      <RunAsTest>true</RunAsTest>
++      <method v="2" />
++    </configuration>
++    <configuration name="MultiplayerTester.testPacket02Constructor" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
++      <ExternalSystemSettings>
++        <option name="executionName" />
++        <option name="externalProjectPath" value="$PROJECT_DIR$" />
++        <option name="externalSystemIdString" value="GRADLE" />
++        <option name="scriptParameters" value="" />
++        <option name="taskDescriptions">
++          <list />
++        </option>
++        <option name="taskNames">
++          <list>
++            <option value=":test" />
++            <option value="--tests" />
++            <option value="&quot;MultiplayerTester.testPacket02Constructor&quot;" />
++          </list>
++        </option>
++        <option name="vmOptions" />
++      </ExternalSystemSettings>
++      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
++      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
++      <DebugAllEnabled>false</DebugAllEnabled>
++      <RunAsTest>true</RunAsTest>
++      <method v="2" />
++    </configuration>
+     <configuration name="iLaby [run]" type="GradleRunConfiguration" factoryName="Gradle" singleton="false" nameIsGenerated="true">
+       <ExternalSystemSettings>
+         <option name="executionName" />
+@@ -81,6 +175,27 @@
+       <RunAsTest>false</RunAsTest>
+       <method v="2" />
+     </configuration>
++    <list>
++      <item itemvalue="Gradle.iLaby [run]" />
++      <item itemvalue="Gradle.MultiplayerTester" />
++      <item itemvalue="Gradle.MultiplayerTester.testPacket02Constructor" />
++      <item itemvalue="Gradle.MultiplayerTester.testPacket01" />
++    </list>
++    <recent_temporary>
++      <list>
++        <item itemvalue="Gradle.MultiplayerTester" />
++        <item itemvalue="Gradle.MultiplayerTester.testPacket02Constructor" />
++        <item itemvalue="Gradle.MultiplayerTester.testPacket01" />
++      </list>
++    </recent_temporary>
++  </component>
++  <component name="SharedIndexes">
++    <attachedChunks>
++      <set>
++        <option value="jdk-18.0.2-corretto-18.0.2-4caba194b151-5720f15e" />
++        <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-4f524021" />
++      </set>
++    </attachedChunks>
+   </component>
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+   <component name="TaskManager">
+Index: test/MultiplayerTester.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/test/MultiplayerTester.java b/test/MultiplayerTester.java
+new file mode 100644
+--- /dev/null	(date 1714591021869)
++++ b/test/MultiplayerTester.java	(date 1714591021869)
+@@ -0,0 +1,107 @@
++import main.java.org.game.Isten;
++import main.java.org.linalg.Vec2;
++import main.java.org.networking.*;
++import org.junit.Assert;
++import org.junit.Test;
++
++public class MultiplayerTester {
++
++    @Test
++    public void testPacket02Constructor() {
++        Packet02Move packet02Move = new Packet02Move("username", 1, 1);
++        Assert.assertEquals(packet02Move, new Packet02Move("username", 1, 1));
++    }
++
++    @Test
++    public void testPacket03Constructor() {
++        Packet03Animation packet03Animation = new Packet03Animation("username", 1);
++        Assert.assertEquals(packet03Animation, new Packet03Animation("username", 1));
++    }
++
++    @Test
++    public void testPacket04Constructor() {
++        Packet04UnitRoom packet04UnitRoom = new Packet04UnitRoom(1,1,1);
++        Assert.assertEquals(packet04UnitRoom, new Packet04UnitRoom(1,1,1));
++    }
++
++    @Test
++    public void testPacket05Constructor() {
++        Packet05Villain packet05Villain = new Packet05Villain("villain", new Vec2(1,1), "imgpath", 0, 0);
++        Assert.assertEquals(packet05Villain, new Packet05Villain("villain", new Vec2(1,1), "imgpath", 0, 0));
++    }
++
++    @Test
++    public void testPacket06Constructor() {
++        Packet06VillainMove packet06VillainMove = new Packet06VillainMove("villain1", 1, 1);
++        Assert.assertEquals(packet06VillainMove, new Packet06VillainMove("villain1", 1, 1));
++    }
++
++    @Test
++    public void testPacket07Constructor() {
++        Packet07Timer packet07Timer = new Packet07Timer(2.0f);
++        Assert.assertEquals(packet07Timer, new Packet07Timer(2.0f));
++    }
++
++    @Test
++    public void testPacket21Constructor() {
++        Packet21Death packet21Death = new Packet21Death("player1");
++        Assert.assertEquals(packet21Death, new Packet21Death("player1"));
++    }
++
++    @Test
++    public void testSentPacketEqualsArrivedPacket02() {
++        Packet02Move packet = new Packet02Move("player1", 2.0f, 2.0f);
++        byte[] data = "02player1,2.0,2.0".getBytes();
++        Assert.assertEquals(new Packet02Move(data), packet);
++    }
++
++    @Test
++    public void testSentPacketEqualsArrivedPacket03() {
++        Packet03Animation packet = new Packet03Animation("player1", 1);
++        byte[] data = "03player1,1".getBytes();
++        Assert.assertEquals(new Packet03Animation(data), packet);
++    }
++
++    @Test
++    public void testSentPacketEqualsArrivedPacket04() {
++        Packet04UnitRoom packet = new Packet04UnitRoom(2.0f, 2.0f, 1);
++        byte[] data = "042.0,2.0,1".getBytes();
++        Assert.assertEquals(new Packet04UnitRoom(data), packet);
++    }
++
++    @Test
++    public void testSentPacketEqualsArrivedPacket05() {
++        Packet05Villain packet = new Packet05Villain("villain1", new Vec2(1,1), "imagePath", 1, 1);
++        byte[] data = "05villain1,1.0,1.0,imagePath,1,1".getBytes();
++        Assert.assertEquals(new Packet05Villain(data), packet);
++    }
++
++    @Test
++    public void testSentPacketEqualsArrivedPacket06() {
++        Packet06VillainMove packet = new Packet06VillainMove("villain1", 1.0f, 1.0f);
++        byte[] data = "06villain1,1.0,1.0".getBytes();
++        Assert.assertEquals(new Packet06VillainMove(data), packet);
++    }
++
++    @Test
++    public void testSentPacketEqualsArrivedPacket07() {
++        Packet07Timer packet = new Packet07Timer(3.0);
++        byte[] data = "073.0".getBytes();
++        Assert.assertEquals(new Packet07Timer(data), packet);
++    }
++
++    @Test
++    public void testSentPacketEqualsArrivedPacket20() {
++        Packet20Wall packet = new Packet20Wall(1.0f, 1.0f, 2.0f, 2.0f, true);
++        byte[] data = "201.0,1.0,2.0,2.0,1".getBytes();
++        Assert.assertEquals(new Packet20Wall(data), packet);
++    }
++
++    @Test
++    public void testSentPacketEqualsArrivedPacket21() {
++        Packet21Death packet = new Packet21Death("player1");
++        byte[] data = "21player1".getBytes();
++        Assert.assertEquals(new Packet21Death(data), packet);
++    }
++
++}
+Index: src/main/java/org/networking/HandlerManager.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package main.java.org.networking;\r\n\r\nimport main.java.org.entities.villain.Villain;\r\nimport main.java.org.game.Graphics.Image;\r\n\r\nimport java.net.InetAddress;\r\nimport java.util.concurrent.locks.Lock;\r\nimport main.java.org.game.Graphics.Text;\r\nimport main.java.org.game.Isten;\r\nimport main.java.org.game.Map.Map;\r\nimport main.java.org.game.Map.Room;\r\nimport main.java.org.game.Map.UnitRoom;\r\nimport main.java.org.game.physics.Collider;\r\nimport main.java.org.game.physics.ColliderGroup;\r\nimport main.java.org.linalg.Vec2;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.Collections;\r\nimport java.util.List;\r\nimport java.util.concurrent.locks.ReentrantLock;\r\nimport java.util.logging.Handler;\r\n\r\npublic class HandlerManager {\r\n\r\n    Isten isten;\r\n\r\n    public HandlerManager(Isten isten) {\r\n        this.isten = isten;\r\n    }\r\n\r\n    private List<TaskType> tasks = new ArrayList<>();\r\n    private List<TaskType> synchronizedTasks = Collections.synchronizedList(tasks);\r\n    private List<HandlerData> handlerDataList = new ArrayList<>();\r\n    private List<HandlerData> synchronizedHandlerDataList = Collections.synchronizedList(handlerDataList);\r\n    public Lock lock = new ReentrantLock();\r\n\r\n    //->>>>>>>>>>>>>>>>//\r\n    //HANDLER DATA\r\n    //->>>>>>>>>>>>>>>>//\r\n    public static abstract class HandlerData {\r\n\r\n    }\r\n\r\n    public static class VillainData extends HandlerData {\r\n        VillainData(String villainName, Vec2 position, String imgPath, int random1, int random2) {\r\n            this.villainName = villainName;\r\n            this.position = position;\r\n            this.imgPath = imgPath;\r\n            this.random1 = random1;\r\n            this.random2 = random2;\r\n        }\r\n\r\n        public String villainName;\r\n        public Vec2 position;\r\n        public String imgPath;\r\n        public int random1;\r\n        public int random2;\r\n    }\r\n\r\n    public static class WallData extends HandlerData {\r\n\r\n        WallData(Vec2 pos, Vec2 scale, boolean isDoor) {\r\n            this.pos = pos;\r\n            this.scale = scale;\r\n            this.isDoor = isDoor;\r\n        }\r\n\r\n        public Vec2 pos;\r\n        public Vec2 scale;\r\n        public boolean isDoor;\r\n    }\r\n\r\n    public static class VillainMoveData extends HandlerData {\r\n        public VillainMoveData(String villainName, Vec2 position) {\r\n            this.villainName = villainName;\r\n            this.position = position;\r\n        }\r\n\r\n        public String villainName;\r\n        public Vec2 position;\r\n    }\r\n\r\n    public static class LoginData extends HandlerData {\r\n        public LoginData(String username, InetAddress inetAddress, int port, Vec2 position, int skinID) {\r\n            this.username = username;\r\n            this.inetAddress = inetAddress;\r\n            this.port = port;\r\n            this.position = position;\r\n            this.skinID = skinID;\r\n        }\r\n\r\n        public String username;\r\n        public Vec2 position;\r\n        public int port;\r\n        public InetAddress inetAddress;\r\n        public int skinID;\r\n    }\r\n\r\n    //->>>>>>>>>>>>>>>>//\r\n    //EXECUTION\r\n    //->>>>>>>>>>>>>>>>//\r\n    public void executeTasks() {\r\n\r\n        if (synchronizedHandlerDataList.size() != synchronizedTasks.size()) return;\r\n\r\n        /*\r\n        lock.lock();\r\n        try {\r\n            for(int i = 0; i < synchronizedTasks.size(); i++) {\r\n                TaskType task = synchronizedTasks.get(i);\r\n                HandlerData data = synchronizedHandlerDataList.get(i);\r\n                if(task == TaskType.VillainMove) {\r\n                    System.out.println(task);\r\n                    System.out.println(data.getClass());\r\n                }\r\n            }\r\n        }\r\n        finally {\r\n            lock.unlock();\r\n        }\r\n\r\n         */\r\n\r\n\r\n        while (!synchronizedTasks.isEmpty()) {\r\n\r\n            TaskType task;\r\n            HandlerData data;\r\n\r\n            lock.lock();\r\n            try {\r\n                // Critical section\r\n                // Access shared resources here\r\n                task = getTask();\r\n                data = getHandlerData();\r\n            } finally {\r\n                lock.unlock(); // Release the lock\r\n            }\r\n\r\n            if (task == null || data == null) return;\r\n            switch (task) {\r\n                case Villain: {\r\n                    if (data.getClass() != VillainData.class) return;\r\n                    VillainData villainData = (VillainData) data;\r\n                    villainHandler(villainData);\r\n                    break;\r\n                }\r\n                case VillainMove: {\r\n                    if (data.getClass() != VillainMoveData.class) return;\r\n                    VillainMoveData villainMoveData = (VillainMoveData) data;\r\n                    villainMoveHandler(villainMoveData);\r\n                    break;\r\n                }\r\n                case Wall: {\r\n                    if (data.getClass() != WallData.class) return;\r\n                    WallData wallData = (WallData) data;\r\n                    wallHandler(wallData);\r\n                    break;\r\n                }\r\n                case Login: {\r\n                    if(data.getClass() != LoginData.class) return;\r\n                    LoginData loginData = (LoginData)data;\r\n                    loginHandler(loginData);\r\n                    break;\r\n                }\r\n            }\r\n\r\n        }\r\n\r\n\r\n    }\r\n\r\n    //->>>>>>>>>>>>>>>>//\r\n    //TASKTYPE ENUM\r\n    //->>>>>>>>>>>>>>>>//\r\n    public enum TaskType {\r\n        Villain,\r\n        VillainMove,\r\n        Wall,\r\n        Login,\r\n    }\r\n\r\n    synchronized public void addTask(TaskType type) {\r\n        lock.lock();\r\n        try {\r\n            synchronizedTasks.add(type);\r\n        }\r\n        finally {\r\n            lock.unlock();\r\n        }\r\n    }\r\n\r\n    synchronized public void addData(HandlerData data) {\r\n        lock.lock();\r\n        try {\r\n            synchronizedHandlerDataList.add(data);\r\n        }\r\n        finally {\r\n            lock.unlock();\r\n        }\r\n    }\r\n\r\n    public TaskType getTask() {\r\n        lock.lock();\r\n        try {\r\n            if (tasks.isEmpty()) return null;\r\n            return synchronizedTasks.remove(0);\r\n        }\r\n        finally {\r\n            lock.unlock();\r\n        }\r\n\r\n    }\r\n\r\n    public HandlerData getHandlerData() {\r\n        lock.lock();\r\n        try {\r\n            if (handlerDataList.isEmpty()) return null;\r\n            return synchronizedHandlerDataList.remove(0);\r\n        }\r\n        finally {\r\n            lock.unlock();\r\n        }\r\n\r\n    }\r\n\r\n\r\n    //->>>>>>>>>>>>>>>>//\r\n    //HANDLER FUNCTIONS\r\n    //->>>>>>>>>>>>>>>>//\r\n    private void wallHandler(WallData wallData) {\r\n        ColliderGroup cg = new ColliderGroup();\r\n        Collider collider = new Collider(wallData.pos, wallData.scale);\r\n\r\n        if (wallData.isDoor) {\r\n            isten.getRenderer().addRenderable(new Image(wallData.pos, wallData.scale, \"./assets/doors/doors_leaf_closed.png\"));\r\n            collider.setSolidity(false);\r\n        } else {\r\n            isten.getRenderer().addRenderable(new Image(wallData.pos, wallData.scale, \"./assets/walls/wall_mid.png\"));\r\n\r\n        }\r\n\r\n        cg.addCollider(collider);\r\n        isten.getPhysicsEngine().addColliderGroup(cg);\r\n    }\r\n\r\n    private void villainHandler(VillainData villainData) {\r\n        Villain villain = new Villain(villainData.villainName, villainData.position, villainData.imgPath);\r\n        //villain.setRoomForVillain(isten.getMap().getRooms(), villainData.random1, villainData.random2);\r\n        isten.addUpdatable(villain);\r\n    }\r\n\r\n    private void villainMoveHandler(VillainMoveData villainMoveData) {\r\n        int index = isten.getVillainIndex(villainMoveData.villainName);\r\n        Villain villain = (Villain) isten.getUpdatable(index);\r\n        if (villain == null) {\r\n            return;\r\n        }\r\n        if (villain.getVillainCollider() != null) {\r\n            Vec2 position = villainMoveData.position;\r\n            villain.getVillainCollider().setPosition(position);\r\n        }\r\n    }\r\n\r\n    private void loginHandler(LoginData loginData) {\r\n        String username = loginData.username;\r\n        InetAddress address = loginData.inetAddress;\r\n        int port = loginData.port;\r\n        Vec2 position = loginData.position;\r\n        int skinID = loginData.skinID;\r\n\r\n        PlayerMP player = new PlayerMP(username, address, port, position);\r\n        player.setSkinID(skinID);\r\n        isten.addUpdatable(player);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/networking/HandlerManager.java b/src/main/java/org/networking/HandlerManager.java
+--- a/src/main/java/org/networking/HandlerManager.java	(revision 50dea416be2d980ce725745a881d3db402e74354)
++++ b/src/main/java/org/networking/HandlerManager.java	(date 1714578021288)
+@@ -7,6 +7,7 @@
+ import java.util.concurrent.locks.Lock;
+ import main.java.org.game.Graphics.Text;
+ import main.java.org.game.Isten;
++import main.java.org.game.Map.EdgeBetweenRooms;
+ import main.java.org.game.Map.Map;
+ import main.java.org.game.Map.Room;
+ import main.java.org.game.Map.UnitRoom;
