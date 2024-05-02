@@ -9,10 +9,12 @@ public class DeathHandler extends ServerSideHandler {
 
     private double currTime = 0;
     private void checkIfPlayerInRoomWithVillain(PlayerMP player) {
-        boolean isInRoomWithVillain = player.checkIfPlayerInVillainRoom(isten);
-        if(isInRoomWithVillain) {
-            Packet21Death packet21Death = new Packet21Death(player.getUsername());
-            sendDataToAllClients(packet21Death);
+        if(player.isAlive()){
+            boolean isInRoomWithVillain = player.checkIfPlayerInVillainRoom(isten);
+            if(isInRoomWithVillain) {
+                Packet21Death packet21Death = new Packet21Death(player.getUsername());
+                sendDataToAllClients(packet21Death);
+            }
         }
     }
 

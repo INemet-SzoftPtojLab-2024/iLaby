@@ -137,7 +137,6 @@ public class Player extends Entity {
         //called every frame
         if (alive) {
 
-
             //move the character
             run = 1;
             boolean w = isten.getInputHandler().isKeyDown(KeyEvent.VK_W);
@@ -201,10 +200,11 @@ public class Player extends Entity {
 
         } else {
 
-            if (!AudioManager.isPlaying(playerSound))
-                if(localPlayer) playerSound = AudioManager.playSound("./assets/audio/died.ogg");
+            if (!AudioManager.isPlaying(playerSound) &&localPlayer)
+                playerSound = AudioManager.playSound("./assets/audio/died.ogg");
 
             if (activeImage != 4) {
+                playerCollider.setVelocity(new Vec2(0));
                 playerImage.get(activeImage).setVisibility(false);
                 activeImage = 4;
                 playerImage.get(activeImage).setVisibility(true);
@@ -234,7 +234,8 @@ public class Player extends Entity {
                 Villain villain = (Villain) u;
                 if (currentRoom != null && currentRoom.equals(villain.getRoom())) {
                     alive = false;
-                    AudioManager.closeSound(playerSound);
+                    if(localPlayer)
+                        AudioManager.closeSound(playerSound);
                     return true;
                 }
             }
@@ -249,6 +250,10 @@ public class Player extends Entity {
 
     public void setAlive(boolean alive) {
         this.alive = alive;
+    }
+
+    public boolean isAlive() {
+        return alive;
     }
 
     public void setPlayerName(Text playerName) {

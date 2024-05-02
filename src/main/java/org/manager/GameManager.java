@@ -17,7 +17,7 @@ public class GameManager {
     private boolean multi;
     private JFrame frame;
     private JPanel currentPanel;
-
+    private Isten isten;
     private static GameStage stage = GameStage.MAIN_MENU;
 
     public GameManager() {
@@ -63,12 +63,12 @@ public class GameManager {
         PlayerPrefs.load();
 
         //game stuff
-        Isten2 isten2 = new Isten2();
         while (true) {
             switch (stage) {
                 case MAIN_MENU:
-                    changePanel(isten2.getRenderer());
-                    isten2.init();
+                    isten = new Isten2();
+                    changePanel(isten.getRenderer());
+                    isten.init();
 
                     long lastFrame2 = System.nanoTime();
                     while (stage == GameStage.MAIN_MENU) {
@@ -76,7 +76,7 @@ public class GameManager {
                         double deltaTime = (currentTime - lastFrame2) * 0.000000001;
                         lastFrame2 = currentTime;
 
-                        isten2.update(deltaTime);
+                        isten.update(deltaTime);
                         try {
                             Thread.sleep(1);
                         } catch (Exception amogus) { //do not remove plz
@@ -87,11 +87,42 @@ public class GameManager {
 
                     PlayerPrefs.save();
                     break;
-                case INGAME:
-                    Isten isten = new Isten();
+                case SOLO:
+                    isten = new Isten();
                     changePanel(isten.getRenderer());//ez az isten.init elott fusson
-                    if(((MainMenu)isten2.getUpdatable(0)).isMulti()) isten.initMP();
-                    else isten.init();
+                    isten.init();
+
+                    //Wait for the server to initialize (only on server side)
+                    if(isten.getSocketServer() != null) {
+                        SharedObject serverInitLock = isten.getSocketServer().getInitializationLock();
+                        try {
+                            serverInitLock.waitForNotification();
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    long lastFrame = System.nanoTime();
+                    while (stage == GameStage.SOLO) {
+                        long currentTime = System.nanoTime();
+                        double deltaTime = (currentTime - lastFrame) * 0.000000001;
+                        lastFrame = currentTime;
+
+                        isten.update(deltaTime);
+                        try {
+                            Thread.sleep(1);
+                        } catch (Exception amogus) { //do not remove plz
+                        }
+                    }
+                    AudioManager.closeAllSounds();
+                    AudioManager.unloadPreloadedSounds();
+
+                    PlayerPrefs.save();
+                    break;
+                case MULTI:
+                    isten = new Isten();
+                    changePanel(isten.getRenderer());//ez az isten.init elott fusson
+                    isten.initMP();
 
                     //Wait for the server to initialize (only on server side)
                     if(isten.getSocketServer() != null) {
@@ -104,11 +135,11 @@ public class GameManager {
                     }
 
 
-                    long lastFrame = System.nanoTime();
-                    while (stage == GameStage.INGAME) {
+                    long lastFrame3 = System.nanoTime();
+                    while (stage == GameStage.MULTI) {
                         long currentTime = System.nanoTime();
-                        double deltaTime = (currentTime - lastFrame) * 0.000000001;
-                        lastFrame = currentTime;
+                        double deltaTime = (currentTime - lastFrame3) * 0.000000001;
+                        lastFrame3 = currentTime;
 
                         isten.update(deltaTime);
                         try {
@@ -134,6 +165,6 @@ public class GameManager {
     }
 
     public enum GameStage {
-        MAIN_MENU, INGAME, EXIT
+        MAIN_MENU, SOLO, MULTI, EXIT
     }
 }

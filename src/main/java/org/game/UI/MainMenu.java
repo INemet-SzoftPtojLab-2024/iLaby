@@ -95,7 +95,7 @@ public class MainMenu extends Updatable {
             AudioManager.playSound("./assets/audio/click.ogg");
             multi = true;
             TimeCounter.setTime(901);
-            GameManager.setStage(GameManager.GameStage.INGAME);
+            GameManager.setStage(GameManager.GameStage.MULTI);
         });
         buttons.get(2).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
@@ -120,17 +120,17 @@ public class MainMenu extends Updatable {
         buttons.get(5).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
             TimeCounter.setTime(901);
-            GameManager.setStage(GameManager.GameStage.INGAME);
+            GameManager.setStage(GameManager.GameStage.SOLO);
         });
         buttons.get(6).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
             TimeCounter.setTime(601);
-            GameManager.setStage(GameManager.GameStage.INGAME);
+            GameManager.setStage(GameManager.GameStage.SOLO);
         });
         buttons.get(7).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
             TimeCounter.setTime(11);
-            GameManager.setStage(GameManager.GameStage.INGAME);
+            GameManager.setStage(GameManager.GameStage.SOLO);
         });
         buttons.get(8).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
