@@ -11,6 +11,7 @@ public class Door extends EdgePiece {
     private double timeSinceOpen = 0.0f;
     public Door(Collider collider, Vec2 position , UnitRoom ur1, UnitRoom ur2){ //does not set the image!!!!
         super(collider, position, ur1, ur2);
+        this.open();
     }
 
     @Override

@@ -52,9 +52,9 @@ public class Map extends Updatable {
             //if(stop) printMap();
         }
 
-        if(!stop) {
+        /*if(!stop) {
             delta += deltaTime;
-            if (delta > 2) {
+            if (delta > 1) {
                 //TESTCASE 1:::
                 if(sec %3==0){
                     addDoorToEdgeWithoutDoor(isten);
@@ -78,6 +78,7 @@ public class Map extends Updatable {
 
                 }
                 //TESTCASE 3:
+
                 if((sec+2)%4==0) {
                     for (Room splittable : rooms) {
                         if (splitRooms(splittable, isten)) {
@@ -89,15 +90,10 @@ public class Map extends Updatable {
                         }
                     }
                 }
-               if(!kruskalForCheckingIfGraphIsCoherent(rooms) ) {
-                    stop = true;
-                    System.err.println("The Graph is not coherent!");
-                    if(!isGraphKohernt(rooms)) System.out.println("not coherent isGraphKoherent");
-                }
                 sec++;
                 delta = 0;
             }
-        }
+        }*/
     }
 
     @Override
@@ -146,7 +142,7 @@ public class Map extends Updatable {
         }else{
             ArrayList<UnitRoom> UnitRoomsWithDistanceXFromLowestColumn;
             while (addableUnitRooms.size() < r1.getUnitRooms().size() / 2) {
-                UnitRoomsWithDistanceXFromLowestColumn = r1.getUnitRoomsWithXDistanceFromLowestColumnIdxInOrderByRow(lowestRowIdx, distance++); //tavolsag novelese, es igy soronkent egyesevel balrol jobbra az osszes unitroom hozzaadasa, amig kell
+                UnitRoomsWithDistanceXFromLowestColumn = r1.getUnitRoomsWithXDistanceFromLowestColumnIdxInOrderByRow(lowestColIdx, distance++); //tavolsag novelese, es igy soronkent egyesevel balrol jobbra az osszes unitroom hozzaadasa, amig kell
                 for (UnitRoom addableUnitRoom : UnitRoomsWithDistanceXFromLowestColumn) {
                     if (addableUnitRooms.size() < r1.getUnitRooms().size() / 2) {
                         addableUnitRooms.add(addableUnitRoom);
