@@ -11,7 +11,7 @@ import static java.lang.Math.sqrt;
 
 public class ItemManager extends Updatable {
     private Isten isten;
-    private ArrayList<Item> items;
+    private ArrayList<Item> items = new ArrayList<>();
     public void addItem(Item item){
         items.add(item);
     }
@@ -19,12 +19,11 @@ public class ItemManager extends Updatable {
     @Override
     public void onStart(Isten isten) {
         this.isten=isten;
-        items=new ArrayList<>();
     }
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-        if(isten.getInputHandler().isKeyDown(KeyEvent.VK_E)){
+        if(isten.getInputHandler().isKeyDown(KeyEvent.VK_E) && !isten.getPlayer().isFainted()){
             Vec2 playerPostion = isten.getPlayer().getPlayerCollider().getPosition();
             for(int i = 0; i < items.size(); i++){
                 if(items.get(i).location== Item.Location.GROUND) {
@@ -32,6 +31,7 @@ public class ItemManager extends Updatable {
                     double playerItemDistance = sqrt(Vec2.dot(playerItemVector, playerItemVector));
                     if (playerItemDistance <= 0.3) {
                         items.get(i).pickUpInInventory();
+                        isten.getSocketClient().sendData(("12" + i).getBytes());;
                         break;
                     }
                 }
@@ -40,7 +40,8 @@ public class ItemManager extends Updatable {
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroy() {}
 
-    }
+    @Override
+    public ArrayList<Item> getItems() { return items; }
 }

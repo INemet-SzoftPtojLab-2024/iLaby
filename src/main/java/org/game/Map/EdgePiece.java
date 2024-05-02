@@ -61,6 +61,10 @@ public abstract class EdgePiece {
 
     public Collider getCollider() {return collider;}
 
+    public Image getImage() {
+        return image;
+    }
+
     public Vec2 getPosition() {
         return position;
     }

@@ -35,7 +35,7 @@ public class MainMenu extends Updatable {
         multi = false;
         character = false;
 
-        images.add(new ImageUI(new Vec2(0, -300), new Vec2(600, 150), "./assets/ui/logo.png"));
+        images.add(new ImageUI(new Vec2(0, -275), new Vec2(600, 200), "./assets/ui/logo.png"));
         images.add(new ImageUI(new Vec2(0, 375), new Vec2(300, 50), "./assets/ui/developer_logo.png"));
         images.add(new ImageUI(new Vec2(0, 0), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/ui/menu_background.jpg"));
 
@@ -43,18 +43,20 @@ public class MainMenu extends Updatable {
             charImages.add(new ImageUI(new Vec2(0, 75), new Vec2(200, 200), "./assets/character/character" + i + "_right1.png"));
         }
 
-        buttons.add(new ButtonUI(new Vec2(0, -125), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Solo", "./assets/Monocraft.ttf", 50));
-        buttons.add(new ButtonUI(new Vec2(0, 0), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Multi", "./assets/Monocraft.ttf", 50));
-        buttons.add(new ButtonUI(new Vec2(0, 125), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Character", "./assets/Monocraft.ttf", 50));
-        buttons.add(new ButtonUI(new Vec2(0, 250), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Exit", "./assets/Monocraft.ttf", 50));
-        buttons.add(new ButtonUI(new Vec2(0, 275), new Vec2(275, 100), "./assets/ui/button_background.jpg", "Back", "./assets/Monocraft.ttf", 50));
-        buttons.add(new ButtonUI(new Vec2(0, -125), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Easy-peasy", "./assets/Monocraft.ttf", 50));
-        buttons.add(new ButtonUI(new Vec2(0, 0), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Casual", "./assets/Monocraft.ttf", 50));
-        buttons.add(new ButtonUI(new Vec2(0, 125), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Never", "./assets/Monocraft.ttf", 50));
-        buttons.add(new ButtonUI(new Vec2(175, -125), new Vec2(275, 90), "./assets/ui/button_background.jpg", "Change", "./assets/Monocraft.ttf", 50));
+        buttons.add(new ButtonUI(new Vec2(0, -125), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Solo", "./assets/Monocraft.ttf", 45));
+        buttons.add(new ButtonUI(new Vec2(0, 0), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Multi", "./assets/Monocraft.ttf", 45));
+        buttons.add(new ButtonUI(new Vec2(0, 125), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Character", "./assets/Monocraft.ttf", 45));
+        buttons.add(new ButtonUI(new Vec2(0, 250), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Exit", "./assets/Monocraft.ttf", 45));
+        buttons.add(new ButtonUI(new Vec2(0, 275), new Vec2(275, 100), "./assets/ui/button_background.jpg", "Back", "./assets/Monocraft.ttf", 45));
+        buttons.add(new ButtonUI(new Vec2(0, -125), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Easy-peasy", "./assets/Monocraft.ttf", 45));
+        buttons.add(new ButtonUI(new Vec2(0, 0), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Casual", "./assets/Monocraft.ttf", 45));
+        buttons.add(new ButtonUI(new Vec2(0, 125), new Vec2(375, 100), "./assets/ui/button_background.jpg", "Never", "./assets/Monocraft.ttf", 45));
+        buttons.add(new ButtonUI(new Vec2(175, -125), new Vec2(275, 90), "./assets/ui/button_background.jpg", "Change", "./assets/Monocraft.ttf", 45));
         buttons.add(new ButtonUI(new Vec2(-250, 75), new Vec2(100, 100), "./assets/ui/arrow_left.png", "", "./assets/Monocraft.ttf", 50));
         buttons.add(new ButtonUI(new Vec2(250, 75), new Vec2(100, 100), "./assets/ui/arrow_right.png", "", "./assets/Monocraft.ttf", 50));
 
+        if(PlayerPrefs.hasKey("name")==false)
+            PlayerPrefs.setString("name", "name");
         texts.add(new TextUI(PlayerPrefs.getString("name"), new Vec2(-175, -125), 50, 0, 0, 255));
 
         for (int i = 0; i < images.size(); i++) {
@@ -69,7 +71,12 @@ public class MainMenu extends Updatable {
             i.setSortingLayer(-69);
             isten.getRenderer().addRenderable(i);
             i.setVisibility(false);
-            activeCharImage = PlayerPrefs.getInt("skin");
+            if(PlayerPrefs.hasKey("skin"))
+                activeCharImage = PlayerPrefs.getInt("skin");
+            else {
+                PlayerPrefs.setInt("skin",0);
+                activeCharImage=0;
+            }
         }
 
         for (ButtonUI r : buttons) {
@@ -87,6 +94,8 @@ public class MainMenu extends Updatable {
         buttons.get(1).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
             multi = true;
+            TimeCounter.setTime(901);
+            GameManager.setStage(GameManager.GameStage.MULTI);
         });
         buttons.get(2).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
@@ -111,17 +120,17 @@ public class MainMenu extends Updatable {
         buttons.get(5).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
             TimeCounter.setTime(901);
-            GameManager.setStage(GameManager.GameStage.INGAME);
+            GameManager.setStage(GameManager.GameStage.SOLO);
         });
         buttons.get(6).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
             TimeCounter.setTime(601);
-            GameManager.setStage(GameManager.GameStage.INGAME);
+            GameManager.setStage(GameManager.GameStage.SOLO);
         });
         buttons.get(7).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
             TimeCounter.setTime(11);
-            GameManager.setStage(GameManager.GameStage.INGAME);
+            GameManager.setStage(GameManager.GameStage.SOLO);
         });
         buttons.get(8).addClickListener(() -> {
             AudioManager.playSound("./assets/audio/click.ogg");
@@ -184,5 +193,9 @@ public class MainMenu extends Updatable {
     @Override
     public void onDestroy() {
 
+    }
+
+    public boolean isMulti() {
+        return multi;
     }
 }

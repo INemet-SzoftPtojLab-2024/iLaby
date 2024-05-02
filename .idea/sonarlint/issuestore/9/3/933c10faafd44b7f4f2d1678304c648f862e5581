@@ -1,12 +1,0 @@
-
-’
-java:S1319&"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ìž£ìþÿÿÿÿ8Œ§ƒ›î1
-s
-java:S1104"QMake image a static final constant or non-public and provide accessors if needed.(É­¼ðüÿÿÿÿ8Œ§ƒ›î1
-u	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš8Ž§ƒ›î1
-w	java:S116"VRename this field "TopNeighbor" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÎÐšìÿÿÿÿÿ8¥§ƒ›î1
-z	java:S116"YRename this field "BottomNeighbor" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¡Ë×Ôûÿÿÿÿ8¥§ƒ›î1
-x	java:S116"WRename this field "LeftNeighbor" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(±É‡¾úÿÿÿÿ8¥§ƒ›î1
-t	java:S116"XRename this field "RightNeighbor" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¡·³§8¥§ƒ›î1
-O
-java:S1135O"2Complete the task associated to this TODO comment.(§ÀÆø8¬§ƒ›î1

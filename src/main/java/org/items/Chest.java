@@ -1,8 +1,10 @@
 package main.java.org.items;
 
+import lombok.Setter;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Isten;
 import main.java.org.game.physics.Collider;
+import main.java.org.items.usable_items.*;
 import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
@@ -10,28 +12,31 @@ import java.util.List;
 
 public class Chest {
     private final int maxAmountOfItems=3;
-    private final Heading heading;//0=left, 1=up, 2=right, 3=down
+    private Heading heading;//0=left, 1=up, 2=right, 3=down
     private final Isten isten;
     private boolean isOpened;//once a chest is opened, cant be closed anymore; default:false
     private ArrayList<Item> storedItems;
     private Image chestImage;
-    private final Vec2 pos;
+    private Vec2 pos;
     private final Vec2 scale=new Vec2(0.4f,0.4f);
+    private int chestType;
+
     /**
      * @param heading 0=left, 1=up, 2=right, 3=down
-     * @param items The minimum 1 and maximum 3 items stored in the chest
      */
-    public Chest(Vec2 position, Isten isten,int heading,ArrayList<Item> items){
+    public Chest(Vec2 position, Isten isten,int heading, int chestType){
         this.isten = isten;
         this.heading=Heading.values()[heading];
         this.pos=position;
+        this.chestType = chestType;
         storedItems=new ArrayList<Item>();
-        if(items.isEmpty()) System.err.println("There is no item in the chest!");
+        fillChest();
+        /*if(items.isEmpty()) System.err.println("There is no item in the chest!");
         if(items.size()>maxAmountOfItems){
             System.err.println("So much items cant be stored in a chest, max amount of storable items is "+maxAmountOfItems);
             for (int i = 0; i < maxAmountOfItems; i++) {storedItems.set(i, items.get(i));}
         }
-        else storedItems=items;
+        else storedItems=items;*/
         isOpened=false;
         chestImage=null;
         switch(this.heading){
@@ -43,6 +48,37 @@ public class Chest {
         chestImage.setVisibility(true);
         isten.getRenderer().addRenderable(chestImage);
     }
+
+    public void fillChest() {
+        switch (chestType) {
+            case 0:
+                storedItems.add(new Gasmask(isten));
+                storedItems.add(new Camembert(isten));
+                storedItems.add(new Transistor(isten));
+                break;
+            case 1:
+                storedItems.add(new Rongy(isten));
+                storedItems.add(new Sorospohar(isten));
+                storedItems.add(new Tvsz(isten));
+                break;
+            case 2:
+                storedItems.add(new Gasmask(isten));
+                storedItems.add(new Camembert(isten));
+                break;
+            case 3:
+                storedItems.add(new Gasmask(isten));
+                storedItems.add(new Rongy(isten));
+                break;
+            case 4:
+                storedItems.add(new Transistor(isten));
+                storedItems.add(new Tvsz(isten));
+                break;
+            case 5:
+                storedItems.add(new Logarlec(isten));
+                break;
+        }
+    }
+
     public void open() {
         chestImage.setVisibility(false);
         switch(heading){
@@ -111,7 +147,22 @@ public class Chest {
         return scale;
     }
 
+    public int getHeadingInt() {return heading.ordinal(); }
     public boolean isOpened(){return isOpened;}
+
+    public void setHeading(int h) { this.heading = Heading.values()[h];}
+    public void setPosition(Vec2 p) { this.pos = p; }
+
+    public ArrayList<Item> getStoredItems() {return storedItems; }
+    public void setStoredItems(ArrayList<Item> items) {storedItems = items;}
+
+    public int getChestType() {
+        return chestType;
+    }
+
+    public void setChestType(int chestType) {
+        this.chestType = chestType;
+    }
 
     private enum Heading{
         RIGHT,
