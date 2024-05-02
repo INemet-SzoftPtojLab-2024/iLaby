@@ -36,7 +36,8 @@ public class Map extends Updatable {
     }
     @Override
     public void onStart(Isten isten) {
-
+        Mapgenerator mg = new Mapgenerator(this,isten);
+        mg.generateSideWalls();
     }
 
     //for testing
