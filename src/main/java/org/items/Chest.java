@@ -53,7 +53,7 @@ public class Chest {
         switch (chestType) {
             case 0:
                 storedItems.add(new Gasmask(isten));
-                storedItems.add(new Camambert(isten));
+                storedItems.add(new Camembert(isten));
                 storedItems.add(new Transistor(isten));
                 break;
             case 1:
@@ -63,7 +63,7 @@ public class Chest {
                 break;
             case 2:
                 storedItems.add(new Gasmask(isten));
-                storedItems.add(new Camambert(isten));
+                storedItems.add(new Camembert(isten));
                 break;
             case 3:
                 storedItems.add(new Gasmask(isten));
