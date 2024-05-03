@@ -4,14 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3506ab6d-0407-47f2-a7e8-78ebc867e577" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/test/MultiplayerTester.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="3506ab6d-0407-47f2-a7e8-78ebc867e577" name="Changes" comment="it's working">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Isten.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Isten.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/UI/Minimap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/UI/Minimap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/physics/PhysicsEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/physics/PhysicsEngine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/GameClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/GameClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/HandlerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/HandlerManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -30,7 +25,12 @@
         <task path="$PROJECT_DIR$">
           <activation />
         </task>
-        <projects_view />
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
       </state>
     </system>
   </component>
@@ -68,7 +68,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;map-generator&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/kuruc/Downloads/junit-4.13.2.jar&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -208,7 +208,18 @@
       <option name="presentableId" value="Default" />
       <updated>1714562409879</updated>
       <workItem from="1714562410886" duration="908000" />
+      <workItem from="1714687853059" duration="1015000" />
+      <workItem from="1714731678095" duration="398000" />
     </task>
+    <task id="LOCAL-00001" summary="it's working">
+      <option name="closed" value="true" />
+      <created>1714665384490</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1714665384490</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -224,5 +235,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="it's working" />
+    <option name="LAST_COMMIT_MESSAGE" value="it's working" />
   </component>
 </project>
