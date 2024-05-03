@@ -43,7 +43,7 @@ public class Text extends Renderable {
     public Text(String text, Vec2 pos, String fontPath, int fontSize, int r, int g, int b) {
 
         this.position = pos;
-        this.font=loadFont_internal(fontPath, Font.BOLD, fontSize);
+        this.font=loadFont_internal(fontPath, Font.PLAIN, fontSize);
         setColor(new Color(r,g,b));
         this.text = text;
     }
@@ -61,7 +61,7 @@ public class Text extends Renderable {
     public Text(String text, Vec2 pos, int fontSize, int r, int g, int b) {
 
         this.position = pos;
-        font = new Font("Dialog", Font.BOLD, fontSize);
+        font = new Font("Dialog", Font.PLAIN, fontSize);
         setColor(new Color(r,g,b));
         this.text = text;
     }
@@ -212,5 +212,10 @@ public class Text extends Renderable {
 
         loadedFonts.put(file.getAbsolutePath(), font);
         return font.deriveFont(style, fontSize);
+    }
+
+    public static Font loadFont(String fontPath, int fontSize)
+    {
+        return loadFont_internal(fontPath, Font.PLAIN, fontSize);
     }
 }
