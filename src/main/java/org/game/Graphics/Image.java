@@ -145,4 +145,9 @@ public class Image extends Renderable {
         loadedImages.put(file.getAbsolutePath(), image);
         return image;
     }
+
+    public static BufferedImage loadImage(String imagePath)
+    {
+        return loadImage_internal(imagePath);
+    }
 }

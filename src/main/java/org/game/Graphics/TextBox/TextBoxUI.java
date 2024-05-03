@@ -1,19 +1,38 @@
 package main.java.org.game.Graphics.TextBox;
 
 import main.java.org.game.Graphics.Renderable;
+import main.java.org.game.Graphics.Text;
+import main.java.org.game.Graphics.Image;
 import main.java.org.game.Input.Input;
 import main.java.org.linalg.Vec2;
 
-import java.awt.*;
+
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 
 public class TextBoxUI extends Renderable {
 
     private Font font=defaultFont;
     private int fontSize=32;
     private static Font defaultFont=new Font("Dialog", Font.PLAIN, 32);
+    private final int padding=3;
 
-    private final StringBuilder text=new StringBuilder();
+    private BufferedImage background=null;
+
+
+    private BufferedImage graphics;
+
+    private Color textColour=new Color(255,255,255);
+    private Color cursorColour=new Color(255,209,0);
+    private Color lineColourActive=new Color(0,255,255);
+    private Color lineColourInactive=new Color(200,200,200);
+
+    private String text="";
 
     private boolean focused=false;
 
@@ -25,11 +44,88 @@ public class TextBoxUI extends Renderable {
     {
         this.position=pos;
         this.scale=scale;
+
+        graphics=new BufferedImage((int)scale.x,(int)scale.y,BufferedImage.TYPE_INT_ARGB);
     }
 
     @Override
     public void render(Graphics graphics) {
+        if(this.graphics.getWidth()!=(int)this.scale.x||this.graphics.getHeight()!=(int)this.scale.y)
+            this.graphics=new BufferedImage((int)scale.x,(int)scale.y,BufferedImage.TYPE_INT_ARGB);
 
+        //clear colour attachment
+        Graphics2D g=(Graphics2D) this.graphics.getGraphics();
+        g.setBackground(new Color(0,0,0,0));
+        g.clearRect(0,0,this.graphics.getWidth(), this.graphics.getHeight());
+
+        //draw line
+        if(focused)
+            g.setColor(lineColourActive);
+        else
+            g.setColor(lineColourInactive);
+        g.fillRect(0,this.graphics.getHeight()-3-padding,this.graphics.getWidth(),3);
+
+        //draw text
+        g.setColor(textColour);
+        g.setFont(font);
+        FontMetrics fm=g.getFontMetrics(font);
+
+        int textWidth= fm.stringWidth(text);
+        int textHeight= fm.getHeight();
+        g.drawString(text,Math.min(0,this.graphics.getWidth()-textWidth-4-padding),this.graphics.getHeight()/2+fm.getMaxDescent());
+
+        //draw cursor
+        if(focused&&(System.nanoTime()/500000000)%2==0)
+        {
+            g.setColor(cursorColour);
+            int cursorX=textWidth>this.graphics.getWidth()-4-padding?this.graphics.getWidth()-2-padding:textWidth+2;
+            int cursorY=this.graphics.getHeight()/2-(int)(0.85f*textHeight)+fm.getMaxDescent();
+            g.fillRect(cursorX, cursorY,2,textHeight);
+        }
+
+        //padding
+        g.clearRect(0,0,this.graphics.getWidth(),padding);
+        g.clearRect(0,this.graphics.getHeight()-padding,this.graphics.getWidth(),padding);
+        g.clearRect(0,0,padding, this.graphics.getHeight());
+        g.clearRect(this.graphics.getWidth()-padding,0,padding,this.graphics.getHeight());
+
+        //draw to screen
+        Vec2 tempPos=new Vec2();
+
+        switch(hOrigin)
+        {
+            case Renderable.LEFT:
+                tempPos.x=renderedPosition.x;
+                break;
+
+            case Renderable.CENTER:
+                tempPos.x=renderedPosition.x-0.5f*renderedScale.x;
+                break;
+
+            case Renderable.RIGHT:
+                tempPos.x=renderedPosition.x-renderedScale.x;
+                break;
+        }
+
+        switch(vOrigin)
+        {
+            case Renderable.TOP:
+                tempPos.y=renderedPosition.y;
+                break;
+
+            case Renderable.CENTER:
+                tempPos.y=renderedPosition.y-0.5f*renderedScale.y;
+                break;
+
+            case Renderable.BOTTOM:
+                tempPos.y=renderedPosition.y-renderedScale.y;
+                break;
+        }
+
+        if(background!=null)//draw background
+            graphics.drawImage(background, Math.round(tempPos.x), Math.round(tempPos.y), (int)(renderedScale.x+0.001), (int)(renderedScale.y+0.001), null);
+        //draw the real stuff
+        graphics.drawImage(this.graphics, Math.round(tempPos.x), Math.round(tempPos.y), (int)(renderedScale.x+0.001), (int)(renderedScale.y+0.001), null);
     }
 
     @Override
@@ -101,7 +197,7 @@ public class TextBoxUI extends Renderable {
             {
                 if(!text.isEmpty()&&System.nanoTime()-lastBackspaceToggle>400000000)
                 {
-                    text.deleteCharAt(text.length()-1);
+                    text=text.substring(0,text.length()-1);
                     if(onValueChange!=null)
                         onValueChange.onValueChanged(this);
 
@@ -139,7 +235,7 @@ public class TextBoxUI extends Renderable {
                 key=(char)KeyEvent.VK_SPACE;
 
             if(key!=(char)-1) {
-                text.append(key);
+                text+=key;
                 if(onValueChange!=null)
                     onValueChange.onValueChanged(this);
                 return;
@@ -162,8 +258,7 @@ public class TextBoxUI extends Renderable {
      */
     public void setText(String text)
     {
-        this.text.delete(0,this.text.length());
-        this.text.append(text);
+        this.text=text;
     }
 
     /**
@@ -197,5 +292,48 @@ public class TextBoxUI extends Renderable {
     public void onInputEnd(TextBoxInputEndListener tbiel)
     {
         onInputEnd=tbiel;
+    }
+
+    public void setFont(String fontPath, int fontSize)
+    {
+        this.font= Text.loadFont(fontPath, fontSize);
+        if(font==null)
+            font=defaultFont;
+    }
+
+    public void setBackground(String imagePath)
+    {
+        background=Image.loadImage(imagePath);
+    }
+
+    public void setBackground(BufferedImage image)
+    {
+        background=image;
+    }
+
+    public void setTextColour(int r, int g, int b, int a)
+    {
+        textColour=new Color(r,g,b,a);
+    }
+
+    public void setCursorColour(int r, int g, int b, int a)
+    {
+        cursorColour=new Color(r,g,b,a);
+    }
+
+    /**
+     * sets the colour of the line under the text when the textbox is focused
+     */
+    public void setLineColourActive(int r, int g, int b, int a)
+    {
+        lineColourActive=new Color(r,g,b,a);
+    }
+
+    /**
+     * sets the colour of the line under the text when the textbox is not focused
+     */
+    public void setLineColourInactive(int r, int g, int b, int a)
+    {
+        lineColourInactive=new Color(r,g,b,a);
     }
 }

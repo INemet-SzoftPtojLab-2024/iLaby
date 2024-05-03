@@ -164,11 +164,15 @@ public class MainMenu extends Updatable {
             isten.getRenderer().addRenderable(t);
             t.setVisibility(false);
         }
-        TextBoxUI tb=new TextBoxUI(new Vec2(0,0), new Vec2(200,200));
+        TextBoxUI tb=new TextBoxUI(new Vec2(0,0), new Vec2(200,30));
         tb.setAlignment(Renderable.LEFT, Renderable.BOTTOM);
         tb.setOrigin(Renderable.LEFT, Renderable.BOTTOM);
         tb.onValueChange(textBox -> System.out.println(textBox.getText()));
+        tb.setSortingLayer(-6900);
+        tb.setFont("./assets/Monocraft.ttf",20);
         isten.getRenderer().addRenderable(tb);
+        tb.setScale(new Vec2(300,30));
+        tb.setLineColourInactive(255,0,0,255);
     }
 
     @Override
