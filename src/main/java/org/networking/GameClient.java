@@ -1,6 +1,7 @@
 package main.java.org.networking;
 
 import main.java.org.game.Isten;
+import main.java.org.game.Map.EdgePiece;
 import main.java.org.game.Map.Map;
 import main.java.org.game.UI.TimeCounter;
 import main.java.org.game.physics.Collider;
@@ -111,7 +112,52 @@ public class GameClient extends Thread {
                 packet = new Packet21Death(data);
                 handleDeath((Packet21Death)packet);
                 break;
+            case EDGEPIECECHANGED:
+                packet = new Packet22EdgePieceChanged(data);
+                handleEdgePieceChanged((Packet22EdgePieceChanged)packet);
+                break;
+            case WALLDELETE:
+                packet = new Packet23WallDelete(data);
+                handleWallDelete((Packet23WallDelete)packet);
+                break;
         }
+    }
+
+    private void handleEdgePieceChanged(Packet22EdgePieceChanged packet) {
+
+        float x = packet.getX();
+        float y = packet.getY();
+        boolean isDoor = packet.isDoor();
+
+        HandlerManager hm = isten.getHandlerManager();
+        hm.lock.lock();
+        try {
+            // Critical section
+            // Access shared resources here
+            hm.addTask(HandlerManager.TaskType.EdgePieceChanged);
+            hm.addData(new HandlerManager.EdgePieceChangeData(x,y, isDoor));
+        } finally {
+            hm.lock.unlock(); // Release the lock
+        }
+
+    }
+
+    private void handleWallDelete(Packet23WallDelete packet) {
+
+        float x = packet.getX();
+        float y = packet.getY();
+
+        HandlerManager hm = isten.getHandlerManager();
+        hm.lock.lock();
+        try {
+            // Critical section
+            // Access shared resources here
+            hm.addTask(HandlerManager.TaskType.WallDelete);
+            hm.addData(new HandlerManager.WallDeleteData(x,y));
+        } finally {
+            hm.lock.unlock(); // Release the lock
+        }
+
     }
 
     private void handleItemDropped(Packet13ItemDropped packet) {

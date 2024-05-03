@@ -21,7 +21,6 @@ import java.util.Vector;
 public class Minimap extends Updatable {
 
     private int displayedScale;
-    private ArrayList<EdgePiece> edgePieces = new ArrayList<>();
     private final int width;
     private final int height;
 
@@ -132,10 +131,10 @@ public class Minimap extends Updatable {
 
         if(isten.getMap().getEdgeManager() == null) return;
 
-        for(int j=0;j<edgePieces.size();j++)
+        for(int j=0;j<isten.getEdgeBetweenRooms().getWalls().size();j++)
         {
-            Vec2 startPos=edgePieces.get(j).getCollider().getPosition().clone();
-            Vec2 scale=edgePieces.get(j).getCollider().getScale();
+            Vec2 startPos=isten.getEdgeBetweenRooms().getWalls().get(j).getCollider().getPosition().clone();
+            Vec2 scale=isten.getEdgeBetweenRooms().getWalls().get(j).getCollider().getScale();
             startPos.x-=0.5f*scale.x+lowerBound.x;
             startPos.y-=0.5f*scale.y+lowerBound.y;
 
@@ -174,7 +173,7 @@ public class Minimap extends Updatable {
                 drawEndY=height;
 
             int r=255, g=255,b=255;
-            if(edgePieces.get(j) instanceof Door)
+            if(isten.getEdgeBetweenRooms().getWalls().get(j) instanceof Door)
             {
                 //r=255;
                 g=205;
@@ -380,9 +379,5 @@ public class Minimap extends Updatable {
             canRerender=true;
             currentThread=null;
         }
-    }
-
-    public void addEdgePiece(EdgePiece piece) {
-        edgePieces.add(piece);
     }
 }

@@ -39,6 +39,27 @@ public class HandlerManager {
 
     }
 
+    public static class EdgePieceChangeData extends HandlerData {
+        public EdgePieceChangeData(float x, float y, boolean isDoor) {
+            this.x = x;
+            this.y = y;
+            this.isDoor = isDoor;
+        }
+        public float x;
+        public float y;
+        public boolean isDoor;
+    }
+
+    public static class WallDeleteData extends HandlerData {
+        public WallDeleteData(float x, float y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        public float x;
+        public float y;
+    }
+
     public static class VillainData extends HandlerData {
         VillainData(String villainName, Vec2 position, String imgPath, int random1, int random2) {
             this.villainName = villainName;
@@ -101,25 +122,6 @@ public class HandlerManager {
 
         if (synchronizedHandlerDataList.size() != synchronizedTasks.size()) return;
 
-        /*
-        lock.lock();
-        try {
-            for(int i = 0; i < synchronizedTasks.size(); i++) {
-                TaskType task = synchronizedTasks.get(i);
-                HandlerData data = synchronizedHandlerDataList.get(i);
-                if(task == TaskType.VillainMove) {
-                    System.out.println(task);
-                    System.out.println(data.getClass());
-                }
-            }
-        }
-        finally {
-            lock.unlock();
-        }
-
-         */
-
-
         while (!synchronizedTasks.isEmpty()) {
 
             TaskType task;
@@ -161,6 +163,18 @@ public class HandlerManager {
                     loginHandler(loginData);
                     break;
                 }
+                case WallDelete: {
+                    if(data.getClass() != WallDeleteData.class) return;
+                    WallDeleteData wallDeleteData = (WallDeleteData)data;
+                    wallDeleteHandler(wallDeleteData);
+                    break;
+                }
+                case EdgePieceChanged: {
+                    if(data.getClass() != EdgePieceChangeData.class) return;
+                    EdgePieceChangeData edgePieceChangeData = (EdgePieceChangeData)data;
+                    edgePieceChangeHandler(edgePieceChangeData);
+                    break;
+                }
             }
 
         }
@@ -176,6 +190,8 @@ public class HandlerManager {
         VillainMove,
         Wall,
         Login,
+        WallDelete,
+        EdgePieceChanged
     }
 
     synchronized public void addTask(TaskType type) {
@@ -226,25 +242,44 @@ public class HandlerManager {
     //->>>>>>>>>>>>>>>>//
     //HANDLER FUNCTIONS
     //->>>>>>>>>>>>>>>>//
+
+    private void wallDeleteHandler(WallDeleteData wallDeleteData) {
+
+        float x = wallDeleteData.x;
+        float y = wallDeleteData.y;
+
+        if(isten.getEdgeBetweenRooms() == null) return;
+
+        for(int i = 0; i < isten.getEdgeBetweenRooms().getWalls().size(); i++) {
+            EdgePiece edgePiece = isten.getEdgeBetweenRooms().getWalls().get(i);
+            if(edgePiece.getPosition().x == x
+                    && edgePiece.getPosition().y == y) {
+                isten.removeEdgePiece(edgePiece);
+                break;
+            }
+        }
+    }
+
     private void wallHandler(WallData wallData) {
-        ColliderGroup cg = new ColliderGroup();
         Collider collider = new Collider(wallData.pos, wallData.scale);
 
         EdgePiece edgePiece;
 
         if (wallData.isDoor) {
-            isten.getRenderer().addRenderable(new Image(wallData.pos, wallData.scale, "./assets/doors/doors_leaf_closed.png"));
             collider.setSolidity(false);
             edgePiece = new Door(collider, collider.getPosition(), null, null);
+            edgePiece.setNewImage("./assets/doors/doors_leaf_closed.png", wallData.scale, isten);
 
         } else {
-            isten.getRenderer().addRenderable(new Image(wallData.pos, wallData.scale, "./assets/walls/wall_mid.png"));
             edgePiece = new Wall(collider, collider.getPosition(), null, null);
+            edgePiece.setNewImage("./assets/walls/wall_mid.png", wallData.scale, isten);
         }
 
-        isten.getMinimap().addEdgePiece(edgePiece);
-        cg.addCollider(collider);
-        isten.getPhysicsEngine().addColliderGroup(cg);
+        isten.addEdgePiece(edgePiece);
+        isten.getEdgeBetweenRooms().addCollider(collider);
+
+
+
     }
 
     private void villainHandler(VillainData villainData) {
@@ -275,5 +310,40 @@ public class HandlerManager {
         PlayerMP player = new PlayerMP(username, address, port, position);
         player.setSkinID(skinID);
         isten.addUpdatable(player);
+    }
+
+    private void edgePieceChangeHandler(EdgePieceChangeData edgePieceChangeData) {
+
+        for(int i = 0; i < isten.getEdgeBetweenRooms().getWalls().size(); i++) {
+            EdgePiece oldEdgePiece = isten.getEdgeBetweenRooms().getWalls().get(i);
+            EdgePiece edgePiece;
+
+            if(oldEdgePiece.isDoor() != edgePieceChangeData.isDoor
+                    && edgePieceChangeData.x == oldEdgePiece.getPosition().x
+                    && edgePieceChangeData.y == oldEdgePiece.getPosition().y) {
+
+                isten.removeEdgePiece(oldEdgePiece);
+
+                Collider collider = new Collider(oldEdgePiece.getCollider().getPosition(), oldEdgePiece.getCollider().getScale());
+                isten.getEdgeBetweenRooms().addCollider(collider);
+
+                if (edgePieceChangeData.isDoor) {
+                    collider.setSolidity(false);
+
+                    edgePiece = new Door(collider, collider.getPosition(), null, null);
+                    edgePiece.setNewImage("./assets/doors/doors_leaf_closed.png", oldEdgePiece.getCollider().getScale(), isten);
+                }
+                else {
+                    collider.setSolidity(true);
+                    edgePiece = new Wall(collider, collider.getPosition(), null, null);
+                    edgePiece.setNewImage("./assets/walls/wall_mid.png", oldEdgePiece.getCollider().getScale(), isten);
+                }
+
+                isten.addEdgePiece(edgePiece);
+                break;
+            }
+
+        }
+
     }
 }

@@ -18,6 +18,11 @@ public class EdgeBetweenRooms {
     private ArrayList<EdgePiece> walls;
     private ColliderGroup colliderGroup;
 
+    public EdgeBetweenRooms() {
+        nodeRooms = new ArrayList<>();
+        walls = new ArrayList<>();
+        this.colliderGroup = new ColliderGroup();
+    }
     public EdgeBetweenRooms(Room r1, Room r2){
         nodeRooms = new ArrayList<>();
         nodeRooms.add(r1);
@@ -103,5 +108,9 @@ public class EdgeBetweenRooms {
             if(edgePiece.isDoor()) return true;
         }
         return false;
+    }
+
+    public void addCollider(Collider collider) {
+        colliderGroup.addCollider(collider);
     }
 }
