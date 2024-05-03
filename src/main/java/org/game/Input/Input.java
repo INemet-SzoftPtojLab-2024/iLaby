@@ -131,6 +131,11 @@ public class Input implements KeyListener, MouseListener {
         return false;
     }
 
+    public boolean isCapsLockOn()
+    {
+        return Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK);
+    }
+
     //mouse functions
     public Vec2 getMousePosition()
     {
