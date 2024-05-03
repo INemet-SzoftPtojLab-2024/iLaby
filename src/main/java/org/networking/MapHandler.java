@@ -88,7 +88,7 @@ public class MapHandler extends ServerSideHandler {
                     //System.out.println("ajtoaddolas tortent");
                 }
                 else{
-                    Vec2 pos = isten.getMap().TakeOutDoor(isten);
+                    Vec2 pos = isten.getMap().TakeOutDoor(isten, true);
                     if(pos.x != -1 && pos.y != -1) {
                         handleAddOrDeleteDoor(pos, false);
                         //stop = true;

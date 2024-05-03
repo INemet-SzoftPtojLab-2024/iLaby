@@ -62,6 +62,7 @@ public class Map extends Updatable {
     }
 
     //a slitelesnel csak a minroomsize fele engedelyezett
+    //visszaadja a newRoom ID-jat
     public int splitRooms(Room r1, Isten isten)
     {
         if(r1.getUnitRooms().size() < minRoomSize) return -1;
@@ -146,6 +147,15 @@ public class Map extends Updatable {
             //hogy csak egyszer addoljuk hozza, de csak ket iranyu ajtoknal van igy
             newRoom.getDoorAdjacentRooms().remove(r1);
             setByDoorAdjacentRooms(r1);
+
+            // chestek allitasa
+            for(UnitRoom unitRoom :r1.getUnitRooms()){
+                if(unitRoom.hasDoor()){
+                    //TODO::chestet removeolni
+                    unitRoom.setChest(null);
+                }
+            }
+
             return newID;
         }
         return -1;
@@ -326,6 +336,15 @@ public class Map extends Updatable {
         //r1.setPlayerCount(r1.getPlayerCount() + r2.getPlayerCount());
         //r1.setRoomType(r2.getRoomType());
         r1.setMaxPlayerCount(r1.getMaxPlayerCount() + r2.getMaxPlayerCount());
+
+        //chest allitasa:
+        for(UnitRoom unitRoom :r1.getUnitRooms()){
+            if(unitRoom.hasWall()){
+                //TODO::chestet removeolni
+                unitRoom.setChest(null);
+            }
+        }
+
         rooms.remove(r2);
     }
 
@@ -366,7 +385,9 @@ public class Map extends Updatable {
         }
     }
     //egyenlore a fv-t hivom meg, és azon kívül választom meg, hogy melyik két edge között akarom a funcot meghívni, ez változhat
-    public Vec2 TakeOutDoor(Isten isten){
+    //visszaadja a posiciojat a modositott edgePiece-nek
+    //otlet: lehetne azt ha nem tudja megcsinalni az egyik iranyba akkor megprobalja a masikba, ha pedig ugy sem akkor ketiranyut probal egy adott edgenel
+    public Vec2 TakeOutDoor(Isten isten, boolean oneWay){
 
         Collections.shuffle(edgeManager.getRoomEdges());
         //mindig nagyon ugyanonnan fog maajd ajtot kivenni
@@ -380,18 +401,22 @@ public class Map extends Updatable {
                 //csak akkor, ha van legalabb 2 ajtaja mindkettonekj, egyebkent mindenkepp szar lenne
                 if (r1.getDoorAdjacentRooms().size() >= 2 &&
                         (r2.getDoorAdjacentRooms().size() >= 2)) {
+
                     r1.getDoorAdjacentRooms().remove(r2);
-                    r2.getDoorAdjacentRooms().remove(r1);
+                    if(oneWay){
+                        r2.getDoorAdjacentRooms().remove(r1);
+                    }
+
                     //megnézem, hogy osszefuggo lenne-e az uj graph
                     if (isGraphKohernt(rooms)) {
                         EdgeBetweenRooms edgeBeingModified = edgeManager.getEdgeBetweenRooms(r1, r2);//ez pont a chosenEdge
                         ArrayList<EdgePiece> edgePieces = edgeBeingModified.getWalls();
                         for (EdgePiece edgePiece : edgePieces) {
                             if (edgePiece.isDoor()) {
-                                edgeBeingModified.switchDoorToWall(edgePiece, isten);
-                                //mar egyszer removoltuk
-                                //r1.getDoorAdjacentRooms().remove(r2);
-                                //r2.getDoorAdjacentRooms().remove(r1);
+                                if(!oneWay)
+                                {
+                                    edgeBeingModified.switchDoorToWall(edgePiece, isten);
+                                }
                                 System.out.println("talatam jot");
                                 return edgePiece.position;
                             }
@@ -401,7 +426,10 @@ public class Map extends Updatable {
                     {
                         System.out.println("Nem lett volna koherens");
                         r1.getDoorAdjacentRooms().add(r2);
-                        r2.getDoorAdjacentRooms().add(r1);
+                        if(oneWay){
+                            r2.getDoorAdjacentRooms().add(r1);
+                        }
+
                     }
                 }
                 else System.out.println("nem volt eleg ajto");
@@ -410,6 +438,7 @@ public class Map extends Updatable {
         return new Vec2(-1,-1);
     }
     //fv ami az ajtok hozzaadasat valositja meg
+    //visszaadja a posiciojat a modosititt edgePiece-nek
     public Vec2 addDoorToEdgeWithoutDoor(Isten isten){
         //vegigiteralok az eleken
         Collections.shuffle(edgeManager.getRoomEdges());

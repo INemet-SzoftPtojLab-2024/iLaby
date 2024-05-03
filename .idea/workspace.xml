@@ -5,21 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3506ab6d-0407-47f2-a7e8-78ebc867e577" name="Changes" comment="it's working">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet22EdgePieceChanged.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet23WallDelete.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__13__12_51__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__13__12_51__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__17__15_18__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__17__15_18__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__26__14_36__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__26__14_36__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__26__14_36__Changes_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__26__14_36__Changes_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_01_05_2024_13_06__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_01_05_2024_13_06__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_01_05_2024_13_38__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_01_05_2024_13_38__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_01_05_2024_13_38__Changes_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_01_05_2024_13_38__Changes_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_02_05_2024_16_14__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_02_05_2024_16_14__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_03_05_2024_12_47__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_03_05_2024_12_47__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Isten.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Isten.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Map/EdgeBetweenRooms.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Map/EdgeBetweenRooms.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Map/Map.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Map/Map.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/UI/Minimap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/UI/Minimap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/GameClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/GameClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/HandlerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/HandlerManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/MapHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/MapHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/Packet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +50,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -80,7 +81,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "map-generator",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/kuruc/Downloads/junit-4.13.2.jar",
     "node.js.detected.package.eslint": "true",
@@ -197,9 +198,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.MultiplayerTester.testPacket01" />
+        <item itemvalue="Gradle.MultiplayerTester.testPacket02Constructor" />
+        <item itemvalue="Gradle.MultiplayerTester" />
         <item itemvalue="Gradle.MultiplayerTester" />
         <item itemvalue="Gradle.MultiplayerTester.testPacket02Constructor" />
-        <item itemvalue="Gradle.MultiplayerTester.testPacket01" />
       </list>
     </recent_temporary>
   </component>
