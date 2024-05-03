@@ -16,7 +16,9 @@ public abstract class Packet {
         ITEMPICKEDUP(12),
         ITEMDROPPED(13),
         WALL(20),
-        DEATH(21);
+        DEATH(21),
+        EDGEPIECECHANGED(22),
+        WALLDELETE(23);
         private int packetId;
         private PacketTypes(int packetId) {
             this.packetId = packetId;

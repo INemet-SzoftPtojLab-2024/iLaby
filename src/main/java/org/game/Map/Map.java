@@ -26,7 +26,6 @@ public class Map extends Updatable {
         this.rooms = new ArrayList<>();
         this.edgeManager = new EdgeManager(isten);
         initUnitRooms();
-
     }
     public void init(Isten isten) {
         isten.addUpdatable(edgeManager);
@@ -41,59 +40,10 @@ public class Map extends Updatable {
     }
 
     //for testing
-    double delta = 0;
-    int sec = 0;
-    boolean stop = true;
+
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-        //for testing
-        if(isten.getInputHandler().isKeyReleased(KeyEvent.VK_SPACE)){
-            stop = !stop;
-            //if(stop) printMap();
-        }
 
-        /*if(!stop) {
-            delta += deltaTime;
-            if (delta > 1) {
-                //TESTCASE 1:::
-                if(sec %3==0){
-                    addDoorToEdgeWithoutDoor(isten);
-                    System.out.println("ajtoaddolas tortent");
-                }
-                else{
-                    if(TakeOutDoor(isten)) {
-                        //stop = true;
-                        System.out.println("edgeNum: "+edgeManager.getRoomEdges().size());
-                        System.out.println("doorNum: "+edgeManager.getDoorNum());
-                        System.out.println("ajtokivetel tortent");
-                    }
-
-
-                }
-                //TESTCASE 2:
-                if (sec % 4 == 0) {
-                    Collections.shuffle(rooms);
-                    mergeRooms(rooms.get(0), rooms.get(0).getPhysicallyAdjacentRooms().get(0), isten);
-                    System.out.println("r1 adjacentrooms Number: " + rooms.get(0).getPhysicallyAdjacentRooms().size());
-
-                }
-                //TESTCASE 3:
-
-                if((sec+2)%4==0) {
-                    for (Room splittable : rooms) {
-                        if (splitRooms(splittable, isten)) {
-                            //System.out.println("sikerult a split");
-                            System.out.println(splittable.getID() + " adjacentrooms: " + splittable.getPhysicallyAdjacentRooms().size());
-                            System.out.println(splittable.getID() + " Dooradjacentrooms: " + splittable.getDoorAdjacentRooms().size());
-                            //stop = true;
-                            break;
-                        }
-                    }
-                }
-                sec++;
-                delta = 0;
-            }
-        }*/
     }
 
     @Override
@@ -112,9 +62,9 @@ public class Map extends Updatable {
     }
 
     //a slitelesnel csak a minroomsize fele engedelyezett
-    private boolean splitRooms(Room r1, Isten isten)
+    public int splitRooms(Room r1, Isten isten)
     {
-        if(r1.getUnitRooms().size() < minRoomSize) return false;
+        if(r1.getUnitRooms().size() < minRoomSize) return -1;
         //egyenlőre minden szoba ami splittel lesz createlve ilyen type-val rendelkezik
         int newID = generateNewRoomID();
         Room newRoom = new Room(newID);
@@ -178,9 +128,11 @@ public class Map extends Updatable {
             r1.setPhysicallyAdjacentRooms();
 
             //set the images
+            /*
             for(UnitRoom unitRoom : newRoom.getUnitRooms()) {
                 unitRoom.addRightImage(isten);
             }
+             */
             //update nodeRooms and generate the new ones
             //also updates the images and colliders
             //TODO
@@ -194,9 +146,9 @@ public class Map extends Updatable {
             //hogy csak egyszer addoljuk hozza, de csak ket iranyu ajtoknal van igy
             newRoom.getDoorAdjacentRooms().remove(r1);
             setByDoorAdjacentRooms(r1);
-            return true;
+            return newID;
         }
-        return false;
+        return -1;
     }
 
     public void setByDoorAdjacentRooms(Room r){
@@ -299,7 +251,7 @@ public class Map extends Updatable {
 
 
     //ez a fv a mapgenerátorban is hasonlóan szerepel (colliderek és imagek nélkül)
-    private void mergeRooms(Room r1, Room r2, Isten isten) {
+    public void mergeRooms(Room r1, Room r2, Isten isten) {
         if(!r1.isPhysicallyAdjacent(r2) || r1.getID() == r2.getID()){
             System.err.println("cant be merged");
             return;
@@ -316,7 +268,7 @@ public class Map extends Updatable {
 
             //setting the new images of the deleted room
             //this method cares about the renderable items too
-            unitRoom.addRightImage(isten);
+            //unitRoom.addRightImage(isten);
         }
 
         r1.getUnitRooms().addAll(r2.getUnitRooms()); //insted of this: r1.getUnitRooms().add(unitroom);
@@ -414,7 +366,7 @@ public class Map extends Updatable {
         }
     }
     //egyenlore a fv-t hivom meg, és azon kívül választom meg, hogy melyik két edge között akarom a funcot meghívni, ez változhat
-    public boolean TakeOutDoor(Isten isten){
+    public Vec2 TakeOutDoor(Isten isten){
 
         Collections.shuffle(edgeManager.getRoomEdges());
         //mindig nagyon ugyanonnan fog maajd ajtot kivenni
@@ -441,7 +393,7 @@ public class Map extends Updatable {
                                 //r1.getDoorAdjacentRooms().remove(r2);
                                 //r2.getDoorAdjacentRooms().remove(r1);
                                 System.out.println("talatam jot");
-                                return true;
+                                return edgePiece.position;
                             }
                         }
                     }
@@ -455,10 +407,10 @@ public class Map extends Updatable {
                 else System.out.println("nem volt eleg ajto");
             }else System.out.println("nincs ajto itt");
         }
-        return false;
+        return new Vec2(-1,-1);
     }
     //fv ami az ajtok hozzaadasat valositja meg
-    public boolean addDoorToEdgeWithoutDoor(Isten isten){
+    public Vec2 addDoorToEdgeWithoutDoor(Isten isten){
         //vegigiteralok az eleken
         Collections.shuffle(edgeManager.getRoomEdges());
         for(EdgeBetweenRooms chosenEdge: edgeManager.getRoomEdges()){
@@ -475,14 +427,14 @@ public class Map extends Updatable {
                         r1.getDoorAdjacentRooms().add(r2);
                         r2.getDoorAdjacentRooms().add(r1);
                         System.out.println("Ajto hozzaadva");
-                        return true;
+                        return chosenPiece.position;
                     }
                 }
             }
         }
         //ha nem tudtam ajtot hozzaadni, akkor teli a map
         System.out.println("Teli a map");
-        return false;
+        return new Vec2(-1,-1);
     }
 
 

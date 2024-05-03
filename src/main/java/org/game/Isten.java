@@ -7,6 +7,8 @@ import main.java.org.game.Graphics.*;
 import main.java.org.entities.player.Player;
 
 import main.java.org.game.Input.Input;
+import main.java.org.game.Map.EdgeBetweenRooms;
+import main.java.org.game.Map.EdgePiece;
 import main.java.org.game.Map.Map;
 import main.java.org.game.PlayerPrefs.PlayerPrefs;
 import main.java.org.game.UI.*;
@@ -22,8 +24,9 @@ import main.java.org.networking.*;
 import javax.swing.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
-/**
+    /**
  * The main class representing the game part of the program.
  */
 public class Isten {
@@ -47,6 +50,10 @@ public class Isten {
     private PlayerMP player;
     private ChestManager chestManager;
     private Minimap minimap;
+
+        //ONLY CONTAINS COLLIDERS AND IMAGES OF EDGEPIECES
+        //DOES NOT REPLACE MAP
+        private EdgeBetweenRooms edgeBetweenRooms;
     /**
      * Constructor for Isten.
      * Initializes the physics engine, game renderer, and list of updatables.
@@ -64,7 +71,8 @@ public class Isten {
         pendingAddedUpdatables = new ArrayList<>();
         pendingRemovedUpdatables = new ArrayList<>();
 
-
+        edgeBetweenRooms = new EdgeBetweenRooms();
+        physicsEngine.addColliderGroup(edgeBetweenRooms.getColliderGroup());
         handlerManager = new HandlerManager(this);
     }
 
@@ -329,5 +337,19 @@ public class Isten {
     public ChestManager getChestManager() { return chestManager; }
     public Minimap getMinimap() {
         return minimap;
+    }
+
+    //ONLY CONTAINS COLLIDERS AND IMAGES OF EDGEPIECES
+    public EdgeBetweenRooms getEdgeBetweenRooms() {
+        return edgeBetweenRooms;
+    }
+    public void addEdgePiece(EdgePiece piece) {
+            edgeBetweenRooms.getWalls().add(piece);
+    }
+
+    public void removeEdgePiece(EdgePiece piece) {
+        renderer.deleteRenderable(piece.getImage());
+        edgeBetweenRooms.getColliderGroup().removeCollider(piece.getCollider());
+        edgeBetweenRooms.getWalls().remove(piece);
     }
 }
