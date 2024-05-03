@@ -50,6 +50,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -222,6 +223,9 @@
       <workItem from="1714562410886" duration="908000" />
       <workItem from="1714687853059" duration="1015000" />
       <workItem from="1714731678095" duration="398000" />
+      <workItem from="1714740938116" duration="2592000" />
+      <workItem from="1714743658125" duration="732000" />
+      <workItem from="1714747759256" duration="7383000" />
     </task>
     <task id="LOCAL-00001" summary="it's working">
       <option name="closed" value="true" />

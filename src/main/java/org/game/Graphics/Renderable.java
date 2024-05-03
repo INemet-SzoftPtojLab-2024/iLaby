@@ -1,5 +1,6 @@
 package main.java.org.game.Graphics;
 
+import main.java.org.game.Input.Input;
 import main.java.org.linalg.Vec2;
 
 import java.awt.*;
@@ -143,13 +144,9 @@ public abstract class Renderable implements Cloneable{
 
     /**a function that is called by the Isten <br>
      * Renderables have the opportunity to override it if necessary
-     * @param mousePos the current position of the mouse on the screen, calculated from the top left corner
-     * @param mousePressed has the left mouse button just been pressed
-     * @param mouseHeld is the left mouse button being held down
-     * @param mouseReleased has the left mouse button just been released
-     * @param mouseClicked has the left mouse button just been clicked (pressed and released in a quick manner)
+     * @param inputHandler the input handler
      */
-    public void processInput(Vec2 mousePos, boolean mousePressed, boolean mouseHeld, boolean mouseReleased, boolean mouseClicked){}
+    public void processInput(Input inputHandler){}
 
 
     @Override

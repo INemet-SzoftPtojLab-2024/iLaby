@@ -1,5 +1,6 @@
 package main.java.org.game.Graphics;
 
+import main.java.org.game.Input.Input;
 import main.java.org.linalg.Vec2;
 
 import java.awt.*;
@@ -69,8 +70,12 @@ public class ButtonUI extends Renderable{
     }
 
     @Override
-    public void processInput(Vec2 mousePos, boolean mousePressed, boolean mouseHeld, boolean mouseReleased, boolean mouseClicked)
+    public void processInput(Input inputHandler)
     {
+        Vec2 mousePos=inputHandler.getMousePosition();
+        boolean mouseClicked=inputHandler.isMouseButtonClicked(Input.MOUSE_LEFT);
+        boolean mouseHeld=inputHandler.isMouseButtonDown(Input.MOUSE_LEFT);
+
         Vec2 tempPos=new Vec2();
 
         isHovered=false;

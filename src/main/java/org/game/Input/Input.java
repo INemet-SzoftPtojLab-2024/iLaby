@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Input implements KeyListener, MouseListener {
@@ -28,6 +29,8 @@ public class Input implements KeyListener, MouseListener {
     private final long[] mouseButtonPressStart;//to help determine whether it was a click or the button has been held down
     private final long MOUSE_CLICK_THRESHOLD_NANO=200000000;
     public final static int MOUSE_LEFT=0, MOUSE_MIDDLE=1, MOUSE_RIGHT=2;
+
+    private ArrayList<TypeListener> keyTypeListeners=new ArrayList<>();
 
     public Input()
     {
@@ -131,6 +134,38 @@ public class Input implements KeyListener, MouseListener {
         return false;
     }
 
+    public boolean isCapsLockOn()
+    {
+        return Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK);
+    }
+
+    /**
+     * add a listener that will be notified as soon as a key has been typed
+     * @param listener the listener
+     */
+    public void addTypeListener(TypeListener listener)
+    {
+        keyTypeListeners.add(listener);
+    }
+
+    /**
+     * removes a listener<br>
+     * NOTE: it doesn't work with lambda functions
+     * @param listener the listener to remove
+     */
+    public void removeTypeListener(TypeListener listener)
+    {
+        keyTypeListeners.remove(listener);
+    }
+
+    /**
+     * remove all type listeners
+     */
+    public void clearTypeListeners()
+    {
+        keyTypeListeners.clear();
+    }
+
     //mouse functions
     public Vec2 getMousePosition()
     {
@@ -221,6 +256,9 @@ public class Input implements KeyListener, MouseListener {
     //keylistener functions
     @Override
     public void keyTyped(KeyEvent e) {
+        char c=e.getKeyChar();
+        for(int i=0;i<keyTypeListeners.size();i++)
+            keyTypeListeners.get(i).onType(c);
     }
 
     @Override
