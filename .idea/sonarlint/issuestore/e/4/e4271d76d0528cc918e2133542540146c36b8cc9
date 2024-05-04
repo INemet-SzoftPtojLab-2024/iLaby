@@ -1,0 +1,23 @@
+
+L
+java:S1066Ÿ"/Merge this if statement with the enclosing one.(íùB8‰ç¡‡ô1
+“
+java:S1319ã"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(æ‹³şÿÿÿÿ8‰ç¡‡ô1
+‰
+java:S1319ÿ"kThe type of "playerImage" should be an interface such as "List" rather than the implementation "ArrayList".(ïö¾ƒ8‰ç¡‡ô1
+y
+java:S11040"WMake localPlayer a static final constant or non-public and provide accessors if needed.(¦ÑéÆûÿÿÿÿ8Šç¡‡ô1
+e
+java:S2184×"GCast one of the operands of this multiplication operation to a "float".(¬†¨ê8Œç¡‡ô1
+j
+java:S2184Ú"GCast one of the operands of this multiplication operation to a "float".(ô»˜¼ıÿÿÿÿ8Œç¡‡ô1
+j
+java:S2184İ"GCast one of the operands of this multiplication operation to a "float".(ÒºşÔùÿÿÿÿ8Œç¡‡ô1
+d
+java:S2184à"GCast one of the operands of this multiplication operation to a "float".(­„ò8Œç¡‡ô1
+Q
+java:S1128"5Remove this unused import 'main.java.org.items.Item'.(Ê¿\8Éè¡‡ô1
+i
+java:S1128"GRemove this unused import 'main.java.org.networking.Packet03Animation'.(±ü«Ìûÿÿÿÿ8Éè¡‡ô1
+ä
+java:S6541š"ÆA "Brain Method" was detected. Refactor it to reduce at least one of the following metrics: LOC from 124 to 64, Complexity from 64 to 14, Nesting Level from 5 to 2, Number of Variables from 15 to 6.(í®8Êè¡‡ô1

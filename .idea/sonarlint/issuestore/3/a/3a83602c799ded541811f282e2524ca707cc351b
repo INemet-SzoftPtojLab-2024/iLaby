@@ -1,0 +1,67 @@
+
+L
+java:S1066Ã"/Merge this if statement with the enclosing one.(ùôı8Œº™‰ô1
+R
+java:S1066‡"/Merge this if statement with the enclosing one.(Õ©ïúÿÿÿÿ8º™‰ô1
+“
+java:S1319¬"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(¡İ·èûÿÿÿÿ8º™‰ô1
+…
+java:S1319¬"bThe type of "u1" should be an interface such as "List" rather than the implementation "ArrayList".(¡İ·èûÿÿÿÿ8º™‰ô1
+…
+java:S1319¬"bThe type of "u2" should be an interface such as "List" rather than the implementation "ArrayList".(¡İ·èûÿÿÿÿ8º™‰ô1
+‘
+java:S1319·"sThe type of "newCoherentElements" should be an interface such as "List" rather than the implementation "ArrayList".(š®Å8º™‰ô1
+ƒ
+java:S1319Å"eThe type of "rooms" should be an interface such as "List" rather than the implementation "ArrayList".(ÕÖ®ö8º™‰ô1
+“
+java:S1319Ë"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(†İÂ˜üÿÿÿÿ8º™‰ô1
+r	java:S117P"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(©Æ˜Èıÿÿÿÿ8º™‰ô1
+r	java:S117\"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ƒ›¡ÿÿÿÿÿ8º™‰ô1
+u	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš8‘º™‰ô1
+
+java:S1186,"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(í®8½™‰ô1
+£
+java:S11861"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(İßéàúÿÿÿÿ8½™‰ô1
+|
+java:S1450"ZRemove the "isGenerated" field and declare it as a local variable in the relevant methods.(¨‘ÑÒüÿÿÿÿ8½™‰ô1
+x
+java:S1450"[Remove the "mapgenerator" field and declare it as a local variable in the relevant methods.(¬Ï‡¸8½™‰ô1
+N
+java:S1172@",Remove this unused method parameter "isten".(Çíóóùÿÿÿÿ8”½™‰ô1
+]	java:S125O"<This block of commented-out lines of code should be removed.(¸¾†Ğşÿÿÿÿ8•½™‰ô1
+W	java:S125w"<This block of commented-out lines of code should be removed.(’±8—½™‰ô1
+^	java:S125ƒ"<This block of commented-out lines of code should be removed.(™¾üÿÿÿÿÿ8—½™‰ô1
+P
+java:S1135‰"2Complete the task associated to this TODO comment.(…ïœ†8—½™‰ô1
+Y	java:S125œ"<This block of commented-out lines of code should be removed.(’Ãˆ8˜½™‰ô1
+d
+java:S1126Î"AReplace this if-then-else statement by a single return statement.(ÁêĞÿÿÿÿÿ8š½™‰ô1
+J
+java:S1172ı",Remove this unused method parameter "isten".(æ¾Ã®8œ½™‰ô1
+M	java:S106ÿ"+Replace this use of System.err by a logger.(•ªËßûÿÿÿÿ8œ½™‰ô1
+M	java:S106‚"+Replace this use of System.out by a logger.(Û¬†öşÿÿÿÿ8½™‰ô1
+Y	java:S125ƒ"<This block of commented-out lines of code should be removed.(ıÔ¶ó8½™‰ô1
+X	java:S125‰"<This block of commented-out lines of code should be removed.(–œ8½™‰ô1
+^	java:S125"<This block of commented-out lines of code should be removed.(»å‚‰ıÿÿÿÿ8½™‰ô1
+^	java:S125‘"<This block of commented-out lines of code should be removed.(â‚ˆ‰şÿÿÿÿ8½™‰ô1
+Y	java:S125Ÿ"<This block of commented-out lines of code should be removed.(ŒÆÊı8½™‰ô1
+^	java:S125¹"<This block of commented-out lines of code should be removed.(ïŠ¯Êúÿÿÿÿ8Ÿ½™‰ô1
+Y	java:S125Ä"<This block of commented-out lines of code should be removed.(É¥¤º8Ÿ½™‰ô1
+H	java:S106Ğ"+Replace this use of System.out by a logger.(–ÉÎÒ8 ½™‰ô1
+H	java:S106Ó"+Replace this use of System.out by a logger.(–ÉÎÒ8 ½™‰ô1
+H	java:S106Ö"+Replace this use of System.out by a logger.(–ÉÎÒ8 ½™‰ô1
+M	java:S106Ù"+Replace this use of System.out by a logger.(ªÓ¼áşÿÿÿÿ8 ½™‰ô1
+M	java:S106Ú"+Replace this use of System.out by a logger.(ªÓ¼áşÿÿÿÿ8 ½™‰ô1
+k	java:S100ğ"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(İåÚŞ8¡½™‰ô1
+H	java:S106"+Replace this use of System.out by a logger.(¤›êì8¢½™‰ô1
+H	java:S106"+Replace this use of System.out by a logger.(‰Ò“»8£½™‰ô1
+M	java:S106£"+Replace this use of System.out by a logger.(¤¼òøûÿÿÿÿ8£½™‰ô1
+H	java:S106¤"+Replace this use of System.out by a logger.(á”º8£½™‰ô1
+M	java:S106¹"+Replace this use of System.out by a logger.( ÍÅÒşÿÿÿÿ8¤½™‰ô1
+H	java:S106À"+Replace this use of System.out by a logger.(ùŸèÿ8¤½™‰ô1
+Q
+java:S1068"/Remove this unused "isGenerated" private field.(¨‘ÑÒüÿÿÿÿ8¥½™‰ô1
+Z
+java:S1144ï"<Remove this unused private "getRoomWithLowestRowIdx" method.(ÜşĞË8¥½™‰ô1
+P
+java:S1144Ì"-Remove this unused private "printMap" method.(êß®ûÿÿÿÿ8¥½™‰ô1
