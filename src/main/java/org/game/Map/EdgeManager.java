@@ -294,8 +294,12 @@ public class EdgeManager extends Updatable {
                 if(ep.isDoor()){
                     Door door = (Door)ep;
                     if(isten.getInputHandler().isKeyReleased(KeyEvent.VK_O) && door.isPlayerAtDoor(isten)){
-                        //TODO itt kell chekkolni hogy kinyilhat, mivel lehet egyiranyu
-                        door.open();
+                        System.out.println("Ajto nyilna");
+                        if(door.canBeOpened(isten)){
+                            door.open();
+                        }
+                        else System.out.println("Nem lehet kinyitni mert egyiranyu");
+
                     }
                     if(door.isOpened()){
                         door.manageOpenDoor(deltaTime);

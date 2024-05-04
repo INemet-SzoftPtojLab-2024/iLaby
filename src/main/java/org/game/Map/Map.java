@@ -4,7 +4,6 @@ import main.java.org.game.Isten;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 
-import java.awt.event.KeyEvent;
 import java.util.*;
 
 
@@ -212,7 +211,7 @@ public class Map extends Updatable {
 
     //BFS, ellenorzi hogy a graf osszefuggo-e, iranyitott graf eseten is
     //meg lehetne csinalni T parameterrel is, de akkor kellene egy getAdjacentrooms fv az interfaceba
-    private  boolean isGraphKohernt(ArrayList<Room> graphNodes){
+    private  boolean isGraphKoherent(ArrayList<Room> graphNodes){
         Queue<Room> queue = new LinkedList<>();
         ArrayList<Room> visited = new ArrayList<>();
         //vegig kell menni az osszes csucsbol indulva
@@ -366,8 +365,12 @@ public class Map extends Updatable {
         }
     }
     //egyenlore a fv-t hivom meg, és azon kívül választom meg, hogy melyik két edge között akarom a funcot meghívni, ez változhat
-    public Vec2 TakeOutDoor(Isten isten){
+    public Vec2 TakeOutDoor(Isten isten, boolean oneWay){
 
+        boolean alreadyOneWay = false;
+        // ez a visszaaddolas miatt kell, kicsit bonyi, hogy miert, trust me
+        boolean r2WasRemovedFromR1 = false;
+        boolean r1WasRemovedFromR2 = false;
         Collections.shuffle(edgeManager.getRoomEdges());
         //mindig nagyon ugyanonnan fog maajd ajtot kivenni
         for(EdgeBetweenRooms chosenEdge : edgeManager.getRoomEdges()){
@@ -380,28 +383,37 @@ public class Map extends Updatable {
                 //csak akkor, ha van legalabb 2 ajtaja mindkettonekj, egyebkent mindenkepp szar lenne
                 if (r1.getDoorAdjacentRooms().size() >= 2 &&
                         (r2.getDoorAdjacentRooms().size() >= 2)) {
-                    r1.getDoorAdjacentRooms().remove(r2);
-                    r2.getDoorAdjacentRooms().remove(r1);
+                    //megnezem, hogy ha egyiranyura akarom allitani, akkor mar egyiranyu-e alapbol, mert ha igen, akkor ki lesz veve
+                    if( !r1.getDoorAdjacentRooms().contains(r2) || !r2.getDoorAdjacentRooms().contains(r1)) alreadyOneWay = true;
+                    //ha nincs benne nem kell lekezelni, max falseot dob
+                    if(r1.getDoorAdjacentRooms().remove(r2)) r2WasRemovedFromR1 = true;
+                    if(alreadyOneWay || !oneWay){
+                        if(r2.getDoorAdjacentRooms().remove(r1)) r1WasRemovedFromR2= true;
+                    }
                     //megnézem, hogy osszefuggo lenne-e az uj graph
-                    if (isGraphKohernt(rooms)) {
+                    if (isGraphKoherent(rooms)) {
                         EdgeBetweenRooms edgeBeingModified = edgeManager.getEdgeBetweenRooms(r1, r2);//ez pont a chosenEdge
                         ArrayList<EdgePiece> edgePieces = edgeBeingModified.getWalls();
                         for (EdgePiece edgePiece : edgePieces) {
                             if (edgePiece.isDoor()) {
-                                edgeBeingModified.switchDoorToWall(edgePiece, isten);
-                                //mar egyszer removoltuk
-                                //r1.getDoorAdjacentRooms().remove(r2);
-                                //r2.getDoorAdjacentRooms().remove(r1);
                                 System.out.println("talatam jot");
-                                return edgePiece.position;
+                                //ha ezek egyike igaz, akkor szedem csak ki, és csak ilyenkor returneolok positiont -1, -1. en kivul
+                                if(alreadyOneWay || !oneWay){
+                                    edgeBeingModified.switchDoorToWall(edgePiece, isten);
+
+                                    return edgePiece.position;
+                                }
+                                //mert nem kell allitani a map kirajzolasan, az adjacencylistet nem kell updatelni (remelem)
+                                return new Vec2(-1,-1);
                             }
                         }
                     }
                     else
                     {
                         System.out.println("Nem lett volna koherens");
-                        r1.getDoorAdjacentRooms().add(r2);
-                        r2.getDoorAdjacentRooms().add(r1);
+                        //igy a legegyszerubb talan
+                        if( r2WasRemovedFromR1) r1.getDoorAdjacentRooms().add(r2);
+                        if(r1WasRemovedFromR2)r2.getDoorAdjacentRooms().add(r1);
                     }
                 }
                 else System.out.println("nem volt eleg ajto");
