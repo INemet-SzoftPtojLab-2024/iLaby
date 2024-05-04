@@ -96,9 +96,8 @@ public class Inventory extends Updatable {
         if (isten.getInputHandler().isKeyDown(KeyEvent.VK_R) && storedItems.get(selectedSlot - 1) != null) {
             Item actItem = storedItems.get(selectedSlot - 1);
             Vec2 actPos = isten.getPlayer().getPlayerCollider().getPosition();
-            if (actItem instanceof Gasmask)
-                hasGasmaskEquipped = false;
             actItem.dropOnGround(actPos);
+            hasGasmaskEquipped=getExistenceOfGasMask();
             isten.getSocketClient().sendData(("13" + actItem.getItemIndex() + ","
                     + actPos.x + "," + actPos.y).getBytes());
 
@@ -181,7 +180,14 @@ public class Inventory extends Updatable {
     }
 
     public boolean getExistenceOfGasMask() {
-        return hasGasmaskEquipped;
+        for(int i = 0; i < 5; i++)
+        {
+            if(storedItems.get(i) instanceof Gasmask)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void dropAllItems(Isten isten) {
