@@ -2,6 +2,7 @@ package main.java.org.game.Map;
 
 import main.java.org.game.Isten;
 import main.java.org.game.updatable.Updatable;
+import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -29,9 +30,12 @@ public class Room extends Updatable implements Graph<Room>{
         unitRooms = new ArrayList<>();
         physicallyAdjacentRooms = new ArrayList<>();
         doorAdjacentRooms = new ArrayList<>();
-        //hasDoorWith = new ArrayList<>();
-        roomType = RoomType.getRandomRoomtype();
 
+        //hasDoorWith = new ArrayList<>();
+        roomType = RoomType.getRandomRoomtype(false);
+    }
+    public void setRoomType(boolean startRoom) {
+        roomType =  RoomType.getRandomRoomtype(startRoom);
     }
     public  Room(){}
 
@@ -144,5 +148,19 @@ public class Room extends Updatable implements Graph<Room>{
     public void setRoomType(RoomType type) {
         this.roomType = type;
     }
-
+    public boolean isUnitRoomInSameRoomAsStartRoom(Vec2 position)
+    {
+        boolean isUnitRoomInRoom=false;
+        boolean isStartUnitRoomInRoom =false;
+        for(UnitRoom unitRoom1 : unitRooms)
+        {
+            if(unitRoom1.getPosition().x == position.x && unitRoom1.getPosition().y== position.y) {
+                isUnitRoomInRoom = true;
+            }
+            if (unitRoom1.getPosition().x == 0.0 && unitRoom1.getPosition().y == 0.0) {
+                isStartUnitRoomInRoom = true;
+            }
+        }
+        return isStartUnitRoomInRoom && isUnitRoomInRoom;
+    }
 }

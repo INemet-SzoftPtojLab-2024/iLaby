@@ -20,6 +20,7 @@ public class UnitRoom implements Graph<UnitRoom>{
     private boolean inRoom;
     //one unitroom can have maximum one door!
     private boolean hasDoor = false;
+    private static int setOwnerRoomType =0;
 
     public UnitRoom(Vec2 pos) {
         this.position = pos;
@@ -63,6 +64,17 @@ public class UnitRoom implements Graph<UnitRoom>{
         return false;
     }
     public void setNewImage(String imgPath, Isten isten) {
+        if(ownerRoom != null) {
+            if (ownerRoom.isUnitRoomInSameRoomAsStartRoom(position) && ownerRoom.getRoomType() == RoomType.GAS) {
+                if (setOwnerRoomType == 0) {
+                    ownerRoom.setRoomType(true);
+                    setOwnerRoomType++;
+                }
+            }
+            if (ownerRoom.isUnitRoomInSameRoomAsStartRoom(position)) {
+                imgPath = getImagePath();
+            }
+        }
         Image newImage = new Image(position, new Vec2(1,1), imgPath);
         //ha ki akajuk cserélni a képet akkor ki kell venni  a renderablek kozol
         if(image != null){
@@ -72,6 +84,18 @@ public class UnitRoom implements Graph<UnitRoom>{
         //this is under a lot of things
         newImage.setSortingLayer(40);
         isten.getRenderer().addRenderable(newImage);
+    }
+    public String getImagePath()
+    {
+        int j;
+        switch (ownerRoom.roomType){
+            case GAS -> j = 1;
+            case BASIC -> j = 2;
+            case CURSED -> j = 3;
+            case SHADOW -> j = 4;
+            default -> j = 0;
+        }
+        return"./assets/floors/floor" + j + ".png";
     }
     public void addRightImage(Isten isten){
 

@@ -172,10 +172,10 @@ public class Inventory extends Updatable {
 
     public void useSelectedItem(double deltatime) {
         Item selectedItem = storedItems.get(selectedSlot - 1);
-        if (selectedItem.getClass().equals(Camembert.class)) {
+        if (selectedItem != null && selectedItem.getClass().equals(Camembert.class)) {
             camembert = (Camembert) selectedItem;
             camembertTriggered = true;
-        } else {
+        } else if (selectedItem != null){
             selectedItem.use(deltatime);
         }
     }

@@ -9,12 +9,18 @@ public enum RoomType {
         CURSED,
         SHADOW;
 
-        public static RoomType getRandomRoomtype(){
+        public static RoomType getRandomRoomtype(boolean startRoom){
                 RoomType[] choices = RoomType.values();
                 Random random = new Random();
-                int index = random.nextInt(choices.length);
-                return choices[index];
-
+                int index;
+                if(startRoom)
+                {
+                        return BASIC;
+                }
+                else{
+                        index = random.nextInt(choices.length);
+                        return choices[index];
+                }
         }
 }
 
