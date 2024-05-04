@@ -304,7 +304,7 @@ public class Player extends Entity {
             if (u.getClass().equals(Villain.class)) {
                 currentRoom = getPlayerRoom(isten);
                 Villain villain = (Villain) u;
-                if (currentRoom != null && currentRoom.equals(villain.getRoom())) {
+                if ((currentRoom != null && currentRoom.equals(villain.getRoom())) && currentRoom.getRoomType() != RoomType.GAS) {
                     alive = false;
                     if (localPlayer && playerSound != null)
                         AudioManager.closeSound(playerSound);
