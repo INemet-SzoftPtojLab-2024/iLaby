@@ -56,6 +56,21 @@ public class Door extends EdgePiece {
         if(playerDoorDistance < 0.5) return true;
         else return false;
     }
+    //az ajto nyitasanak csekkolasakor hasznalom
+    public boolean canBeOpened(Isten isten){
+        //player helyének meghatározása
+        Room placeOfPlayer = isten.getPlayer().getPlayerRoom(isten);
+        //masik oldali szoba meghatározása
+        Room roomOnOtherSideOfDoor = null;
+        for(UnitRoom unitRoom : unitRoomsBetween) {
+            //checkolom, hogy nem-e pont ezt a szobát nézem, elvileg az
+            // sincs benne az adjacentlistába, szóval || feltétellel is jó lenne, de menjünk biztosra
+            if (!unitRoom.getOwnerRoom().equals(placeOfPlayer)) {
+                roomOnOtherSideOfDoor = unitRoom.getOwnerRoom();
+            }
+        }
+        return placeOfPlayer.getDoorAdjacentRooms().contains(roomOnOtherSideOfDoor);
+    }
     public void open(){
         collider.setSolidity(false);
     }
