@@ -302,16 +302,7 @@ public class Player extends Entity {
         Room currentRoom = null;
         for (Updatable u : isten.getUpdatables()) {
             if (u.getClass().equals(Villain.class)) {
-                for (Room room : isten.getMap().getRooms()) {
-                    for (UnitRoom unitRoom : room.getUnitRooms()) {
-                        if (playerCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
-                                playerCollider.getPosition().x <= unitRoom.getPosition().x + 0.5 &&
-                                playerCollider.getPosition().y >= unitRoom.getPosition().y - 0.5 &&
-                                playerCollider.getPosition().y <= unitRoom.getPosition().y + 0.5) {
-                            currentRoom = room;
-                        }
-                    }
-                }
+                currentRoom = getPlayerRoom(isten);
                 Villain villain = (Villain) u;
                 if (currentRoom != null && currentRoom.equals(villain.getRoom())) {
                     alive = false;
@@ -324,6 +315,22 @@ public class Player extends Entity {
         return false;
     }
 
+    //kiszerveztem a fenti fv-t, mert nekem is kellett, és máshol később is hasznos lehet, ha kell, unitRoomra is ki lehetne szervezni
+    public Room getPlayerRoom(Isten isten){
+        UnitRoom[][] unitRooms= isten.getMap().getUnitRooms();
+        for(int i = 0; i < unitRooms.length;i++){
+            for(int j = 0; j<unitRooms[i].length;j++){
+                if (playerCollider.getPosition().x >= unitRooms[i][j].getPosition().x - 0.5 &&
+                        playerCollider.getPosition().x <= unitRooms[i][j].getPosition().x + 0.5 &&
+                        playerCollider.getPosition().y >= unitRooms[i][j].getPosition().y - 0.5 &&
+                        playerCollider.getPosition().y <= unitRooms[i][j].getPosition().y + 0.5)
+                {
+                    return unitRooms[i][j].getOwnerRoom();
+                }
+            }
+        }
+        return null;
+    }
     @Override
     public void onDestroy() {
         //not implemented yet

@@ -1,0 +1,35 @@
+
+u
+java:S2293N"YReplace the type specification in this constructor call with the diamond operator ("<>").(™ß¾&8›¹Ûó1
+{
+java:S2293U"YReplace the type specification in this constructor call with the diamond operator ("<>").(½Á¦Ôùÿÿÿÿ8œ¹Ûó1
+v
+java:S2293["YReplace the type specification in this constructor call with the diamond operator ("<>").(‚×´Ö8œ¹Ûó1
+P
+java:S1121L".Extract the assignment out of this expression.(ìé¿­øÿÿÿÿ8œ¹Ûó1
+J
+java:S5411>"(Use a primitive boolean expression here.(ÓËÿóøÿÿÿÿ8œ¹Ûó1
+£
+java:S1186{"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(İßéàúÿÿÿÿ8¦¹Ûó1
+‚
+java:S1149"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(¶’Å’8¨¹Ûó1
+‡
+java:S1149"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(Ï¤„¯ıÿÿÿÿ8¨¹Ûó1
+‡
+java:S1149"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(ŸĞø¢şÿÿÿÿ8¨¹Ûó1
+\
+java:S1854L":Remove this useless assignment to local variable "random".(ìé¿­øÿÿÿÿ8ª¹Ûó1
+L	java:S1067"+Replace this use of System.err by a logger.(úÜ’¤ıÿÿÿÿ8¬¹Ûó1
+@
+java:S2119:"Save and re-use this "Random".(šŸ«íøÿÿÿÿ8­¹Ûó1
+>
+java:S1116J"Remove this empty statement.(ôŸìúÿÿÿÿ8®¹Ûó1
+M
+java:S1481K"+Remove this unused "random" local variable.(«ìç‰øÿÿÿÿ8®¹Ûó1
+C	java:S131L""Add a default case to this switch.(ìé¿­øÿÿÿÿ8®¹Ûó1
+T
+java:S1135L"2Complete the task associated to this TODO comment.(ìé¿­øÿÿÿÿ8¯¹Ûó1
+L
+java:S1481€")Remove this unused "wall" local variable.(µµ÷óşÿÿÿÿ8´¹Ûó1
+;
+java:S2119‡"Save and re-use this "Random".(¼İÅf8µ¹Ûó1

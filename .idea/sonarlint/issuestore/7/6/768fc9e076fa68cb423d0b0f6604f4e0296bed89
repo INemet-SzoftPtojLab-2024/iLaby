@@ -1,0 +1,18 @@
+
+{
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(üØÜâùÿÿÿÿ8éçïØó1
+‡
+java:S1319"eThe type of "items" should be an interface such as "List" rather than the implementation "ArrayList".(Ü…Àûüÿÿÿÿ8êçïØó1
+e
+java:S2259-"HA "NullPointerException" could be thrown; "chestImage" is nullable here.(ûÚï8‰èïØó1
+C
+java:S1170"!Make this final field static too.(ˆ¡ûàıÿÿÿÿ8ŠèïØó1
+G	java:S106"+Replace this use of System.err by a logger.(Ú£¸õ8èïØó1
+L	java:S106!"+Replace this use of System.err by a logger.(…Ğ«Úøÿÿÿÿ8èïØó1
+Y
+java:S1128"<Remove this unused import 'main.java.org.game.Map.UnitRoom'.(–Ä©¡8Éô‡Ùó1
+b
+java:S1128"@Remove this unused import 'main.java.org.game.physics.Collider'.(Ïª³Õúÿÿÿÿ8ÎÛ‡Ùó1
+M
+java:S1128
+"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ8ÎÛ‡Ùó1
