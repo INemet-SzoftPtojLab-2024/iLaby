@@ -8,6 +8,7 @@ import main.java.org.game.updatable.Updatable;
 import main.java.org.items.Item;
 import main.java.org.items.usable_items.Camembert;
 import main.java.org.items.usable_items.Gasmask;
+import main.java.org.items.usable_items.Sorospohar;
 import main.java.org.items.usable_items.Tvsz;
 import main.java.org.linalg.Vec2;
 
@@ -215,11 +216,16 @@ public class Inventory extends Updatable {
         itemIcons.set(index , null);
     }
     //Megnézi van-e item, ami megvéd a gonoszoktól, ha talál használja és true-val tér vissza, amúgy nem azzal
-    public boolean avoidVillain(){
+    public boolean avoidVillain(double deltaTime){
         if(canAvoidVillain) return true;
         for(Item item : storedItems){
             if(item instanceof Tvsz){
-                item.use(0);
+                item.use(deltaTime);
+                return true;
+            }
+            if(item instanceof Sorospohar)
+            {
+                item.use(deltaTime);
                 return true;
             }
         }

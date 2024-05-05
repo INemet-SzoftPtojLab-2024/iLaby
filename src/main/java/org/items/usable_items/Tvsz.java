@@ -69,5 +69,10 @@ public class Tvsz extends Item {
         countText.setPosition(textPosition);
         countText.setVisibility(true);
     }
+    @Override
+    public void dropOnGround(Vec2 pos){
+        super.dropOnGround(pos);
+        countText.setVisibility(false);
+    }
     public void setShouldUseCharge(boolean value){shouldUseCharge = value;}
 }

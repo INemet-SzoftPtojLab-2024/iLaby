@@ -306,7 +306,7 @@ public class Player extends Entity {
         death.setScale(new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()));
     }
 
-    public boolean checkIfPlayerInVillainRoom(Isten isten) {
+    public boolean checkIfPlayerInVillainRoom(Isten isten,double deltaTime) {
         Room currentRoom = null;
         for (Updatable u : isten.getUpdatables()) {
             if (u.getClass().equals(Villain.class)) {
@@ -314,7 +314,7 @@ public class Player extends Entity {
                 Villain villain = (Villain) u;
                 if ((currentRoom != null && currentRoom.equals(villain.getRoom())) && currentRoom.getRoomType() != RoomType.GAS) {
                    //Ha van akkora szerencsenk, hogy van item nalunk, ami megmentene megse halunk meg
-                    if(!isten.getInventory().avoidVillain()){
+                    if(!isten.getInventory().avoidVillain(deltaTime)){
                         if (localPlayer && playerSound != null)
                             AudioManager.closeSound(playerSound);
                         return true;

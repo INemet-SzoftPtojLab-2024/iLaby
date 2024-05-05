@@ -8,9 +8,9 @@ import java.util.ArrayList;
 public class DeathHandler extends ServerSideHandler {
 
     private double currTime = 0;
-    private void checkIfPlayerInRoomWithVillain(PlayerMP player) {
+    private void checkIfPlayerInRoomWithVillain(PlayerMP player,double deltaTime) {
         if(player.isAlive()){
-            boolean isInRoomWithVillain = player.checkIfPlayerInVillainRoom(isten);
+            boolean isInRoomWithVillain = player.checkIfPlayerInVillainRoom(isten,deltaTime);
             if(isInRoomWithVillain) {
                 Packet21Death packet21Death = new Packet21Death(player.getUsername());
                 sendDataToAllClients(packet21Death);
@@ -46,7 +46,7 @@ public class DeathHandler extends ServerSideHandler {
             for(int i = 0; i < isten.getUpdatables().size(); i++) {
                 if(isten.getUpdatable(i).getClass() == PlayerMP.class) {
                     PlayerMP player = (PlayerMP)isten.getUpdatable(i);
-                    checkIfPlayerInRoomWithVillain(player);
+                    checkIfPlayerInRoomWithVillain(player,deltaTime);
                 }
             }
         }
