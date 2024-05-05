@@ -53,11 +53,14 @@ public class MapHandler extends ServerSideHandler {
                 Packet20Wall packet = new Packet20Wall(pos.x, pos.y, scale.x, scale.y, edgePiece.isDoor());
                 server.sendData(packet.getData(), client.ipAddress, client.port);
             }
+            /*
             try {
                 Thread.sleep(5);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+
+             */
         }
 
 
@@ -84,13 +87,13 @@ public class MapHandler extends ServerSideHandler {
 
                 if(sec %3==0){
                     Vec2 pos = isten.getMap().addDoorToEdgeWithoutDoor(isten);
-                    handleAddOrDeleteDoor(pos, true);
+                    //handleAddOrDeleteDoor(pos, true);
                     //System.out.println("ajtoaddolas tortent");
                 }
                 else{
                     Vec2 pos = isten.getMap().TakeOutDoor(isten,true);
                     if(pos.x != -1 && pos.y != -1) {
-                        handleAddOrDeleteDoor(pos, false);
+                        //handleAddOrDeleteDoor(pos, false);
                         //stop = true;
                         //System.out.println("edgeNum: "+isten.getMap().getEdgeManager().getRoomEdges().size());
                         //System.out.println("doorNum: "+isten.getMap().getEdgeManager().getDoorNum());
@@ -104,10 +107,10 @@ public class MapHandler extends ServerSideHandler {
                     Collections.shuffle(isten.getMap().getRooms());
                     Room r1 = isten.getMap().getRooms().get(0);
                     Room r2 = isten.getMap().getRooms().get(0).getPhysicallyAdjacentRooms().get(0);
-                    handleUnitRoomChange(r2.getUnitRooms(), r1.getRoomType().ordinal());
-                    handleWallDeletion(isten.getMap().getEdgeManager().getEdgeBetweenRooms(r1, r2));
+                    //handleUnitRoomChange(r2.getUnitRooms(), r1.getRoomType().ordinal());
+                    //handleWallDeletion(isten.getMap().getEdgeManager().getEdgeBetweenRooms(r1, r2));
                     isten.getMap().mergeRooms(r1, r2, isten);
-                    handleRoomEdges(r1);
+                    //handleRoomEdges(r1);
 
                     //System.out.println("r1 adjacentrooms Number: " + rooms.get(0).getPhysicallyAdjacentRooms().size());
 
@@ -121,10 +124,10 @@ public class MapHandler extends ServerSideHandler {
 
                             for(Room room: isten.getMap().getRooms()) {
                                 if(room.getID() == newID) {
-                                    handleUnitRoomChange(room.getUnitRooms(), room.getRoomType().ordinal());
-                                    handleWallAddition(isten.getMap().getEdgeManager().getEdgeBetweenRooms(splittable, room));
-                                    handleRoomEdges(room);
-                                    handleRoomEdges(splittable);
+                                    //handleUnitRoomChange(room.getUnitRooms(), room.getRoomType().ordinal());
+                                    //handleWallAddition(isten.getMap().getEdgeManager().getEdgeBetweenRooms(splittable, room));
+                                    //handleRoomEdges(room);
+                                    //handleRoomEdges(splittable);
                                     break;
                                 }
                             }
@@ -150,11 +153,14 @@ public class MapHandler extends ServerSideHandler {
                 pos.y,
                 isDoor);
         sendDataToAllClients(packet);
+        /*
         try {
             Thread.sleep(5);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+         */
     }
 
     public void handleRoomEdges(Room room) {
@@ -164,11 +170,14 @@ public class MapHandler extends ServerSideHandler {
                         edgePiece.getPosition().y,
                         edgePiece.isDoor());
                 sendDataToAllClients(packet);
+                /*
                 try {
                     Thread.sleep(5);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+
+                 */
             }
         }
     }
@@ -179,11 +188,14 @@ public class MapHandler extends ServerSideHandler {
                     edgePiece.getCollider().getScale().x, edgePiece.getCollider().getScale().y,
                     edgePiece.isDoor());
             sendDataToAllClients(packet);
+            /*
             try {
                 Thread.sleep(5);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+
+             */
         }
     }
     public void handleWallDeletion(EdgeBetweenRooms edge) {
@@ -191,11 +203,14 @@ public class MapHandler extends ServerSideHandler {
             Packet23WallDelete packet = new Packet23WallDelete(edgePiece.getPosition().x,
                     edgePiece.getPosition().y);
             sendDataToAllClients(packet);
+            /*
             try {
                 Thread.sleep(5);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+
+             */
         }
     }
 
@@ -205,11 +220,14 @@ public class MapHandler extends ServerSideHandler {
             Packet04UnitRoom packet = new Packet04UnitRoom(unitRoom.getPosition().x,
                     unitRoom.getPosition().y, type);
             sendDataToAllClients(packet);
+            /*
             try {
                 Thread.sleep(5);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+
+             */
         }
 
     }

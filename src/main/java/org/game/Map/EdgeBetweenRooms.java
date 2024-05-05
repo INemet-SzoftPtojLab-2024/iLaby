@@ -48,11 +48,11 @@ public class EdgeBetweenRooms {
         if(wallToSwitch.getUnitRoomsBetween().get(0).hasDoor() || wallToSwitch.getUnitRoomsBetween().get(1).hasDoor()) return false;
 
         String doorPath = "./assets/doors/doors_leaf_closed.png";
-        wallToSwitch.collider.setSolidity(false);
+        //wallToSwitch.collider.setSolidity(false);
 
         //wallToSwitch.setNewImage(doorPath, wallToSwitch.image.getScale(),isten);
 
-        isten.getRenderer().deleteRenderable(wallToSwitch.image);
+        //isten.getRenderer().deleteRenderable(wallToSwitch.image);
         Door newDoor = new Door(wallToSwitch.getCollider(), wallToSwitch.getPosition(),
                 wallToSwitch.unitRoomsBetween.get(0), wallToSwitch.unitRoomsBetween.get(1));
         newDoor.setNewImage(doorPath, wallToSwitch.getCollider().getScale(), isten);
@@ -65,8 +65,8 @@ public class EdgeBetweenRooms {
     }
     public void switchDoorToWall(EdgePiece doorToSwitch, Isten isten){
         String wallPath = "./assets/walls/wall_mid.png";
-        doorToSwitch.collider.setSolidity(true);
-        isten.getRenderer().deleteRenderable(doorToSwitch.image);
+        //doorToSwitch.collider.setSolidity(true);
+        //isten.getRenderer().deleteRenderable(doorToSwitch.image);
 
         Wall newWall = new Wall(doorToSwitch.getCollider(), doorToSwitch.getPosition(),
                 doorToSwitch.unitRoomsBetween.get(0), doorToSwitch.unitRoomsBetween.get(1));
