@@ -59,9 +59,9 @@ public class Door extends EdgePiece {
         else return false;
     }
     //az ajto nyitasanak csekkolasakor hasznalom
-    public boolean canBeOpened(Isten isten){
+    public boolean canBeOpened(Isten isten, Vec2 playerPos){
         //player helyének meghatározása
-        Room placeOfPlayer = isten.getPlayer().getPlayerRoom(isten);
+        Room placeOfPlayer = isten.getPlayer().getPlayerRoom(isten, playerPos);
         //masik oldali szoba meghatározása
         Room roomOnOtherSideOfDoor = null;
         for(UnitRoom unitRoom : unitRoomsBetween) {

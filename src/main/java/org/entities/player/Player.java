@@ -310,7 +310,7 @@ public class Player extends Entity {
         Room currentRoom = null;
         for (Updatable u : isten.getUpdatables()) {
             if (u.getClass().equals(Villain.class)) {
-                currentRoom = getPlayerRoom(isten);
+                currentRoom = getPlayerRoom(isten, playerCollider.getPosition());
                 Villain villain = (Villain) u;
                 if ((currentRoom != null && currentRoom.equals(villain.getRoom())) && currentRoom.getRoomType() != RoomType.GAS&&!villain.getIsFainted()) {
                    //Ha van akkora szerencsenk, hogy van item nalunk, ami megmentene megse halunk meg
@@ -327,14 +327,14 @@ public class Player extends Entity {
     }
 
     //kiszerveztem a fenti fv-t, mert nekem is kellett, és máshol később is hasznos lehet, ha kell, unitRoomra is ki lehetne szervezni
-    public Room getPlayerRoom(Isten isten){
+    public Room getPlayerRoom(Isten isten, Vec2 playerPos){
         UnitRoom[][] unitRooms= isten.getMap().getUnitRooms();
         for(int i = 0; i < unitRooms.length;i++){
             for(int j = 0; j<unitRooms[i].length;j++){
-                if (playerCollider.getPosition().x >= unitRooms[i][j].getPosition().x - 0.5 &&
-                        playerCollider.getPosition().x <= unitRooms[i][j].getPosition().x + 0.5 &&
-                        playerCollider.getPosition().y >= unitRooms[i][j].getPosition().y - 0.5 &&
-                        playerCollider.getPosition().y <= unitRooms[i][j].getPosition().y + 0.5)
+                if (playerPos.x >= unitRooms[i][j].getPosition().x - 0.5 &&
+                        playerPos.x <= unitRooms[i][j].getPosition().x + 0.5 &&
+                        playerPos.y >= unitRooms[i][j].getPosition().y - 0.5 &&
+                        playerPos.y <= unitRooms[i][j].getPosition().y + 0.5)
                 {
                     return unitRooms[i][j].getOwnerRoom();
                 }

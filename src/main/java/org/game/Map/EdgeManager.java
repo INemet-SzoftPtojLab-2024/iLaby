@@ -309,7 +309,7 @@ public class EdgeManager extends Updatable {
                     Door door = (Door)ep;
                     if(door.isPlayerAtDoor(isten, playerPosition)){
                         System.out.println("Ajto nyilna");
-                        if(door.canBeOpened(isten)){
+                        if(door.canBeOpened(isten, playerPosition)){
                             System.out.println("OPEN IT");
                             door.open();
                             return door.position;
