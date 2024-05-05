@@ -122,7 +122,6 @@ public class Villain extends Entity {
         else return false;
     }
     public void move(Isten isten, double deltaTime) {
-        if(!isInGasRoom(isten)) {
             sum += deltaTime;
             Vec2 playerPosition = villainCollider.getPosition();
             Random random = new Random();
@@ -230,7 +229,6 @@ public class Villain extends Entity {
                 }
             }
         }
-    }
 
     public float[] randomPositions(ArrayList<Room> rooms) {
         //Collections.shuffle(rooms);
@@ -318,5 +316,9 @@ public class Villain extends Entity {
 
     public void setRandom2(int random2) {
         this.random2 = random2;
+    }
+
+    public void setVelocity(float velocity) {
+        villainCollider.setVelocity(new Vec2(velocity, velocity));
     }
 }
