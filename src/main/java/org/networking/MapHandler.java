@@ -48,8 +48,8 @@ public class MapHandler extends ServerSideHandler {
             EdgeBetweenRooms re = map.getEdgeManager().getRoomEdges().get(i);
             for (int j = 0; j < re.getWalls().size(); j++) {
                 EdgePiece edgePiece = re.getWalls().get(j);
-                Vec2 pos = edgePiece.getImage().getPosition();
-                Vec2 scale = edgePiece.getImage().getScale();
+                Vec2 pos = edgePiece.getCollider().getPosition();
+                Vec2 scale = edgePiece.getCollider().getScale();
                 Packet20Wall packet = new Packet20Wall(pos.x, pos.y, scale.x, scale.y, edgePiece.isDoor());
                 server.sendData(packet.getData(), client.ipAddress, client.port);
             }
@@ -85,15 +85,16 @@ public class MapHandler extends ServerSideHandler {
             if (delta > 1) {
                 //TESTCASE 1:::
 
+                /*
                 if(sec %3==0){
                     Vec2 pos = isten.getMap().addDoorToEdgeWithoutDoor(isten);
-                    //handleAddOrDeleteDoor(pos, true);
+                    handleAddOrDeleteDoor(pos, true);
                     //System.out.println("ajtoaddolas tortent");
                 }
                 else{
                     Vec2 pos = isten.getMap().TakeOutDoor(isten,true);
                     if(pos.x != -1 && pos.y != -1) {
-                        //handleAddOrDeleteDoor(pos, false);
+                        handleAddOrDeleteDoor(pos, false);
                         //stop = true;
                         //System.out.println("edgeNum: "+isten.getMap().getEdgeManager().getRoomEdges().size());
                         //System.out.println("doorNum: "+isten.getMap().getEdgeManager().getDoorNum());
@@ -102,21 +103,27 @@ public class MapHandler extends ServerSideHandler {
 
 
                 }
+
+                 */
+
+
+
                 //TESTCASE 2:
                 if (sec % 4 == 0) {
                     Collections.shuffle(isten.getMap().getRooms());
+
                     Room r1 = isten.getMap().getRooms().get(0);
                     Room r2 = isten.getMap().getRooms().get(0).getPhysicallyAdjacentRooms().get(0);
-                    //handleUnitRoomChange(r2.getUnitRooms(), r1.getRoomType().ordinal());
-                    //handleWallDeletion(isten.getMap().getEdgeManager().getEdgeBetweenRooms(r1, r2));
+                    handleUnitRoomChange(r2.getUnitRooms(), r1.getRoomType().ordinal());
+                    handleWallDeletion(isten.getMap().getEdgeManager().getEdgeBetweenRooms(r1, r2));
                     isten.getMap().mergeRooms(r1, r2, isten);
-                    //handleRoomEdges(r1);
+                    handleRoomEdges(r1);
 
                     //System.out.println("r1 adjacentrooms Number: " + rooms.get(0).getPhysicallyAdjacentRooms().size());
 
                 }
                 //TESTCASE 3:
-
+/*
                 if((sec+2)%4==0) {
                     for (Room splittable : isten.getMap().getRooms()) {
                         int newID;
@@ -124,10 +131,10 @@ public class MapHandler extends ServerSideHandler {
 
                             for(Room room: isten.getMap().getRooms()) {
                                 if(room.getID() == newID) {
-                                    //handleUnitRoomChange(room.getUnitRooms(), room.getRoomType().ordinal());
-                                    //handleWallAddition(isten.getMap().getEdgeManager().getEdgeBetweenRooms(splittable, room));
-                                    //handleRoomEdges(room);
-                                    //handleRoomEdges(splittable);
+                                    handleUnitRoomChange(room.getUnitRooms(), room.getRoomType().ordinal());
+                                    handleWallAddition(isten.getMap().getEdgeManager().getEdgeBetweenRooms(splittable, room));
+                                    handleRoomEdges(room);
+                                    handleRoomEdges(splittable);
                                     break;
                                 }
                             }
@@ -140,6 +147,8 @@ public class MapHandler extends ServerSideHandler {
                     }
                 }
 
+
+                 */
 
                 sec++;
                 delta = 0;

@@ -64,7 +64,7 @@ public class EdgeManager extends Updatable {
 
                 // removeing the collidergroup from the physics engine
                 //edgeToDelete.getColliderGroup().getColliders().clear(); //it's not required
-                isten.getPhysicsEngine().removeColliderGroup(edgeToDelete.getColliderGroup().id);
+                //isten.getPhysicsEngine().removeColliderGroup(edgeToDelete.getColliderGroup().id);
                 roomEdges.remove(i);
                 return;
             }
@@ -93,10 +93,10 @@ public class EdgeManager extends Updatable {
                         //ha ajto akkor kicsereljuk falra, de csak akkor ha a masikon mar van ajto, hogy egy edgen ne legyen ketto
                         if(edgeBetweenRoom.getWalls().get(i).isDoor() && edgeBetweenRAndRDAdjacent.hasDoor()) edgeBetweenRoom.switchDoorToWall(edgeBetweenRoom.getWalls().get(i), isten);
                         edgeBetweenRAndRDAdjacent.getWalls().add(edgeBetweenRoom.getWalls().get(i));
-                        edgeBetweenRAndRDAdjacent.getColliderGroup().addCollider(edgeBetweenRoom.getWalls().get(i).collider);
+                        //edgeBetweenRAndRDAdjacent.getColliderGroup().addCollider(edgeBetweenRoom.getWalls().get(i).collider);
                     }
-                    isten.getPhysicsEngine().removeColliderGroup(edgeBetweenRoom.getColliderGroup().id);
-                    edgeBetweenRoom.getColliderGroup().getColliders().clear();
+                    //isten.getPhysicsEngine().removeColliderGroup(edgeBetweenRoom.getColliderGroup().id);
+                    //edgeBetweenRoom.getColliderGroup().getColliders().clear();
                     edgeToRemove.add(edgeBetweenRoom);
                 }
                 else{
@@ -219,7 +219,7 @@ public class EdgeManager extends Updatable {
                 newEdge.addNewWall(wallRightPos, verticalScale, wallFinderUnitRoom, wallFinderUnitRoom.getRightNeighbor(),isten);
             }
         }
-        isten.getPhysicsEngine().addColliderGroup(newEdge.getColliderGroup());
+        //isten.getPhysicsEngine().addColliderGroup(newEdge.getColliderGroup());
     }
     //this function add one door to an edge
     //ha mar minden erintett unitroomhoz tartozik ajot, akkor nem addol es hamissal ter vissza

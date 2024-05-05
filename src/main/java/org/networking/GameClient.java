@@ -223,6 +223,9 @@ public class GameClient extends Thread {
     }
 
     private void handleWall(Packet20Wall packet) {
+
+        //if(isten.getSocketServer() != null) return;
+
         Vec2 pos = new Vec2(packet.getPosX(), packet.getPosY());
         Vec2 scale = new Vec2(packet.getScaleX(), packet.getScaleY());
         boolean isDoor = packet.isDoor();

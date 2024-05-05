@@ -38,7 +38,7 @@ public class EdgeBetweenRooms {
         Collider wallCollider = new Collider(position,scale);
         colliderGroup.addCollider(wallCollider);
         Wall newWall = new Wall(wallCollider, position, ur1, ur2);
-        newWall.setNewImage(wallPath, scale, isten);
+        //newWall.setNewImage(wallPath, scale, isten);
         walls.add(newWall);
 
     }
@@ -55,7 +55,7 @@ public class EdgeBetweenRooms {
         //isten.getRenderer().deleteRenderable(wallToSwitch.image);
         Door newDoor = new Door(wallToSwitch.getCollider(), wallToSwitch.getPosition(),
                 wallToSwitch.unitRoomsBetween.get(0), wallToSwitch.unitRoomsBetween.get(1));
-        newDoor.setNewImage(doorPath, wallToSwitch.getCollider().getScale(), isten);
+        //newDoor.setNewImage(doorPath, wallToSwitch.getCollider().getScale(), isten);
 
         walls.add(newDoor);
         newDoor.getUnitRoomsBetween().get(0).setHasDoor(true);
@@ -70,7 +70,7 @@ public class EdgeBetweenRooms {
 
         Wall newWall = new Wall(doorToSwitch.getCollider(), doorToSwitch.getPosition(),
                 doorToSwitch.unitRoomsBetween.get(0), doorToSwitch.unitRoomsBetween.get(1));
-        newWall.setNewImage(wallPath, doorToSwitch.getCollider().getScale(), isten);
+        //newWall.setNewImage(wallPath, doorToSwitch.getCollider().getScale(), isten);
 
         walls.add(newWall);
         newWall.getUnitRoomsBetween().get(0).setHasDoor(false);
