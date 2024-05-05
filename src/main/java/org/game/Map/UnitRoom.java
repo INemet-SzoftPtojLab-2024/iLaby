@@ -75,6 +75,11 @@ public class UnitRoom implements Graph<UnitRoom>{
                 imgPath = getImagePath();
             }
         }
+        if(setOwnerRoomType==2)
+        {
+            ownerRoom.setRoomTypeToRoomType(RoomType.GAS);
+            imgPath = getImagePath();
+        }
         Image newImage = new Image(position, new Vec2(1,1), imgPath);
         //ha ki akajuk cserélni a képet akkor ki kell venni  a renderablek kozol
         if(image != null){
@@ -111,6 +116,7 @@ public class UnitRoom implements Graph<UnitRoom>{
         //if(ownerRoom.getID() == 999) j = 5;
         //String path = "./assets/rooms/" + j + ".png";
         //String path = "./assets/floor_"+ j +".png";
+        setOwnerRoomType=2;
         String path = "./assets/floors/floor" + j + ".png";
         setNewImage(path, isten);
     }
