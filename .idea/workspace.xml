@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3506ab6d-0407-47f2-a7e8-78ebc867e577" name="Changes" comment="it's working" />
+    <list default="true" id="3506ab6d-0407-47f2-a7e8-78ebc867e577" name="Changes" comment="it's working">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Isten.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Isten.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/UI/Minimap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/UI/Minimap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/HandlerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/HandlerManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/MapHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/MapHandler.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -192,7 +198,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-21.0.2-corretto-21.0.2-4caba194b151-51586f01" />
+        <option value="jdk-18.0.2-corretto-18.0.2-4caba194b151-5720f15e" />
+        <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-4f524021" />
       </set>
     </attachedChunks>
   </component>

@@ -37,8 +37,8 @@ public abstract class EdgePiece {
     }
 
     public void removeEdgePiece(Isten isten, ColliderGroup colliderGroup){
-        isten.getRenderer().deleteRenderable(image);
-        isten.getPhysicsEngine().getColliderGroup(colliderGroup.id).removeCollider(collider);
+        //isten.getRenderer().deleteRenderable(image);
+        //isten.getPhysicsEngine().getColliderGroup(colliderGroup.id).removeCollider(collider);
         //colliderGroup.removeCollider(collider); //its the same
         image = null;
         collider = null;

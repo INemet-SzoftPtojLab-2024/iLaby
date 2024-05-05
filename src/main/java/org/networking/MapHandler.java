@@ -48,16 +48,19 @@ public class MapHandler extends ServerSideHandler {
             EdgeBetweenRooms re = map.getEdgeManager().getRoomEdges().get(i);
             for (int j = 0; j < re.getWalls().size(); j++) {
                 EdgePiece edgePiece = re.getWalls().get(j);
-                Vec2 pos = edgePiece.getImage().getPosition();
-                Vec2 scale = edgePiece.getImage().getScale();
+                Vec2 pos = edgePiece.getCollider().getPosition();
+                Vec2 scale = edgePiece.getCollider().getScale();
                 Packet20Wall packet = new Packet20Wall(pos.x, pos.y, scale.x, scale.y, edgePiece.isDoor());
                 server.sendData(packet.getData(), client.ipAddress, client.port);
             }
+            /*
             try {
                 Thread.sleep(5);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+
+             */
         }
 
 
@@ -82,6 +85,7 @@ public class MapHandler extends ServerSideHandler {
             if (delta > 1) {
                 //TESTCASE 1:::
 
+
                 if(sec %3==0){
                     Vec2 pos = isten.getMap().addDoorToEdgeWithoutDoor(isten);
                     handleAddOrDeleteDoor(pos, true);
@@ -99,9 +103,15 @@ public class MapHandler extends ServerSideHandler {
 
 
                 }
+
+
+
+
+
                 //TESTCASE 2:
                 if (sec % 4 == 0) {
                     Collections.shuffle(isten.getMap().getRooms());
+
                     Room r1 = isten.getMap().getRooms().get(0);
                     Room r2 = isten.getMap().getRooms().get(0).getPhysicallyAdjacentRooms().get(0);
                     handleUnitRoomChange(r2.getUnitRooms(), r1.getRoomType().ordinal());
@@ -138,6 +148,8 @@ public class MapHandler extends ServerSideHandler {
                 }
 
 
+
+
                 sec++;
                 delta = 0;
             }
@@ -150,11 +162,14 @@ public class MapHandler extends ServerSideHandler {
                 pos.y,
                 isDoor);
         sendDataToAllClients(packet);
+        /*
         try {
             Thread.sleep(5);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+         */
     }
 
     public void handleRoomEdges(Room room) {
@@ -164,11 +179,14 @@ public class MapHandler extends ServerSideHandler {
                         edgePiece.getPosition().y,
                         edgePiece.isDoor());
                 sendDataToAllClients(packet);
+                /*
                 try {
                     Thread.sleep(5);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+
+                 */
             }
         }
     }
@@ -179,11 +197,14 @@ public class MapHandler extends ServerSideHandler {
                     edgePiece.getCollider().getScale().x, edgePiece.getCollider().getScale().y,
                     edgePiece.isDoor());
             sendDataToAllClients(packet);
+            /*
             try {
                 Thread.sleep(5);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+
+             */
         }
     }
     public void handleWallDeletion(EdgeBetweenRooms edge) {
@@ -191,11 +212,14 @@ public class MapHandler extends ServerSideHandler {
             Packet23WallDelete packet = new Packet23WallDelete(edgePiece.getPosition().x,
                     edgePiece.getPosition().y);
             sendDataToAllClients(packet);
+            /*
             try {
                 Thread.sleep(5);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+
+             */
         }
     }
 
@@ -205,11 +229,14 @@ public class MapHandler extends ServerSideHandler {
             Packet04UnitRoom packet = new Packet04UnitRoom(unitRoom.getPosition().x,
                     unitRoom.getPosition().y, type);
             sendDataToAllClients(packet);
+            /*
             try {
                 Thread.sleep(5);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+
+             */
         }
 
     }
