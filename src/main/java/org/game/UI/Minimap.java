@@ -133,6 +133,8 @@ public class Minimap extends Updatable {
 
         for(int j=0;j<isten.getEdgeBetweenRooms().getWalls().size();j++)
         {
+            if(isten.getEdgeBetweenRooms().getWalls().get(j) == null) return;
+
             Vec2 startPos=isten.getEdgeBetweenRooms().getWalls().get(j).getCollider().getPosition().clone();
             Vec2 scale=isten.getEdgeBetweenRooms().getWalls().get(j).getCollider().getScale();
             startPos.x-=0.5f*scale.x+lowerBound.x;
