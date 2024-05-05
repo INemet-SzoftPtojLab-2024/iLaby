@@ -74,4 +74,6 @@ public abstract class Item {
 
     public int getItemIndex() { return itemIndex; }
     public boolean isUsed(){return used;}
+    public void setCapacity(float capacity) {}
+    public void resizeBar(float percent) {}
 }

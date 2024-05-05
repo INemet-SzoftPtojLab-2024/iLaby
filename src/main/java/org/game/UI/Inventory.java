@@ -106,8 +106,10 @@ public class Inventory extends Updatable {
             Vec2 actPos = isten.getPlayer().getPlayerCollider().getPosition();
             actItem.dropOnGround(actPos);
             hasGasmaskEquipped = getExistenceOfGasMask();
-            isten.getSocketClient().sendData(("13" + actItem.getItemIndex() + ","
-                    + actPos.x + "," + actPos.y).getBytes());
+            isten.getSocketClient().sendData(("13" + actItem.getItemIndex() + "," + actPos.x + "," + actPos.y).getBytes());
+            if(actItem.getClass() == Gasmask.class)
+                isten.getSocketClient().sendData(("14" + actItem.getItemIndex() + "," + ((Gasmask) actItem).getCapacity()).getBytes());
+
 
             storedItems.set(selectedSlot - 1, null);
             tmp = new ImageUI(getSlotLocation(selectedSlot), new Vec2(iconSize), "./assets/ui/inventorySlot_Selected.png");

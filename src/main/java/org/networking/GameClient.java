@@ -103,6 +103,10 @@ public class GameClient extends Thread {
                 packet = new Packet13ItemDropped(data);
                 handleItemDropped((Packet13ItemDropped) packet);
                 break;
+            case GASMASK:
+                packet = new Packet14Gasmask(data);
+                handleGasmask((Packet14Gasmask) packet);
+                break;
             case WALL:
                 //System.out.println("GOT WALL PACKET");
                 packet = new Packet20Wall(data);
@@ -124,6 +128,15 @@ public class GameClient extends Thread {
                 packet = new Packet24DoorOpen(data);
                 handleDoorOpen((Packet24DoorOpen)packet);
                 break;
+        }
+    }
+
+    private void handleGasmask(Packet14Gasmask packet) {
+        for(int i = 0; i < isten.getUpdatables().size(); i++) {
+            if(isten.getUpdatable(i).getClass() == ItemManager.class) {
+                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).setCapacity(packet.getCapacity());
+                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).resizeBar(packet.getCapacity());
+            }
         }
     }
 

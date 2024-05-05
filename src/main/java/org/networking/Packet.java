@@ -15,6 +15,7 @@ public abstract class Packet {
         CHESTOPENED(11),
         ITEMPICKEDUP(12),
         ITEMDROPPED(13),
+        GASMASK(14),
         WALL(20),
         DEATH(21),
         EDGEPIECECHANGED(22),
