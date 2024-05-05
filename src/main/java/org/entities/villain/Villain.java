@@ -23,15 +23,17 @@ import java.util.Random;
 public class Villain extends Entity {
     static ArrayList<Room> roomsWithVillains = new ArrayList<>();
     Image villainImage;
+    static ArrayList<Image> faintedVillainImages=new ArrayList<>();
     Collider villainCollider;
     Text villainName;
-    float time;
+    double timeElapsed;
     int direction;
     Vec2 position;
     String imagePath;
     float velocity;
     double sum;
     Room room;
+    boolean isFainted;
     UnitRoom currentUnitRoom;
     UnitRoom prevUnitRoom;
     private int random1, random2;
@@ -39,12 +41,13 @@ public class Villain extends Entity {
     public Villain() {
         villainCollider = null;
         villainImage = null;
-        time = 0.0f;
+        timeElapsed = 0;
         villainName = null;
         direction=1;
         velocity = 0.5f;
         sum = 0.0;
         room = null;
+        isFainted=false;
     }
     public Villain(String name, String iP) {
         this(name, new Vec2(0,0), iP);
@@ -53,7 +56,7 @@ public class Villain extends Entity {
     public Villain(String name, Vec2 pos, String iP) {
         villainCollider = null;
         villainImage = null;
-        time = 0.0f;
+        timeElapsed = 0;
         villainName = new Text(name, new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 255, 0, 0);
         villainName.setShadowOn(false);
         direction=1;
@@ -73,9 +76,15 @@ public class Villain extends Entity {
         isten.getPhysicsEngine().addCollider(villainCollider);//register collider in the physics engine
 
         villainImage = new Image(new Vec2(), playerScale, imagePath);
+        faintedVillainImages.add(new Image(new Vec2(),new Vec2(0.7f, 0.7f),imagePath.substring(0,imagePath.length()-4)+"_fainted1.png"));
+        faintedVillainImages.add(new Image(new Vec2(),new Vec2(0.7f, 0.7f),imagePath.substring(0,imagePath.length()-4)+"_fainted2.png"));
+        //System.out.println(imagePath.substring(0,imagePath.length()-4)+"_fainted1.png");
         villainImage.setSortingLayer(-50);
+        faintedVillainImages.get(0).setSortingLayer(-40);faintedVillainImages.get(1).setSortingLayer(-40);
         villainImage.setVisibility(true);
         isten.getRenderer().addRenderable(villainImage);//register images in the renderer
+        isten.getRenderer().addRenderable(faintedVillainImages.get(0));//register images in the renderer
+        isten.getRenderer().addRenderable(faintedVillainImages.get(1));//register images in the renderer
 
         if (villainName != null) {
             villainName.setVisibility(true);
@@ -101,9 +110,20 @@ public class Villain extends Entity {
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
+        timeElapsed+=deltaTime;
         Vec2 playerPosition = villainCollider.getPosition();
-        villainImage.setPosition(playerPosition);
+        //villainImage.setPosition(playerPosition);
+        faintedVillainImages.get(0).setPosition(playerPosition);
+        faintedVillainImages.get(0).setPosition(playerPosition);
         villainName.setPosition(Vec2.sum(playerPosition, new Vec2(0, (float) 0.5)));
+        if(isFainted) {
+            if ((timeElapsed*1000000) % 1000000 < 500000) {
+                setVillainImage(isten,faintedVillainImages.get(0));
+            }
+            else {
+                setVillainImage(isten,faintedVillainImages.get(1));
+            }
+        }
     }
     public boolean isInGasRoom(Isten isten)
     {
@@ -122,11 +142,13 @@ public class Villain extends Entity {
         else return false;
     }
     public void move(Isten isten, double deltaTime) {
-        if(!isInGasRoom(isten)) {
+        if(!isInGasRoom(isten)/*&&!isFainted*/) {
             sum += deltaTime;
             Vec2 playerPosition = villainCollider.getPosition();
             Random random = new Random();
             villainImage.setPosition(playerPosition);
+            //faintedVillainImages.get(0).setPosition(playerPosition);
+            //faintedVillainImages.get(1).setPosition(playerPosition);
             villainName.setPosition(Vec2.sum(playerPosition, new Vec2(0, (float) 0.5)));
 
 
@@ -230,6 +252,8 @@ public class Villain extends Entity {
                 }
             }
         }
+        else setFainted();
+
     }
 
     public float[] randomPositions(ArrayList<Room> rooms) {
@@ -318,5 +342,10 @@ public class Villain extends Entity {
 
     public void setRandom2(int random2) {
         this.random2 = random2;
+    }
+    public boolean getIsFainted(){return isFainted;}
+    public void setFainted(){
+        isFainted=true;
+        villainImage.setVisibility(false);
     }
 }

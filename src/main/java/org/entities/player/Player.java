@@ -312,7 +312,7 @@ public class Player extends Entity {
             if (u.getClass().equals(Villain.class)) {
                 currentRoom = getPlayerRoom(isten);
                 Villain villain = (Villain) u;
-                if ((currentRoom != null && currentRoom.equals(villain.getRoom())) && currentRoom.getRoomType() != RoomType.GAS) {
+                if ((currentRoom != null && currentRoom.equals(villain.getRoom())) && currentRoom.getRoomType() != RoomType.GAS&&!villain.getIsFainted()) {
                    //Ha van akkora szerencsenk, hogy van item nalunk, ami megmentene megse halunk meg
                     if(!isten.getInventory().avoidVillain(deltaTime)){
                         if (localPlayer && playerSound != null)

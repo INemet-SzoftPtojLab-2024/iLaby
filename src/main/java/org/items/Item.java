@@ -25,6 +25,7 @@ public abstract class Item {
     protected Image image;
     protected final Isten isten;
     protected String imagePath;
+    protected boolean used;
     private int itemIndex;
 
     private LocalDateTime droppedAt;
@@ -35,7 +36,7 @@ public abstract class Item {
         droppedAt = null;
         this.isten=isten;
         itemIndex = isten.getItemManager().getItems().size();
-
+        used=false;
         isten.getItemManager().addItem(this);
     }
     public void dropOnGround(Vec2 pos){
@@ -51,9 +52,11 @@ public abstract class Item {
         //Pics up an item if it is not in the inventory, and it has been dropped for more than 200 millisec
         //1 ms = 1000000 ns :)
         if((!location.equals(Location.INVENTORY) && droppedAt.isBefore((LocalDateTime.now()).minusNanos(200000000)))) {
-            location = Location.INVENTORY;
-            image.setVisibility(false);
-            isten.getInventory().addItem(this);
+            if(!used) {
+                location = Location.INVENTORY;
+                image.setVisibility(false);
+                isten.getInventory().addItem(this);
+            }
         }
     }
 
@@ -70,4 +73,5 @@ public abstract class Item {
     public Image getImage() { return image; }
 
     public int getItemIndex() { return itemIndex; }
+    public boolean isUsed(){return used;}
 }
