@@ -8,6 +8,7 @@ import main.java.org.entities.player.Player;
 
 import main.java.org.game.Input.Input;
 import main.java.org.game.Map.EdgeBetweenRooms;
+import main.java.org.game.Map.EdgeManager;
 import main.java.org.game.Map.EdgePiece;
 import main.java.org.game.Map.Map;
 import main.java.org.game.PlayerPrefs.PlayerPrefs;
@@ -50,10 +51,8 @@ public class Isten {
     private PlayerMP player;
     private ChestManager chestManager;
     private Minimap minimap;
+    private ClientMap clientMap;
 
-        //ONLY CONTAINS COLLIDERS AND IMAGES OF EDGEPIECES
-        //DOES NOT REPLACE MAP
-        private EdgeBetweenRooms edgeBetweenRooms;
     /**
      * Constructor for Isten.
      * Initializes the physics engine, game renderer, and list of updatables.
@@ -71,9 +70,10 @@ public class Isten {
         pendingAddedUpdatables = new ArrayList<>();
         pendingRemovedUpdatables = new ArrayList<>();
 
-        edgeBetweenRooms = new EdgeBetweenRooms();
-        physicsEngine.addColliderGroup(edgeBetweenRooms.getColliderGroup());
+        clientMap = new ClientMap();
+
         handlerManager = new HandlerManager(this);
+        ClientPacketSender.init(this);
     }
 
     /**
@@ -207,6 +207,7 @@ public class Isten {
         updatables.add(itemManager);
         updatables.add(inventory);
         updatables.add(map);
+        updatables.add(clientMap);
 
         updatables.add(chestManager);//majd a játékba nem kell 500 láda, csak szemléltetésképp kell ilyen sok
 
@@ -340,16 +341,9 @@ public class Isten {
     }
 
     //ONLY CONTAINS COLLIDERS AND IMAGES OF EDGEPIECES
-    public EdgeBetweenRooms getEdgeBetweenRooms() {
-        return edgeBetweenRooms;
-    }
-    public void addEdgePiece(EdgePiece piece) {
-            edgeBetweenRooms.getWalls().add(piece);
+    public ClientMap getClientMap() {
+        return clientMap;
     }
 
-    public void removeEdgePiece(EdgePiece piece) {
-        renderer.deleteRenderable(piece.getImage());
-        edgeBetweenRooms.getColliderGroup().removeCollider(piece.getCollider());
-        edgeBetweenRooms.getWalls().remove(piece);
-    }
+
 }

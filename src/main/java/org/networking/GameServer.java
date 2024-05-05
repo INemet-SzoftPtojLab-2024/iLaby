@@ -127,7 +127,23 @@ public class GameServer extends Thread {
                 packet = new Packet13ItemDropped(data);
                 handleItemDropped((Packet13ItemDropped) packet);
                 break;
+            case DOOROPEN:
+                packet = new Packet24DoorOpen(data);
+                handleDoorOpen((Packet24DoorOpen)packet);
+                break;
+            case PLAYERPOSFORDOOROPEN:
+                packet = new Packet25PlayerPosForDoorOpen(data);
+                handlePlayerPosForDoorOpen((Packet25PlayerPosForDoorOpen)packet);
+                break;
         }
+    }
+
+    private void handlePlayerPosForDoorOpen(Packet25PlayerPosForDoorOpen packet) {
+        mapHandler.CheckIfPlayerOpenedDoor(packet);
+    }
+
+    private void handleDoorOpen(Packet24DoorOpen packet) {
+        mapHandler.handleDoorOpen(packet);
     }
 
     private void handleItemDropped(Packet13ItemDropped packet) {

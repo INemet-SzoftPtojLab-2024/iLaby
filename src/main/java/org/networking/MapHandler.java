@@ -241,4 +241,29 @@ public class MapHandler extends ServerSideHandler {
 
     }
 
+    public void CheckIfPlayerOpenedDoor(Packet25PlayerPosForDoorOpen packet) {
+
+        Vec2 doorPos = isten.getMap().getEdgeManager().OpenDoor(new Vec2(packet.getX(), packet.getY()));
+        if(doorPos.x == -1 && doorPos.y == -1) return;
+
+        Packet24DoorOpen packet24DoorOpen = new Packet24DoorOpen(doorPos.x, doorPos.y, false);
+        packet24DoorOpen.writeData(isten.getSocketClient());
+
+    }
+
+    public void handleDoorOpen(Packet24DoorOpen packet) {
+
+        for(int i = 0; i < isten.getMap().getEdgeManager().getRoomEdges().size(); i++) {
+            EdgeBetweenRooms re = isten.getMap().getEdgeManager().getRoomEdges().get(i);
+            for (int j = 0; j < re.getWalls().size(); j++) {
+                EdgePiece edgePiece = re.getWalls().get(j);
+                if(packet.getX() == edgePiece.getPosition().x &&
+                        packet.getY() == edgePiece.getPosition().y) {
+                    edgePiece.getCollider().setSolidity(packet.isSolid());
+                }
+            }
+        }
+
+        sendDataToAllClients(packet);
+    }
 }

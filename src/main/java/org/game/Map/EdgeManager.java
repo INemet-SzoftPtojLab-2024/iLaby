@@ -293,22 +293,35 @@ public class EdgeManager extends Updatable {
             for(EdgePiece ep : edge.getWalls()){
                 if(ep.isDoor()){
                     Door door = (Door)ep;
-                    if(isten.getInputHandler().isKeyReleased(KeyEvent.VK_O) && door.isPlayerAtDoor(isten)){
-                        System.out.println("Ajto nyilna");
-                        if(door.canBeOpened(isten)){
-                            door.open();
-                        }
-                        else System.out.println("Nem lehet kinyitni mert egyiranyu");
-
-                    }
                     if(door.isOpened()){
                         door.manageOpenDoor(deltaTime);
                     }
-
                 }
             }
         }
 
+    }
+
+    public Vec2 OpenDoor(Vec2 playerPosition) {
+        for(EdgeBetweenRooms edge: roomEdges){
+            for(EdgePiece ep : edge.getWalls()){
+                if(ep.isDoor()){
+                    Door door = (Door)ep;
+                    if(door.isPlayerAtDoor(isten, playerPosition)){
+                        System.out.println("Ajto nyilna");
+                        if(door.canBeOpened(isten)){
+                            System.out.println("OPEN IT");
+                            door.open();
+                            return door.position;
+                        }
+                        else {
+                            System.out.println("Nem lehet kinyitni mert egyiranyu");
+                        }
+                    }
+                }
+            }
+        }
+        return new Vec2(-1,-1);
     }
 
     @Override

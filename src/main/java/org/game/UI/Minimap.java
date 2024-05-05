@@ -131,12 +131,12 @@ public class Minimap extends Updatable {
 
         if(isten.getMap().getEdgeManager() == null) return;
 
-        for(int j=0;j<isten.getEdgeBetweenRooms().getWalls().size();j++)
+        for(int j=0;j<isten.getClientMap().getEdgeBetweenRooms().getWalls().size();j++)
         {
-            if(isten.getEdgeBetweenRooms().getWalls().get(j) == null) return;
+            if(isten.getClientMap().getEdgeBetweenRooms().getWalls().get(j) == null) return;
 
-            Vec2 startPos=isten.getEdgeBetweenRooms().getWalls().get(j).getCollider().getPosition().clone();
-            Vec2 scale=isten.getEdgeBetweenRooms().getWalls().get(j).getCollider().getScale();
+            Vec2 startPos=isten.getClientMap().getEdgeBetweenRooms().getWalls().get(j).getCollider().getPosition().clone();
+            Vec2 scale=isten.getClientMap().getEdgeBetweenRooms().getWalls().get(j).getCollider().getScale();
             startPos.x-=0.5f*scale.x+lowerBound.x;
             startPos.y-=0.5f*scale.y+lowerBound.y;
 
@@ -175,7 +175,7 @@ public class Minimap extends Updatable {
                 drawEndY=height;
 
             int r=255, g=255,b=255;
-            if(isten.getEdgeBetweenRooms().getWalls().get(j) instanceof Door)
+            if(isten.getClientMap().getEdgeBetweenRooms().getWalls().get(j) instanceof Door)
             {
                 //r=255;
                 g=205;

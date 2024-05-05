@@ -120,6 +120,27 @@ public class GameClient extends Thread {
                 packet = new Packet23WallDelete(data);
                 handleWallDelete((Packet23WallDelete)packet);
                 break;
+            case DOOROPEN:
+                packet = new Packet24DoorOpen(data);
+                handleDoorOpen((Packet24DoorOpen)packet);
+                break;
+        }
+    }
+
+    private void handleDoorOpen(Packet24DoorOpen packet) {
+        float x = packet.getX();
+        float y = packet.getY();
+        boolean isSolid = packet.isSolid();
+
+        HandlerManager hm = isten.getHandlerManager();
+        hm.lock.lock();
+        try {
+            // Critical section
+            // Access shared resources here
+            hm.addTask(HandlerManager.TaskType.DoorOpen);
+            hm.addData(new HandlerManager.DoorOpenData(x,y, isSolid));
+        } finally {
+            hm.lock.unlock(); // Release the lock
         }
     }
 
