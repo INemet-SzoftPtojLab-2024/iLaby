@@ -348,4 +348,7 @@ public class Villain extends Entity {
         isFainted=true;
         villainImage.setVisibility(false);
     }
+    public void setVelocity(float velocity) {
+        villainCollider.setVelocity(new Vec2(velocity, velocity));
+    }
 }

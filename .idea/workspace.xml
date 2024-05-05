@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3506ab6d-0407-47f2-a7e8-78ebc867e577" name="Changes" comment="it's working" />
+    <list default="true" id="3506ab6d-0407-47f2-a7e8-78ebc867e577" name="Changes" comment="it's working">
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/entities/villain/Villain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/entities/villain/Villain.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -39,6 +41,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="5cd5399fbfcfd5811c762cb41388070c81f45885" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -183,9 +190,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.MultiplayerTester.testPacket01" />
+        <item itemvalue="Gradle.MultiplayerTester.testPacket02Constructor" />
+        <item itemvalue="Gradle.MultiplayerTester" />
         <item itemvalue="Gradle.MultiplayerTester" />
         <item itemvalue="Gradle.MultiplayerTester.testPacket02Constructor" />
-        <item itemvalue="Gradle.MultiplayerTester.testPacket01" />
       </list>
     </recent_temporary>
   </component>
