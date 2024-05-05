@@ -1,0 +1,19 @@
+
+L
+java:S1066"/Merge this if statement with the enclosing one.(—°ŸC8Œó†ô1
+M
+java:S1066"/Merge this if statement with the enclosing one.(ğ—¾ú8Œó†ô1
+“
+java:S1319µ"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(åé‹˜ùÿÿÿÿ8ó†ô1
+
+java:S1319Å"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ÿä¨ô8ó†ô1
+¤
+java:S1186Æ"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ˆˆ±şÿÿÿÿ8ó†ô1
+m
+java:S6201"JReplace this instanceof check and cast with 'instanceof PlayerMP playermp'(¯Ï¤ıÿÿÿÿ8÷Áé‰ô1
+k
+java:S6201œ"HReplace this instanceof check and cast with 'instanceof Villain villain'(óİò·øÿÿÿÿ8¶ó†ô1
+X
+java:S1128"6Remove this unused import 'main.java.org.linalg.Vec2'.(²‰¸Áúÿÿÿÿ8úÁé‰ô1
+M
+java:S1128"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ8úÁé‰ô1

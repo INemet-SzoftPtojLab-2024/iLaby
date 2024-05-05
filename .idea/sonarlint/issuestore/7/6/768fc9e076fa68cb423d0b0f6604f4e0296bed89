@@ -1,18 +1,15 @@
 
 {
-java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(üØÜâùÿÿÿÿ8éçïØó1
-‡
-java:S1319"eThe type of "items" should be an interface such as "List" rather than the implementation "ArrayList".(Ü…Àûüÿÿÿÿ8êçïØó1
+java:S2293 "YReplace the type specification in this constructor call with the diamond operator ("<>").(üØÜâùÿÿÿÿ8»«€†ô1
+
+java:S1319œ"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(‹ûáç8¾«€†ô1
+ˆ
+java:S1319"eThe type of "items" should be an interface such as "List" rather than the implementation "ArrayList".(­Æçíùÿÿÿÿ8¾«€†ô1
 e
-java:S2259-"HA "NullPointerException" could be thrown; "chestImage" is nullable here.(ûÚï8‰èïØó1
+java:S22590"HA "NullPointerException" could be thrown; "chestImage" is nullable here.(ûÚï8–¬€†ô1
 C
-java:S1170"!Make this final field static too.(ˆ¡ûàıÿÿÿÿ8ŠèïØó1
-G	java:S106"+Replace this use of System.err by a logger.(Ú£¸õ8èïØó1
-L	java:S106!"+Replace this use of System.err by a logger.(…Ğ«Úøÿÿÿÿ8èïØó1
-Y
-java:S1128"<Remove this unused import 'main.java.org.game.Map.UnitRoom'.(–Ä©¡8Éô‡Ùó1
-b
-java:S1128"@Remove this unused import 'main.java.org.game.physics.Collider'.(Ïª³Õúÿÿÿÿ8ÎÛ‡Ùó1
-M
-java:S1128
-"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ8ÎÛ‡Ùó1
+java:S1170"!Make this final field static too.(ˆ¡ûàıÿÿÿÿ8˜¬€†ô1
+X	java:S125""<This block of commented-out lines of code should be removed.(º•É˜8¢¬€†ô1
+C	java:S1315""Add a default case to this switch.(ôÀÄÖùÿÿÿÿ8§¬€†ô1
+V
+java:S1068"4Remove this unused "maxAmountOfItems" private field.(ˆ¡ûàıÿÿÿÿ8Á¬€†ô1

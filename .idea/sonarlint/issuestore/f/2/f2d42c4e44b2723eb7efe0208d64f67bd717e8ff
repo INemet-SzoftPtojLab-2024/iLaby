@@ -1,8 +1,30 @@
 
-L
-java:S1066l"/Merge this if statement with the enclosing one.(öı›Ÿ8Ñ—”î1
-Œ
-java:S1319é"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(—•íıÿÿÿÿ
-r	java:S117F"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Áäúÿÿÿÿ8Ñ—”î1
-n	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš
-H	java:S106È"+Replace this use of System.out by a logger.(ö³¦8©Ñ—”î1
+M
+java:S1066ƒ"/Merge this if statement with the enclosing one.(öı›Ÿ8²İÂ‡ô1
+R
+java:S1066ş"/Merge this if statement with the enclosing one.(×”şÿÿÿÿ8²İÂ‡ô1
+R
+java:S1066ˆ"/Merge this if statement with the enclosing one.(¾»Úûÿÿÿÿ8³İÂ‡ô1
+’
+java:S1319'"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ÏÕ›‚ûÿÿÿÿ8³İÂ‡ô1
+“
+java:S1319—"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(—•íıÿÿÿÿ8³İÂ‡ô1
+r	java:S117X"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Áäúÿÿÿÿ8³İÂ‡ô1
+u	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš8µİÂ‡ô1
+¤
+java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(µÕ«ùÿÿÿÿ8¥áÂ‡ô1
+¤
+java:S1186»"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(İßéàúÿÿÿÿ8¥áÂ‡ô1
+b
+java:S1854œ"?Remove this useless assignment to local variable "doorRemoved".(İåÊšùÿÿÿÿ8®áÂ‡ô1
+O
+java:S1135v"2Complete the task associated to this TODO comment.(…ïœ†8¯áÂ‡ô1
+S
+java:S1481”"0Remove this unused "doorRemoved" local variable.(æËíıÿÿÿÿ8²áÂ‡ô1
+P
+java:S1135®"2Complete the task associated to this TODO comment.(…ïœ†8³áÂ‡ô1
+P
+java:S1135¾"2Complete the task associated to this TODO comment.(…ïœ†8´áÂ‡ô1
+H	java:S106å"+Replace this use of System.out by a logger.(ö³¦8¸áÂ‡ô1
+H	java:S106©"+Replace this use of System.out by a logger.(­ş€ã8âÑõ‡ô1
+M	java:S106­"+Replace this use of System.out by a logger.(ê‚›¯ùÿÿÿÿ8öÿ÷‡ô1
