@@ -46,6 +46,7 @@ public class Player extends Entity {
     protected int run = 1;
     protected int skinID;
     public boolean localPlayer = false;
+    private Room currentRoom = null;
 
     public Player() {
         playerCollider = null;
@@ -174,6 +175,13 @@ public class Player extends Entity {
                         currentRoom = room;
                     }
                 }
+            }
+            if(currentRoom != this.currentRoom){
+                //Lasd Inventory canAvoidVillain member var
+                isten.getInventory().setCanAvoidVillain(false);
+                //Ha szobat valt a player, akkor a kovetkezo alkalommar, amikor gegnerrel talalkozik hasznalodnia kell a Tvsz-nek
+                isten.getInventory().resetShouldUseChargeForTvsz();
+                this.currentRoom = currentRoom;
             }
             if (currentRoom != null && currentRoom.getRoomType() == RoomType.GAS) {
                 if (!isten.getInventory().getExistenceOfGasMask()) {
@@ -305,10 +313,13 @@ public class Player extends Entity {
                 currentRoom = getPlayerRoom(isten);
                 Villain villain = (Villain) u;
                 if ((currentRoom != null && currentRoom.equals(villain.getRoom())) && currentRoom.getRoomType() != RoomType.GAS) {
-                    alive = false;
-                    if (localPlayer && playerSound != null)
-                        AudioManager.closeSound(playerSound);
-                    return true;
+                   //Ha van akkora szerencsenk, hogy van item nalunk, ami megmentene megse halunk meg
+                    if(!isten.getInventory().avoidVillain()){
+                        if (localPlayer && playerSound != null)
+                            AudioManager.closeSound(playerSound);
+                        return true;
+                    }
+
                 }
             }
         }
@@ -334,6 +345,9 @@ public class Player extends Entity {
     @Override
     public void onDestroy() {
         //not implemented yet
+    }
+    public Room getCurrentRoom() {
+        return currentRoom;
     }
 
     public void setAlive(boolean alive) {

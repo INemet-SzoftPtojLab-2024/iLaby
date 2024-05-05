@@ -15,6 +15,7 @@ public class ItemManager extends Updatable {
     public void addItem(Item item){
         items.add(item);
     }
+    public void removeItem(Item item){items.remove(item);}
 
     @Override
     public void onStart(Isten isten) {

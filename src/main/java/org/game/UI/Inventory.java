@@ -8,6 +8,7 @@ import main.java.org.game.updatable.Updatable;
 import main.java.org.items.Item;
 import main.java.org.items.usable_items.Camembert;
 import main.java.org.items.usable_items.Gasmask;
+import main.java.org.items.usable_items.Tvsz;
 import main.java.org.linalg.Vec2;
 
 import java.awt.event.KeyEvent;
@@ -28,6 +29,8 @@ public class Inventory extends Updatable {
     private boolean hasGasmaskEquipped;
     private boolean camembertTriggered;
     private Camembert camembert;
+    //Azert van ra szukseg, hogy ne haljon meg a player, ha 1 Tvsz charge-dzsal bemegyek egy gegnerhez
+    private boolean canAvoidVillain = false;
 
 
     public Inventory(int size){
@@ -202,6 +205,26 @@ public class Inventory extends Updatable {
         hasGasmaskEquipped = false;
     }
 
+    public void deleteItem(Item item){
+        int index = 0;
+        for(; index < storedItems.size(); index++){
+            if(storedItems.get(index) == item)break;
+        }
+        isten.getRenderer().deleteRenderable(itemIcons.get(index));
+        storedItems.set(index, null);
+        itemIcons.set(index , null);
+    }
+    //Megnézi van-e item, ami megvéd a gonoszoktól, ha talál használja és true-val tér vissza, amúgy nem azzal
+    public boolean avoidVillain(){
+        if(canAvoidVillain) return true;
+        for(Item item : storedItems){
+            if(item instanceof Tvsz){
+                item.use(0);
+                return true;
+            }
+        }
+        return false;
+    }
     public List<Item> getStoredItems() {
         return storedItems;
     }
@@ -233,4 +256,12 @@ public class Inventory extends Updatable {
     }
 
     public void setCamembert(Camembert camembert) {this.camembert = camembert;}
+    public void setCanAvoidVillain(boolean value){ canAvoidVillain = value;}
+    public void resetShouldUseChargeForTvsz(){
+        for(Item i : storedItems){
+            if(i instanceof Tvsz){
+                ((Tvsz)i).setShouldUseCharge(true);
+            }
+        }
+    }
 }
