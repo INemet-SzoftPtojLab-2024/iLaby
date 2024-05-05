@@ -22,16 +22,6 @@ public class MainMenu extends Updatable {
     private MainMenuPanelEnum currentPanelType;
     private MainMenuPanel currentPanel=null;
 
-    private ArrayList<ImageUI> images = new ArrayList<>();
-    private ArrayList<ImageUI> charImages = new ArrayList<>();
-    private ArrayList<ButtonUI> buttons = new ArrayList<>();
-    private ArrayList<TextUI> texts = new ArrayList<>();
-    private ArrayList<TextBoxUI> textBoxes=new ArrayList<>();
-    private boolean diff;
-    private boolean multi;
-    private boolean character;
-    private int activeCharImage;
-
     @Override
     public void onStart(Isten isten) {
         AudioManager.preloadSound("./assets/audio/click.ogg");
@@ -42,145 +32,6 @@ public class MainMenu extends Updatable {
             PlayerPrefs.setString("name", "Logus");
         if(PlayerPrefs.hasKey("skin")==false)
             PlayerPrefs.setInt("skin",0);
-
-        /*diff = false;
-        multi = false;
-        character = false;
-
-        images.add(new ImageUI(new Vec2(0, -275), new Vec2(600, 200), "./assets/ui/logo.png"));
-        images.add(new ImageUI(new Vec2(0, 375), new Vec2(300, 50), "./assets/ui/developer_logo.png"));
-        images.add(new ImageUI(new Vec2(0, 0), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/ui/menu_background.jpg"));
-
-        for (int i = 0; i < 3; i++) {
-            charImages.add(new ImageUI(new Vec2(0, 75), new Vec2(200, 200), "./assets/character/character" + i + "_right1.png"));
-        }
-
-        buttons.add(new ButtonUI(new Vec2(0, -125), new Vec2(375, 100), "./assets/ui/button_background.png", "Solo", "./assets/Bavarian.otf", 45));
-        buttons.add(new ButtonUI(new Vec2(0, 0), new Vec2(375, 100), "./assets/ui/button_background.png", "Multi", "./assets/Bavarian.otf", 45));
-        buttons.add(new ButtonUI(new Vec2(0, 125), new Vec2(375, 100), "./assets/ui/button_background.png", "Character", "./assets/Bavarian.otf", 45));
-        buttons.add(new ButtonUI(new Vec2(0, 250), new Vec2(375, 100), "./assets/ui/button_background.png", "Exit", "./assets/Bavarian.otf", 45));
-        buttons.add(new ButtonUI(new Vec2(0, 275), new Vec2(275, 100), "./assets/ui/button_background.png", "Back", "./assets/Bavarian.otf", 45));
-        buttons.add(new ButtonUI(new Vec2(0, -125), new Vec2(375, 100), "./assets/ui/button_background.png", "Easy-peasy", "./assets/Bavarian.otf", 45));
-        buttons.add(new ButtonUI(new Vec2(0, 0), new Vec2(375, 100), "./assets/ui/button_background.png", "Casual", "./assets/Bavarian.otf", 45));
-        buttons.add(new ButtonUI(new Vec2(0, 125), new Vec2(375, 100), "./assets/ui/button_background.png", "Never", "./assets/Bavarian.otf", 45));
-        buttons.add(new ButtonUI(new Vec2(-250, 75), new Vec2(100, 100), "./assets/ui/arrow_left.png", "", "./assets/Bavarian.otf", 50));
-        buttons.add(new ButtonUI(new Vec2(250, 75), new Vec2(100, 100), "./assets/ui/arrow_right.png", "", "./assets/Bavarian.otf", 50));
-
-        do{//add nickname textbox
-            if(PlayerPrefs.hasKey("name")==false)
-                PlayerPrefs.setString("name", "Logus");
-
-            texts.add(new TextUI("Nickname:", new Vec2(-175, -125), "./assets/Bavarian.otf",50, 0, 0, 255));
-            TextBoxUI nicholasName=new TextBoxUI(new Vec2(-175,-125), new Vec2(200,30));
-            nicholasName.setFont("./assets/Bavarian.otf",50);
-            nicholasName.setBackground("./assets/tile.png");
-            nicholasName.setText(PlayerPrefs.getString("name"));
-            nicholasName.setSortingLayer(1000);
-            textBoxes.add(nicholasName);
-        }while(69==420);
-
-        for (int i = 0; i < images.size(); i++) {
-            images.get(i).setAlignment(Renderable.CENTER, Renderable.CENTER);
-            isten.getRenderer().addRenderable(images.get(i));
-            images.get(i).setSortingLayer(-69);
-        }
-        images.get(2).setSortingLayer(-13);
-
-        for (ImageUI i : charImages) {
-            i.setAlignment(Renderable.CENTER, Renderable.CENTER);
-            i.setSortingLayer(-69);
-            isten.getRenderer().addRenderable(i);
-            i.setVisibility(false);
-            if(PlayerPrefs.hasKey("skin"))
-                activeCharImage = PlayerPrefs.getInt("skin");
-            else {
-                PlayerPrefs.setInt("skin",0);
-                activeCharImage=0;
-            }
-        }
-
-        for (ButtonUI r : buttons) {
-            r.setAlignment(Renderable.CENTER, Renderable.CENTER);
-            isten.getRenderer().addRenderable(r);
-            r.setSortingLayer(-69);
-        }
-        for (int i = 0; i < buttons.size(); i++) {
-            if (i > 3) buttons.get(i).setVisibility(false);
-        }
-        buttons.get(0).addClickListener(() -> {
-            AudioManager.playSound("./assets/audio/click.ogg");
-            diff = true;
-        });
-        buttons.get(1).addClickListener(() -> {
-            AudioManager.playSound("./assets/audio/click.ogg");
-            multi = true;
-            TimeCounter.setTime(901);
-            GameManager.setStage(GameManager.GameStage.MULTI);
-        });
-        buttons.get(2).addClickListener(() -> {
-            AudioManager.playSound("./assets/audio/click.ogg");
-            character = true;
-        });
-        buttons.get(3).addClickListener(() -> {
-            AudioManager.playSound("./assets/audio/click.ogg");
-            GameManager.setStage(GameManager.GameStage.EXIT);
-        });
-        buttons.get(4).addClickListener(() -> {
-            AudioManager.playSound("./assets/audio/click.ogg");
-            diff = false;
-            multi = false;
-            character = false;
-            for (int i = 0; i < buttons.size(); i++) {
-                buttons.get(i).setVisibility(i <= 3);
-            }
-            for (TextUI t : texts) t.setVisibility(false);
-
-            for (ImageUI i : charImages) i.setVisibility(false);
-
-            for(TextBoxUI tbc: textBoxes) tbc.setVisibility(false);
-        });
-        buttons.get(5).addClickListener(() -> {
-            AudioManager.playSound("./assets/audio/click.ogg");
-            TimeCounter.setTime(901);
-            GameManager.setStage(GameManager.GameStage.SOLO);
-        });
-        buttons.get(6).addClickListener(() -> {
-            AudioManager.playSound("./assets/audio/click.ogg");
-            TimeCounter.setTime(601);
-            GameManager.setStage(GameManager.GameStage.SOLO);
-        });
-        buttons.get(7).addClickListener(() -> {
-            AudioManager.playSound("./assets/audio/click.ogg");
-            TimeCounter.setTime(11);
-            GameManager.setStage(GameManager.GameStage.SOLO);
-        });
-        buttons.get(8).addClickListener(() -> {
-            AudioManager.playSound("./assets/audio/click.ogg");
-            if (activeCharImage > 0) activeCharImage--;
-            else activeCharImage = charImages.size() - 1;
-            PlayerPrefs.setInt("skin", activeCharImage);
-            for (int i = 0; i < charImages.size(); i++) charImages.get(i).setVisibility(i == activeCharImage);
-        });
-        buttons.get(9).addClickListener(() -> {
-            AudioManager.playSound("./assets/audio/click.ogg");
-            if (activeCharImage < charImages.size() - 1) activeCharImage++;
-            else activeCharImage = 0;
-            PlayerPrefs.setInt("skin", activeCharImage);
-            for (int i = 0; i < charImages.size(); i++) charImages.get(i).setVisibility(i == activeCharImage);
-        });
-
-        for (TextUI t : texts) {
-            t.setAlignment(Renderable.CENTER, Renderable.CENTER);
-            t.setSortingLayer(-69);
-            isten.getRenderer().addRenderable(t);
-            t.setVisibility(false);
-        }
-
-        for(TextBoxUI tbc: textBoxes)
-        {
-            isten.getRenderer().addRenderable(tbc);
-            tbc.setVisibility(false);
-        }*/
     }
 
     @Override
@@ -249,29 +100,6 @@ public class MainMenu extends Updatable {
                     break;
             }
         }
-
-        /*images.get(images.size() - 1).setScale(new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()));
-        if (diff && !buttons.get(5).getVisibility()) {
-            for (int i = 0; i < buttons.size(); i++) {
-                if (i < 4 || i > 7) buttons.get(i).setVisibility(false);
-                else buttons.get(i).setVisibility(true);
-            }
-        }
-        if (multi && !buttons.get(4).getVisibility()) {
-            for (int i = 0; i < buttons.size(); i++) {
-                if (i == 4) buttons.get(i).setVisibility(true);
-                else buttons.get(i).setVisibility(false);
-            }
-        }
-        if (character && !buttons.get(4).getVisibility()) {
-            for (int i = 0; i < buttons.size(); i++) {
-                if (i == 4 || i > 7) buttons.get(i).setVisibility(true);
-                else buttons.get(i).setVisibility(false);
-            }
-            charImages.get(activeCharImage).setVisibility(true);
-            texts.get(0).setVisibility(true);
-            textBoxes.get(0).setVisibility(true);
-        }*/
     }
 
     @Override
@@ -350,7 +178,7 @@ public class MainMenu extends Updatable {
             button_multi=new ButtonUI(new Vec2(0, 0), new Vec2(375, 100), "./assets/ui/button_background.png", "Multi", "./assets/Bavarian.otf", 45);
             button_multi.setSortingLayer(-68);
             button_multi.addClickListener(() -> {
-                AudioManager.playSound("./assets/audio/click.ogg");
+                //AudioManager.playSound("./assets/audio/click.ogg");
                 if(parent!=null)
                     parent.currentPanelType=MainMenuPanelEnum.MULTI;
             });
@@ -421,7 +249,7 @@ public class MainMenu extends Updatable {
             button_easy=new ButtonUI(new Vec2(0, -125), new Vec2(375, 100), "./assets/ui/button_background.png", "Easy-peasy", "./assets/Bavarian.otf", 45);
             button_easy.setSortingLayer(-67);
             button_easy.addClickListener(() -> {
-                AudioManager.playSound("./assets/audio/click.ogg");
+                //AudioManager.playSound("./assets/audio/click.ogg");
                 TimeCounter.setTime(901);
                 if(parent!=null)
                     parent.currentPanelType=MainMenuPanelEnum.SOLO;
@@ -430,7 +258,7 @@ public class MainMenu extends Updatable {
             button_medium=new ButtonUI(new Vec2(0, 0), new Vec2(375, 100), "./assets/ui/button_background.png", "Casual", "./assets/Bavarian.otf", 45);
             button_medium.setSortingLayer(-67);
             button_medium.addClickListener(() -> {
-                AudioManager.playSound("./assets/audio/click.ogg");
+                //AudioManager.playSound("./assets/audio/click.ogg");
                 TimeCounter.setTime(601);
                 if(parent!=null)
                     parent.currentPanelType=MainMenuPanelEnum.SOLO;
@@ -439,7 +267,7 @@ public class MainMenu extends Updatable {
             button_hard=new ButtonUI(new Vec2(0, 125), new Vec2(375, 100), "./assets/ui/button_background.png", "Gigachad", "./assets/Bavarian.otf", 45);
             button_hard.setSortingLayer(-67);
             button_hard.addClickListener(() -> {
-                AudioManager.playSound("./assets/audio/click.ogg");
+                //AudioManager.playSound("./assets/audio/click.ogg");
                 TimeCounter.setTime(11);
                 if(parent!=null)
                     parent.currentPanelType=MainMenuPanelEnum.SOLO;
@@ -569,7 +397,6 @@ public class MainMenu extends Updatable {
             for(Renderable r : renderables)
             {
                 r.setAlignment(Renderable.CENTER, Renderable.CENTER);
-                r.setOrigin(Renderable.CENTER, Renderable.CENTER);
                 isten.getRenderer().addRenderable(r);
             }
         }
@@ -582,6 +409,43 @@ public class MainMenu extends Updatable {
         @Override
         public MainMenuPanelEnum getType() {
             return MainMenuPanelEnum.CHARACTER;
+        }
+    }
+
+    public class LoadingPanel extends MainMenuPanel
+    {
+        private ImageUI image_background=null;
+
+        public LoadingPanel(MainMenu parent)
+        {
+            super(parent);
+        }
+
+        @Override
+        public void load(Isten isten) {
+
+            //images
+            image_background=new ImageUI(new Vec2(0, 0), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/ui/menu_background.jpg");
+            image_background.setSortingLayer(-67);
+            renderables.add(image_background);
+
+            for(Renderable r : renderables)
+            {
+                r.setAlignment(Renderable.CENTER, Renderable.CENTER);
+                isten.getRenderer().addRenderable(r);
+            }
+        }
+
+        @Override
+        public void update(Isten isten) {
+            image_background.setScale(new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()));
+        }
+
+        @Override
+        public MainMenuPanelEnum getType() {
+            if(parent!=null)
+                return parent.currentPanelType;
+            return MainMenuPanelEnum.NONE;
         }
     }
 }
