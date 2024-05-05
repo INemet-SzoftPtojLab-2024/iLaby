@@ -60,7 +60,7 @@ public class Isten {
     public Isten() {
         inventory=new Inventory(5);
         map=new Map(this, 50, 50, 10);
-        chestManager = new ChestManager(75);
+        chestManager = new ChestManager(175);
         itemManager=new ItemManager();
         inputHandler = new Input();
         camera = new Camera();
@@ -138,7 +138,7 @@ public class Isten {
 
     public void initMP() {
         //Set localPlayer to true, so that only this player can be moved and followed by the camera on this client
-        player = new PlayerMP(JOptionPane.showInputDialog(this.getRenderer(),"Username"),null,-1);
+        player = new PlayerMP(PlayerPrefs.getString("name"),null,-1);
 
 
         player.localPlayer = true;
@@ -168,7 +168,7 @@ public class Isten {
     }
     public void init() {
         //Create own player
-        player = new PlayerMP(JOptionPane.showInputDialog(this.getRenderer(),"Username"),null,-1);
+        player = new PlayerMP(PlayerPrefs.getString("name"),null,-1);
 
         player.localPlayer = true;
 

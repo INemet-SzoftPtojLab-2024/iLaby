@@ -27,7 +27,7 @@ public class ItemManager extends Updatable {
         if(isten.getInputHandler().isKeyDown(KeyEvent.VK_E) && !isten.getPlayer().isFainted()){
             Vec2 playerPostion = isten.getPlayer().getPlayerCollider().getPosition();
             for(int i = 0; i < items.size(); i++){
-                if(items.get(i).location== Item.Location.GROUND) {
+                if(items.get(i).location== Item.Location.GROUND&& !items.get(i).isUsed()) {
                     Vec2 playerItemVector = Vec2.subtract(playerPostion, items.get(i).getPosition());
                     double playerItemDistance = sqrt(Vec2.dot(playerItemVector, playerItemVector));
                     if (playerItemDistance <= 0.3) {

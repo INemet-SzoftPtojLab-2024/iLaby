@@ -95,8 +95,11 @@ public class VillainHandler extends ServerSideHandler {
                 villain.setRoomForVillain(isten.getMap().getRooms(), skeleton.getRandom1(), skeleton.getRandom2());
             }
 
-
             villain.move(isten, deltaTime);
+            if (villain.isInGasRoom(isten)){
+                villain.setVelocity(0.0f);
+            }
+
 
             if((int)(currTime * 100) % 2 == 0) {
                 Packet06VillainMove packet = new Packet06VillainMove(villain.getVillainName(),
