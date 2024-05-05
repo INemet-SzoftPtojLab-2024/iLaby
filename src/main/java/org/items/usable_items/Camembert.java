@@ -42,6 +42,7 @@ public class Camembert extends Item {
     }
     @Override
     public void use(double deltaTime){
+        used=true;
         dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
         if (!isExplosionPositionCalculated){
             for(int i = 0; i < 30; i++) {

@@ -15,10 +15,13 @@ public abstract class Packet {
         CHESTOPENED(11),
         ITEMPICKEDUP(12),
         ITEMDROPPED(13),
+        GASMASK(14),
         WALL(20),
         DEATH(21),
         EDGEPIECECHANGED(22),
-        WALLDELETE(23);
+        WALLDELETE(23),
+        DOOROPEN(24),
+        PLAYERPOSFORDOOROPEN(25);
         private int packetId;
         private PacketTypes(int packetId) {
             this.packetId = packetId;

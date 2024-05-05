@@ -5,12 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3506ab6d-0407-47f2-a7e8-78ebc867e577" name="Changes" comment="it's working">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/character/character2_ded.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/character/character2_left1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/character/character2_left2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/character/character2_right1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/character/character2_right2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/entities/player/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/entities/player/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Map/Door.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Map/Door.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Map/EdgeManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Map/EdgeManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,6 +45,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="5cd5399fbfcfd5811c762cb41388070c81f45885" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -165,7 +169,7 @@
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
+        <option name="scriptParameters" value="--scan" />
         <option name="taskDescriptions">
           <list />
         </option>
@@ -190,9 +194,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.MultiplayerTester.testPacket01" />
+        <item itemvalue="Gradle.MultiplayerTester.testPacket02Constructor" />
+        <item itemvalue="Gradle.MultiplayerTester" />
         <item itemvalue="Gradle.MultiplayerTester" />
         <item itemvalue="Gradle.MultiplayerTester.testPacket02Constructor" />
-        <item itemvalue="Gradle.MultiplayerTester.testPacket01" />
       </list>
     </recent_temporary>
   </component>
@@ -218,7 +224,7 @@
       <workItem from="1714743658125" duration="732000" />
       <workItem from="1714747759256" duration="7383000" />
       <workItem from="1714847163651" duration="324000" />
-      <workItem from="1714917209714" duration="2560000" />
+      <workItem from="1714924570656" duration="7744000" />
     </task>
     <task id="LOCAL-00001" summary="it's working">
       <option name="closed" value="true" />

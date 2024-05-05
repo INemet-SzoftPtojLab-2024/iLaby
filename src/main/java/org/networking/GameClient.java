@@ -103,6 +103,10 @@ public class GameClient extends Thread {
                 packet = new Packet13ItemDropped(data);
                 handleItemDropped((Packet13ItemDropped) packet);
                 break;
+            case GASMASK:
+                packet = new Packet14Gasmask(data);
+                handleGasmask((Packet14Gasmask) packet);
+                break;
             case WALL:
                 //System.out.println("GOT WALL PACKET");
                 packet = new Packet20Wall(data);
@@ -120,6 +124,36 @@ public class GameClient extends Thread {
                 packet = new Packet23WallDelete(data);
                 handleWallDelete((Packet23WallDelete)packet);
                 break;
+            case DOOROPEN:
+                packet = new Packet24DoorOpen(data);
+                handleDoorOpen((Packet24DoorOpen)packet);
+                break;
+        }
+    }
+
+    private void handleGasmask(Packet14Gasmask packet) {
+        for(int i = 0; i < isten.getUpdatables().size(); i++) {
+            if(isten.getUpdatable(i).getClass() == ItemManager.class) {
+                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).setCapacity(packet.getCapacity());
+                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).resizeBar(packet.getCapacity());
+            }
+        }
+    }
+
+    private void handleDoorOpen(Packet24DoorOpen packet) {
+        float x = packet.getX();
+        float y = packet.getY();
+        boolean isSolid = packet.isSolid();
+
+        HandlerManager hm = isten.getHandlerManager();
+        hm.lock.lock();
+        try {
+            // Critical section
+            // Access shared resources here
+            hm.addTask(HandlerManager.TaskType.DoorOpen);
+            hm.addData(new HandlerManager.DoorOpenData(x,y, isSolid));
+        } finally {
+            hm.lock.unlock(); // Release the lock
         }
     }
 
@@ -223,6 +257,9 @@ public class GameClient extends Thread {
     }
 
     private void handleWall(Packet20Wall packet) {
+
+        //if(isten.getSocketServer() != null) return;
+
         Vec2 pos = new Vec2(packet.getPosX(), packet.getPosY());
         Vec2 scale = new Vec2(packet.getScaleX(), packet.getScaleY());
         boolean isDoor = packet.isDoor();

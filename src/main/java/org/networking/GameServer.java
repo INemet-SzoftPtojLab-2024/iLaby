@@ -127,7 +127,37 @@ public class GameServer extends Thread {
                 packet = new Packet13ItemDropped(data);
                 handleItemDropped((Packet13ItemDropped) packet);
                 break;
+            case GASMASK:
+                packet = new Packet14Gasmask(data);
+                handleGasmask((Packet14Gasmask) packet);
+                break;
+            case DOOROPEN:
+                packet = new Packet24DoorOpen(data);
+                handleDoorOpen((Packet24DoorOpen)packet);
+                break;
+            case PLAYERPOSFORDOOROPEN:
+                packet = new Packet25PlayerPosForDoorOpen(data);
+                handlePlayerPosForDoorOpen((Packet25PlayerPosForDoorOpen)packet);
+                break;
         }
+    }
+
+    private void handleGasmask(Packet14Gasmask packet) {
+        for(int i = 0; i < isten.getUpdatables().size(); i++) {
+            if(isten.getUpdatable(i).getClass() == ItemManager.class) {
+                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).setCapacity(packet.getCapacity());
+                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).resizeBar(packet.getCapacity());
+            }
+        }
+        sendDataToAllClients(packet.getData());
+    }
+
+    private void handlePlayerPosForDoorOpen(Packet25PlayerPosForDoorOpen packet) {
+        mapHandler.CheckIfPlayerOpenedDoor(packet);
+    }
+
+    private void handleDoorOpen(Packet24DoorOpen packet) {
+        mapHandler.handleDoorOpen(packet);
     }
 
     private void handleItemDropped(Packet13ItemDropped packet) {

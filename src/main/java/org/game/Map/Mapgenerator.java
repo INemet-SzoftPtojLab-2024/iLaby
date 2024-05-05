@@ -295,7 +295,7 @@ public class Mapgenerator {
                     EdgeBetweenRooms newEdge = new EdgeBetweenRooms(r1,r2);
                     map.getEdgeManager().getRoomEdges().add(newEdge);
                     // this collidergroup will be filled up, when the walls are created
-                    isten.getPhysicsEngine().addColliderGroup(newEdge.getColliderGroup());
+                    //isten.getPhysicsEngine().addColliderGroup(newEdge.getColliderGroup());
                 }
             }
         }

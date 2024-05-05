@@ -34,15 +34,19 @@ public class Inventory extends Updatable {
     private boolean canAvoidVillain = false;
 
 
-    public Inventory(int size){
+    public Inventory(int size) {
         this.size = size;
         inventoryIcons = new ArrayList<>();
-        itemIcons=new ArrayList<>();
-        storedItems=new ArrayList<>();
-        for (int i = 0; i < 5; i++) {storedItems.add(null);}
-        for (int i = 0; i < 5; i++) {itemIcons.add(null);}
-        selectedSlot=1;
-        hasGasmaskEquipped =false;
+        itemIcons = new ArrayList<>();
+        storedItems = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            storedItems.add(null);
+        }
+        for (int i = 0; i < 5; i++) {
+            itemIcons.add(null);
+        }
+        selectedSlot = 1;
+        hasGasmaskEquipped = false;
     }
 
     @Override
@@ -71,16 +75,16 @@ public class Inventory extends Updatable {
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-        int previousSelectedSlot=selectedSlot;
-        if(isten.getInputHandler().isKeyDown(KeyEvent.VK_1)) selectedSlot=1;
-        else if(isten.getInputHandler().isKeyDown(KeyEvent.VK_2)) selectedSlot=2;
-        else if(isten.getInputHandler().isKeyDown(KeyEvent.VK_3)) selectedSlot=3;
-        else if(isten.getInputHandler().isKeyDown(KeyEvent.VK_4)) selectedSlot=4;
-        else if(isten.getInputHandler().isKeyDown(KeyEvent.VK_5)) selectedSlot=5;
+        int previousSelectedSlot = selectedSlot;
+        if (isten.getInputHandler().isKeyDown(KeyEvent.VK_1)) selectedSlot = 1;
+        else if (isten.getInputHandler().isKeyDown(KeyEvent.VK_2)) selectedSlot = 2;
+        else if (isten.getInputHandler().isKeyDown(KeyEvent.VK_3)) selectedSlot = 3;
+        else if (isten.getInputHandler().isKeyDown(KeyEvent.VK_4)) selectedSlot = 4;
+        else if (isten.getInputHandler().isKeyDown(KeyEvent.VK_5)) selectedSlot = 5;
 
         ImageUI tmp;
-        if(selectedSlot!=previousSelectedSlot) {
-            tmp = new ImageUI(getSlotLocation(previousSelectedSlot ), new Vec2(iconSize), "./assets/ui/inventorySlot.png");
+        if (selectedSlot != previousSelectedSlot) {
+            tmp = new ImageUI(getSlotLocation(previousSelectedSlot), new Vec2(iconSize), "./assets/ui/inventorySlot.png");
             inventoryIcons.set(previousSelectedSlot - 1, tmp);
             tmp.setAlignment(Renderable.CENTER, Renderable.BOTTOM);
             tmp.setVisibility(true);
@@ -101,9 +105,11 @@ public class Inventory extends Updatable {
             Item actItem = storedItems.get(selectedSlot - 1);
             Vec2 actPos = isten.getPlayer().getPlayerCollider().getPosition();
             actItem.dropOnGround(actPos);
-            hasGasmaskEquipped=getExistenceOfGasMask();
-            isten.getSocketClient().sendData(("13" + actItem.getItemIndex() + ","
-                    + actPos.x + "," + actPos.y).getBytes());
+            hasGasmaskEquipped = getExistenceOfGasMask();
+            isten.getSocketClient().sendData(("13" + actItem.getItemIndex() + "," + actPos.x + "," + actPos.y).getBytes());
+            if(actItem.getClass() == Gasmask.class)
+                isten.getSocketClient().sendData(("14" + actItem.getItemIndex() + "," + ((Gasmask) actItem).getCapacity()).getBytes());
+
 
             storedItems.set(selectedSlot - 1, null);
             tmp = new ImageUI(getSlotLocation(selectedSlot), new Vec2(iconSize), "./assets/ui/inventorySlot_Selected.png");
@@ -115,7 +121,7 @@ public class Inventory extends Updatable {
             itemIcons.get(selectedSlot - 1).setVisibility(false);
 
         }
-        if (camembertTriggered && camembert!=null){
+        if (camembertTriggered && camembert != null) {
             camembert.use(deltaTime);
         }
     }
@@ -126,6 +132,7 @@ public class Inventory extends Updatable {
     }
 
     public void addItem(Item item) {
+
         ImageUI tmp = null;
         for (int i = 0; i < 5; i++) {
             if (storedItems.get(i) == null) {
@@ -152,6 +159,7 @@ public class Inventory extends Updatable {
         tmp.setVisibility(true);
         tmp.setSortingLayer(-69);
         isten.getRenderer().addRenderable(tmp);
+
     }
 
     /**
@@ -178,16 +186,14 @@ public class Inventory extends Updatable {
         if (selectedItem != null && selectedItem.getClass().equals(Camembert.class)) {
             camembert = (Camembert) selectedItem;
             camembertTriggered = true;
-        } else if (selectedItem != null){
+        } else if (selectedItem != null) {
             selectedItem.use(deltatime);
         }
     }
 
     public boolean getExistenceOfGasMask() {
-        for(int i = 0; i < 5; i++)
-        {
-            if(storedItems.get(i) instanceof Gasmask)
-            {
+        for (int i = 0; i < 5; i++) {
+            if (storedItems.get(i) instanceof Gasmask) {
                 return true;
             }
         }
@@ -206,31 +212,32 @@ public class Inventory extends Updatable {
         hasGasmaskEquipped = false;
     }
 
-    public void deleteItem(Item item){
+    public void deleteItem(Item item) {
         int index = 0;
-        for(; index < storedItems.size(); index++){
-            if(storedItems.get(index) == item)break;
+        for (; index < storedItems.size(); index++) {
+            if (storedItems.get(index) == item) break;
         }
         isten.getRenderer().deleteRenderable(itemIcons.get(index));
         storedItems.set(index, null);
-        itemIcons.set(index , null);
+        itemIcons.set(index, null);
     }
+
     //Megnézi van-e item, ami megvéd a gonoszoktól, ha talál használja és true-val tér vissza, amúgy nem azzal
-    public boolean avoidVillain(double deltaTime){
-        if(canAvoidVillain) return true;
-        for(Item item : storedItems){
-            if(item instanceof Tvsz){
+    public boolean avoidVillain(double deltaTime) {
+        if (canAvoidVillain) return true;
+        for (Item item : storedItems) {
+            if (item instanceof Tvsz) {
                 item.use(deltaTime);
                 return true;
             }
-            if(item instanceof Sorospohar)
-            {
+            if (item instanceof Sorospohar) {
                 item.use(deltaTime);
                 return true;
             }
         }
         return false;
     }
+
     public List<Item> getStoredItems() {
         return storedItems;
     }
@@ -261,12 +268,18 @@ public class Inventory extends Updatable {
         this.camembertTriggered = camembertTriggered;
     }
 
-    public void setCamembert(Camembert camembert) {this.camembert = camembert;}
-    public void setCanAvoidVillain(boolean value){ canAvoidVillain = value;}
-    public void resetShouldUseChargeForTvsz(){
-        for(Item i : storedItems){
-            if(i instanceof Tvsz){
-                ((Tvsz)i).setShouldUseCharge(true);
+    public void setCamembert(Camembert camembert) {
+        this.camembert = camembert;
+    }
+
+    public void setCanAvoidVillain(boolean value) {
+        canAvoidVillain = value;
+    }
+
+    public void resetShouldUseChargeForTvsz() {
+        for (Item i : storedItems) {
+            if (i instanceof Tvsz) {
+                ((Tvsz) i).setShouldUseCharge(true);
             }
         }
     }
