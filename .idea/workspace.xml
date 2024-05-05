@@ -6,15 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="3506ab6d-0407-47f2-a7e8-78ebc867e577" name="Changes" comment="it's working">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Graphics/GameRenderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Graphics/GameRenderer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Isten.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Isten.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Map/Door.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Map/Door.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Map/EdgeBetweenRooms.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Map/EdgeBetweenRooms.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Map/EdgeManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Map/EdgeManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Map/EdgePiece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Map/EdgePiece.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Map/Mapgenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Map/Mapgenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/UI/GameMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/UI/GameMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/GameClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/GameClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/UI/Minimap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/UI/Minimap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/HandlerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/HandlerManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/MapHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/MapHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

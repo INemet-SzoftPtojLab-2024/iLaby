@@ -85,7 +85,7 @@ public class MapHandler extends ServerSideHandler {
             if (delta > 1) {
                 //TESTCASE 1:::
 
-                /*
+
                 if(sec %3==0){
                     Vec2 pos = isten.getMap().addDoorToEdgeWithoutDoor(isten);
                     handleAddOrDeleteDoor(pos, true);
@@ -104,7 +104,7 @@ public class MapHandler extends ServerSideHandler {
 
                 }
 
-                 */
+
 
 
 
@@ -123,7 +123,7 @@ public class MapHandler extends ServerSideHandler {
 
                 }
                 //TESTCASE 3:
-/*
+
                 if((sec+2)%4==0) {
                     for (Room splittable : isten.getMap().getRooms()) {
                         int newID;
@@ -148,7 +148,7 @@ public class MapHandler extends ServerSideHandler {
                 }
 
 
-                 */
+
 
                 sec++;
                 delta = 0;

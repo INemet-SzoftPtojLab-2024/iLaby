@@ -283,9 +283,9 @@ public class HandlerManager {
     }
 
     private void villainHandler(VillainData villainData) {
-        //Villain villain = new Villain(villainData.villainName, villainData.position, villainData.imgPath);
+        Villain villain = new Villain(villainData.villainName, villainData.position, villainData.imgPath);
         //villain.setRoomForVillain(isten.getMap().getRooms(), villainData.random1, villainData.random2);
-        //isten.addUpdatable(villain);
+        isten.addUpdatable(villain);
     }
 
     private void villainMoveHandler(VillainMoveData villainMoveData) {
