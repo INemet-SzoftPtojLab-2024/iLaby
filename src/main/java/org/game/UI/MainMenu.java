@@ -411,41 +411,4 @@ public class MainMenu extends Updatable {
             return MainMenuPanelEnum.CHARACTER;
         }
     }
-
-    public class LoadingPanel extends MainMenuPanel
-    {
-        private ImageUI image_background=null;
-
-        public LoadingPanel(MainMenu parent)
-        {
-            super(parent);
-        }
-
-        @Override
-        public void load(Isten isten) {
-
-            //images
-            image_background=new ImageUI(new Vec2(0, 0), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/ui/menu_background.jpg");
-            image_background.setSortingLayer(-67);
-            renderables.add(image_background);
-
-            for(Renderable r : renderables)
-            {
-                r.setAlignment(Renderable.CENTER, Renderable.CENTER);
-                isten.getRenderer().addRenderable(r);
-            }
-        }
-
-        @Override
-        public void update(Isten isten) {
-            image_background.setScale(new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()));
-        }
-
-        @Override
-        public MainMenuPanelEnum getType() {
-            if(parent!=null)
-                return parent.currentPanelType;
-            return MainMenuPanelEnum.NONE;
-        }
-    }
 }
