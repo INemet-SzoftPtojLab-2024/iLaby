@@ -32,7 +32,7 @@ public class Villain extends Entity {
     private float velocity;
     private double sum;
     private Room room;
-    private boolean isFainted;
+    private double faintTime;
     private UnitRoom currentUnitRoom;
     private int random1, random2;
     private double dTime;
@@ -54,6 +54,7 @@ public class Villain extends Entity {
         room = null;
         dTime=0.0;
         stillImage=0;
+        faintTime=0.0;
     }
     @Override
     public void onStart(Isten isten) {
@@ -109,20 +110,7 @@ public class Villain extends Entity {
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-        /*timeElapsed+=deltaTime;
-        Vec2 playerPosition = villainCollider.getPosition();
-        //villainImage.setPosition(playerPosition);
-        images.get(0).setPosition(playerPosition);
-        images.get(0).setPosition(playerPosition);
-        villainName.setPosition(Vec2.sum(playerPosition, new Vec2(0, (float) 0.5)));
-        if(isFainted) {
-            if ((timeElapsed*1000000) % 1000000 < 500000) {
-                setVillainImage(isten,images.get(0));
-            }
-            else {
-                setVillainImage(isten,images.get(1));
-            }
-        }*/
+
     }
     public boolean isInGasRoom(Isten isten)
     {
@@ -141,11 +129,20 @@ public class Villain extends Entity {
         else return false;
     }
     public void move(Isten isten, double deltaTime) {
-        if(!isInGasRoom(isten)&&!isFainted) {
+        if(faintTime>0) {
+            faintTime -= deltaTime;
+            if (faintTime<0)faintTime=0;
+        }
+        if(!isInGasRoom(isten)&&faintTime==0) {
+            stillImage=0;
+            villainCollider.setMovability(true);
             sum += deltaTime;
             Vec2 villainPosition = villainCollider.getPosition();
             Random random = new Random();
+            faintedImage1.setVisibility(false);
+            faintedImage2.setVisibility(false);
             villainImage.setPosition(villainPosition);
+            villainImage.setVisibility(true);
             villainName.setPosition(Vec2.sum(villainPosition, new Vec2(0, (float) 0.5)));
 
 
@@ -250,6 +247,8 @@ public class Villain extends Entity {
             }
         }
         else{
+            villainCollider.setMovability(false);
+            System.out.println("not moving");
             dTime-=deltaTime;
             villainImage.setVisibility(false);
             if(stillImage==0)
@@ -378,10 +377,13 @@ public class Villain extends Entity {
     public void setRandom2(int random2) {
         this.random2 = random2;
     }
-    public boolean getIsFainted(){return isFainted;}
-    public void setFainted(){
-        isFainted=true;
-        villainImage.setVisibility(false);
+    public double getFaintTime(){return faintTime;}
+    public void setFainted(double time){
+        faintTime=time;
+        //villainImage.setVisibility(false);
+    }
+    public boolean getIsFainted(){
+        return faintTime > 0;
     }
     public void setVelocity(float velocity) {
         villainCollider.setVelocity(new Vec2(velocity, velocity));
