@@ -23,19 +23,17 @@ import java.util.Random;
 public class Villain extends Entity {
     static ArrayList<Room> roomsWithVillains = new ArrayList<>();
     private Image villainImage;
-    static ArrayList<Image> images=new ArrayList<>();
-    Collider villainCollider;
-    Text villainName;
-    double timeElapsed;
-    int direction;
-    Vec2 position;
-    String imagePath;
-    float velocity;
-    double sum;
-    Room room;
-    boolean isFainted;
-    UnitRoom currentUnitRoom;
-    UnitRoom prevUnitRoom;
+    private Image faintedImage1;
+    private Image faintedImage2;
+    private Collider villainCollider;
+    private Text villainName;
+    private Vec2 position;
+    private String imagePath;
+    private float velocity;
+    private double sum;
+    private Room room;
+    private boolean isFainted;
+    private UnitRoom currentUnitRoom;
     private int random1, random2;
     private double dTime;
     private int stillImage;
@@ -47,10 +45,8 @@ public class Villain extends Entity {
     public Villain(String name, Vec2 pos, String iP) {
         villainCollider = null;
         villainImage = null;
-        timeElapsed = 0;
         villainName = new Text(name, new Vec2(0, 0), "./assets/Monocraft.ttf", 15, 255, 0, 0);
         villainName.setShadowOn(false);
-        direction=1;
         position = pos;
         imagePath = iP;
         velocity = 0.5f;
@@ -64,31 +60,31 @@ public class Villain extends Entity {
         Vec2 villainScale = new Vec2(0.6f, 0.6f);
         Vec2 faintedScale = new Vec2(0.7f, 0.7f);
 
-        images.add( new Image(new Vec2(), villainScale, imagePath));
-        images.add(new Image(new Vec2(),faintedScale,imagePath.substring(0,imagePath.length()-4)+"_fainted1.png"));
-        images.add(new Image(new Vec2(),faintedScale,imagePath.substring(0,imagePath.length()-4)+"_fainted2.png"));
-        //System.out.println(imagePath.substring(0,imagePath.length()-4)+"_fainted1.png");
+        villainImage=new Image(new Vec2(), villainScale, imagePath);
+        faintedImage1=new Image(new Vec2(),faintedScale,imagePath.substring(0,imagePath.length()-4)+"_fainted1.png");
+        faintedImage2=new Image(new Vec2(),faintedScale,imagePath.substring(0,imagePath.length()-4)+"_fainted2.png");
+        /*System.out.println(imagePath);
+        System.out.println(imagePath.substring(0,imagePath.length()-4)+"_fainted1.png");
+        System.out.println(imagePath.substring(0,imagePath.length()-4)+"_fainted2.png");
+        System.out.println();*/
         position = randomPositions(isten.getMap().getRooms());
         villainCollider = new Collider(position, villainScale);
 
         villainCollider.setMovability(true);
         isten.getPhysicsEngine().addCollider(villainCollider);
 
-        for (int i = 0; i< 3; i++) {
+        villainImage.setSortingLayer(-50);
+        isten.getRenderer().addRenderable(villainImage);
+        villainImage.setVisibility(true);
 
-            if(i == 0)
-            {
-                villainImage= images.get(0);
-                images.get(i).setSortingLayer(-50);
-                images.get(i).setVisibility(true);
-                isten.getRenderer().addRenderable(images.get(i));
-            }
-            else{
-                images.get(i).setSortingLayer(-50);
-                images.get(i).setVisibility(false);
-                isten.getRenderer().addRenderable(images.get(i));
-            }
-        }
+        faintedImage1.setSortingLayer(-50);
+        isten.getRenderer().addRenderable(faintedImage1);
+        faintedImage1.setVisibility(false);
+
+        faintedImage2.setSortingLayer(-50);
+        isten.getRenderer().addRenderable(faintedImage2);
+        faintedImage2.setVisibility(false);
+
 
         if (villainName != null) {
             villainName.setVisibility(true);
@@ -109,7 +105,6 @@ public class Villain extends Entity {
                 }
             }
         }
-        prevUnitRoom = currentUnitRoom;
     }
 
     @Override
@@ -146,7 +141,7 @@ public class Villain extends Entity {
         else return false;
     }
     public void move(Isten isten, double deltaTime) {
-        if(!isInGasRoom(isten)/*&&!isFainted*/) {
+        if(!isInGasRoom(isten)&&!isFainted) {
             sum += deltaTime;
             Vec2 villainPosition = villainCollider.getPosition();
             Random random = new Random();
@@ -256,23 +251,23 @@ public class Villain extends Entity {
         }
         else{
             dTime-=deltaTime;
-            images.get(0).setVisibility(false);
+            villainImage.setVisibility(false);
             if(stillImage==0)
             {
-                images.get(1).setPosition(villainCollider.getPosition());
-                images.get(2).setPosition(villainCollider.getPosition());
-                images.get(1).setVisibility(true);
+                faintedImage1.setPosition(villainCollider.getPosition());
+                faintedImage2.setPosition(villainCollider.getPosition());
+                faintedImage1.setVisibility(true);
             }
             if(stillImage % 2 == 0 && dTime<0.0)
             {
-                images.get(1).setVisibility(false);
-                images.get(2).setVisibility(true);
+                faintedImage1.setVisibility(true);
+                faintedImage2.setVisibility(false);
                 stillImage++;
                 dTime=0.2;
             }
             else if(stillImage % 2 == 1 && dTime<0.0){
-                images.get(2).setVisibility(false);
-                images.get(1).setVisibility(true);
+                faintedImage2.setVisibility(true);
+                faintedImage1.setVisibility(false);
                 stillImage++;
                 dTime=0.2;
             }
