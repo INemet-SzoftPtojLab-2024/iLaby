@@ -154,7 +154,7 @@ public class Isten {
             socketServer.addConnection(player,loginPacket);
         }
 
-        if(JOptionPane.showConfirmDialog(this.getRenderer(), "Server?") == 0) {
+        if(PlayerPrefs.getInt("isHost")!=0) {
             socketServer = new GameServer(this);
             socketServer.start();
 

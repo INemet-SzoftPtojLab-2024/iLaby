@@ -32,6 +32,8 @@ public class MainMenu extends Updatable {
             PlayerPrefs.setString("name", "Logus");
         if(PlayerPrefs.hasKey("skin")==false)
             PlayerPrefs.setInt("skin",0);
+
+        PlayerPrefs.setInt("isHost",0);//nem baj, ha ez mindig beallitodik
     }
 
     @Override
@@ -70,11 +72,26 @@ public class MainMenu extends Updatable {
                     currentPanel.load(isten);
                     break;
 
-                case SOLO:
+                case MULTI_QUESTION:
+                    if(currentPanel!=null)
+                        currentPanel.unload(isten);
+                    currentPanel=new MultiQuestionPanel(this);
+                    currentPanel.load(isten);
+                    break;
+
+                case SOLO_EASY:
+                case SOLO_MEDIUM:
+                case SOLO_HARD:
+                    switch (currentPanelType)
+                    {
+                        case SOLO_EASY -> TimeCounter.setTime(901);
+                        case SOLO_MEDIUM -> TimeCounter.setTime(601);
+                        case SOLO_HARD -> TimeCounter.setTime(11);
+                    }
+
                     if(currentPanel!=null)
                         currentPanel.unload(isten);
                     currentPanel=null;
-                    TimeCounter.setTime(901);
                     GameManager.setStage(GameManager.GameStage.SOLO);
                     break;
 
@@ -108,7 +125,7 @@ public class MainMenu extends Updatable {
     }
 
     private enum MainMenuPanelEnum{
-        NONE, HOME, DIFFICULTY, CHARACTER, SOLO, MULTI, EXIT
+        NONE, HOME, DIFFICULTY, CHARACTER, SOLO_EASY, SOLO_MEDIUM, SOLO_HARD, MULTI, MULTI_QUESTION, EXIT
     }
 
     private abstract class MainMenuPanel
@@ -154,7 +171,7 @@ public class MainMenu extends Updatable {
         @Override
         public void load(Isten isten) {
             //images
-            image_logo=new ImageUI(new Vec2(0, -275), new Vec2(600, 200), "./assets/ui/logo.png");
+            image_logo=new ImageUI(new Vec2(0, -275), new Vec2(420, 140), "./assets/ui/logo.png");
             image_developerLogo=new ImageUI(new Vec2(0, 375), new Vec2(300, 50), "./assets/ui/developer_logo.png");
             image_background=new ImageUI(new Vec2(0, 0), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/ui/menu_background.jpg");
 
@@ -167,7 +184,7 @@ public class MainMenu extends Updatable {
             renderables.add(image_background);
 
             //buttons
-            button_solo=new ButtonUI(new Vec2(0, -125), new Vec2(375, 100), "./assets/ui/button_background.png", "Solo", "./assets/Bavarian.otf", 45);
+            button_solo=new ButtonUI(new Vec2(0, -50), new Vec2(375, 100), "./assets/ui/button_background.png", "Single-player", "./assets/Bavarian.otf", 45);
             button_solo.setSortingLayer(-68);
             button_solo.addClickListener(() -> {
                 AudioManager.playSound("./assets/audio/click.ogg");
@@ -175,15 +192,15 @@ public class MainMenu extends Updatable {
                     parent.currentPanelType=MainMenuPanelEnum.DIFFICULTY;
             });
 
-            button_multi=new ButtonUI(new Vec2(0, 0), new Vec2(375, 100), "./assets/ui/button_background.png", "Multi", "./assets/Bavarian.otf", 45);
+            button_multi=new ButtonUI(new Vec2(0, 50), new Vec2(375, 100), "./assets/ui/button_background.png", "Multiplayer", "./assets/Bavarian.otf", 45);
             button_multi.setSortingLayer(-68);
             button_multi.addClickListener(() -> {
-                //AudioManager.playSound("./assets/audio/click.ogg");
+                AudioManager.playSound("./assets/audio/click.ogg");
                 if(parent!=null)
-                    parent.currentPanelType=MainMenuPanelEnum.MULTI;
+                    parent.currentPanelType=MainMenuPanelEnum.MULTI_QUESTION;
             });
 
-            button_character=new ButtonUI(new Vec2(0, 125), new Vec2(375, 100), "./assets/ui/button_background.png", "Character", "./assets/Bavarian.otf", 45);
+            button_character=new ButtonUI(new Vec2(0, 150), new Vec2(375, 100), "./assets/ui/button_background.png", "Set drip", "./assets/Bavarian.otf", 45);
             button_character.setSortingLayer(-68);
             button_character.addClickListener(() -> {
                 AudioManager.playSound("./assets/audio/click.ogg");
@@ -194,7 +211,7 @@ public class MainMenu extends Updatable {
             button_exit=new ButtonUI(new Vec2(0, 250), new Vec2(375, 100), "./assets/ui/button_background.png", "Exit", "./assets/Bavarian.otf", 45);
             button_exit.setSortingLayer(-68);
             button_exit.addClickListener(() -> {
-                AudioManager.playSound("./assets/audio/click.ogg");
+                //AudioManager.playSound("./assets/audio/click.ogg");
                 if(parent!=null)
                     parent.currentPanelType=MainMenuPanelEnum.EXIT;
             });
@@ -231,6 +248,8 @@ public class MainMenu extends Updatable {
         private ButtonUI button_hard=null;
         private ButtonUI button_back=null;
 
+        private TextUI text_title=null;
+
         public DifficultyPanel(MainMenu parent)
         {
             super(parent);
@@ -246,31 +265,28 @@ public class MainMenu extends Updatable {
 
 
             //buttons
-            button_easy=new ButtonUI(new Vec2(0, -125), new Vec2(375, 100), "./assets/ui/button_background.png", "Easy-peasy", "./assets/Bavarian.otf", 45);
+            button_easy=new ButtonUI(new Vec2(0, -50), new Vec2(375, 100), "./assets/ui/button_background.png", "Easy-peasy", "./assets/Bavarian.otf", 45);
             button_easy.setSortingLayer(-67);
             button_easy.addClickListener(() -> {
                 //AudioManager.playSound("./assets/audio/click.ogg");
-                TimeCounter.setTime(901);
                 if(parent!=null)
-                    parent.currentPanelType=MainMenuPanelEnum.SOLO;
+                    parent.currentPanelType=MainMenuPanelEnum.SOLO_EASY;
             });
 
-            button_medium=new ButtonUI(new Vec2(0, 0), new Vec2(375, 100), "./assets/ui/button_background.png", "Casual", "./assets/Bavarian.otf", 45);
+            button_medium=new ButtonUI(new Vec2(0, 50), new Vec2(375, 100), "./assets/ui/button_background.png", "Casual", "./assets/Bavarian.otf", 45);
             button_medium.setSortingLayer(-67);
             button_medium.addClickListener(() -> {
                 //AudioManager.playSound("./assets/audio/click.ogg");
-                TimeCounter.setTime(601);
                 if(parent!=null)
-                    parent.currentPanelType=MainMenuPanelEnum.SOLO;
+                    parent.currentPanelType=MainMenuPanelEnum.SOLO_MEDIUM;
             });
 
-            button_hard=new ButtonUI(new Vec2(0, 125), new Vec2(375, 100), "./assets/ui/button_background.png", "Gigachad", "./assets/Bavarian.otf", 45);
+            button_hard=new ButtonUI(new Vec2(0, 150), new Vec2(375, 100), "./assets/ui/button_background.png", "Gigachad", "./assets/Bavarian.otf", 45);
             button_hard.setSortingLayer(-67);
             button_hard.addClickListener(() -> {
                 //AudioManager.playSound("./assets/audio/click.ogg");
-                TimeCounter.setTime(11);
                 if(parent!=null)
-                    parent.currentPanelType=MainMenuPanelEnum.SOLO;
+                    parent.currentPanelType=MainMenuPanelEnum.SOLO_HARD;
             });
 
             button_back=new ButtonUI(new Vec2(0, 275), new Vec2(275, 100), "./assets/ui/button_background.png", "Back", "./assets/Bavarian.otf", 45);
@@ -285,6 +301,12 @@ public class MainMenu extends Updatable {
             renderables.add(button_medium);
             renderables.add(button_hard);
             renderables.add(button_back);
+
+
+            text_title=new TextUI("Choose difficulty", new Vec2(0, -300), "./assets/Bavarian.otf",50, 255, 255, 255);
+            text_title.setShadowOn(false);
+            text_title.setSortingLayer(-69);
+            renderables.add(text_title);
 
             for(Renderable r : renderables)
             {
@@ -316,6 +338,8 @@ public class MainMenu extends Updatable {
 
         private TextUI text_name=null;
         private TextBoxUI textBox_name=null;
+
+        private TextUI text_title=null;
 
         public CharacterPanel(MainMenu parent)
         {
@@ -392,6 +416,10 @@ public class MainMenu extends Updatable {
             renderables.add(text_name);
             renderables.add(textBox_name);
 
+            text_title=new TextUI("Drip", new Vec2(0, -300), "./assets/Bavarian.otf",60, 255, 255, 255);
+            text_title.setShadowOn(false);
+            text_title.setSortingLayer(-69);
+            renderables.add(text_title);
 
 
             for(Renderable r : renderables)
@@ -409,6 +437,87 @@ public class MainMenu extends Updatable {
         @Override
         public MainMenuPanelEnum getType() {
             return MainMenuPanelEnum.CHARACTER;
+        }
+    }
+
+    private class MultiQuestionPanel extends MainMenuPanel
+    {
+        private ImageUI image_background=null;
+
+        private TextUI text_title=null;
+
+        private ButtonUI button_host=null;
+        private ButtonUI button_connect=null;
+        private ButtonUI button_back=null;
+
+        public MultiQuestionPanel(MainMenu parent)
+        {
+            super(parent);
+        }
+
+
+        @Override
+        public void load(Isten isten) {
+
+            //images
+            image_background=new ImageUI(new Vec2(0, 0), new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()), "./assets/ui/menu_background.jpg");
+            image_background.setSortingLayer(-67);
+            renderables.add(image_background);
+
+            //buttons
+            button_host=new ButtonUI(new Vec2(0, 0), new Vec2(375, 100), "./assets/ui/button_background.png", "Host game", "./assets/Bavarian.otf", 45);
+            button_host.setSortingLayer(-69);
+            button_host.addClickListener(()->{
+                //AudioManager.playSound("./assets/audio/click.ogg");
+                PlayerPrefs.setInt("isHost",69);
+                if(parent!=null)
+                    parent.currentPanelType=MainMenuPanelEnum.MULTI;
+            });
+
+            button_connect=new ButtonUI(new Vec2(0, 100), new Vec2(375, 100), "./assets/ui/button_background.png", "Connect...", "./assets/Bavarian.otf", 45);
+            button_connect.setSortingLayer(-69);
+            button_connect.addClickListener(()->{
+                //AudioManager.playSound("./assets/audio/click.ogg");
+                PlayerPrefs.setInt("isHost",0);
+                if(parent!=null)
+                    parent.currentPanelType=MainMenuPanelEnum.MULTI;
+            });
+
+            button_back=new ButtonUI(new Vec2(0, 275), new Vec2(275, 100), "./assets/ui/button_background.png", "Back", "./assets/Bavarian.otf", 45);
+            button_back.setSortingLayer(-69);
+            button_back.addClickListener(()->{
+                AudioManager.playSound("./assets/audio/click.ogg");
+                PlayerPrefs.setInt("isHost",0);
+                if(parent!=null)
+                    parent.currentPanelType=MainMenuPanelEnum.HOME;
+            });
+
+            renderables.add(button_host);
+            renderables.add(button_connect);
+            renderables.add(button_back);
+
+            //text
+            text_title=new TextUI("Multiplayer", new Vec2(0, -300), "./assets/Bavarian.otf",60, 255, 255, 255);
+            text_title.setShadowOn(false);
+            text_title.setSortingLayer(-69);
+            renderables.add(text_title);
+
+
+            for(Renderable r : renderables)
+            {
+                r.setAlignment(Renderable.CENTER, Renderable.CENTER);
+                isten.getRenderer().addRenderable(r);
+            }
+        }
+
+        @Override
+        public void update(Isten isten) {
+            image_background.setScale(new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()));
+        }
+
+        @Override
+        public MainMenuPanelEnum getType() {
+            return MainMenuPanelEnum.MULTI_QUESTION;
         }
     }
 }
