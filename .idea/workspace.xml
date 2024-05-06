@@ -5,23 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3506ab6d-0407-47f2-a7e8-78ebc867e577" name="Changes" comment="it's working">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__13__12_51__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__13__12_51__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__17__15_18__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__17__15_18__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__26__14_36__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__26__14_36__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__05__02__15_12__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__05__02__15_12__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__05__02__15_12__Changes_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__05__02__15_12__Changes_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__05__05__15_16__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__05__05__15_16__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_01_05_2024_13_06__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_01_05_2024_13_06__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_01_05_2024_13_38__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_01_05_2024_13_38__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_01_05_2024_13_38__Changes_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_01_05_2024_13_38__Changes_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_02_05_2024_16_14__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_02_05_2024_16_14__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_03_05_2024_12_47__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_03_05_2024_12_47__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_05_05_2024_16_40__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_05_05_2024_16_40__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/entities/villain/Villain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/entities/villain/Villain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/VillainHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/VillainHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/character/character2_ded.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/character/character2_left1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/character/character2_left2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/character/character2_right1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/character/character2_right2.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -237,6 +228,8 @@
       <workItem from="1714747759256" duration="7383000" />
       <workItem from="1714847163651" duration="324000" />
       <workItem from="1714924570656" duration="7744000" />
+      <workItem from="1714998304768" duration="2091000" />
+      <workItem from="1715005596007" duration="1318000" />
     </task>
     <task id="LOCAL-00001" summary="it's working">
       <option name="closed" value="true" />
