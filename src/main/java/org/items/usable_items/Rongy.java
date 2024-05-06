@@ -11,7 +11,6 @@ import main.java.org.linalg.Vec2;
 
 public class Rongy extends Item {
     private Image stink;
-
     private double impactTime;
     public Rongy(Isten isten){
         super(isten,new Vec2(0.5f,0.4f));
@@ -19,9 +18,10 @@ public class Rongy extends Item {
         image = new Image(new Vec2(-10,-10), scale, imagePath);
         isten.getRenderer().addRenderable(image);
         image.setVisibility(false);
-        stink=new Image(new Vec2(),new Vec2(1.0f,1.0f),"./assets/items/stink_rongy.png");
+        stink=new Image(new Vec2(),new Vec2(0.8f,0.8f),"./assets/items/stink_rongy.png");
+        stink.setVisibility(false);
         isten.getRenderer().addRenderable(stink);
-        impactTime=100000;
+        impactTime=5;//sec
 
     }
     @Override
@@ -32,12 +32,24 @@ public class Rongy extends Item {
         for (Updatable u : isten.getUpdatables()) {
             if (u.getClass().equals(Villain.class)) {
                 Villain villain = (Villain) u;
-                if (villain.getRoom().equals(getRoom())) {
-                    villain.setFainted();
+                if (villain.getRoom().equals(room)) {
+                    villain.setFainted(impactTime);
                 }
             }
         }
+        stink.setPosition(Vec2.sum(position,new Vec2(0.0f,0.25f)));
+        stink.setVisibility(true);
         isten.getInventory().deleteItem(this);
+        Runnable stinkThread=()->{//thread azért kell, hogy ha már nem hat a rongy, akkor eltüntesse a füstfelhőt
+            try {
+                Thread.sleep((long) (impactTime*1000));
+                stink.setVisibility(false);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        };
+        Thread t=new Thread(stinkThread);
+        t.start();
     }
     private Room getRoom() {
         Room currentRoom = null;

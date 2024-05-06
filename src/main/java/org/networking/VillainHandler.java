@@ -38,15 +38,27 @@ public class VillainHandler extends ServerSideHandler {
         villainSkeletons.add(new Villain("Villain6",  "./assets/villain/villain1.png"));
         villainSkeletons.add(new Villain("Villain7",  "./assets/villain/villain3.png"));
         villainSkeletons.add(new Villain("Villain8",  "./assets/villain/villain3.png"));
+        villainSkeletons.add(new Villain("Villain9",  "./assets/villain/villain3.png"));
+        villainSkeletons.add(new Villain("Villain10",  "./assets/villain/villain3.png"));
+        villainSkeletons.add(new Villain("Villain11",  "./assets/villain/villain3.png"));
+        villainSkeletons.add(new Villain("Villain12",  "./assets/villain/villain3.png"));
+        villainSkeletons.add(new Villain("Villain13",  "./assets/villain/villain3.png"));
+        villainSkeletons.add(new Villain("Villain14", "./assets/villain/villain2.png"));
+        villainSkeletons.add(new Villain("Villain15",  "./assets/villain/villain2.png"));
+        villainSkeletons.add(new Villain("Villain16",  "./assets/villain/villain2.png"));
+        villainSkeletons.add(new Villain("Villain17",  "./assets/villain/villain2.png"));
+        villainSkeletons.add(new Villain("Villain18",  "./assets/villain/villain2.png"));
+        villainSkeletons.add(new Villain("Villain19",  "./assets/villain/villain2.png"));
         villainSkeletons.add(new Villain("Gajdos",  "./assets/villain/villain1.png"));
         villainSkeletons.add(new Villain("Csuka",  "./assets/villain/villain2.png"));
 
         for(Villain villain: villainSkeletons) {
-            float[] data = villain.randomPositions(isten.getMap().getRooms());
+            /*float[] data = villain.randomPositions(isten.getMap().getRooms());
             int random1 = (int)data[0];
             int random2 = (int)data[1];
             Vec2 pos = new Vec2(data[2], data[3]);
-            villain.setPosition(pos);
+            villain.setPosition(pos);*/
+            villain.setPosition(villain.randomPositions(isten.getMap().getRooms()));
         }
 
     }

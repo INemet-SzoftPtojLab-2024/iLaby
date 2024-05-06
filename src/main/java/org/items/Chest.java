@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Chest {
-    private final int maxAmountOfItems=3;
     private Heading heading;//0=left, 1=up, 2=right, 3=down
     private final Isten isten;
     private boolean isOpened;//once a chest is opened, cant be closed anymore; default:false
@@ -49,15 +48,13 @@ public class Chest {
         isten.getRenderer().addRenderable(chestImage);
     }
 
-    public void fillChest() {
+    public void fillChest() {//max 2 item mehet bele
         switch (chestType) {
             case 0:
-                storedItems.add(new Gasmask(isten));
                 storedItems.add(new Camembert(isten));
                 storedItems.add(new Transistor(isten));
                 break;
             case 1:
-                storedItems.add(new Rongy(isten));
                 storedItems.add(new Sorospohar(isten));
                 storedItems.add(new Tvsz(isten));
                 break;
@@ -81,56 +78,41 @@ public class Chest {
 
     public void open() {
         chestImage.setVisibility(false);
+        if(storedItems.size()>2) System.out.println("There are more than 2 items in the chest!");
         switch(heading){
             case RIGHT: {
                 chestImage = new Image(pos, scale, "./assets/items/chest/chest_opened_right.png");
-                if(storedItems.size()==1||storedItems.size()==3)storedItems.get(0).dropOnGround(new Vec2(pos.x+0.4f,pos.y));
+                if(storedItems.size()==1)storedItems.get(0).dropOnGround(new Vec2(pos.x+0.4f,pos.y));
                 else {
                     storedItems.get(0).dropOnGround(new Vec2(pos.x+0.3f,pos.y-0.3f));
                     storedItems.get(1).dropOnGround(new Vec2(pos.x+0.3f,pos.y+0.3f));
-                }
-                if(storedItems.size()==3){
-                    storedItems.get(1).dropOnGround(new Vec2(pos.x+0.3f,pos.y-0.4f));
-                    storedItems.get(2).dropOnGround(new Vec2(pos.x+0.3f,pos.y+0.4f));
                 }
                 break;
             }
             case DOWN: {
                 chestImage = new Image(pos, scale, "./assets/items/chest/chest_opened_down.png");
-                if(storedItems.size()==1||storedItems.size()==3)storedItems.get(0).dropOnGround(new Vec2(pos.x,pos.y-0.4f));
+                if(storedItems.size()==1)storedItems.get(0).dropOnGround(new Vec2(pos.x,pos.y-0.4f));
                 else {
                     storedItems.get(0).dropOnGround(new Vec2(pos.x+0.3f,pos.y-0.3f));
                     storedItems.get(1).dropOnGround(new Vec2(pos.x-0.3f,pos.y-0.3f));
-                }
-                if(storedItems.size()==3){
-                    storedItems.get(1).dropOnGround(new Vec2(pos.x+0.4f,pos.y-0.3f));
-                    storedItems.get(2).dropOnGround(new Vec2(pos.x-0.4f,pos.y-0.3f));
                 }
                 break;
             }
             case LEFT: {
                 chestImage = new Image(pos, scale, "./assets/items/chest/chest_opened_left.png");
-                if(storedItems.size()==1||storedItems.size()==3)storedItems.get(0).dropOnGround(new Vec2(pos.x-0.4f,pos.y));
+                if(storedItems.size()==1)storedItems.get(0).dropOnGround(new Vec2(pos.x-0.4f,pos.y));
                 else {
                     storedItems.get(0).dropOnGround(new Vec2(pos.x-0.3f,pos.y+0.3f));
                     storedItems.get(1).dropOnGround(new Vec2(pos.x-0.3f,pos.y-0.3f));
-                }
-                if(storedItems.size()==3){
-                    storedItems.get(1).dropOnGround(new Vec2(pos.x-0.3f,pos.y+0.4f));
-                    storedItems.get(2).dropOnGround(new Vec2(pos.x-0.3f,pos.y-0.4f));
                 }
                 break;
             }
             case UP: {
                 chestImage = new Image(pos, scale, "./assets/items/chest/chest_opened_up.png");
-                if(storedItems.size()==1||storedItems.size()==3)storedItems.get(0).dropOnGround(new Vec2(pos.x,pos.y+0.4f));
+                if(storedItems.size()==1)storedItems.get(0).dropOnGround(new Vec2(pos.x,pos.y+0.4f));
                 else {
                     storedItems.get(0).dropOnGround(new Vec2(pos.x-0.3f,pos.y+0.3f));
                     storedItems.get(1).dropOnGround(new Vec2(pos.x+0.3f,pos.y+0.3f));
-                }
-                if(storedItems.size()==3){
-                    storedItems.get(1).dropOnGround(new Vec2(pos.x-0.4f,pos.y+0.3f));
-                    storedItems.get(2).dropOnGround(new Vec2(pos.x+0.4f,pos.y+0.3f));
                 }
                 break;
             }
