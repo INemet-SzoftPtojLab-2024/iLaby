@@ -80,9 +80,11 @@ public class ChestManager extends Updatable {
         }
         ColliderGroup chestColliders=new ColliderGroup();
         for (int i = 0; i < chests.size(); i++) {
-            Collider c=new Collider(chests.get(i).getPosition(),new Vec2(0.15f,0.15f));
+            Collider c=new Collider(chests.get(i).getPosition(),new Vec2(0.3f,0.3f));
             chestColliders.addCollider(c);
         }
+        isten.getPhysicsEngine().addColliderGroup(chestColliders);
+
     }
 
     @Override
