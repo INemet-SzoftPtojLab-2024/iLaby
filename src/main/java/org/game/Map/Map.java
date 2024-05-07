@@ -66,7 +66,7 @@ public class Map extends Updatable {
         if(r1.getUnitRooms().size() < minRoomSize) return -1;
         //egyenlőre minden szoba ami splittel lesz createlve ilyen type-val rendelkezik
         int newID = generateNewRoomID();
-        Room newRoom = new Room(newID);
+        Room newRoom = new Room(newID,r1.getMaxPlayerCount());
         ArrayList<UnitRoom> addableUnitRooms = new ArrayList<>();
         int distance = 0;
         ArrayList<Integer> minMaxRowColValues = r1.getMinMaxRowColValues();
@@ -324,7 +324,7 @@ public class Map extends Updatable {
         //r1.setDiscovered(r2.isDiscovered());
         //r1.setPlayerCount(r1.getPlayerCount() + r2.getPlayerCount());
         //r1.setRoomType(r2.getRoomType());
-        r1.setMaxPlayerCount(r1.getMaxPlayerCount() + r2.getMaxPlayerCount());
+        r1.setMaxPlayerCount(Math.max(r1.getMaxPlayerCount(),r2.getMaxPlayerCount()));
         rooms.remove(r2);
     }
 
@@ -396,14 +396,15 @@ public class Map extends Updatable {
                         ArrayList<EdgePiece> edgePieces = edgeBeingModified.getWalls();
                         for (EdgePiece edgePiece : edgePieces) {
                             if (edgePiece.isDoor()) {
-                                System.out.println("talatam jot");
+
                                 //ha ezek egyike igaz, akkor szedem csak ki, és csak ilyenkor returneolok positiont -1, -1. en kivul
                                 if(alreadyOneWay || !oneWay){
                                     edgeBeingModified.switchDoorToWall(edgePiece, isten);
-
+                                    System.out.println("kiszedek egy ajtot");
                                     return edgePiece.position;
                                 }
                                 //mert nem kell allitani a map kirajzolasan, az adjacencylistet nem kell updatelni (remelem)
+                                System.out.println("egyiranyura allitom az ajtot");
                                 return new Vec2(-1,-1);
                             }
                         }

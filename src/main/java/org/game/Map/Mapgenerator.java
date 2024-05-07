@@ -7,6 +7,7 @@ import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 /**
  * this class is only used at the beginning of a game, when a map needs to be generated
@@ -91,7 +92,8 @@ public class Mapgenerator {
             //ez nem igaz, mert ha egy unitroomhoz tobb ajtot kene adni, akkor kevesebb door lesz mint edge
             //room.setDoorAdjacentRooms(room.getPhysicallyAdjacentRooms());
         }
-
+        //ez egyenlore a spawnRoom beallitasa, Bea fv-eit e szerint lehetne modositani.
+        isten.getMap().getUnitRooms()[0][0].getOwnerRoom().setRoomTypeToRoomType(RoomType.BASIC);
     }
 
     public void generateSideWalls() {
@@ -162,7 +164,8 @@ public class Mapgenerator {
         }
         if(unitRoomNeighbourRooms.isEmpty()){
             //System.out.println("Új szoba kerül felvételre ID-val:" + unitRoom.getRowNum()*mapRowSize+unitRoom.getColNum());
-            Room newRoom = new Room(unitRoom.getRowNum()* map.getMapRowSize() +unitRoom.getColNum());
+            Random random = new Random();
+            Room newRoom = new Room(unitRoom.getRowNum()* map.getMapRowSize() +unitRoom.getColNum(), random.nextInt(2,5));
             unitRoom.setOwnerRoom(newRoom);
             newRoom.getUnitRooms().add(unitRoom);
             map.getRooms().add(newRoom);

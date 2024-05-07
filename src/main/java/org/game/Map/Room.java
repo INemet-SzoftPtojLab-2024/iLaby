@@ -6,6 +6,7 @@ import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Random;
 
 
 public class Room extends Updatable implements Graph<Room>{
@@ -13,8 +14,9 @@ public class Room extends Updatable implements Graph<Room>{
     private ArrayList<UnitRoom> unitRooms;
     private ArrayList<Room> physicallyAdjacentRooms;
     private ArrayList<Room> doorAdjacentRooms;
-    private int maxPlayerCount = 5;
-    int playerCount;
+    private int maxPlayerCount;
+
+    private int playerCount;
 
     //ArrayList<Player> players;
     boolean discovered = false;
@@ -25,17 +27,24 @@ public class Room extends Updatable implements Graph<Room>{
     //private ArrayList<Integer> hasDoorWith;
 
 
-    public Room(int ID){
+    public Room(int ID, int maxPlayerCount){
         this.ID = ID;
         unitRooms = new ArrayList<>();
         physicallyAdjacentRooms = new ArrayList<>();
         doorAdjacentRooms = new ArrayList<>();
-
-        //hasDoorWith = new ArrayList<>();
-        roomType = RoomType.getRandomRoomtype(false);
+        this.maxPlayerCount = maxPlayerCount;
+        roomType = RoomType.getRandomRoomtype();
+        playerCount = 0;
     }
     public void setRoomType(boolean startRoom) {
-        roomType =  RoomType.getRandomRoomtype(startRoom);
+        if(startRoom){
+            roomType = RoomType.BASIC;
+            maxPlayerCount = 100;
+            System.out.println(ID+ "szamu szobanak 100 a maxPlayerCountja");
+        }
+        else{
+           roomType =  RoomType.getRandomRoomtype();
+        }
     }
     public void setRoomTypeToRoomType(RoomType room) {
         roomType =  room;
@@ -165,5 +174,16 @@ public class Room extends Updatable implements Graph<Room>{
             }
         }
         return isStartUnitRoomInRoom && isUnitRoomInRoom;
+    }
+    public int getPlayerCount() {
+        return playerCount;
+    }
+
+    public void decreasePlayerCount() {
+        playerCount--;
+    }
+
+    public void increasePlayerCount() {
+        playerCount++;
     }
 }

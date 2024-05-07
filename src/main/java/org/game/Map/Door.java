@@ -69,6 +69,10 @@ public class Door extends EdgePiece {
             // sincs benne az adjacentlistába, szóval || feltétellel is jó lenne, de menjünk biztosra
             if (!unitRoom.getOwnerRoom().equals(placeOfPlayer)) {
                 roomOnOtherSideOfDoor = unitRoom.getOwnerRoom();
+                if(roomOnOtherSideOfDoor.getMaxPlayerCount()<=roomOnOtherSideOfDoor.getPlayerCount()) {
+                    System.err.println("Nem volt eleg hely a szobaban az ajto hasznalatakor");
+                    return false;
+                }
             }
         }
         return placeOfPlayer.getDoorAdjacentRooms().contains(roomOnOtherSideOfDoor);

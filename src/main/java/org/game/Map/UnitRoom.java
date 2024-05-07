@@ -65,7 +65,7 @@ public class UnitRoom implements Graph<UnitRoom>{
     }
     public void setNewImage(String imgPath, Isten isten) {
         if(ownerRoom != null) {
-            if (ownerRoom.isUnitRoomInSameRoomAsStartRoom(position) && ownerRoom.getRoomType() == RoomType.GAS) {
+            if (ownerRoom.isUnitRoomInSameRoomAsStartRoom(position) && ownerRoom.getRoomType() == RoomType.GAS ) { //feltetel kiveve, mert a starterRoom mindig legyen basic, es itt egyben be is allitjuk a maxPlayerCountot
                 if (setOwnerRoomType == 0) {
                     ownerRoom.setRoomType(true);
                     setOwnerRoomType++;
