@@ -84,11 +84,11 @@ public class MapHandler extends ServerSideHandler {
             delta += deltaTime;
             //Original was: 1
             //Megváltoztattam 0.1-re, hogy gyorsabban tötrénjenek a változások
-            if (delta > 0.1) {
+            if (delta > 1) {
                 //TESTCASE 1:::
 
 
-                if(sec %3==0){
+               if(false){
                     Vec2 pos = isten.getMap().addDoorToEdgeWithoutDoor(isten);
                     handleAddOrDeleteDoor(pos, true);
                     //System.out.println("ajtoaddolas tortent");
@@ -102,8 +102,6 @@ public class MapHandler extends ServerSideHandler {
                         //System.out.println("doorNum: "+isten.getMap().getEdgeManager().getDoorNum());
                         //System.out.println("ajtokivetel tortent");
                     }
-
-
                 }
 
 
@@ -111,7 +109,7 @@ public class MapHandler extends ServerSideHandler {
 
 
                 //TESTCASE 2:
-                if (sec % 4 == 0) {
+               if (sec % 4 == 0) {
                     Collections.shuffle(isten.getMap().getRooms());
 
                     Room r1 = isten.getMap().getRooms().get(0);

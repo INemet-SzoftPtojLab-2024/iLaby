@@ -411,8 +411,10 @@ public class HandlerManager {
 
     private void edgePieceChangeHandler(EdgePieceChangeData edgePieceChangeData) {
 
-        for(int i = 0; i < isten.getClientMap().getEdgeBetweenRooms().getWalls().size(); i++) {
-            EdgePiece oldEdgePiece = isten.getClientMap().getEdgeBetweenRooms().getWalls().get(i);
+        int sizeOfEdges = isten.getClientMap().getEdgeBetweenRooms().getWalls().size();
+        ArrayList<EdgePiece> walls = isten.getClientMap().getEdgeBetweenRooms().getWalls();
+        for(int i = 0; i < sizeOfEdges; i++) {
+            EdgePiece oldEdgePiece = walls.get(i);
             EdgePiece edgePiece;
 
             if(oldEdgePiece.isDoor() != edgePieceChangeData.isDoor
