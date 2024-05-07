@@ -37,6 +37,8 @@ public class Villain extends Entity {
     private int random1, random2;
     private double dTime;
     private int stillImage;
+    double timeElapsed;
+
 
     public Villain(String name, String iP) {
         this(name, new Vec2(0,0), iP);
@@ -68,7 +70,7 @@ public class Villain extends Entity {
         System.out.println(imagePath.substring(0,imagePath.length()-4)+"_fainted1.png");
         System.out.println(imagePath.substring(0,imagePath.length()-4)+"_fainted2.png");
         System.out.println();*/
-        position = randomPositions(isten.getMap().getRooms());
+        //position = randomPositions(isten.getMap().getRooms());
         villainCollider = new Collider(position, villainScale);
 
         villainCollider.setMovability(true);
@@ -96,21 +98,37 @@ public class Villain extends Entity {
 
         Map map = isten.getMap();
 
-        for (Room room : map.getRooms()) {
-            for (UnitRoom unitRoom : room.getUnitRooms()) {
-                if (position.x >= unitRoom.getPosition().x - 0.5 &&
-                        position.x <= unitRoom.getPosition().x + 0.5 &&
-                        position.y >= unitRoom.getPosition().y - 0.5 &&
-                        position.y <= unitRoom.getPosition().y + 0.5) {
-                    currentUnitRoom = unitRoom;
-                }
-            }
-        }
+
     }
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
+        timeElapsed+=deltaTime;
+        Vec2 playerPosition = villainCollider.getPosition();
+        villainImage.setPosition(playerPosition);
+        faintedImage1.setPosition(playerPosition);
+        faintedImage2.setPosition(playerPosition);
+        villainName.setPosition(Vec2.sum(playerPosition, new Vec2(0, (float) 0.5)));
 
+        if(faintTime > 0) {
+            if ((timeElapsed*1000000) % 1000000 < 500000) {
+                setVillainImage(isten,faintedImage1);
+            }
+            else {
+                setVillainImage(isten,faintedImage2);
+            }
+        }
+        for (Room room : isten.getMap().getRooms()) {
+            for (UnitRoom unitRoom : room.getUnitRooms()) {
+                if (villainCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
+                        villainCollider.getPosition().x <= unitRoom.getPosition().x + 0.5 &&
+                        villainCollider.getPosition().y >= unitRoom.getPosition().y - 0.5 &&
+                        villainCollider.getPosition().y <= unitRoom.getPosition().y + 0.5) {
+                    currentUnitRoom = unitRoom;
+                    this.room = currentUnitRoom.getOwnerRoom();
+                }
+            }
+        }
     }
     public boolean isInGasRoom(Isten isten)
     {
@@ -299,20 +317,21 @@ public class Villain extends Entity {
         Room selectedRoom;
 
         do {
-            selectedRoom = rooms.get(rand.nextInt(rooms.size() - 1));
+            random1 = rand.nextInt(rooms.size() - 1);
+            selectedRoom = rooms.get(random1);
         } while (roomsWithVillains.contains(selectedRoom) || isStartUnitRoomInRoom(selectedRoom)|| selectedRoom.getRoomType()== RoomType.GAS);
 
-        UnitRoom selectedUnitRoom = selectedRoom.getUnitRooms().get(rand.nextInt(selectedRoom.getUnitRooms().size()));
+        random2 =rand.nextInt(selectedRoom.getUnitRooms().size()-1);
+        UnitRoom selectedUnitRoom = selectedRoom.getUnitRooms().get(random2);
         roomsWithVillains.add(selectedRoom);
+        //System.out.println(selectedRoom.getID());
         room = selectedRoom;
         return new Vec2(selectedUnitRoom.getPosition().x, selectedUnitRoom.getPosition().y);
     }
 
-    public void setRoomForVillain(ArrayList<Room> rooms, int selectedRoomIndex, int selectedUnitRoomIndex) {
-        Room selectedRoom = rooms.get(selectedRoomIndex);
-        UnitRoom selectedUnitRoom = selectedRoom.getUnitRooms().get(selectedUnitRoomIndex);
-        roomsWithVillains.add(selectedRoom);
-        room = selectedRoom;
+    public void setRoomForVillain(ArrayList<Room> rooms, int randomRoom, int randomUnitRoom) {
+        room = rooms.get(randomRoom);
+        roomsWithVillains.add(room);
     }
 
     boolean isStartUnitRoomInRoom(Room room) {
@@ -388,4 +407,6 @@ public class Villain extends Entity {
     public void setVelocity(float velocity) {
         villainCollider.setVelocity(new Vec2(velocity, velocity));
     }
+
+
 }

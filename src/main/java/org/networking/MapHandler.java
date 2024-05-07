@@ -257,6 +257,7 @@ public class MapHandler extends ServerSideHandler {
             EdgeBetweenRooms re = isten.getMap().getEdgeManager().getRoomEdges().get(i);
             for (int j = 0; j < re.getWalls().size(); j++) {
                 EdgePiece edgePiece = re.getWalls().get(j);
+                if(edgePiece == null || edgePiece.getPosition() == null) return;
                 if(packet.getX() == edgePiece.getPosition().x &&
                         packet.getY() == edgePiece.getPosition().y) {
                     edgePiece.getCollider().setSolidity(packet.isSolid());

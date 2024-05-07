@@ -19,7 +19,7 @@ public class GameServer extends Thread {
     private VillainHandler villainHandler;
     private MapHandler mapHandler;
     private TimeHandler timeHandler;
-    private DeathHandler deathHandler;
+    private PlayerStatusHandler playerStatusHandler;
     private ChestGenerationHandler chestGenerationHandler;
     private DatagramSocket socket;
 
@@ -66,13 +66,13 @@ public class GameServer extends Thread {
         mapHandler = new MapHandler();
         timeHandler = new TimeHandler();
         villainHandler = new VillainHandler();
-        deathHandler = new DeathHandler();
+        playerStatusHandler = new PlayerStatusHandler();
         chestGenerationHandler = new ChestGenerationHandler();
 
         serverSideHandlers.add(mapHandler);
         serverSideHandlers.add(timeHandler);
         serverSideHandlers.add(villainHandler);
-        serverSideHandlers.add(deathHandler);
+        serverSideHandlers.add(playerStatusHandler);
         serverSideHandlers.add(chestGenerationHandler);
 
         for(ServerSideHandler serverSideHandler: serverSideHandlers) {

@@ -21,7 +21,8 @@ public abstract class Packet {
         EDGEPIECECHANGED(22),
         WALLDELETE(23),
         DOOROPEN(24),
-        PLAYERPOSFORDOOROPEN(25);
+        PLAYERPOSFORDOOROPEN(25),
+        INGASROOM(26);
         private int packetId;
         private PacketTypes(int packetId) {
             this.packetId = packetId;

@@ -12,6 +12,8 @@ public class ClientMap extends Updatable {
 
     private EdgeBetweenRooms edgeBetweenRooms;
     private Isten isten;
+    public static int mapWidth;
+    public static int mapHeight;
 
     public void addEdgePiece(EdgePiece edgePiece) {
         edgeBetweenRooms.getWalls().add(edgePiece);
@@ -19,6 +21,8 @@ public class ClientMap extends Updatable {
     @Override
     public void onStart(Isten isten) {
         this.isten = isten;
+        ClientMap.mapWidth = isten.getMap().getMapColumnSize();
+        ClientMap.mapHeight = isten.getMap().getMapRowSize();
         edgeBetweenRooms = new EdgeBetweenRooms();
         isten.getPhysicsEngine().addColliderGroup(edgeBetweenRooms.getColliderGroup());
     }

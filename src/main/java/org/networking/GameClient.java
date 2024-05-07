@@ -128,6 +128,27 @@ public class GameClient extends Thread {
                 packet = new Packet24DoorOpen(data);
                 handleDoorOpen((Packet24DoorOpen)packet);
                 break;
+            case INGASROOM:
+                packet = new Packet26InGasRoom(data);
+                handleInGasRoom((Packet26InGasRoom)packet);
+                break;
+        }
+    }
+
+    private void handleInGasRoom(Packet26InGasRoom packet) {
+        float x = packet.getX();
+        float y = packet.getY();
+        boolean isInGasRoom = packet.isInGasRoom();
+
+        HandlerManager hm = isten.getHandlerManager();
+        hm.lock.lock();
+        try {
+            // Critical section
+            // Access shared resources here
+            hm.addTask(HandlerManager.TaskType.InGasRoom);
+            hm.addData(new HandlerManager.InGasRoomData(x,y, isInGasRoom));
+        } finally {
+            hm.lock.unlock(); // Release the lock
         }
     }
 
@@ -280,14 +301,16 @@ public class GameClient extends Thread {
         Vec2 position = new Vec2(packet.getX(), packet.getY());
         int type = packet.getType();
         String path = "./assets/floors/floor" + (type+1) + ".png";
-        Map map = isten.getMap();
-        for(int i = 0; i < map.getMapRowSize(); i++) {
-            for(int j = 0; j < map.getMapColumnSize(); j++) {
-                if(map.getUnitRooms()[i][j].getPosition().x == position.x &&
-                map.getUnitRooms()[i][j].getPosition().y == position.y) {
-                    map.getUnitRooms()[i][j].setNewImage(path, isten);
-                }
-            }
+
+        HandlerManager hm = isten.getHandlerManager();
+        hm.lock.lock();
+        try {
+            // Critical section
+            // Access shared resources here
+            hm.addTask(HandlerManager.TaskType.UnitRoom);
+            hm.addData(new HandlerManager.UnitRoomData(position, path));
+        } finally {
+            hm.lock.unlock(); // Release the lock
         }
     }
 

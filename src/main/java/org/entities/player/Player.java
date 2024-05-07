@@ -46,7 +46,8 @@ public class Player extends Entity {
     protected int run = 1;
     protected int skinID;
     public boolean localPlayer = false;
-    private Room currentRoom = null;
+    public Room currentRoom = null;
+    private boolean isInGasRoom = false;
 
     public Player() {
         playerCollider = null;
@@ -183,17 +184,24 @@ public class Player extends Entity {
                 isten.getInventory().resetShouldUseChargeForTvsz();
                 this.currentRoom = currentRoom;
             }
-            if (currentRoom != null && currentRoom.getRoomType() == RoomType.GAS) {
+            if (isInGasRoom) {
+                isInGasRoom = false;
                 if (!isten.getInventory().getExistenceOfGasMask()) {
                     faintingTime = 0;
                     isFainted = true;
                     speed = 1;
-                    for (int i = 0; i < 5; i++) {
-                        if (isten.getInventory().getStoredItems().get(i) != null) {
-                            isten.getInventory().getStoredItems().get(i).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(i + 1).getPosition().x, currentRoom.getUnitRooms().get(i + 1).getPosition().y));
+                    if(localPlayer) {
+                        for (int i = 0; i < 5; i++) {
+                            if (isten.getInventory().getStoredItems().get(i) != null) {
+                                //TODO
+                                // Should send item dropped to all clients.
+                                // When on client, throws nullpointer exception
+                                if(isten.getSocketServer() != null) isten.getInventory().getStoredItems().get(i).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(i + 1).getPosition().x, currentRoom.getUnitRooms().get(i + 1).getPosition().y));
+                            }
                         }
+                        isten.getInventory().dropAllItems(isten);
                     }
-                    isten.getInventory().dropAllItems(isten);
+
                     isInGasRoomButHasMask = false;
                 }
                 else {
@@ -413,5 +421,12 @@ public class Player extends Entity {
 
     public boolean isFainted() {
         return isFainted;
+    }
+    public void isInGasRoom(boolean b) {
+        isInGasRoom = b;
+    }
+
+    public boolean isInGasRoom() {
+        return isInGasRoom;
     }
 }

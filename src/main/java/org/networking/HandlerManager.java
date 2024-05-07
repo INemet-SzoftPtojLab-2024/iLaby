@@ -1,5 +1,6 @@
 package main.java.org.networking;
 
+import main.java.org.entities.player.Player;
 import main.java.org.entities.villain.Villain;
 import main.java.org.game.Graphics.Image;
 
@@ -10,6 +11,7 @@ import main.java.org.game.Isten;
 import main.java.org.game.Map.*;
 import main.java.org.game.physics.Collider;
 import main.java.org.game.physics.ColliderGroup;
+import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
@@ -39,6 +41,14 @@ public class HandlerManager {
 
     }
 
+    public static class UnitRoomData extends HandlerData {
+        public UnitRoomData(Vec2 position, String path) {
+            this.position = position;
+            this.path = path;
+        }
+        public Vec2 position;
+        public String path;
+    }
     public static class EdgePieceChangeData extends HandlerData {
         public EdgePieceChangeData(float x, float y, boolean isDoor) {
             this.x = x;
@@ -126,6 +136,17 @@ public class HandlerManager {
         public boolean isSolid;
     }
 
+    public static class InGasRoomData extends HandlerData {
+        public InGasRoomData(float x, float y, boolean isInGasRoom) {
+            this.x = x;
+            this.y = y;
+            this.isInGasRoom = isInGasRoom;
+        }
+        public float x;
+        public float y;
+        public boolean isInGasRoom;
+    }
+
     //->>>>>>>>>>>>>>>>//
     //EXECUTION
     //->>>>>>>>>>>>>>>>//
@@ -192,13 +213,24 @@ public class HandlerManager {
                     doorOpenHandler(doorOpenData);
                     break;
                 }
+                case UnitRoom:
+                {
+                    if(data.getClass() != UnitRoomData.class) return;
+                    UnitRoomData unitRoomData = (UnitRoomData)data;
+                    unitRoomHandler(unitRoomData);
+                    break;
+                }
+                case InGasRoom: {
+                    if(data.getClass() != InGasRoomData.class) return;
+                    InGasRoomData inGasRoomData = (InGasRoomData)data;
+                    inGasRoomHandler(inGasRoomData);
+                    break;
+                }
             }
 
         }
 
-
     }
-
 
 
     //->>>>>>>>>>>>>>>>//
@@ -212,6 +244,7 @@ public class HandlerManager {
         WallDelete,
         EdgePieceChanged,
         DoorOpen,
+        UnitRoom, InGasRoom,
     }
 
     synchronized public void addTask(TaskType type) {
@@ -262,6 +295,22 @@ public class HandlerManager {
     //->>>>>>>>>>>>>>>>//
     //HANDLER FUNCTIONS
     //->>>>>>>>>>>>>>>>//
+
+    private void unitRoomHandler(UnitRoomData unitRoomData) {
+        Vec2 position = unitRoomData.position;
+        String path = unitRoomData.path;
+
+        Map map = isten.getMap();
+
+        for(int i = 0; i < map.getMapRowSize(); i++) {
+            for(int j = 0; j < map.getMapColumnSize(); j++) {
+                if(map.getUnitRooms()[i][j].getPosition().x == position.x &&
+                        map.getUnitRooms()[i][j].getPosition().y == position.y) {
+                    map.getUnitRooms()[i][j].setNewImage(path, isten);
+                }
+            }
+        }
+    }
 
     private void doorOpenHandler(DoorOpenData doorOpenData) {
         float x = doorOpenData.x;
@@ -381,5 +430,21 @@ public class HandlerManager {
 
         }
 
+
+    }
+
+    private void inGasRoomHandler(InGasRoomData inGasRoomData) {
+        float x = inGasRoomData.x;
+        float y = inGasRoomData.y;
+        boolean isInGasRoom = inGasRoomData.isInGasRoom;
+
+        for(Updatable updatable: isten.getUpdatables()) {
+
+            if(updatable.getClass() == PlayerMP.class ) {
+                PlayerMP player = (PlayerMP)updatable;
+                if(player.getPlayerCollider().getPosition().x == x
+                        && player.getPlayerCollider().getPosition().y == y) player.isInGasRoom(isInGasRoom);
+            }
+        }
     }
 }

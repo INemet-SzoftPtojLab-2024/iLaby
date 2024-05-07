@@ -64,8 +64,8 @@ public class MultiplayerTester {
 
     @Test
     public void testSentPacketEqualsArrivedPacket04() {
-        Packet04UnitRoom packet = new Packet04UnitRoom(2.0f, 2.0f, 1);
-        byte[] data = "042.0,2.0,1".getBytes();
+        Packet04UnitRoom packet = new Packet04UnitRoom(1,1,1);
+        byte[] data = "041.0,1.0,1".getBytes();
         Assert.assertEquals(new Packet04UnitRoom(data), packet);
     }
 

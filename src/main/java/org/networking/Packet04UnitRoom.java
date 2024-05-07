@@ -1,5 +1,7 @@
 package main.java.org.networking;
 
+import java.util.Arrays;
+
 public class Packet04UnitRoom extends Packet {
 
     private float x;
@@ -7,13 +9,16 @@ public class Packet04UnitRoom extends Packet {
     private int type;
     public Packet04UnitRoom(byte[] data) {
         super(04);
+
+
         String[] dataArray = readData(data).split(",");
-        this.x = Float.parseFloat(dataArray[0]);
+        this.x = Float.parseFloat(dataArray[0]);;
         this.y = Float.parseFloat(dataArray[1]);
         this.type = Integer.parseInt(dataArray[2]);
         //System.out.println("dataArray0: " + dataArray[0] + "dataArray1: " + dataArray[1] + "dataArray2: " + dataArray[2]);
 
     }
+
 
     public Packet04UnitRoom(float x, float y, int type) {
         super(04);

@@ -95,17 +95,11 @@ public class VillainHandler extends ServerSideHandler {
         }
         else currTime = 0;
 
-
         for(Villain skeleton: villainSkeletons) {
             int index = isten.getVillainIndex(skeleton.getVillainName());
             Villain villain = (Villain)isten.getUpdatable(index);
 
             if(villain == null || !villain.isInitialized()) continue;
-
-
-            if(villain.getRoom() == null) {
-                villain.setRoomForVillain(isten.getMap().getRooms(), skeleton.getRandom1(), skeleton.getRandom2());
-            }
 
             villain.move(isten, deltaTime);
             if (villain.isInGasRoom(isten)){
