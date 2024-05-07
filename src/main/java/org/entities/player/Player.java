@@ -309,10 +309,8 @@ public class Player extends Entity {
     }
 
     public boolean checkIfPlayerInVillainRoom(Isten isten,double deltaTime) {
-        Room currentRoom = null;
         for (Updatable u : isten.getUpdatables()) {
             if (u.getClass().equals(Villain.class)) {
-                currentRoom = getPlayerRoom(isten, playerCollider.getPosition());
                 Villain villain = (Villain) u;
                 if ((currentRoom != null && currentRoom.equals(villain.getRoom())) && currentRoom.getRoomType() != RoomType.GAS&&!villain.getIsFainted()) {
                    //Ha van akkora szerencsenk, hogy van item nalunk, ami megmentene megse halunk meg
