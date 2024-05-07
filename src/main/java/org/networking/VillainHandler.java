@@ -53,11 +53,6 @@ public class VillainHandler extends ServerSideHandler {
         villainSkeletons.add(new Villain("Csuka",  "./assets/villain/villain2.png"));
 
         for(Villain villain: villainSkeletons) {
-            /*float[] data = villain.randomPositions(isten.getMap().getRooms());
-            int random1 = (int)data[0];
-            int random2 = (int)data[1];
-            Vec2 pos = new Vec2(data[2], data[3]);
-            villain.setPosition(pos);*/
             villain.setPosition(villain.randomPositions(isten.getMap().getRooms()));
         }
 
@@ -74,9 +69,7 @@ public class VillainHandler extends ServerSideHandler {
         for(int i = 0; i < villainSkeletons.size(); i++) {
             Packet05Villain packet = new Packet05Villain(villainSkeletons.get(i).getVillainName(),
                     villainSkeletons.get(i).getPosition(),
-                    villainSkeletons.get(i).getImagePath(),
-                    villainSkeletons.get(i).getRandom1(),
-                    villainSkeletons.get(i).getRandom2());
+                    villainSkeletons.get(i).getImagePath());
             server.sendData(packet.getData(), client.ipAddress, client.port);
         }
     }
@@ -101,9 +94,15 @@ public class VillainHandler extends ServerSideHandler {
 
             if(villain == null || !villain.isInitialized()) continue;
 
-            villain.move(isten, deltaTime);
-            if (villain.isInGasRoom(isten)){
+            villain.updateVillainOnServer(isten, deltaTime);
+            if (villain.isInGasRoom()){
+                Packet27VillainIsInGasRoom packet = new Packet27VillainIsInGasRoom(villain.getVillainName(), true);
+                sendDataToAllClients(packet);
                 villain.setVelocity(0.0f);
+            }
+            else {
+                Packet27VillainIsInGasRoom packet = new Packet27VillainIsInGasRoom(villain.getVillainName(), false);
+                sendDataToAllClients(packet);
             }
 
 

@@ -71,19 +71,15 @@ public class HandlerManager {
     }
 
     public static class VillainData extends HandlerData {
-        VillainData(String villainName, Vec2 position, String imgPath, int random1, int random2) {
+        VillainData(String villainName, Vec2 position, String imgPath) {
             this.villainName = villainName;
             this.position = position;
             this.imgPath = imgPath;
-            this.random1 = random1;
-            this.random2 = random2;
         }
 
         public String villainName;
         public Vec2 position;
         public String imgPath;
-        public int random1;
-        public int random2;
     }
 
     public static class WallData extends HandlerData {
@@ -144,6 +140,15 @@ public class HandlerManager {
         }
         public float x;
         public float y;
+        public boolean isInGasRoom;
+    }
+
+    public static class VillainInGasRoomData extends HandlerData {
+        public VillainInGasRoomData(String villainName, boolean isInGasRoom) {
+            this.villainName = villainName;
+            this.isInGasRoom = isInGasRoom;
+        }
+        public String villainName;
         public boolean isInGasRoom;
     }
 
@@ -226,6 +231,12 @@ public class HandlerManager {
                     inGasRoomHandler(inGasRoomData);
                     break;
                 }
+                case VillainInGasRoom: {
+                    if(data.getClass() != VillainInGasRoomData.class) return;
+                    VillainInGasRoomData villainInGasRoomData = (VillainInGasRoomData)data;
+                    VillainInGasRoomHandler(villainInGasRoomData);
+                    break;
+                }
             }
 
         }
@@ -244,7 +255,9 @@ public class HandlerManager {
         WallDelete,
         EdgePieceChanged,
         DoorOpen,
-        UnitRoom, InGasRoom,
+        UnitRoom,
+        InGasRoom,
+        VillainInGasRoom
     }
 
     synchronized public void addTask(TaskType type) {
@@ -369,7 +382,6 @@ public class HandlerManager {
 
     private void villainHandler(VillainData villainData) {
         Villain villain = new Villain(villainData.villainName, villainData.position, villainData.imgPath);
-        //villain.setRoomForVillain(isten.getMap().getRooms(), villainData.random1, villainData.random2);
         isten.addUpdatable(villain);
     }
 
@@ -447,4 +459,17 @@ public class HandlerManager {
             }
         }
     }
+
+    private void VillainInGasRoomHandler(VillainInGasRoomData villainInGasRoomData) {
+        String villainName = villainInGasRoomData.villainName;
+        boolean isInGasRoom = villainInGasRoomData.isInGasRoom;
+
+        for(Villain villain: isten.getUpdatablesByType(Villain.class)) {
+            if(villain.getVillainName().equalsIgnoreCase(villainName)) {
+                villain.isInGasRoom(isInGasRoom);
+            }
+        }
+    }
+
+
 }

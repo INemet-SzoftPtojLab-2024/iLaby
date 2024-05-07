@@ -26,8 +26,8 @@ public class MultiplayerTester {
 
     @Test
     public void testPacket05Constructor() {
-        Packet05Villain packet05Villain = new Packet05Villain("villain", new Vec2(1,1), "imgpath", 0, 0);
-        Assert.assertEquals(packet05Villain, new Packet05Villain("villain", new Vec2(1,1), "imgpath", 0, 0));
+        Packet05Villain packet05Villain = new Packet05Villain("villain", new Vec2(1,1), "imgpath");
+        Assert.assertEquals(packet05Villain, new Packet05Villain("villain", new Vec2(1,1), "imgpath"));
     }
 
     @Test
@@ -71,8 +71,8 @@ public class MultiplayerTester {
 
     @Test
     public void testSentPacketEqualsArrivedPacket05() {
-        Packet05Villain packet = new Packet05Villain("villain1", new Vec2(1,1), "imagePath", 1, 1);
-        byte[] data = "05villain1,1.0,1.0,imagePath,1,1".getBytes();
+        Packet05Villain packet = new Packet05Villain("villain1", new Vec2(1,1), "imagePath");
+        byte[] data = "05villain1,1.0,1.0,imagePath".getBytes();
         Assert.assertEquals(new Packet05Villain(data), packet);
     }
 

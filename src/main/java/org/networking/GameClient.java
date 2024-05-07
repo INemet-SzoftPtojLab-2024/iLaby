@@ -1,8 +1,6 @@
 package main.java.org.networking;
 
 import main.java.org.game.Isten;
-import main.java.org.game.Map.EdgePiece;
-import main.java.org.game.Map.Map;
 import main.java.org.game.UI.TimeCounter;
 import main.java.org.game.physics.Collider;
 import main.java.org.game.physics.ColliderGroup;
@@ -132,6 +130,26 @@ public class GameClient extends Thread {
                 packet = new Packet26InGasRoom(data);
                 handleInGasRoom((Packet26InGasRoom)packet);
                 break;
+            case VILLAININGASROOM:
+                packet = new Packet27VillainIsInGasRoom(data);
+                handleVillainInGasRoom((Packet27VillainIsInGasRoom)packet);
+                break;
+        }
+    }
+
+    private void handleVillainInGasRoom(Packet27VillainIsInGasRoom packet) {
+        String villainName = packet.getVillainName();
+        boolean isInGasRoom = packet.isInGasRoom();
+
+        HandlerManager hm = isten.getHandlerManager();
+        hm.lock.lock();
+        try {
+            // Critical section
+            // Access shared resources here
+            hm.addTask(HandlerManager.TaskType.VillainInGasRoom);
+            hm.addData(new HandlerManager.VillainInGasRoomData(villainName, isInGasRoom));
+        } finally {
+            hm.lock.unlock(); // Release the lock
         }
     }
 
@@ -339,8 +357,6 @@ public class GameClient extends Thread {
         String villainName = packet.getVillainName();
         Vec2 position = packet.getPosition();
         String imagePath = packet.getImagePath();
-        int random1 = packet.getRandom1();
-        int random2 = packet.getRandom2();
 
         HandlerManager hm = isten.getHandlerManager();
         hm.lock.lock();
@@ -348,7 +364,7 @@ public class GameClient extends Thread {
                 // Critical section
                 // Access shared resources here
                 hm.addTask(HandlerManager.TaskType.Villain);
-                hm.addData(new HandlerManager.VillainData(villainName, position, imagePath, random1, random2));
+                hm.addData(new HandlerManager.VillainData(villainName, position, imagePath));
             } finally {
                 hm.lock.unlock(); // Release the lock
             }

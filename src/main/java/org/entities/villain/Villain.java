@@ -38,6 +38,7 @@ public class Villain extends Entity {
     private double dTime;
     private int stillImage;
     double timeElapsed;
+    private boolean isInGasRoom = false;
 
 
     public Villain(String name, String iP) {
@@ -103,6 +104,10 @@ public class Villain extends Entity {
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
+        if(faintTime>0) {
+            faintTime -= deltaTime;
+            if (faintTime<0)faintTime=0;
+        }
         timeElapsed+=deltaTime;
         Vec2 playerPosition = villainCollider.getPosition();
         villainImage.setPosition(playerPosition);
@@ -118,6 +123,60 @@ public class Villain extends Entity {
                 setVillainImage(isten,faintedImage2);
             }
         }
+
+        if(!isInGasRoom&&faintTime==0) {
+            stillImage = 0;
+            villainCollider.setMovability(true);
+            sum += deltaTime;
+            Vec2 villainPosition = villainCollider.getPosition();
+            faintedImage1.setVisibility(false);
+            faintedImage2.setVisibility(false);
+            villainImage.setPosition(villainPosition);
+            villainImage.setVisibility(true);
+            villainName.setPosition(Vec2.sum(villainPosition, new Vec2(0, (float) 0.5)));
+        }
+        else{
+            villainCollider.setMovability(false);
+            dTime-=deltaTime;
+            villainImage.setVisibility(false);
+            if(stillImage==0)
+            {
+                faintedImage1.setPosition(villainCollider.getPosition());
+                faintedImage2.setPosition(villainCollider.getPosition());
+                faintedImage1.setVisibility(true);
+            }
+            if(stillImage % 2 == 0 && dTime<0.0)
+            {
+                faintedImage1.setVisibility(true);
+                faintedImage2.setVisibility(false);
+                stillImage++;
+                dTime=0.2;
+            }
+            else if(stillImage % 2 == 1 && dTime<0.0){
+                faintedImage2.setVisibility(true);
+                faintedImage1.setVisibility(false);
+                stillImage++;
+                dTime=0.2;
+            }
+
+        }
+    }
+    public void checkIfInGasRoom(Isten isten)
+    {
+        if(this.room == null) {
+            return;
+        }
+
+        if(room.getRoomType()== RoomType.GAS) {
+            isInGasRoom = true;
+        }
+        else {
+            isInGasRoom = false;
+        }
+    }
+
+    public void updateVillainOnServer(Isten isten, double deltaTime) {
+
         for (Room room : isten.getMap().getRooms()) {
             for (UnitRoom unitRoom : room.getUnitRooms()) {
                 if (villainCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
@@ -129,54 +188,13 @@ public class Villain extends Entity {
                 }
             }
         }
-    }
-    public boolean isInGasRoom(Isten isten)
-    {
-        Room currentRoom = null;
-        for (Room room : isten.getMap().getRooms()) {
-            for (UnitRoom unitRoom : room.getUnitRooms()) {
-                if (villainCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
-                        villainCollider.getPosition().x <= unitRoom.getPosition().x + 0.5 &&
-                        villainCollider.getPosition().y >= unitRoom.getPosition().y - 0.5 &&
-                        villainCollider.getPosition().y <= unitRoom.getPosition().y + 0.5) {
-                    currentRoom = room;
-                }
-            }
-        }
-        if(currentRoom!= null && currentRoom.getRoomType()== RoomType.GAS)return true;
-        else return false;
-    }
-    public void move(Isten isten, double deltaTime) {
-        if(faintTime>0) {
-            faintTime -= deltaTime;
-            if (faintTime<0)faintTime=0;
-        }
-        if(!isInGasRoom(isten)&&faintTime==0) {
-            stillImage=0;
-            villainCollider.setMovability(true);
-            sum += deltaTime;
-            Vec2 villainPosition = villainCollider.getPosition();
-            Random random = new Random();
-            faintedImage1.setVisibility(false);
-            faintedImage2.setVisibility(false);
-            villainImage.setPosition(villainPosition);
-            villainImage.setVisibility(true);
-            villainName.setPosition(Vec2.sum(villainPosition, new Vec2(0, (float) 0.5)));
 
+        checkIfInGasRoom(isten);
+
+        if(!isInGasRoom&&faintTime==0) {
+            Random random = new Random();
 
             if (sum < 2) return;
-            Map map = isten.getMap();
-
-            for (Room room : map.getRooms()) {
-                for (UnitRoom unitRoom : room.getUnitRooms()) {
-                    if (villainCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
-                            villainCollider.getPosition().x <= unitRoom.getPosition().x + 0.5 &&
-                            villainCollider.getPosition().y >= unitRoom.getPosition().y - 0.5 &&
-                            villainCollider.getPosition().y <= unitRoom.getPosition().y + 0.5) {
-                        currentUnitRoom = unitRoom;
-                    }
-                }
-            }
             int randomNumber = random.nextInt(3);
             if (villainCollider.getVelocity().x < 0) {
                 if (currentUnitRoom.isLeftDoor()) {
@@ -264,52 +282,7 @@ public class Villain extends Entity {
                 }
             }
         }
-        else{
-            villainCollider.setMovability(false);
-            System.out.println("not moving");
-            dTime-=deltaTime;
-            villainImage.setVisibility(false);
-            if(stillImage==0)
-            {
-                faintedImage1.setPosition(villainCollider.getPosition());
-                faintedImage2.setPosition(villainCollider.getPosition());
-                faintedImage1.setVisibility(true);
-            }
-            if(stillImage % 2 == 0 && dTime<0.0)
-            {
-                faintedImage1.setVisibility(true);
-                faintedImage2.setVisibility(false);
-                stillImage++;
-                dTime=0.2;
-            }
-            else if(stillImage % 2 == 1 && dTime<0.0){
-                faintedImage2.setVisibility(true);
-                faintedImage1.setVisibility(false);
-                stillImage++;
-                dTime=0.2;
-            }
-
-        }
-
     }
-
-    /*public float[] randomPositions(ArrayList<Room> rooms) {
-        //Collections.shuffle(rooms);
-        Random rand = new Random();
-
-        Room selectedRoom;
-
-        do {
-            random1 = rand.nextInt(rooms.size() - 1);
-            selectedRoom = rooms.get(random1);
-        } while (roomsWithVillains.contains(selectedRoom) || isStartUnitRoomInRoom(selectedRoom)|| selectedRoom.getRoomType()== RoomType.GAS);
-
-        random2 = rand.nextInt(selectedRoom.getUnitRooms().size());
-        UnitRoom selectedUnitRoom = selectedRoom.getUnitRooms().get(random2);
-        roomsWithVillains.add(selectedRoom);
-        room = selectedRoom;
-        return new float[]{random1, random2, selectedUnitRoom.getPosition().x, selectedUnitRoom.getPosition().y};
-    }*/
     public Vec2 randomPositions(ArrayList<Room> rooms) {
         Collections.shuffle(rooms);
         Random rand = new Random();
@@ -324,14 +297,8 @@ public class Villain extends Entity {
         random2 =rand.nextInt(selectedRoom.getUnitRooms().size()-1);
         UnitRoom selectedUnitRoom = selectedRoom.getUnitRooms().get(random2);
         roomsWithVillains.add(selectedRoom);
-        //System.out.println(selectedRoom.getID());
         room = selectedRoom;
         return new Vec2(selectedUnitRoom.getPosition().x, selectedUnitRoom.getPosition().y);
-    }
-
-    public void setRoomForVillain(ArrayList<Room> rooms, int randomRoom, int randomUnitRoom) {
-        room = rooms.get(randomRoom);
-        roomsWithVillains.add(room);
     }
 
     boolean isStartUnitRoomInRoom(Room room) {
@@ -371,7 +338,6 @@ public class Villain extends Entity {
 
     public void setVillainImage(Isten isten, Image image) {
         villainImage = image;
-        isten.getRenderer().addRenderable(villainImage);
     }
     public Room getRoom() {
         return room;
@@ -379,22 +345,6 @@ public class Villain extends Entity {
 
     public void setPosition(Vec2 vec2) {
         position = vec2;
-    }
-
-    public int getRandom1() {
-        return random1;
-    }
-
-    public int getRandom2() {
-        return random2;
-    }
-
-    public void setRandom1(int random1) {
-        this.random1 = random1;
-    }
-
-    public void setRandom2(int random2) {
-        this.random2 = random2;
     }
     public double getFaintTime(){return faintTime;}
     public void setFainted(double time){
@@ -408,5 +358,10 @@ public class Villain extends Entity {
         villainCollider.setVelocity(new Vec2(velocity, velocity));
     }
 
-
+    public void isInGasRoom(boolean b) {
+        isInGasRoom = b;
+    }
+    public boolean isInGasRoom() {
+        return isInGasRoom;
+    }
 }

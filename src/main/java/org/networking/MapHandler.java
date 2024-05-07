@@ -82,7 +82,9 @@ public class MapHandler extends ServerSideHandler {
 
         if(!stop) {
             delta += deltaTime;
-            if (delta > 1) {
+            //Original was: 1
+            //Megváltoztattam 0.1-re, hogy gyorsabban tötrénjenek a változások
+            if (delta > 0.1) {
                 //TESTCASE 1:::
 
 
@@ -123,6 +125,7 @@ public class MapHandler extends ServerSideHandler {
 
                 }
                 //TESTCASE 3:
+
 
                 if((sec+2)%4==0) {
                     for (Room splittable : isten.getMap().getRooms()) {

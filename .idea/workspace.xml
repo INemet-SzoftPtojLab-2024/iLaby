@@ -5,21 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3506ab6d-0407-47f2-a7e8-78ebc867e577" name="Changes" comment="it's working">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet26InGasRoom.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/networking/PlayerStatusHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet27VillainIsInGasRoom.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2024__05__06__14_25__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2024__05__06__14_25__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/entities/player/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/entities/player/Player.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/entities/villain/Villain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/entities/villain/Villain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Isten.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Isten.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/ClientMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/ClientMap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/DeathHandler.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/GameClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/GameClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/GameServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/GameServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/HandlerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/HandlerManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/MapHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/MapHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/Packet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/Packet04UnitRoom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet04UnitRoom.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/Packet05Villain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet05Villain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/VillainHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/VillainHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/MultiplayerTester.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/MultiplayerTester.java" afterDir="false" />
     </list>
@@ -51,8 +47,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -81,6 +77,7 @@
     &quot;Gradle.MultiplayerTester.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.MultiplayerTester.testPacket01.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.MultiplayerTester.testPacket02Constructor.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.iLaby [:Main.main()].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.iLaby [run].executor&quot;: &quot;Run&quot;,
     &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
     &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
@@ -181,7 +178,7 @@
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="--scan" />
+        <option name="scriptParameters" value="" />
         <option name="taskDescriptions">
           <list />
         </option>
