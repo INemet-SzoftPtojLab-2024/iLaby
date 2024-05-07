@@ -37,6 +37,7 @@ C
 java:S1481â",Remove this unused "edgelen" local variable.(‡È«Æ
 F	java:S106‡"+Replace this use of System.err by a logger.(•ªËßûÿÿÿÿ
 R	java:S125•"<This block of commented-out lines of code should be removed.(ŒÆÊý
+^	java:S125ª"<This block of commented-out lines of code should be removed.(ãÆ¦¬üÿÿÿÿ8šï¹õ1
 ]
 java:S1854²"ARemove this useless assignment to local variable "verticalScale".(ðëßÈþÿÿÿÿ
 _

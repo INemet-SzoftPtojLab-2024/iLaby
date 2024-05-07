@@ -165,19 +165,13 @@ public class Player extends Entity {
                 }
             }
 
-            Room currentRoom = null;
-
-            for (Room room : isten.getMap().getRooms()) {
-                for (UnitRoom unitRoom : room.getUnitRooms()) {
-                    if (playerCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
-                            playerCollider.getPosition().x <= unitRoom.getPosition().x + 0.5 &&
-                            playerCollider.getPosition().y >= unitRoom.getPosition().y - 0.5 &&
-                            playerCollider.getPosition().y <= unitRoom.getPosition().y + 0.5) {
-                        currentRoom = room;
-                    }
-                }
-            }
+            Room currentRoom = getPlayerRoom(isten,playerCollider.getPosition());
             if(currentRoom != this.currentRoom){
+                //beallitani a playerCountjat a szobanak:: (akar kiszervezheto fv-be)
+                if(this.currentRoom!= null){
+                    this.currentRoom.decreasePlayerCount();
+                }
+                currentRoom.increasePlayerCount();
                 //Lasd Inventory canAvoidVillain member var
                 isten.getInventory().setCanAvoidVillain(false);
                 //Ha szobat valt a player, akkor a kovetkezo alkalommar, amikor gegnerrel talalkozik hasznalodnia kell a Tvsz-nek
@@ -349,6 +343,15 @@ public class Player extends Entity {
             }
         }
         return null;
+
+
+       ///efffektivebb megoldas
+       /* Vec2 pos = playerPos.clone();
+        int x = (int)pos.x;
+        int y = (int)pos.y;
+        System.out.println(x + " " + y + " ownerroorm pozi" +  isten.getMap().getUnitRooms()[y][x].getColNum() + " " + isten.getMap().getUnitRooms()[y][x].getRowNum());
+        return isten.getMap().getUnitRooms()[y][x].getOwnerRoom();*/
+
     }
     @Override
     public void onDestroy() {

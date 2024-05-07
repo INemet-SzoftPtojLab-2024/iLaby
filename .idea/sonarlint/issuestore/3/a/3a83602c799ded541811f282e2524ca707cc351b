@@ -12,9 +12,9 @@ java:S1319¬"bThe type of "u2" should be an interface such as "List" rather tha
 ‘
 java:S1319·"sThe type of "newCoherentElements" should be an interface such as "List" rather than the implementation "ArrayList".(š®Å8º™‰ô1
 ƒ
-java:S1319Å"eThe type of "rooms" should be an interface such as "List" rather than the implementation "ArrayList".(ÕÖ®ö8º™‰ô1
+java:S1319Æ"eThe type of "rooms" should be an interface such as "List" rather than the implementation "ArrayList".(ÕÖ®ö8º™‰ô1
 “
-java:S1319Ë"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(†İÂ˜üÿÿÿÿ8º™‰ô1
+java:S1319Ì"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(†İÂ˜üÿÿÿÿ8º™‰ô1
 r	java:S117P"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(©Æ˜Èıÿÿÿÿ8º™‰ô1
 r	java:S117\"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ƒ›¡ÿÿÿÿÿ8º™‰ô1
 u	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš8‘º™‰ô1
@@ -53,12 +53,13 @@ H	java:S106Ö"+Replace this use of System.out by a logger.(–ÉÎÒ8 ½™‰ô1
 M	java:S106Ù"+Replace this use of System.out by a logger.(ªÓ¼áşÿÿÿÿ8 ½™‰ô1
 M	java:S106Ú"+Replace this use of System.out by a logger.(ªÓ¼áşÿÿÿÿ8 ½™‰ô1
 k	java:S100ğ"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(İåÚŞ8¡½™‰ô1
-H	java:S106"+Replace this use of System.out by a logger.(¤›êì8¢½™‰ô1
-H	java:S106"+Replace this use of System.out by a logger.(‰Ò“»8£½™‰ô1
-M	java:S106£"+Replace this use of System.out by a logger.(¤¼òøûÿÿÿÿ8£½™‰ô1
-H	java:S106¤"+Replace this use of System.out by a logger.(á”º8£½™‰ô1
-M	java:S106¹"+Replace this use of System.out by a logger.( ÍÅÒşÿÿÿÿ8¤½™‰ô1
-H	java:S106À"+Replace this use of System.out by a logger.(ùŸèÿ8¤½™‰ô1
+G	java:S106“"+Replace this use of System.out by a logger.(áÔ£98£½™‰ô1
+H	java:S106—"+Replace this use of System.out by a logger.(ªŞñ©8¤½™‰ô1
+H	java:S106"+Replace this use of System.out by a logger.(‰Ò“»8¤½™‰ô1
+M	java:S106¤"+Replace this use of System.out by a logger.(¤¼òøûÿÿÿÿ8ù‡Ä¨ô1
+H	java:S106¥"+Replace this use of System.out by a logger.(á”º8Ç¿È¨ô1
+M	java:S106º"+Replace this use of System.out by a logger.( ÍÅÒşÿÿÿÿ8íÔ¹õ1
+H	java:S106Á"+Replace this use of System.out by a logger.(ùŸèÿ8íÔ¹õ1
 Q
 java:S1068"/Remove this unused "isGenerated" private field.(¨‘ÑÒüÿÿÿÿ8¥½™‰ô1
 Z

@@ -1,31 +1,31 @@
 
 ‡
-java:S13195"eThe type of "rooms" should be an interface such as "List" rather than the implementation "ArrayList".(Ã‹Öçùÿÿÿÿ8Ôó†ô1
+java:S1319<"eThe type of "rooms" should be an interface such as "List" rather than the implementation "ArrayList".(Ã‹Öçùÿÿÿÿ8Ôó†ô1
 
-java:S1319U"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(¤„‚×8Ôó†ô1
+java:S1319\"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(¤„‚×8Ôó†ô1
 
-java:S1319h"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ƒ¦¥Œ8Ôó†ô1
+java:S1319o"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ƒ¦¥Œ8Ôó†ô1
 
-java:S1319r"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(–¯±ø8Ôó†ô1
-
-java:S1319|"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ê¾Ú¹8Õó†ô1
+java:S1319y"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(–¯±ø8Ôó†ô1
+
+java:S1319ƒ"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ê¾Ú¹8Õó†ô1
 “
-java:S1319€"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ØÎ­şùÿÿÿÿ8Õó†ô1
+java:S1319‡"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ØÎ­şùÿÿÿÿ8§¤¾¨ô1
 “
-java:S1319ƒ"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(Ş„Ù­úÿÿÿÿ8Õó†ô1
-r	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¶Ò’úÿÿÿÿ8Õó†ô1
+java:S1319Š"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(Ş„Ù­úÿÿÿÿ8Õó†ô1
+r	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¶Ò’úÿÿÿÿ8Õó†ô1
 n	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš
-i	java:S116"MRename this field "ID" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÆÌèš8½õ†ô1
+i	java:S116"MRename this field "ID" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÆÌèš8½õ†ô1
 £
-java:S1186'"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(µÕ«ùÿÿÿÿ8½õ†ô1
+java:S1186."€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(µÕ«ùÿÿÿÿ8½õ†ô1
 
-java:S1186-"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(í®8½õ†ô1
+java:S11864"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(í®8½õ†ô1
 £
-java:S11862"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(İßéàúÿÿÿÿ8½õ†ô1
-X	java:S125"<This block of commented-out lines of code should be removed.(Çìß8Àõ†ô1
-X	java:S125"<This block of commented-out lines of code should be removed.(í¶’ÿ8Áõ†ô1
-]	java:S125 "<This block of commented-out lines of code should be removed.(ÏÌÙñùÿÿÿÿ8Âõ†ô1
-]	java:S125;"<This block of commented-out lines of code should be removed.(âù¨Œøÿÿÿÿ8Äõ†ô1
-]	java:S125C"<This block of commented-out lines of code should be removed.(âù¨Œøÿÿÿÿ8Äõ†ô1
+java:S11869"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(İßéàúÿÿÿÿ8½õ†ô1
+X	java:S125"<This block of commented-out lines of code should be removed.(Çìß8Àõ†ô1
+X	java:S125"<This block of commented-out lines of code should be removed.(í¶’ÿ8Áõ†ô1
+]	java:S125""<This block of commented-out lines of code should be removed.(ÏÌÙñùÿÿÿÿ8Âõ†ô1
+]	java:S125B"<This block of commented-out lines of code should be removed.(âù¨Œøÿÿÿÿ8Äõ†ô1
+]	java:S125J"<This block of commented-out lines of code should be removed.(âù¨Œøÿÿÿÿ8Äõ†ô1
 h
-java:S1659W"FDeclare "maxRowNum" and all following declarations on a separate line.(«óÔûÿÿÿÿ8Éõ†ô1
+java:S1659^"FDeclare "maxRowNum" and all following declarations on a separate line.(«óÔûÿÿÿÿ8Éõ†ô1

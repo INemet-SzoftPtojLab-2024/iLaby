@@ -5,19 +5,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3506ab6d-0407-47f2-a7e8-78ebc867e577" name="Changes" comment="it's working">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet27VillainIsInGasRoom.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/game/Map/Algorithms/Merge.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__05__05__15_16__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__05__05__15_16__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_05_05_2024_16_40__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_05_05_2024_16_40__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_06_05_2024_08_50__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_06_05_2024_08_50__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_06_05_2024_19_29__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_06_05_2024_19_29__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2024__05__06__14_25__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2024__05__06__14_25__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/a/3a83602c799ded541811f282e2524ca707cc351b" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/a/3a83602c799ded541811f282e2524ca707cc351b" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/f/4fdc75f760398ad335804099c4c2aad3b4db38bd" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/f/4fdc75f760398ad335804099c4c2aad3b4db38bd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/5/2/52cbef614c32616e4d10fba69e1eb02927d4f7a1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/5/8/58f412e7843066f3f085fcbcffbcd715deb97352" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/5/8/58f412e7843066f3f085fcbcffbcd715deb97352" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/7/6/768fc9e076fa68cb423d0b0f6604f4e0296bed89" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/7/6/768fc9e076fa68cb423d0b0f6604f4e0296bed89" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/3/933c10faafd44b7f4f2d1678304c648f862e5581" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/3/933c10faafd44b7f4f2d1678304c648f862e5581" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/5/95e852f03d23ecabb97806217a07c752c409eb7b" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/5/95e852f03d23ecabb97806217a07c752c409eb7b" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/c/9c5b76ca10ecfaf22d96236316b037e6470b3693" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/c/9c5b76ca10ecfaf22d96236316b037e6470b3693" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/a/e/ae6b841d57349f3d394f98633de24bf000774d96" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/a/e/ae6b841d57349f3d394f98633de24bf000774d96" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/c/4/c4bd7d38976ca5aef7092b829c2de7aa2795bfa7" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/c/4/c4bd7d38976ca5aef7092b829c2de7aa2795bfa7" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/c/6/c6f7b65f617fe34dc6a651a2bf566be4a0d2a975" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/c/6/c6f7b65f617fe34dc6a651a2bf566be4a0d2a975" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/c/a/ca0db237d642623320d941e9c23c4dea256bde23" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/c/a/ca0db237d642623320d941e9c23c4dea256bde23" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/f/2/f2d42c4e44b2723eb7efe0208d64f67bd717e8ff" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/f/2/f2d42c4e44b2723eb7efe0208d64f67bd717e8ff" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/f/3/f33af664d2d865bb0ccc96ecd9a7130b9bdfb148" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/f/3/f33af664d2d865bb0ccc96ecd9a7130b9bdfb148" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/5/2/52cbef614c32616e4d10fba69e1eb02927d4f7a1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/entities/villain/Villain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/entities/villain/Villain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/entities/player/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/entities/player/Player.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Isten.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Isten.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/GameClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/GameClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Map/Door.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Map/Door.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Map/Map.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Map/Map.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Map/Mapgenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Map/Mapgenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Map/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Map/Room.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Map/RoomType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Map/RoomType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Map/UnitRoom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Map/UnitRoom.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/items/usable_items/Transistor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/items/usable_items/Transistor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/HandlerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/HandlerManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/MapHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/MapHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/Packet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/Packet05Villain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet05Villain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/VillainHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/VillainHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/MultiplayerTester.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/MultiplayerTester.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -236,6 +258,7 @@
       <workItem from="1714847163651" duration="324000" />
       <workItem from="1714924570656" duration="7744000" />
       <workItem from="1715002935390" duration="1974000" />
+      <workItem from="1715102723676" duration="13630000" />
     </task>
     <task id="LOCAL-00001" summary="it's working">
       <option name="closed" value="true" />

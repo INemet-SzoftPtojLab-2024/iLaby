@@ -1,6 +1,8 @@
 
+Q
+java:S1066E"/Merge this if statement with the enclosing one.(³¼œøþÿÿÿÿ8õÈ„§ô1
 ’
-java:S1319&"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ìž£ìþÿÿÿÿ8¡Æ¾‡ô1
+java:S1319'"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ìž£ìþÿÿÿÿ8öÈ„§ô1
 s
 java:S1104"QMake image a static final constant or non-public and provide accessors if needed.(É­¼ðüÿÿÿÿ8£Æ¾‡ô1
 u	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš8ˆáÚÛó1
@@ -8,6 +10,5 @@ w	java:S116"VRename this field "TopNeighbor" to match the regular expression 
 z	java:S116"YRename this field "BottomNeighbor" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¡Ë×Ôûÿÿÿÿ8¿Æ¾‡ô1
 x	java:S116"WRename this field "LeftNeighbor" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(±É‡¾úÿÿÿÿ8ÁÆ¾‡ô1
 t	java:S116"XRename this field "RightNeighbor" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¡·³§8ÁÆ¾‡ô1
-O
-java:S1135O"2Complete the task associated to this TODO comment.(§ÀÆø8ÎÆ¾‡ô1
-]	java:S125W"<This block of commented-out lines of code should be removed.(Œ…½ªüÿÿÿÿ8ÎÆ¾‡ô1
+X
+java:S2696G"6Make the enclosing method "static" or remove this set.(„…ºžùÿÿÿÿ8ŸÉ„§ô1

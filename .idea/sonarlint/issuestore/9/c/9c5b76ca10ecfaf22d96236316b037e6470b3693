@@ -4,4 +4,28 @@ java:S1319^"pThe return type of this method should be an interface such as "Lis
 
 java:S1319b"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(‘ÕØç8œ¿íî1
 u	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš8¿íî1
-]	java:S1255"<This block of commented-out lines of code should be removed.(€ìÄ¦şÿÿÿÿ8«¿íî1
+^
+java:S1854#"<Remove this useless assignment to local variable "wallPath".(ŠÛ•ùÿÿÿÿÿ8²é¹õ1
+N
+java:S1172"",Remove this unused method parameter "isten".(Ù˜ÿÿÿÿÿ8²é¹õ1
+O
+java:S1481#"-Remove this unused "wallPath" local variable.(ŠÛ•ùÿÿÿÿÿ8³é¹õ1
+X	java:S125)"<This block of commented-out lines of code should be removed.(ÛÈ©®8´é¹õ1
+^
+java:S18542"<Remove this useless assignment to local variable "doorPath".(’€ÕÑşÿÿÿÿ8´é¹õ1
+I
+java:S1172-",Remove this unused method parameter "isten".(ÅåÆ8´é¹õ1
+O
+java:S14812"-Remove this unused "doorPath" local variable.(’€ÕÑşÿÿÿÿ8µé¹õ1
+W	java:S1253"<This block of commented-out lines of code should be removed.(ÁíÂ98µé¹õ1
+]	java:S1255"<This block of commented-out lines of code should be removed.(€ìÄ¦şÿÿÿÿ8µé¹õ1
+X	java:S1257"<This block of commented-out lines of code should be removed.(´¦¯Í8µé¹õ1
+X	java:S125:"<This block of commented-out lines of code should be removed.(Ïû½­8µé¹õ1
+^
+java:S1854C"<Remove this useless assignment to local variable "wallPath".(ŠÛ•ùÿÿÿÿÿ8¶é¹õ1
+I
+java:S1172B",Remove this unused method parameter "isten".(çå“Ë8·é¹õ1
+O
+java:S1481C"-Remove this unused "wallPath" local variable.(ŠÛ•ùÿÿÿÿÿ8·é¹õ1
+]	java:S125D"<This block of commented-out lines of code should be removed.(•¹Ù™øÿÿÿÿ8·é¹õ1
+X	java:S125I"<This block of commented-out lines of code should be removed.(õÅ°Ê8·é¹õ1

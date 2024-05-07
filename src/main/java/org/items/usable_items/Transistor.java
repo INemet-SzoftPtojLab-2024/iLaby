@@ -4,6 +4,8 @@ import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.Renderable;
 import main.java.org.game.Graphics.TextUI;
 import main.java.org.game.Isten;
+import main.java.org.game.Map.Room;
+import main.java.org.game.Map.UnitRoom;
 import main.java.org.game.UI.Inventory;
 import main.java.org.items.Item;
 import main.java.org.linalg.Vec2;
@@ -48,6 +50,12 @@ public class Transistor extends Item {
 
     @Override
     public void use(double deltatime){
+        //exception handling a szoba szama miatt
+         Room r = getActiveTransistorRoom();
+        if(r.getMaxPlayerCount()<= r.getPlayerCount()){
+            System.err.println("Nem volt eleg hely a szobaban a tranzisztor hasznalatakor");
+            return;
+        }
         if(!used){
             countText.setVisibility(false);
             Vec2 playerPosition = isten.getPlayer().getPlayerCollider().getPosition();
@@ -64,6 +72,21 @@ public class Transistor extends Item {
     public void dropOnGround(Vec2 pos){
         super.dropOnGround(pos);
         countText.setVisibility(false);
+    }
+    public Room getActiveTransistorRoom(){
+        UnitRoom[][] unitRooms= isten.getMap().getUnitRooms();
+        for(int i = 0; i < unitRooms.length;i++){
+                    for(int j = 0; j<unitRooms[i].length;j++){
+                        if (activatedImage.getPosition().x >= unitRooms[i][j].getPosition().x - 0.5 &&
+                                activatedImage.getPosition().x <= unitRooms[i][j].getPosition().x + 0.5 &&
+                                activatedImage.getPosition().y >= unitRooms[i][j].getPosition().y - 0.5 &&
+                                activatedImage.getPosition().y <= unitRooms[i][j].getPosition().y + 0.5)
+                        {
+                            return unitRooms[i][j].getOwnerRoom();
+                }
+            }
+        }
+        return null;
     }
 
 }
