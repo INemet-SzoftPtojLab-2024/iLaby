@@ -22,7 +22,7 @@ public class GameManager {
 
     public GameManager() {
         //Create frame
-        frame = new JFrame("iLaby");
+        frame = new JFrame("eLaby");
         frame.setIconImage(Toolkit.getDefaultToolkit().getImage("assets/ui/logo.png"));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
