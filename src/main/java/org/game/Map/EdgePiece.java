@@ -44,6 +44,10 @@ public abstract class EdgePiece {
         collider = null;
         position = null;
     }
+    public void removeEdgePieceOnClient(Isten isten, EdgeBetweenRooms ownerEdge){
+        ownerEdge.getColliderGroup().removeCollider(collider);
+        isten.getRenderer().deleteRenderable(image);
+    }
     public abstract boolean isDoor();
     public void setNewImage(String imgPath, Vec2 scale,  Isten isten) {
         Image newImage = new Image(position, scale, imgPath);

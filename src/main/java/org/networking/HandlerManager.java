@@ -335,7 +335,12 @@ public class HandlerManager {
         for(int i = 0; i < isten.getClientMap().getEdgeBetweenRooms().getWalls().size(); i++) {
             EdgePiece edgePiece = isten.getClientMap().getEdgeBetweenRooms().getWalls().get(i);
             if(edgePiece.isDoor() && edgePiece.getPosition().x == x && edgePiece.getPosition().y == y) {
-                edgePiece.getCollider().setSolidity(isSolid);
+                //ha az isSolid false -> akkor open
+                if(edgePiece instanceof  Door){
+                    if(!isSolid) ((Door) edgePiece).openOnClient();
+                    else ((Door) edgePiece).closeOnClient();
+                }
+
                 break;
             }
         }

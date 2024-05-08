@@ -47,8 +47,9 @@ public class ClientMap extends Updatable {
     }
 
     public void removeEdgePiece(EdgePiece piece) {
-        isten.getRenderer().deleteRenderable(piece.getImage());
-        edgeBetweenRooms.getColliderGroup().removeCollider(piece.getCollider());
+        //isten.getRenderer().deleteRenderable(piece.getImage());
+        //edgeBetweenRooms.getColliderGroup().removeCollider(piece.getCollider());
+        piece.removeEdgePieceOnClient(isten, edgeBetweenRooms);
         edgeBetweenRooms.getWalls().remove(piece);
     }
 }
