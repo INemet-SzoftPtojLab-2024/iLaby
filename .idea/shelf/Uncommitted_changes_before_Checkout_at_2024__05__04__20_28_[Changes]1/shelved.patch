@@ -1,0 +1,56 @@
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__26__14_36__Changes_1.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__26__14_36__Changes_1.xml b/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__26__14_36__Changes_1.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__26__14_36__Changes_1.xml	
++++ /dev/null	
+@@ -1,9 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_2024__04__26__14_36_[Changes]1" date="1714134994592" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__26__14_36_[Changes]1/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 2024. 04. 26. 14:36 [Changes]" />
+-  <binary>
+-    <option name="BEFORE_PATH" value="data/sus.amogus" />
+-    <option name="AFTER_PATH" value="data/sus.amogus" />
+-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__26__14_36_[Changes]1/sus.amogus" />
+-  </binary>
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__26__14_36_[Changes]1/sus.amogus
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__26__14_36_[Changes]1/sus.amogus b/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__26__14_36_[Changes]1/sus.amogus
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__26__14_36_[Changes]1/sus.amogus	
++++ /dev/null	
+@@ -1,1 +0,0 @@
+-������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������8hj���������8hj������8hj�����������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������݊
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__26__14_36_[Changes]1/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__26__14_36_[Changes]1/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__26__14_36_[Changes]1/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__04__26__14_36_[Changes]1/shelved.patch	
++++ /dev/null	
+@@ -1,20 +0,0 @@
+-Index: .idea/misc.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\r\n  <component name=\"FrameworkDetectionExcludesConfiguration\">\r\n    <file type=\"web\" url=\"file://$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_17\" default=\"true\" project-jdk-name=\"21\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/out\" />\r\n  </component>\r\n</project>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/.idea/misc.xml b/.idea/misc.xml
+---- a/.idea/misc.xml	
+-+++ b/.idea/misc.xml	
+-@@ -4,7 +4,7 @@
+-   <component name="FrameworkDetectionExcludesConfiguration">
+-     <file type="web" url="file://$PROJECT_DIR$" />
+-   </component>
+--  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="21" project-jdk-type="JavaSDK">
+-+  <component name="ProjectRootManager" version="2" languageLevel="JDK_20" default="true" project-jdk-name="21" project-jdk-type="JavaSDK">
+-     <output url="file://$PROJECT_DIR$/out" />
+-   </component>
+- </project>
+-\ No newline at end of file

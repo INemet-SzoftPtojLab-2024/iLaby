@@ -328,7 +328,7 @@ public class Player extends Entity {
 
     //kiszerveztem a fenti fv-t, mert nekem is kellett, és máshol később is hasznos lehet, ha kell, unitRoomra is ki lehetne szervezni
     public Room getPlayerRoom(Isten isten, Vec2 playerPos){
-        UnitRoom[][] unitRooms= isten.getMap().getUnitRooms();
+        /*UnitRoom[][] unitRooms= isten.getMap().getUnitRooms();
         for(int i = 0; i < unitRooms.length;i++){
             for(int j = 0; j<unitRooms[i].length;j++){
                 if (playerPos.x >= unitRooms[i][j].getPosition().x - 0.5 &&
@@ -340,15 +340,12 @@ public class Player extends Entity {
                 }
             }
         }
-        return null;
-
-
+        return null;*/
        ///efffektivebb megoldas
-       /* Vec2 pos = playerPos.clone();
-        int x = (int)pos.x;
-        int y = (int)pos.y;
-        System.out.println(x + " " + y + " ownerroorm pozi" +  isten.getMap().getUnitRooms()[y][x].getColNum() + " " + isten.getMap().getUnitRooms()[y][x].getRowNum());
-        return isten.getMap().getUnitRooms()[y][x].getOwnerRoom();*/
+        int x = (int)(playerPos.x + 0.5f);
+        int y = (int)(playerPos.y + 0.5f);
+        //System.out.println(x + " " + y + " ownerroorm pozi " +  isten.getMap().getUnitRooms()[y][x].getColNum() + " " + isten.getMap().getUnitRooms()[y][x].getRowNum());
+        return isten.getMap().getUnitRooms()[y][x].getOwnerRoom();
 
     }
     @Override
