@@ -112,10 +112,10 @@ public class GameRenderer extends JPanel implements ActionListener {
             //if it is not on the screen, yeet
             Vec2 tempPos=renderable.getRenderedPosition();
             Vec2 tempScale=renderable.getRenderedScale();
-            //if(tempPos.x-tempScale.x>screenSize.x||tempPos.y-tempScale.y>screenSize.y)
-                //continue;
-            //if(tempPos.x+tempScale.x<0||tempPos.y+tempScale.y<0)
-                //continue;
+            if(tempPos.x-tempScale.x>screenSize.x||tempPos.y-tempScale.y>screenSize.y)
+                continue;
+            if(tempPos.x+tempScale.x<0||tempPos.y+tempScale.y<0)
+                continue;
 
             //if not yet yeeten, render
             renderable.render(graphics);
