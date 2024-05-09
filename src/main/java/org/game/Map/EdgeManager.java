@@ -5,6 +5,7 @@ import lombok.Setter;
 import main.java.org.game.Isten;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
+import main.java.org.networking.PlayerMP;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -289,31 +290,32 @@ public class EdgeManager extends Updatable {
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-        for(EdgeBetweenRooms edge: roomEdges){
-            for(EdgePiece ep : edge.getWalls()){
+            for(EdgePiece ep : isten.getClientMap().getEdgeBetweenRooms().getWalls()){
                 if(ep.isDoor()){
                     Door door = (Door)ep;
                     if(door.isOpened()){
-                        door.manageOpenDoor(deltaTime);
+                        door.manageOpenDoor(isten, deltaTime);
                     }
                 }
             }
-        }
 
     }
 
-    public Vec2 OpenDoor(Vec2 playerPosition) {
-        for(EdgeBetweenRooms edge: roomEdges){
-            for(EdgePiece ep : edge.getWalls()){
+    public Vec2 OpenDoor(PlayerMP player) {
+        for(int i = 0; i < roomEdges.size(); i++){
+            EdgeBetweenRooms edge = roomEdges.get(i);
+            for(int j = 0; j < edge.getWalls().size(); j++){
+                EdgePiece ep = edge.getWalls().get(j);
                 if(ep.isDoor()){
                     Door door = (Door)ep;
-                    if(door.isPlayerAtDoor(isten, playerPosition)){
-                        if(door.canBeOpened(isten)){
+                    if(door.isPlayerAtDoor(isten, player.getPlayerCollider().getPosition())){
+                        if(door.canBeOpened(player)){
                             door.open();
                             return door.position;
                         }
                         else {
                             System.out.println("Nem lehet kinyitni mert egyiranyu");
+                            return new Vec2(-1,-1);
                         }
                     }
                 }

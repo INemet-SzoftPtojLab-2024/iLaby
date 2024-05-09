@@ -49,10 +49,21 @@ public class PlayerStatusHandler extends ServerSideHandler {
         }
         else currTime = 0;
 
-        if((int)(currTime * 100) % 100 == 0) {
+        if((int)(currTime * 100)% 2 == 0) {
             for(int i = 0; i < isten.getUpdatables().size(); i++) {
                 if(isten.getUpdatable(i).getClass() == PlayerMP.class) {
                     PlayerMP player = (PlayerMP)isten.getUpdatable(i);
+
+                    Room currentRoom = player.getPlayerRoom(isten, player.getPlayerCollider().getPosition());
+                    if(player.getCurrentRoom() != currentRoom) {
+                        if(player.getCurrentRoom() != null){
+                            Packet28PlayerChangedRoom packet = new Packet28PlayerChangedRoom(player.getUsername());
+                            if(player.port != -1) server.sendData(packet.getData(), player.ipAddress, player.port);
+                            player.getCurrentRoom().decreasePlayerCount();
+                            currentRoom.increasePlayerCount();
+                        }
+                    }
+                    player.setCurrentRoom(currentRoom);
 
                     checkIfPlayerInRoomWithVillain(player,deltaTime);
                     checkIfPlayerInGasRoom(player);

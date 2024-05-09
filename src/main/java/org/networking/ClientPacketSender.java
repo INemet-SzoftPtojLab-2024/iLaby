@@ -7,7 +7,7 @@ public class ClientPacketSender {
 
     public static void sendPacketToServer(Packet packet) {
         if(isten == null) return;
-        packet.writeData(isten.getSocketClient());
+
     }
 
     public static void init(Isten isten) {

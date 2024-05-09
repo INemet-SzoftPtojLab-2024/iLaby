@@ -84,7 +84,7 @@ public class MapHandler extends ServerSideHandler {
             delta += deltaTime;
             //Original was: 1
             //Megváltoztattam 0.1-re, hogy gyorsabban tötrénjenek a változások
-            if (delta > 1) {
+            if (delta > 0.1) {
                 //TESTCASE 1:::
 
 
@@ -242,30 +242,17 @@ public class MapHandler extends ServerSideHandler {
 
     }
 
-    public void CheckIfPlayerOpenedDoor(Packet25PlayerPosForDoorOpen packet) {
+    public void CheckIfPlayerOpenedDoor(Packet25PlayerForDoorOpen packet) {
 
-        Vec2 doorPos = isten.getMap().getEdgeManager().OpenDoor(new Vec2(packet.getX(), packet.getY()));
-        if(doorPos.x == -1 && doorPos.y == -1) return;
 
-        Packet24DoorOpen packet24DoorOpen = new Packet24DoorOpen(doorPos.x, doorPos.y, false);
-        packet24DoorOpen.writeData(isten.getSocketClient());
+        for(PlayerMP player: isten.getUpdatablesByType(PlayerMP.class)) {
+            if(player.getUsername().equalsIgnoreCase(packet.getUsername())) {
+                Vec2 doorPos = isten.getMap().getEdgeManager().OpenDoor(player);
+                if(doorPos.x == -1 && doorPos.y == -1) return;
 
-    }
-
-    public void handleDoorOpen(Packet24DoorOpen packet) {
-
-        for(int i = 0; i < isten.getMap().getEdgeManager().getRoomEdges().size(); i++) {
-            EdgeBetweenRooms re = isten.getMap().getEdgeManager().getRoomEdges().get(i);
-            for (int j = 0; j < re.getWalls().size(); j++) {
-                EdgePiece edgePiece = re.getWalls().get(j);
-                if(edgePiece == null || edgePiece.getPosition() == null) return;
-                if(packet.getX() == edgePiece.getPosition().x &&
-                        packet.getY() == edgePiece.getPosition().y) {
-                    edgePiece.getCollider().setSolidity(packet.isSolid());
-                }
+                Packet24DoorOpen packet24DoorOpen = new Packet24DoorOpen(doorPos.x, doorPos.y, false);
+                sendDataToAllClients(packet24DoorOpen);
             }
         }
-
-        sendDataToAllClients(packet);
     }
 }

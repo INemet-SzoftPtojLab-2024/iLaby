@@ -131,13 +131,9 @@ public class GameServer extends Thread {
                 packet = new Packet14Gasmask(data);
                 handleGasmask((Packet14Gasmask) packet);
                 break;
-            case DOOROPEN:
-                packet = new Packet24DoorOpen(data);
-                handleDoorOpen((Packet24DoorOpen)packet);
-                break;
             case PLAYERPOSFORDOOROPEN:
-                packet = new Packet25PlayerPosForDoorOpen(data);
-                handlePlayerPosForDoorOpen((Packet25PlayerPosForDoorOpen)packet);
+                packet = new Packet25PlayerForDoorOpen(data);
+                handlePlayerPosForDoorOpen((Packet25PlayerForDoorOpen)packet);
                 break;
         }
     }
@@ -152,12 +148,8 @@ public class GameServer extends Thread {
         sendDataToAllClients(packet.getData());
     }
 
-    private void handlePlayerPosForDoorOpen(Packet25PlayerPosForDoorOpen packet) {
+    private void handlePlayerPosForDoorOpen(Packet25PlayerForDoorOpen packet) {
         mapHandler.CheckIfPlayerOpenedDoor(packet);
-    }
-
-    private void handleDoorOpen(Packet24DoorOpen packet) {
-        mapHandler.handleDoorOpen(packet);
     }
 
     private void handleItemDropped(Packet13ItemDropped packet) {
