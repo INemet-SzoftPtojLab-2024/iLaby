@@ -154,8 +154,7 @@ public class GameClient extends Thread {
     }
 
     private void handleInGasRoom(Packet26InGasRoom packet) {
-        float x = packet.getX();
-        float y = packet.getY();
+        String username = packet.getUsername();
         boolean isInGasRoom = packet.isInGasRoom();
 
         HandlerManager hm = isten.getHandlerManager();
@@ -164,7 +163,7 @@ public class GameClient extends Thread {
             // Critical section
             // Access shared resources here
             hm.addTask(HandlerManager.TaskType.InGasRoom);
-            hm.addData(new HandlerManager.InGasRoomData(x,y, isInGasRoom));
+            hm.addData(new HandlerManager.InGasRoomData(username, isInGasRoom));
         } finally {
             hm.lock.unlock(); // Release the lock
         }
