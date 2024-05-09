@@ -24,7 +24,7 @@ public class ChestManager extends Updatable {
     private Map map;
     private ColliderGroup colliderGroup;
     //a random unitRoom kiválasztására
-    private  final ArrayList<Integer> randomUnitRoom;
+    private final ArrayList<Integer> randomUnitRoom;
 
     /**
      * @param n How many chests should be generated randomly across the map?
@@ -122,14 +122,6 @@ public class ChestManager extends Updatable {
     @Override
     public Vector<Chest> getChests() {
         return chests;
-    }
-
-    public ColliderGroup getColliderGroup() {
-        return colliderGroup;
-    }
-
-    public void setColliderGroup(ColliderGroup colliderGroup) {
-        this.colliderGroup = colliderGroup;
     }
     public void updateColliderGroup(Chest chest){
         if(chest.getCollider() !=null){

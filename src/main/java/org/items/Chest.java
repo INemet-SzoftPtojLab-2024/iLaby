@@ -163,9 +163,6 @@ public class Chest {
         isOpened = true;
 
     }
-    public void setChestLocation( UnitRoom UnitRoomTmp){
-
-    }
     public Vec2 getPosition(){
         return pos;
     }
@@ -194,19 +191,11 @@ public class Chest {
     }
     public int getHeadingInt() {return heading.ordinal(); }
     public boolean isOpened(){return isOpened;}
-
-    public void setHeading(int h) { this.heading = Heading.values()[h];}
     public void setPosition(Vec2 p) { this.pos = p; }
 
-    public ArrayList<Item> getStoredItems() {return storedItems; }
-    public void setStoredItems(ArrayList<Item> items) {storedItems = items;}
 
     public int getChestType() {
         return chestType.ordinal();
-    }
-
-    public void setChestType(int chestType) {
-        this.chestType = (Chest.ChestType) Arrays.stream(Chest.ChestType.values()).toArray()[chestType];
     }
     public UnitRoom getUnitRoom(Vec2 pos){
         UnitRoom chestUnitRoom=null;
