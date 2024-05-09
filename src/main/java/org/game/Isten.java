@@ -59,8 +59,8 @@ public class Isten {
      */
     public Isten() {
         inventory=new Inventory(5);
-        map=new Map(this, 50, 50, 8);
-        chestManager = new ChestManager(75);
+        map=new Map(this, 20, 20, 8);
+        chestManager = new ChestManager(50, this);
         itemManager=new ItemManager();
         inputHandler = new Input();
         camera = new Camera();

@@ -1,16 +1,11 @@
 package main.java.org.items;
 
-import lombok.Getter;
 import main.java.org.game.Isten;
 import main.java.org.game.Map.Map;
 import main.java.org.game.Map.UnitRoom;
-import main.java.org.game.Map.Wall;
-import main.java.org.game.physics.Collider;
 import main.java.org.game.physics.ColliderGroup;
 import main.java.org.game.updatable.Updatable;
-import main.java.org.items.usable_items.*;
 import main.java.org.linalg.Vec2;
-import main.java.org.networking.Packet11ChestOpened;
 
 import java.awt.event.KeyEvent;
 import java.util.*;
@@ -23,114 +18,124 @@ import static java.lang.Math.sqrt;
  * Every chest is next to a wall and headed against the wall.
  */
 public class ChestManager extends Updatable {
-    private Vector<Chest>chests=new Vector<>();
-    private  int chestCount;
-    private  Map map;
-    private Vector<UnitRoom> placeableUnitRooms = new Vector<>();//UnitRoom-ok, amelyikbe helyezhető láda (mivel ajtó mellé nem rakható láda)
-    private Vector<Boolean> isThereChest=new Vector<>();//igaz=van az azonos sorszámú unitroomban láda
+    private Vector<Chest> chests = new Vector<>();
+    private int chestCount;
+    private Isten isten;
+    private Map map;
+    private ColliderGroup colliderGroup;
+    //a random unitRoom kiválasztására
+    private  final ArrayList<Integer> randomUnitRoom;
+
     /**
      * @param n How many chests should be generated randomly across the map?
      */
-    public ChestManager(int n){
-        chestCount=n;
-        map=null;
+    public ChestManager(int n, Isten isten) {
+        this.isten = isten;
+        chestCount = n;
+        map = null;
+        colliderGroup = new  ColliderGroup();
+        int mapRowSize = isten.getMap().getMapRowSize();
+        int mapColumnSize = isten.getMap().getMapColumnSize();
+         randomUnitRoom= new ArrayList<>();
+        int listSize = mapRowSize * mapColumnSize;
+        for(int i =0;i<listSize;i++){
+            randomUnitRoom.add(i);
+        }
     }
+
     @Override
     public void onStart(Isten isten) {
 
     }
 
     public void init(Isten isten) {
-        map=isten.getMap();
-        for (int i = 0; i < map.getUnitRooms().length; i++) {
-            for (int j = 0; j < map.getUnitRooms()[i].length; j++) {
-                UnitRoom unitRoomTmp=map.getUnitRooms()[i][j];
-                //megcsinaltam a unitroomot: van egy hasdoor valtozoja, es mindegyik uniroomrol le lehet kerdezni hogy melyik oldala fall
-                //fontos az ajtot is falnak veszi!!
-                //ezek a valtoztatasok a mapdrawing branchen elerhetoek(nem tudtam jol összrakni, nem vagyok jo git kezeko :) )
-                if(!unitRoomTmp.hasDoor()//ha egyik fal sem ajtó
-                        &&(unitRoomTmp.isTopWall()|| unitRoomTmp.isRightWall()|| unitRoomTmp.isBottomWall()|| unitRoomTmp.isLeftWall()))//ha egyik oldalán legalább fal van
-                {
-                    placeableUnitRooms.add(unitRoomTmp);
-                    isThereChest.add(false);
-                }
-            }
+        isten.getPhysicsEngine().addColliderGroup(colliderGroup);
+        Random random = new Random();
+        for (int i = 0; i < chestCount; i++) {
+            if(!placeChest(random.nextInt(Chest.ChestType.values().length))) break;
         }
-        if(chestCount> placeableUnitRooms.size()) {
-            System.err.println("So many chests cant be generated!");
-            chestCount=placeableUnitRooms.size();
-        }
-        Random rand=new Random();
-        int randomUnitRoom=rand.nextInt(placeableUnitRooms.size());
-        for (int h = 0; h < chestCount; h++) {
-            while(isThereChest.get(randomUnitRoom)){
-                randomUnitRoom=rand.nextInt(placeableUnitRooms.size());
-            }
-            WallLocation wall= wallInUnitRoomPicker(placeableUnitRooms.get(randomUnitRoom));
-            Vec2 chestPos=null;
-            switch (wall) {//0=left, 1=top, 2=right, 3=bottom
-                case LEFT: chestPos=new Vec2(placeableUnitRooms.get(randomUnitRoom).getPosition().x - 0.3f, placeableUnitRooms.get(randomUnitRoom).getPosition().y);break;
-                case TOP :chestPos=new Vec2(placeableUnitRooms.get(randomUnitRoom).getPosition().x, placeableUnitRooms.get(randomUnitRoom).getPosition().y + 0.3f);break;
-                case RIGHT: chestPos=new Vec2(placeableUnitRooms.get(randomUnitRoom).getPosition().x + 0.3f, placeableUnitRooms.get(randomUnitRoom).getPosition().y);break;
-                case BOTTOM: chestPos=new Vec2(placeableUnitRooms.get(randomUnitRoom).getPosition().x, placeableUnitRooms.get(randomUnitRoom).getPosition().y - 0.3f);break;
-            };
-            //CHEST TIPUSOK, a networking miatt sokkal egyszerubb így az itemeket atadni --> Chest.java/fillChest
-            chests.add(new Chest(chestPos,isten,wall.ordinal(),rand.nextInt(5)));
-            isThereChest.set(randomUnitRoom,true);
-        }
-        ColliderGroup chestColliders=new ColliderGroup();
-        for (int i = 0; i < chests.size(); i++) {
-            Collider c=new Collider(chests.get(i).getPosition(),new Vec2(0.3f,0.3f));
-            chestColliders.addCollider(c);
-        }
-        isten.getPhysicsEngine().addColliderGroup(chestColliders);
-
     }
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-        if(isten.getInputHandler().isKeyDown(KeyEvent.VK_E)){
+        if (isten.getInputHandler().isKeyDown(KeyEvent.VK_E)) {
             Vec2 playerPostion = isten.getPlayer().getPlayerCollider().getPosition();
             int index = 0;
-            for(var chest : chests){
-                Vec2 playerChestVector = Vec2.subtract(playerPostion,chest.getPosition());
-                double playerChestDistance = sqrt(Vec2.dot(playerChestVector,playerChestVector));
-                if(playerChestDistance <= 0.5 && !chest.isOpened()){
+            for (var chest : chests) {
+                Vec2 playerChestVector = Vec2.subtract(playerPostion, chest.getPosition());
+                double playerChestDistance = sqrt(Vec2.dot(playerChestVector, playerChestVector));
+                if (playerChestDistance <= 0.5 && !chest.isOpened()) {
                     chest.open();
-                    isten.getSocketClient().sendData(("11"+index).getBytes());
+                    isten.getSocketClient().sendData(("11" + index).getBytes());
                     break;
                 }
                 index++;
             }
         }
-    }
 
+        for (int i=0;i<chests.size();i++) {
+            if (!chests.get(i).getIsOnRightPlace()) {
+                chests.get(i).setUnitRoom(getPlaceForChest().getPosition());
+            }
+        }
+    }
     @Override
     public void onDestroy() {
 
     }
-    private WallLocation wallInUnitRoomPicker(UnitRoom unitRoom ){
+    private boolean placeChest(int chestType) {
+        UnitRoom unitRoom = getPlaceForChest();
+        if(unitRoom == null){
+            System.out.println("no place for chest");
+            return false;
+        }
 
-        WallLocation wall;//0=left, 1=top, 2=right, 3=bottom
-        ArrayList<WallLocation> walls = new ArrayList<>();
-        if(unitRoom.isLeftWall())walls.add(WallLocation.LEFT);
-        if(unitRoom.isTopWall())walls.add(WallLocation.TOP);
-        if(unitRoom.isRightWall())walls.add(WallLocation.RIGHT);
-        if(unitRoom.isBottomWall()) walls.add(WallLocation.BOTTOM);
+        //CHEST TIPUSOK, a networking miatt sokkal egyszerubb így az itemeket atadni --> Chest.java/fillChest
 
-        Random random = new Random();
-        return walls.get(random.nextInt(walls.size()));
-
-
+        Chest chest=new Chest(unitRoom.getPosition(),isten,chestType,chests.size());
+        chests.add(chest);
+        updateColliderGroup(chest);
+        return true;
     }
-
-    public enum WallLocation {
-        LEFT,
-        TOP,
-        RIGHT,
-        BOTTOM
+    private UnitRoom getPlaceForChest(){
+        int mapRowSize = isten.getMap().getMapRowSize();
+        Collections.shuffle(randomUnitRoom);
+        for(Integer number : randomUnitRoom){
+            if(isUnitRoomAvalaibleForChest(isten.getMap().getUnitRooms()[(int)(number/mapRowSize)][number%mapRowSize]))
+            {
+                return isten.getMap().getUnitRooms()[(int)(number/mapRowSize)][number%mapRowSize];
+            }
+        }
+        return null;
     }
-
+    private boolean isUnitRoomAvalaibleForChest(UnitRoom unitRoomTmp){
+        if (!unitRoomTmp.hasDoor()//ha egyik fal sem ajtó
+                && (unitRoomTmp.isTopWall() || unitRoomTmp.isRightWall() || unitRoomTmp.isBottomWall() || unitRoomTmp.isLeftWall())//ha egyik oldalán legalább fal van
+        )
+        {
+            if(!unitRoomTmp.getHasChest()){
+                return true;
+            }
+        }
+        return false;
+    }
     @Override
-    public Vector<Chest> getChests() { return chests; }
+    public Vector<Chest> getChests() {
+        return chests;
+    }
+
+    public ColliderGroup getColliderGroup() {
+        return colliderGroup;
+    }
+
+    public void setColliderGroup(ColliderGroup colliderGroup) {
+        this.colliderGroup = colliderGroup;
+    }
+    public void updateColliderGroup(Chest chest){
+        if(chest.getCollider() !=null){
+            colliderGroup.removeCollider(chest.getCollider());
+        }
+        chest.setCollider();
+        colliderGroup.addCollider(chest.getCollider());
+    }
 }

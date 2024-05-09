@@ -269,7 +269,7 @@ public class GameClient extends Thread {
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ChestManager.class) {
                 chestIndex = i;
-                isten.getUpdatables().get(i).getChests().add(new Chest(packet.getPos(),isten,packet.getHeading(), packet.getChestType()));
+                isten.getUpdatables().get(i).getChests().add(new Chest(packet.getPos(),isten, packet.getChestType(), packet.getIdx()));
                 chestGenCount++;
             }
         }

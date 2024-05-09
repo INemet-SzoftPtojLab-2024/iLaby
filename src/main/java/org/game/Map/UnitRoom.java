@@ -21,11 +21,13 @@ public class UnitRoom implements Graph<UnitRoom>{
     //one unitroom can have maximum one door!
     private boolean hasDoor = false;
     private static int setOwnerRoomType =0;
+    private boolean hasChest;
 
     public UnitRoom(Vec2 pos) {
         this.position = pos;
         this.inRoom = false;
         adjacentUnitRooms = new ArrayList<>();
+        hasChest=false;
     }
 
 
@@ -226,6 +228,13 @@ public class UnitRoom implements Graph<UnitRoom>{
 
     public UnitRoom getRightNeighbor() {
         return RightNeighbor;
+    }
+    public boolean getHasChest(){
+        return hasChest;
+    }
+    public void setHasChest(boolean hasChest)
+    {
+    this.hasChest=hasChest;
     }
 
 }
