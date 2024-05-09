@@ -89,7 +89,7 @@ public class Collider
     }
 
     /**resolves the collision between a movable and an immovable collider. */
-    private static void resolveCollisionMN(Collider c1, Collider c2, boolean noResolution)//collision resolution where c1 is movable and c2 is not
+    static void resolveCollisionMN(Collider c1, Collider c2, boolean noResolution)//collision resolution where c1 is movable and c2 is not
     {
         boolean shouldResolve=c1.isSolid&&c2.isSolid&&!noResolution;
 
@@ -163,7 +163,7 @@ public class Collider
     }
 
     /** the collision happens between two movable colliders. if resolution happens, the colliders will be moved equally */
-    private static void resolveCollisionMM(Collider c1, Collider c2, boolean noResolution)//collision resolution where both c1 and c2 are movable
+    static void resolveCollisionMM(Collider c1, Collider c2, boolean noResolution)//collision resolution where both c1 and c2 are movable
     {
         boolean shouldResolve=c1.isSolid&&c2.isSolid&&!noResolution;
 
