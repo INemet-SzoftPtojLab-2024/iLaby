@@ -252,10 +252,10 @@ public class Map extends Updatable {
     //ez a fv a mapgenerátorban is hasonlóan szerepel (colliderek és imagek nélkül)
     public void mergeRooms(Room r1, Room r2, Isten isten) {
         if(!r1.isPhysicallyAdjacent(r2) || r1.getID() == r2.getID()){
-            System.err.println("cant be merged");
+            //System.err.println("cant be merged");
             return;
         }
-        System.out.println(r2.getID() + "(r2) is merged to (r1)" + r1.getID());
+        //System.out.println(r2.getID() + "(r2) is merged to (r1)" + r1.getID());
         //remove r2 and keep r1;
 
         edgeManager.deleteEdge(r1,r2);
@@ -400,25 +400,29 @@ public class Map extends Updatable {
                                 //ha ezek egyike igaz, akkor szedem csak ki, és csak ilyenkor returneolok positiont -1, -1. en kivul
                                 if(alreadyOneWay || !oneWay){
                                     edgeBeingModified.switchDoorToWall(edgePiece, isten);
-                                    System.out.println("kiszedek egy ajtot");
+                                    //System.out.println("kiszedek egy ajtot");
                                     return edgePiece.position;
                                 }
                                 //mert nem kell allitani a map kirajzolasan, az adjacencylistet nem kell updatelni (remelem)
-                                System.out.println("egyiranyura allitom az ajtot");
+                                //System.out.println("egyiranyura allitom az ajtot");
                                 return new Vec2(-1,-1);
                             }
                         }
                     }
                     else
                     {
-                        System.out.println("Nem lett volna koherens");
+                        //System.out.println("Nem lett volna koherens");
                         //igy a legegyszerubb talan
                         if( r2WasRemovedFromR1) r1.getDoorAdjacentRooms().add(r2);
                         if(r1WasRemovedFromR2)r2.getDoorAdjacentRooms().add(r1);
                     }
                 }
-                else System.out.println("nem volt eleg ajto");
-            }else System.out.println("nincs ajto itt");
+                else {
+                    //System.out.println("nem volt eleg ajto");
+                }
+            }else {
+                //System.out.println("nincs ajto itt");
+            }
         }
         return new Vec2(-1,-1);
     }
@@ -439,14 +443,14 @@ public class Map extends Updatable {
                         //frissitem a szomszedossagi listakat
                         r1.getDoorAdjacentRooms().add(r2);
                         r2.getDoorAdjacentRooms().add(r1);
-                        System.out.println("Ajto hozzaadva");
+                        //System.out.println("Ajto hozzaadva");
                         return chosenPiece.position;
                     }
                 }
             }
         }
         //ha nem tudtam ajtot hozzaadni, akkor teli a map
-        System.out.println("Teli a map");
+        //System.out.println("Teli a map");
         return new Vec2(-1,-1);
     }
 

@@ -134,6 +134,16 @@ public class GameClient extends Thread {
                 packet = new Packet27VillainIsInGasRoom(data);
                 handleVillainInGasRoom((Packet27VillainIsInGasRoom)packet);
                 break;
+            case PLAYERROOMCHANGED:
+                packet = new Packet28PlayerChangedRoom(data);
+                handlePlayerChangedRoom((Packet28PlayerChangedRoom)packet);
+                break;
+        }
+    }
+
+    private void handlePlayerChangedRoom(Packet28PlayerChangedRoom packet) {
+        for(PlayerMP player: isten.getUpdatablesByType(PlayerMP.class)) {
+            if(player.getUsername().equalsIgnoreCase(packet.getUsername())) player.changedRoom(true);
         }
     }
 

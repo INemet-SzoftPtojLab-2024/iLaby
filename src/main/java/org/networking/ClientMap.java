@@ -1,7 +1,6 @@
 package main.java.org.networking;
 
 import main.java.org.game.Isten;
-import main.java.org.game.Map.Door;
 import main.java.org.game.Map.EdgeBetweenRooms;
 import main.java.org.game.Map.EdgePiece;
 import main.java.org.game.updatable.Updatable;
@@ -31,8 +30,7 @@ public class ClientMap extends Updatable {
     public void onUpdate(Isten isten, double deltaTime) {
         //check if door is opened by player
         if(isten.getInputHandler().isKeyReleased(KeyEvent.VK_O)) {
-            Packet25PlayerPosForDoorOpen packet = new Packet25PlayerPosForDoorOpen(isten.getPlayer().getPlayerCollider().getPosition().x,
-                    isten.getPlayer().getPlayerCollider().getPosition().y);
+            Packet25PlayerForDoorOpen packet = new Packet25PlayerForDoorOpen(isten.getPlayer().getPlayerName().getText());
             packet.writeData(isten.getSocketClient());
         }
     }
