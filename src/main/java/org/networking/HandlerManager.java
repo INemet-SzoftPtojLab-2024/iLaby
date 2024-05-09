@@ -133,13 +133,11 @@ public class HandlerManager {
     }
 
     public static class InGasRoomData extends HandlerData {
-        public InGasRoomData(float x, float y, boolean isInGasRoom) {
-            this.x = x;
-            this.y = y;
+        public InGasRoomData(String username, boolean isInGasRoom) {
+            this.username = username;
             this.isInGasRoom = isInGasRoom;
         }
-        public float x;
-        public float y;
+        public String username;
         public boolean isInGasRoom;
     }
 
@@ -338,7 +336,7 @@ public class HandlerManager {
                 //ha az isSolid false -> akkor open
                 if(edgePiece instanceof  Door){
                     if(!isSolid) ((Door) edgePiece).openOnClient();
-                    else ((Door) edgePiece).closeOnClient();
+                    else ((Door)edgePiece).closeOnClient();
                 }
 
                 break;
@@ -387,7 +385,7 @@ public class HandlerManager {
 
     private void villainHandler(VillainData villainData) {
         Villain villain = new Villain(villainData.villainName, villainData.position, villainData.imgPath);
-        isten.addUpdatable(villain);
+        //isten.addUpdatable(villain);
     }
 
     private void villainMoveHandler(VillainMoveData villainMoveData) {
@@ -442,6 +440,7 @@ public class HandlerManager {
                     edgePiece = new Wall(collider, collider.getPosition(), null, null);
                     edgePiece.setNewImage("./assets/walls/wall_mid.png", oldEdgePiece.getCollider().getScale(), isten);
                 }
+                if(edgePiece.getImage() == null) System.out.println("Edgepiece image is null");
 
                 isten.getClientMap().addEdgePiece(edgePiece);
                 break;
@@ -453,16 +452,14 @@ public class HandlerManager {
     }
 
     private void inGasRoomHandler(InGasRoomData inGasRoomData) {
-        float x = inGasRoomData.x;
-        float y = inGasRoomData.y;
+        String username = inGasRoomData.username;
         boolean isInGasRoom = inGasRoomData.isInGasRoom;
 
         for(Updatable updatable: isten.getUpdatables()) {
 
             if(updatable.getClass() == PlayerMP.class ) {
                 PlayerMP player = (PlayerMP)updatable;
-                if(player.getPlayerCollider().getPosition().x == x
-                        && player.getPlayerCollider().getPosition().y == y) player.isInGasRoom(isInGasRoom);
+                if(player.getUsername().equalsIgnoreCase(username)) player.isInGasRoom(isInGasRoom);
             }
         }
     }

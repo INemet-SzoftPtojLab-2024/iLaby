@@ -134,6 +134,16 @@ public class GameClient extends Thread {
                 packet = new Packet27VillainIsInGasRoom(data);
                 handleVillainInGasRoom((Packet27VillainIsInGasRoom)packet);
                 break;
+            case PLAYERROOMCHANGED:
+                packet = new Packet28PlayerChangedRoom(data);
+                handlePlayerChangedRoom((Packet28PlayerChangedRoom)packet);
+                break;
+        }
+    }
+
+    private void handlePlayerChangedRoom(Packet28PlayerChangedRoom packet) {
+        for(PlayerMP player: isten.getUpdatablesByType(PlayerMP.class)) {
+            if(player.getUsername().equalsIgnoreCase(packet.getUsername())) player.changedRoom(true);
         }
     }
 
@@ -154,8 +164,7 @@ public class GameClient extends Thread {
     }
 
     private void handleInGasRoom(Packet26InGasRoom packet) {
-        float x = packet.getX();
-        float y = packet.getY();
+        String username = packet.getUsername();
         boolean isInGasRoom = packet.isInGasRoom();
 
         HandlerManager hm = isten.getHandlerManager();
@@ -164,7 +173,7 @@ public class GameClient extends Thread {
             // Critical section
             // Access shared resources here
             hm.addTask(HandlerManager.TaskType.InGasRoom);
-            hm.addData(new HandlerManager.InGasRoomData(x,y, isInGasRoom));
+            hm.addData(new HandlerManager.InGasRoomData(username, isInGasRoom));
         } finally {
             hm.lock.unlock(); // Release the lock
         }
@@ -269,7 +278,7 @@ public class GameClient extends Thread {
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ChestManager.class) {
                 chestIndex = i;
-                isten.getUpdatables().get(i).getChests().add(new Chest(packet.getPos(),isten,packet.getHeading(), packet.getChestType()));
+                isten.getUpdatables().get(i).getChests().add(new Chest(packet.getPos(),isten, packet.getChestType(), packet.getIdx()));
                 chestGenCount++;
             }
         }

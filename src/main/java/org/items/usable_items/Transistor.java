@@ -52,10 +52,10 @@ public class Transistor extends Item {
     public void use(double deltatime){
         //exception handling a szoba szama miatt
          Room r = getActiveTransistorRoom();
-        if(r.getMaxPlayerCount()<= r.getPlayerCount()){
-            System.err.println("Nem volt eleg hely a szobaban a tranzisztor hasznalatakor");
-            return;
-        }
+         if(r != null && (r.getMaxPlayerCount()<= r.getPlayerCount())){
+                 System.err.println("Nem volt eleg hely a szobaban a tranzisztor hasznalatakor");
+                 return;
+         }
         if(!used){
             countText.setVisibility(false);
             Vec2 playerPosition = isten.getPlayer().getPlayerCollider().getPosition();

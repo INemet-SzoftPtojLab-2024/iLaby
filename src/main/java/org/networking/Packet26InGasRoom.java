@@ -1,21 +1,19 @@
 package main.java.org.networking;
 
 public class Packet26InGasRoom extends Packet {
-    private float x,y;
+    private String username;
     private boolean isInGasRoom;
 
     public Packet26InGasRoom(byte[] data) {
         super(26);
         String[] dataArray = readData(data).split(",");
-        this.x = Float.parseFloat(dataArray[0]);
-        this.y = Float.parseFloat(dataArray[1]);
-        this.isInGasRoom = Boolean.parseBoolean(dataArray[2]);
+        this.username = dataArray[0];
+        this.isInGasRoom = Boolean.parseBoolean(dataArray[1]);
     }
 
-    public Packet26InGasRoom(float x, float y, boolean isInGasRoom) {
+    public Packet26InGasRoom(String username, boolean isInGasRoom) {
         super(26);
-        this.x = x;
-        this.y = y;
+        this.username = username;
         this.isInGasRoom = isInGasRoom;
     }
 
@@ -28,16 +26,12 @@ public class Packet26InGasRoom extends Packet {
     }
 
     public byte[] getData() {
-        return ("26" + this.x + "," + this.y + "," + isInGasRoom).getBytes();
+        return ("26" + username + "," + isInGasRoom).getBytes();
 
     }
 
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
+    public String getUsername() {
+        return username;
     }
 
     public boolean isInGasRoom() {
