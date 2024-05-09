@@ -336,7 +336,7 @@ public class HandlerManager {
                 //ha az isSolid false -> akkor open
                 if(edgePiece instanceof  Door){
                     if(!isSolid) ((Door) edgePiece).openOnClient();
-                    else ((Door) edgePiece).closeOnClient();
+                    else ((Door)edgePiece).closeOnClient();
                 }
 
                 break;
@@ -385,7 +385,7 @@ public class HandlerManager {
 
     private void villainHandler(VillainData villainData) {
         Villain villain = new Villain(villainData.villainName, villainData.position, villainData.imgPath);
-        isten.addUpdatable(villain);
+        //isten.addUpdatable(villain);
     }
 
     private void villainMoveHandler(VillainMoveData villainMoveData) {
@@ -440,6 +440,7 @@ public class HandlerManager {
                     edgePiece = new Wall(collider, collider.getPosition(), null, null);
                     edgePiece.setNewImage("./assets/walls/wall_mid.png", oldEdgePiece.getCollider().getScale(), isten);
                 }
+                if(edgePiece.getImage() == null) System.out.println("Edgepiece image is null");
 
                 isten.getClientMap().addEdgePiece(edgePiece);
                 break;

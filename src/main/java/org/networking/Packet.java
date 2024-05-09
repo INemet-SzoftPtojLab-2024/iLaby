@@ -23,7 +23,8 @@ public abstract class Packet {
         DOOROPEN(24),
         PLAYERPOSFORDOOROPEN(25),
         INGASROOM(26),
-        VILLAININGASROOM(27);
+        VILLAININGASROOM(27),
+        PLAYERROOMCHANGED(28);
         private int packetId;
         private PacketTypes(int packetId) {
             this.packetId = packetId;

@@ -48,6 +48,7 @@ public class Player extends Entity {
     public boolean localPlayer = false;
     public Room currentRoom = null;
     private boolean isInGasRoom = false;
+    private boolean changedRoom = false;
 
     public Player() {
         playerCollider = null;
@@ -165,18 +166,15 @@ public class Player extends Entity {
                 }
             }
 
-            Room currentRoom = getPlayerRoom(isten,playerCollider.getPosition());
-            if(currentRoom != this.currentRoom){
+            //Room currentRoom = getPlayerRoom(isten,playerCollider.getPosition());
+            if(changedRoom) {
                 //beallitani a playerCountjat a szobanak:: (akar kiszervezheto fv-be)
-                if(this.currentRoom!= null){
-                    this.currentRoom.decreasePlayerCount();
-                }
-                currentRoom.increasePlayerCount();
+
                 //Lasd Inventory canAvoidVillain member var
                 isten.getInventory().setCanAvoidVillain(false);
                 //Ha szobat valt a player, akkor a kovetkezo alkalommar, amikor gegnerrel talalkozik hasznalodnia kell a Tvsz-nek
                 isten.getInventory().resetShouldUseChargeForTvsz();
-                this.currentRoom = currentRoom;
+                changedRoom = false;
             }
             if (isInGasRoom) {
                 isInGasRoom = false;
@@ -426,5 +424,13 @@ public class Player extends Entity {
 
     public boolean isInGasRoom() {
         return isInGasRoom;
+    }
+
+    public void changedRoom(boolean b) {
+        changedRoom = b;
+    }
+
+    public void setCurrentRoom(Room currentRoom) {
+        this.currentRoom = currentRoom;
     }
 }

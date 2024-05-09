@@ -7,6 +7,7 @@ import main.java.org.game.physics.ColliderGroup;
 import main.java.org.linalg.Vec2;
 import main.java.org.networking.ClientPacketSender;
 import main.java.org.networking.Packet24DoorOpen;
+import main.java.org.networking.PlayerMP;
 
 import static java.lang.Math.sqrt;
 
@@ -63,9 +64,10 @@ public class Door extends EdgePiece {
         else return false;
     }
     //az ajto nyitasanak csekkolasakor hasznalom
-    public boolean canBeOpened(Isten isten){
+    public boolean canBeOpened(PlayerMP player) {
         //player helyének meghatározása
-        Room placeOfPlayer = isten.getPlayer().getCurrentRoom();
+        Room placeOfPlayer = player.getCurrentRoom();
+        System.out.println(placeOfPlayer.getID());
         //masik oldali szoba meghatározása
         Room roomOnOtherSideOfDoor = null;
         for(UnitRoom unitRoom : unitRoomsBetween) {
@@ -74,11 +76,11 @@ public class Door extends EdgePiece {
             if (!unitRoom.getOwnerRoom().equals(placeOfPlayer)) {
                 roomOnOtherSideOfDoor = unitRoom.getOwnerRoom();
                 if(roomOnOtherSideOfDoor.getMaxPlayerCount()<=roomOnOtherSideOfDoor.getPlayerCount()) {
-                    System.err.println("Nem volt eleg hely a szobaban az ajto hasznalatakor");
                     return false;
                 }
             }
         }
+        System.out.println(placeOfPlayer.getDoorAdjacentRooms().contains(roomOnOtherSideOfDoor));
         return placeOfPlayer.getDoorAdjacentRooms().contains(roomOnOtherSideOfDoor);
     }
     public void open(){
@@ -87,11 +89,10 @@ public class Door extends EdgePiece {
         //collider.setSolidity(false);
     }
     public void close(){
-        Packet24DoorOpen packet = new Packet24DoorOpen(position.x, position.y, true);
-        ClientPacketSender.sendPacketToServer(packet);
         //collider.setSolidity(true);
     }
     public void openOnClient(){
+        System.out.println("Open on client");
         collider.setSolidity(false);
         this.image.setVisibility(false);
         this.openedImage.setVisibility(true);
@@ -102,16 +103,23 @@ public class Door extends EdgePiece {
         this.image.setVisibility(true);
         this.openedImage.setVisibility(false);
     }
+
+    private void sendCloseOnAllClients(Isten isten) {
+        Packet24DoorOpen packet = new Packet24DoorOpen(collider.getPosition().x,
+                collider.getPosition().y, true);
+        packet.writeData(isten.getSocketServer());
+    }
+
     public boolean isOpened(){
         return !collider.isSolid();
     }
     public boolean isClosed(){
         return collider.isSolid();
     }
-    public void manageOpenDoor(double delta){
+    public void manageOpenDoor(Isten isten, double delta){
         timeSinceOpen += delta;
         if(timeSinceOpen > 2.0f){
-            close();
+            sendCloseOnAllClients(isten);
             timeSinceOpen = 0.0f;
         }
     }
