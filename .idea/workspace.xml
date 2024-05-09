@@ -4,65 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3506ab6d-0407-47f2-a7e8-78ebc867e577" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__05__08__16_48_[Changes]/098e2fb073f84303e4936b5215044c9bf5a18688" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__05__08__16_48_[Changes]/3a83602c799ded541811f282e2524ca707cc351b" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__05__08__16_48_[Changes]/4fdc75f760398ad335804099c4c2aad3b4db38bd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__05__08__16_48_[Changes]/933c10faafd44b7f4f2d1678304c648f862e5581" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__05__08__16_48_[Changes]/95e852f03d23ecabb97806217a07c752c409eb7b" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__05__08__16_48_[Changes]/ae6b841d57349f3d394f98633de24bf000774d96" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__05__08__16_48_[Changes]/c6f7b65f617fe34dc6a651a2bf566be4a0d2a975" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__05__08__16_48_[Changes]/e4271d76d0528cc918e2133542540146c36b8cc9" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__05__08__16_48_[Changes]/eae9dc057e2fdbe6747a231ce61370cbe2f6501c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__05__08__16_48_[Changes]/f2d42c4e44b2723eb7efe0208d64f67bd717e8ff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__05__08__16_48_[Changes]/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__05__08__16_48__Changes_.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_09_05_2024_20_02_[Changes]/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_09_05_2024_20_02__Changes_.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/1/6/169d9ada591f37be86a4e8122319c57317a11ee7" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/6/4/647b353b1eed4c1112055b259e9776df21eb9338" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/2/e2e6e4cf9af87debc02da52dc814f27fea01d5c1" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/e/ee5f6236aa51b4f6af044d3fcc4dbaf443e24c03" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/f/1/f1e5fb6da1f484afc6699c3f88fb9c3062b14de2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/1/6/169d9ada591f37be86a4e8122319c57317a11ee7" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/6/4/647b353b1eed4c1112055b259e9776df21eb9338" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/e/2/e2e6e4cf9af87debc02da52dc814f27fea01d5c1" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/e/e/ee5f6236aa51b4f6af044d3fcc4dbaf443e24c03" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/f/1/f1e5fb6da1f484afc6699c3f88fb9c3062b14de2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet25PlayerForDoorOpen.java" afterDir="false" />
+    <list default="true" id="3506ab6d-0407-47f2-a7e8-78ebc867e577" name="Changes" comment="it's working">
+<<<<<<< HEAD
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Graphics/GameRenderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Graphics/GameRenderer.java" afterDir="false" />
+=======
       <change afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet28PlayerChangedRoom.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/main/java/org/game/physics/ColliderGroupTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/main/java/org/game/physics/ColliderTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/main/java/org/linalg/Vec2Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024__05__02__15_12__Changes_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_01_05_2024_13_06__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_01_05_2024_13_38__Changes_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_02_05_2024_16_14__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/0/9/098e2fb073f84303e4936b5215044c9bf5a18688" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/0/9/098e2fb073f84303e4936b5215044c9bf5a18688" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/a/3a83602c799ded541811f282e2524ca707cc351b" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/a/3a83602c799ded541811f282e2524ca707cc351b" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/f/4fdc75f760398ad335804099c4c2aad3b4db38bd" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/f/4fdc75f760398ad335804099c4c2aad3b4db38bd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/3/933c10faafd44b7f4f2d1678304c648f862e5581" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/3/933c10faafd44b7f4f2d1678304c648f862e5581" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/5/95e852f03d23ecabb97806217a07c752c409eb7b" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/5/95e852f03d23ecabb97806217a07c752c409eb7b" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/a/e/ae6b841d57349f3d394f98633de24bf000774d96" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/a/e/ae6b841d57349f3d394f98633de24bf000774d96" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/c/6/c6f7b65f617fe34dc6a651a2bf566be4a0d2a975" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/c/6/c6f7b65f617fe34dc6a651a2bf566be4a0d2a975" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/4/e4271d76d0528cc918e2133542540146c36b8cc9" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/4/e4271d76d0528cc918e2133542540146c36b8cc9" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/a/eae9dc057e2fdbe6747a231ce61370cbe2f6501c" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/a/eae9dc057e2fdbe6747a231ce61370cbe2f6501c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/f/2/f2d42c4e44b2723eb7efe0208d64f67bd717e8ff" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/f/2/f2d42c4e44b2723eb7efe0208d64f67bd717e8ff" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/entities/player/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/entities/player/Player.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Isten.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Isten.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Map/Door.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Map/Door.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Map/EdgeManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Map/EdgeManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Map/Map.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Map/Map.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/Map/UnitRoom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/Map/UnitRoom.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/physics/Collider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/physics/Collider.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/game/physics/ColliderGroup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/game/physics/ColliderGroup.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/items/Chest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/items/Chest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/items/ChestManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/items/ChestManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/items/usable_items/Transistor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/items/usable_items/Transistor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/ClientMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/ClientMap.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/ClientPacketSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/ClientPacketSender.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/GameClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/GameClient.java" afterDir="false" />
@@ -70,12 +23,9 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/HandlerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/HandlerManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/MapHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/MapHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/Packet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/Packet10ChestGeneration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet10ChestGeneration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/Packet25PlayerPosForDoorOpen.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/Packet26InGasRoom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet26InGasRoom.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/Packet25PlayerPosForDoorOpen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/Packet25PlayerForDoorOpen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/PlayerStatusHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/PlayerStatusHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/networking/VillainHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/networking/VillainHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/MultiplayerTester.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/MultiplayerTester.java" afterDir="false" />
+>>>>>>> 94a559a0291613b967d3da9451fa53e6512b7c40
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,35 +80,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Downloaded.Files.Path.Enabled": "false",
-    "Gradle.MultiplayerTester.executor": "Run",
-    "Gradle.MultiplayerTester.testPacket01.executor": "Run",
-    "Gradle.MultiplayerTester.testPacket02Constructor.executor": "Run",
-    "Gradle.iLaby [:Main.main()].executor": "Run",
-    "Gradle.iLaby [run].executor": "Run",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "Merging main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/kuruc/Downloads/junit-4.13.2.jar",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Gradle.MultiplayerTester.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MultiplayerTester.testPacket01.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MultiplayerTester.testPacket02Constructor.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.iLaby [:Main.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.iLaby [run].executor&quot;: &quot;Run&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;minimap&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/ploglamoszasssssz/java/cucc/Benchmark&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Gradle.iLaby [run]">
     <configuration name="MultiplayerTester" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
@@ -296,6 +246,8 @@
       <workItem from="1714924570656" duration="7744000" />
       <workItem from="1715002935390" duration="1974000" />
       <workItem from="1715102723676" duration="14303000" />
+      <workItem from="1715290284520" duration="1347000" />
+      <workItem from="1715292075647" duration="1741000" />
     </task>
     <task id="LOCAL-00001" summary="it's working">
       <option name="closed" value="true" />
@@ -324,6 +276,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="it's working" />
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <option name="LAST_COMMIT_MESSAGE" value="it's working" />
   </component>
 </project>
