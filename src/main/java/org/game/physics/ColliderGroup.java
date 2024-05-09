@@ -109,7 +109,7 @@ public class ColliderGroup
     }
 
     /** searches for the lowest and the highest coordinate in which the colliderGroup has colliders */
-    private void updateBounds()
+    public void updateBounds()
     {
         if(colliders.isEmpty())
         {
@@ -189,5 +189,13 @@ public class ColliderGroup
         //resolve collisions
         for(int i=0;i<touching.length;i++)
             Collider.resolveCollision(c,touching[i],noResolution);
+    }
+
+    public Vec2 getLowerBound() {
+        return lowerBound;
+    }
+
+    public Vec2 getUpperBound() {
+        return upperBound;
     }
 }

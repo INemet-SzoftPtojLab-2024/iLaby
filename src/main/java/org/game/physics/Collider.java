@@ -249,4 +249,8 @@ public class Collider
         distance+=Math.abs(c1.position.y-c2.position.y)-0.5f*(c1.scale.y+ c2.scale.y);
         return distance;
     }
+
+    public int getId() {
+        return id;
+    }
 }
