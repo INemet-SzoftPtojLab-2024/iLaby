@@ -20,14 +20,8 @@ public class PlayerStatusHandler extends ServerSideHandler {
 
     private void checkIfPlayerInGasRoom(PlayerMP player){
         if(player.getCurrentRoom() != null && player.getCurrentRoom().getRoomType() == RoomType.GAS) {
-            Packet26InGasRoom packet = new Packet26InGasRoom(player.getPlayerCollider().getPosition().x,
-                    player.getPlayerCollider().getPosition().y, true);
+            Packet26InGasRoom packet = new Packet26InGasRoom(player.getUsername(), true);
             sendDataToAllClients(packet);
-        }
-        else {
-            Packet26InGasRoom packet = new Packet26InGasRoom(player.getPlayerCollider().getPosition().x,
-                    player.getPlayerCollider().getPosition().y, false);
-            //sendDataToAllClients(packet);
         }
     }
 
@@ -55,20 +49,11 @@ public class PlayerStatusHandler extends ServerSideHandler {
         }
         else currTime = 0;
 
-        if((int)(currTime * 100)% 2 == 0) {
+        if((int)(currTime * 100) % 100 == 0) {
             for(int i = 0; i < isten.getUpdatables().size(); i++) {
                 if(isten.getUpdatable(i).getClass() == PlayerMP.class) {
                     PlayerMP player = (PlayerMP)isten.getUpdatable(i);
-                    for (Room room : isten.getMap().getRooms()) {
-                        for (UnitRoom unitRoom : room.getUnitRooms()) {
-                            if (player.getPlayerCollider().getPosition().x >= unitRoom.getPosition().x - 0.5 &&
-                                    player.getPlayerCollider().getPosition().x <= unitRoom.getPosition().x + 0.5 &&
-                                    player.getPlayerCollider().getPosition().y >= unitRoom.getPosition().y - 0.5 &&
-                                    player.getPlayerCollider().getPosition().y <= unitRoom.getPosition().y + 0.5) {
-                                player.currentRoom = room;
-                            }
-                        }
-                    }
+
                     checkIfPlayerInRoomWithVillain(player,deltaTime);
                     checkIfPlayerInGasRoom(player);
                 }

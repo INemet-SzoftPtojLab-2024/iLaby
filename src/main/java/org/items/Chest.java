@@ -221,11 +221,11 @@ public class Chest {
         if (!unitRoom.hasDoor()//ha egyik fal sem ajtó
                 && (unitRoom.isTopWall() || unitRoom.isRightWall() || unitRoom.isBottomWall() || unitRoom.isLeftWall())//ha egyik oldalán legalább fal van
         ){
-            System.out.println(" true");
+            //System.out.println(" true");
             return true;
         }
         else {
-            System.out.println("false");
+            //System.out.println("false");
             return false;
         }
     }
