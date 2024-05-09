@@ -76,6 +76,7 @@ public class ChestManager extends Updatable {
         for (int i=0;i<chests.size();i++) {
             if (!chests.get(i).getIsOnRightPlace()) {
                 chests.get(i).setUnitRoom(getPlaceForChest().getPosition());
+                updateColliderGroup(chests.get(i));
             }
         }
     }
