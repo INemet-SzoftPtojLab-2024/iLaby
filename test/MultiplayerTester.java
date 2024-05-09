@@ -1,12 +1,9 @@
 import main.java.org.game.Isten;
 import main.java.org.linalg.Vec2;
 import main.java.org.networking.*;
+
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
-
-
-
 public class MultiplayerTester {
 
     @Test
