@@ -86,4 +86,21 @@ class ColliderGroupTest
         collider2.setPosition(new Vec2(collider2.getPosition().x, colliderGroup.getLowerBound().y - 1.0f));
         assertFalse(colliderGroup.isColliderInBounds(collider2));
     }
+    @Test
+    public void testGetCollider() {
+        ColliderGroup colliderGroup = new ColliderGroup();
+
+        Collider collider1 = new Collider();
+        Collider collider2 = new Collider();
+        Collider collider3 = new Collider();
+        colliderGroup.addCollider(collider1);
+        colliderGroup.addCollider(collider2);
+        colliderGroup.addCollider(collider3);
+
+        assertEquals(collider1, colliderGroup.getCollider(collider1.getId()));
+        assertEquals(collider2, colliderGroup.getCollider(collider2.getId()));
+        assertEquals(collider3, colliderGroup.getCollider(collider3.getId()));
+
+        assertNull(colliderGroup.getCollider(-1));
+    }
 }
