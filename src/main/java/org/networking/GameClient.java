@@ -1,5 +1,6 @@
 package main.java.org.networking;
 
+import main.java.org.entities.player.Player;
 import main.java.org.game.Isten;
 import main.java.org.game.UI.TimeCounter;
 import main.java.org.game.physics.Collider;
@@ -17,6 +18,7 @@ public class GameClient extends Thread {
     private InetAddress ipAddress;
     private DatagramSocket socket;
     Isten isten;
+    int unitRoomPacketCount = 0;
 
     public GameClient(Isten isten, String ipAddress) {
         this.isten = isten;
@@ -70,6 +72,7 @@ public class GameClient extends Thread {
                 handleAnimation((Packet03Animation)packet);
                 break;
             case UNITROOM:
+                unitRoomPacketCount++;
                 packet = new Packet04UnitRoom(data);
                 handleUnitRoom((Packet04UnitRoom)packet);
                 break;
@@ -123,6 +126,7 @@ public class GameClient extends Thread {
                 handleWallDelete((Packet23WallDelete)packet);
                 break;
             case DOOROPEN:
+                //System.out.println("unitRoomPacketCount: " + unitRoomPacketCount);
                 packet = new Packet24DoorOpen(data);
                 handleDoorOpen((Packet24DoorOpen)packet);
                 break;
@@ -243,21 +247,54 @@ public class GameClient extends Thread {
     }
 
     private void handleItemDropped(Packet13ItemDropped packet) {
+
+        Vec2 pos = packet.getPos();
+        String username = packet.getUsername();
+        int selectedSlot = packet.getSelectedSlot();
+        int itemIndex = packet.getItemIndex();
+
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ItemManager.class) {
+
+                for(PlayerMP player: isten.getUpdatablesByType(PlayerMP.class)) {
+                    if(player.getUsername().equalsIgnoreCase(username)) {
+                        System.out.println(itemIndex);
+                        System.out.println(isten.getItemManager().getItems().get(itemIndex).getClass());
+                        System.out.println("selectedSlot: " + selectedSlot);
+
+                        Item item = isten.getItemManager().getItems().get(itemIndex);
+
+                        player.getInventory().dropItem(item, pos, selectedSlot);
+                        break;
+
+                    }
+                }
+                /*
                 isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).setLocation(Item.Location.GROUND);
                 isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).getImage().setVisibility(true);
                 isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).getImage().setPosition(packet.getPos());
                 isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).setPosition(packet.getPos());
+                 */
             }
         }
     }
 
     private void handleItemPickedUp(Packet12ItemPickedUp packet) {
+        int itemIndex = packet.getItemIndex();
+        String username = packet.getUsername();
+        int selectedSlot = packet.getSelectedSlot();
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ItemManager.class) {
-                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).setLocation(Item.Location.INVENTORY);
-                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).getImage().setVisibility(false);
+                //isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).setLocation(Item.Location.INVENTORY);
+                //isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).getImage().setVisibility(false);
+
+                for(PlayerMP player: isten.getUpdatablesByType(PlayerMP.class)) {
+                    if(player.getUsername().equalsIgnoreCase(username)) {
+                        isten.getItemManager().getItems().get(itemIndex).pickUpInInventory(player, selectedSlot);
+                        break;
+
+                    }
+                }
             }
         }
     }

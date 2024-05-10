@@ -407,7 +407,7 @@ public class HandlerManager {
         Vec2 position = loginData.position;
         int skinID = loginData.skinID;
 
-        PlayerMP player = new PlayerMP(username, address, port, position);
+        PlayerMP player = new PlayerMP(isten, username, address, port, position);
         player.setSkinID(skinID);
         isten.addUpdatable(player);
     }

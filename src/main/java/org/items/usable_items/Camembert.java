@@ -82,10 +82,10 @@ public class Camembert extends Item {
                 }
                 explosionCount = 0;
                 time = 0;
-                isten.getInventory().setCamembertTriggered(false);
-                isten.getInventory().setCamembert(null);
+                isten.getPlayer().getInventory().setCamembertTriggered(false);
+                isten.getPlayer().getInventory().setCamembert(null);
                 isExplosionPositionCalculated = false;
-                isten.getInventory().removeCamembert();
+                isten.getPlayer().getInventory().removeCamembert();
             }
         }
     }

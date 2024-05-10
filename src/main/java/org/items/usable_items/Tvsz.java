@@ -8,6 +8,7 @@ import main.java.org.game.Map.Room;
 import main.java.org.game.UI.Inventory;
 import main.java.org.items.Item;
 import main.java.org.linalg.Vec2;
+import main.java.org.networking.PlayerMP;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,8 +48,8 @@ public class Tvsz extends Item {
                 charges--;
                 countText.setText(String.valueOf(charges));
             } else{
-                isten.getInventory().setCanAvoidVillain(true);
-                isten.getInventory().deleteItem(this);
+                isten.getPlayer().getInventory().setCanAvoidVillain(true);
+                isten.getPlayer().getInventory().deleteItem(this);
                 isten.getItemManager().removeItem(this);
                 delete();
             }
@@ -61,9 +62,13 @@ public class Tvsz extends Item {
     }
 
     @Override
-    public void pickUpInInventory(){
-        super.pickUpInInventory();
-        Inventory inv = isten.getInventory();
+    public void pickUpInInventory(PlayerMP player, int selectedSlotByClient) {
+        super.pickUpInInventory(player, selectedSlotByClient);
+        if(player.localPlayer) setUI(player);
+    }
+
+    private void setUI(PlayerMP player) {
+        Inventory inv = player.getInventory();
         Vec2 slotPosition = inv.getStoringSlotPosition(this);
         Vec2 textPosition = new Vec2(slotPosition.x -10, slotPosition.y-7);
         countText.setPosition(textPosition);

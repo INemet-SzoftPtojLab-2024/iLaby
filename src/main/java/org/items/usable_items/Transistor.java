@@ -9,6 +9,7 @@ import main.java.org.game.Map.UnitRoom;
 import main.java.org.game.UI.Inventory;
 import main.java.org.items.Item;
 import main.java.org.linalg.Vec2;
+import main.java.org.networking.PlayerMP;
 
 public class Transistor extends Item {
 
@@ -36,16 +37,20 @@ public class Transistor extends Item {
     }
 
     @Override
-    public void pickUpInInventory(){
-        super.pickUpInInventory();
-        Inventory inv = isten.getInventory();
+    public void pickUpInInventory(PlayerMP player, int selectedSlotByClient) {
+        super.pickUpInInventory(player, selectedSlotByClient);
+
+        if(player.localPlayer) setUI(player);
+    }
+
+    private void setUI(PlayerMP player) {
+        Inventory inv = player.getInventory();
         Vec2 slotPosition = inv.getStoringSlotPosition(this);
         Vec2 textPosition = new Vec2(slotPosition.x -10, slotPosition.y-7);
         if(!used){
             countText.setPosition(textPosition);
             countText.setVisibility(true);
         }
-
     }
 
     @Override

@@ -92,7 +92,7 @@ public class Door extends EdgePiece {
         //collider.setSolidity(true);
     }
     public void openOnClient(){
-        System.out.println("Open on client");
+        //System.out.println("Open on client");
         collider.setSolidity(false);
         this.image.setVisibility(false);
         this.openedImage.setVisibility(true);
