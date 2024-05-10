@@ -338,13 +338,14 @@ public class GameClient extends Thread {
 
     private int chestGenCount = 0;
     private void handleChestGeneration(Packet10ChestGeneration packet) {
-        if(isten.getSocketServer() != null) return;
 
         int chestIndex = 0;
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ChestManager.class) {
                 chestIndex = i;
-                isten.getUpdatables().get(i).getChests().add(new Chest(packet.getPos(),isten, packet.getChestType(), packet.getWallLocation(), packet.getIdx()));
+                Chest chest =  new Chest(packet.getPos(),isten, packet.getChestType(), packet.getWallLocation(), packet.getIdx());
+                chest.setNewChestImage();
+                isten.getUpdatables().get(i).getChests().add(chest);
                 chestGenCount++;
             }
         }
