@@ -25,6 +25,7 @@ import main.java.org.game.PlayerPrefs.PlayerPrefs;
 import main.java.org.game.updatable.Updatable;
 
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
@@ -60,6 +61,12 @@ public class Player extends Entity {
     protected Inventory inventory;
 
     private PP_FogOfWar fogOfWar=null;
+    private BufferedImage fogOfWarImage=null;
+    private int[] fogOfWarRaw=null;
+    private char[] fogOfWarHelper=null; private int mapX, mapY;
+    private boolean fogOfWarDrawing=false;
+    private final Object fogOfWarSync=new Object();
+    private final float fogDistance=5;
 
     public Player(String name, Isten isten) {
         this.isten = isten;
@@ -167,7 +174,10 @@ public class Player extends Entity {
         AudioManager.preloadSound("./assets/audio/won.ogg");
 
         //fog of war
-        fogOfWar=new PP_FogOfWar(Image.loadImage("./assets/villain/villain1.png"));
+        fogOfWar=new PP_FogOfWar(fogOfWarImage);
+        mapX=isten.getMap().getMapRowSize();
+        mapY=isten.getMap().getMapColumnSize();
+        fogOfWarHelper=new char[mapX*mapY];
         isten.getRenderer().registerPostProcessingEffect(fogOfWar);
     }
 
@@ -339,6 +349,18 @@ public class Player extends Entity {
         }
         death.setScale(new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()));
         winBgn.setScale(new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()));
+
+        if(alive)
+        {
+            synchronized (fogOfWarSync)
+            {
+                if(!fogOfWarDrawing)
+                {
+                    Thread thread=new Thread(()->drawFogOfWar(isten));
+                    thread.start();
+                }
+            }
+        }
     }
 
     public boolean checkIfPlayerInVillainRoom(Isten isten,double deltaTime) {
@@ -367,6 +389,55 @@ public class Player extends Entity {
         return isten.getMap().getUnitRooms()[y][x].getOwnerRoom();
 
     }
+
+    private void drawFogOfWar(Isten isten)
+    {
+        //check for newly discovered area
+        final Vec2 pos=playerCollider.getPosition();
+        //clearFogDistance and transparencyHelper are made to reduce the number of float operations
+        final float clearFogDistance=0.75f*fogDistance;
+        final float transparencyHelper=1/(0.25f*fogDistance);
+
+        int minX=Math.round(pos.x-(float)Math.ceil(fogDistance));
+        int maxX=Math.round(pos.x+(float)Math.ceil(fogDistance));
+
+        int minY=Math.round(pos.y-(float)Math.ceil(fogDistance));
+        int maxY=Math.round(pos.y+(float)Math.ceil(fogDistance));
+
+        if(minX<0)
+            minX=0;
+        if(minY<0)
+            minY=0;
+        if(maxX>=mapX)
+            maxX=mapX-1;
+        if(maxY>=mapY)
+            maxY=mapY-1;
+
+        for(int i=minX; i<maxX;i++)
+        {
+            int currentIndex=i*mapY+minY;
+            for(int j=minY;j<maxY;j++, currentIndex++)
+            {
+                float distance=(float)Math.sqrt((pos.x-i)*(pos.x-i)+(pos.y-j)*(pos.y-j));
+                if(distance>fogDistance)
+                    continue;
+                if(distance>clearFogDistance)
+                {
+                   char opaqueness=(char)(256*transparencyHelper*(distance-clearFogDistance));
+                   if(opaqueness<fogOfWarHelper[currentIndex])
+                       fogOfWarHelper[currentIndex]=opaqueness;
+                }
+            }
+        }
+
+
+
+        synchronized (fogOfWarSync)
+        {
+            fogOfWarDrawing=false;
+        }
+    }
+
     @Override
     public void onDestroy() {
         //not implemented yet

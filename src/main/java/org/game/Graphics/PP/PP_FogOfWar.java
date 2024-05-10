@@ -19,4 +19,9 @@ public class PP_FogOfWar implements PostProcessEffectBased{
 
         frameBuffer.drawImage(source, 0,0,width, height,null);
     }
+
+    public void setImage(BufferedImage source)
+    {
+        this.source=source;
+    }
 }
