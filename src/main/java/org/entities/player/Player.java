@@ -68,6 +68,7 @@ public class Player extends Entity {
     private boolean fogOfWarDrawing=false;
     private final Object fogOfWarSync=new Object();
     private final float fogDistance=3;
+    private final int fogResolution=300;
 
     public Player(String name, Isten isten) {
         this.isten = isten;
@@ -175,9 +176,12 @@ public class Player extends Entity {
         AudioManager.preloadSound("./assets/audio/won.ogg");
 
         //fog of war
+        fogOfWarImage=new BufferedImage(fogResolution, fogResolution, BufferedImage.TYPE_INT_ARGB);
+        fogOfWarRaw=new int[4*fogResolution*fogResolution];
         fogOfWar=new PP_FogOfWar(fogOfWarImage);
-        mapX=isten.getMap().getMapRowSize();
-        mapY=isten.getMap().getMapColumnSize();
+
+        mapX=isten.getMap().getMapRowSize()+1;//a plusz 1 azert kell, hogy a falak is latszodjanak
+        mapY=isten.getMap().getMapColumnSize()+1;
         fogOfWarHelper=new char[mapX*mapY];
         Arrays.fill(fogOfWarHelper,(char)127);
         isten.getRenderer().registerPostProcessingEffect(fogOfWar);
@@ -396,9 +400,11 @@ public class Player extends Entity {
     {
         //check for newly discovered area
         final Vec2 pos=playerCollider.getPosition();
+        final int screenWidth=isten.getRenderer().getWidth();
+        final int screenHeight=isten.getRenderer().getHeight();
         //clearFogDistance and transparencyHelper are made to reduce the number of float operations
-        final float clearFogDistance=0.6f*fogDistance;
-        final float transparencyHelper=1/(0.4f*fogDistance);
+        final float clearFogDistance=0.5f*fogDistance;
+        final float transparencyHelper=1/(0.5f*fogDistance);
         final float onePer127=1/127.0f;
 
         int minX=Math.round(pos.x-(float)Math.ceil(fogDistance));
@@ -438,7 +444,7 @@ public class Player extends Entity {
 
 
         //draw image
-        if(fogOfWarImage==null)
+        /*if(fogOfWarImage==null)
         {
             if(isten.getRenderer().getWidth()>3&&isten.getRenderer().getHeight()>3)
             {
@@ -454,12 +460,12 @@ public class Player extends Entity {
             fogOfWarImage=new BufferedImage(isten.getRenderer().getWidth()/4,isten.getRenderer().getHeight()/4,BufferedImage.TYPE_INT_ARGB);
             fogOfWarRaw=new int[4*fogOfWarImage.getWidth()*fogOfWarImage.getHeight()];
             fogOfWar.setImage(fogOfWarImage);
-        }
+        }*/
 
         Arrays.fill(fogOfWarRaw,0);
 
-        Vec2 imageStart=Vec2.sum(pos, new Vec2(-2/isten.getCamera().getPixelsPerUnit()*fogOfWarImage.getWidth(),2/isten.getCamera().getPixelsPerUnit()*fogOfWarImage.getHeight()));
-        Vec2 delta=new Vec2(4/isten.getCamera().getPixelsPerUnit(),-4/isten.getCamera().getPixelsPerUnit());
+        Vec2 imageStart=Vec2.sum(pos, new Vec2(-0.5f*screenWidth/(float)isten.getCamera().getPixelsPerUnit(),0.5f*screenHeight/(float)isten.getCamera().getPixelsPerUnit()));
+        Vec2 delta=new Vec2(((float)screenWidth/isten.getCamera().getPixelsPerUnit())/fogResolution,-((float)screenHeight/isten.getCamera().getPixelsPerUnit())/fogResolution);
 
         int currentIndex=3;//offset to alpha
         Vec2 currentPos=imageStart.clone();
@@ -481,24 +487,24 @@ public class Player extends Entity {
                     boolean topNO=currentY<0||currentY>=mapY;
                     boolean bottomNO=currentY<1||currentY>mapY;
                     boolean leftNO=currentX<0||currentX>=mapX;
-                    boolean rightNO=currentX<-1||!(currentX<mapX);
+                    boolean rightNO=currentX<-1||currentX>(mapX-2);
 
-                    topLeft=0;
+                    topLeft=1;
                     if(!(topNO||leftNO))
                         topLeft=onePer127*fogOfWarHelper[currentY*mapX+currentX];
                     topLeftPos.x=currentX; topLeftPos.y=currentY;
 
-                    topRight=0;
+                    topRight=1;
                     if(!(topNO||rightNO))
                         topRight=onePer127*fogOfWarHelper[currentY*mapX+currentX+1];
                     topRightPos.x=currentX+1; topRightPos.y=currentY;;
 
-                    bottomLeft=0;
+                    bottomLeft=1;
                     if(!(bottomNO||leftNO))
                         bottomLeft=onePer127*fogOfWarHelper[(currentY-1)*mapX+currentX];
                     bottomLeftPos.x=currentX; bottomLeftPos.y=currentY-1;
 
-                    bottomRight=0;
+                    bottomRight=1;
                     if(!(bottomNO||rightNO))
                         bottomRight=onePer127*fogOfWarHelper[(currentY-1)*mapX+currentX+1];
                     bottomRightPos.x=currentX+1; bottomRightPos.y=currentY-1;

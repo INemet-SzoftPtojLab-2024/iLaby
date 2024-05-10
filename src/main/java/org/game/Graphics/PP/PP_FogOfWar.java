@@ -17,7 +17,9 @@ public class PP_FogOfWar implements PostProcessEffectBased{
         if(source==null)
             return;
 
+        ((Graphics2D)frameBuffer).setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         frameBuffer.drawImage(source, 0,0,width, height,null);
+        ((Graphics2D)frameBuffer).setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
     }
 
     public void setImage(BufferedImage source)
