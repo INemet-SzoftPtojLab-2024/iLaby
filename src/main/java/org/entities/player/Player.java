@@ -57,6 +57,7 @@ public class Player extends Entity {
     public Room currentRoom = null;
     private boolean isInGasRoom = false;
     private boolean changedRoom = false;
+    private boolean playerInVillainRoom = false;
 
     public Player(Isten isten) {
         playerCollider = null;
@@ -222,8 +223,15 @@ public class Player extends Entity {
 
             //Room currentRoom = getPlayerRoom(isten,playerCollider.getPosition());
             if(changedRoom) {
-                //beallitani a playerCountjat a szobanak:: (akar kiszervezheto fv-be)
 
+                if(playerInVillainRoom && !inventory.avoidVillain(deltaTime)){
+                    if (localPlayer && playerSound != null) {
+                        alive = false;
+                        AudioManager.closeSound(playerSound);
+                    }
+                }
+                //beallitani a playerCountjat a szobanak:: (akar kiszervezheto fv-be)
+                System.out.println("Changed room");
                 //Lasd Inventory canAvoidVillain member var
                 inventory.setCanAvoidVillain(false);
                 //Ha szobat valt a player, akkor a kovetkezo alkalommar, amikor gegnerrel talalkozik hasznalodnia kell a Tvsz-nek
@@ -365,12 +373,7 @@ public class Player extends Entity {
                 Villain villain = (Villain) u;
                 if ((currentRoom != null && currentRoom.equals(villain.getRoom())) && currentRoom.getRoomType() != RoomType.GAS&&!villain.getIsFainted()) {
                    //Ha van akkora szerencsenk, hogy van item nalunk, ami megmentene megse halunk meg
-                    if(!inventory.avoidVillain(deltaTime)){
-                        if (localPlayer && playerSound != null)
-                            AudioManager.closeSound(playerSound);
-                        return true;
-                    }
-
+                    return true;
                 }
             }
         }
@@ -489,5 +492,9 @@ public class Player extends Entity {
 
     public Inventory getInventory() {
         return inventory;
+    }
+
+    public void setPlayerInVillainRoom(boolean isInRoomWithVillain) {
+        playerInVillainRoom = isInRoomWithVillain;
     }
 }

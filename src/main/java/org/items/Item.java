@@ -53,6 +53,7 @@ public abstract class Item {
     public void pickUpInInventory(PlayerMP player, int selectedSlotByClient){
         //Pics up an item if it is not in the inventory, and it has been dropped for more than 200 millisec
         //1 ms = 1000000 ns :)
+        if(droppedAt == null) return;
         if((!location.equals(Location.INVENTORY) && droppedAt.isBefore((LocalDateTime.now()).minusNanos(200000000)))) {
             if(!used) {
                 location = Location.INVENTORY;

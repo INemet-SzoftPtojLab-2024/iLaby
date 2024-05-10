@@ -142,7 +142,23 @@ public class GameServer extends Thread {
                 packet = new Packet17Camembert(data);
                 handleCamembert((Packet17Camembert)packet);
                 break;
+            case TVSZ:
+                packet = new Packet15Tvsz(data);
+                handleTvsz((Packet15Tvsz)packet);
+                break;
+            case ISPLAYERINVILLAINROOM:
+                packet = new Packet41IsPlayerInVillainRoom(data);
+                handleIsPlayerVillainRoom((Packet41IsPlayerInVillainRoom)packet);
+                break;
         }
+    }
+
+    private void handleIsPlayerVillainRoom(Packet41IsPlayerInVillainRoom packet) {
+        sendDataToAllClients(packet.getData());
+    }
+
+    private void handleTvsz(Packet15Tvsz packet) {
+        sendDataToAllClients(packet.getData());
     }
 
     private void handleCamembert(Packet17Camembert packet) {
@@ -215,6 +231,7 @@ public class GameServer extends Thread {
     }
 
     private void handlePlayerJoinedData(PlayerMP player) {
+        playerStatusHandler.addClient(player);
         mapHandler.sendDataToClient(player);
         villainHandler.sendDataToClient(player);
         chestGenerationHandler.sendDataToClient(player);

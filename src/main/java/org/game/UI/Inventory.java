@@ -14,6 +14,7 @@ import main.java.org.items.usable_items.Tvsz;
 import main.java.org.linalg.Vec2;
 import main.java.org.networking.Packet12ItemPickedUp;
 import main.java.org.networking.Packet13ItemDropped;
+import main.java.org.networking.Packet15Tvsz;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -102,7 +103,7 @@ public class Inventory extends Updatable {
             tmp.setSortingLayer(-68);
             isten.getRenderer().addRenderable(tmp);
         }
-        if (owner.localPlayer && isten.getInputHandler().isKeyDown(KeyEvent.VK_F)) {
+        if (owner.localPlayer && isten.getInputHandler().isKeyReleased(KeyEvent.VK_F)) {
             useSelectedItem(deltaTime);
         }
         if (owner.localPlayer && isten.getInputHandler().isKeyReleased(KeyEvent.VK_R) && storedItems.get(selectedSlot - 1) != null) {
@@ -116,6 +117,10 @@ public class Inventory extends Updatable {
             //isten.getSocketClient().sendData(("13" + actItem.getItemIndex() + "," + actPos.x + "," + actPos.y).getBytes());
             if(actItem.getClass() == Gasmask.class)
                 isten.getSocketClient().sendData(("14" + actItem.getItemIndex() + "," + ((Gasmask) actItem).getCapacity()).getBytes());
+            else if(actItem.getClass() == Tvsz.class) {
+                Packet15Tvsz packet15Tvsz = new Packet15Tvsz(actItem.getItemIndex(), ((Tvsz)actItem).getCharges());
+                packet15Tvsz.writeData(isten.getSocketClient());
+            }
 
 
             if(owner.localPlayer) {
@@ -228,7 +233,8 @@ public class Inventory extends Updatable {
         if (selectedItem != null && selectedItem.getClass().equals(Camembert.class)) {
             camembert = (Camembert) selectedItem;
             camembertTriggered = true;
-        } else if (selectedItem != null) {
+        }
+        else if (selectedItem != null) {
             selectedItem.use(owner, deltatime);
         }
     }
@@ -273,7 +279,7 @@ public class Inventory extends Updatable {
                 return true;
             }
             if (item instanceof Sorospohar) {
-                item.use(owner, deltaTime);
+                //item.use(owner, deltaTime);
                 return true;
             }
         }

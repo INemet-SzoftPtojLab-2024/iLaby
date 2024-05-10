@@ -9,6 +9,7 @@ import main.java.org.items.Chest;
 import main.java.org.items.ChestManager;
 import main.java.org.items.Item;
 import main.java.org.items.ItemManager;
+import main.java.org.items.usable_items.Tvsz;
 import main.java.org.linalg.Vec2;
 
 import java.io.IOException;
@@ -142,12 +143,41 @@ public class GameClient extends Thread {
                 packet = new Packet28PlayerChangedRoom(data);
                 handlePlayerChangedRoom((Packet28PlayerChangedRoom)packet);
                 break;
+            case TVSZ:
+                packet =new Packet15Tvsz(data);
+                handleTvsz((Packet15Tvsz)packet);
+                break;
+            case ISPLAYERINVILLAINROOM:
+                packet =new Packet41IsPlayerInVillainRoom(data);
+                handleIsPlayerInVillainRoom((Packet41IsPlayerInVillainRoom)packet);
+                break;
         }
     }
 
-    private void handlePlayerChangedRoom(Packet28PlayerChangedRoom packet) {
+    private void handleIsPlayerInVillainRoom(Packet41IsPlayerInVillainRoom packet) {
+        String username = packet.getUsername();
+        boolean isPlayerInVillainRoom = packet.getIsPlayerInVillainRoom();
+
         for(PlayerMP player: isten.getUpdatablesByType(PlayerMP.class)) {
-            if(player.getUsername().equalsIgnoreCase(packet.getUsername())) player.changedRoom(true);
+            if(player.getUsername().equalsIgnoreCase(username)) {
+                player.setPlayerInVillainRoom(isPlayerInVillainRoom);
+            }
+
+        }
+    }
+
+    private void handleTvsz(Packet15Tvsz packet) {
+        int charges = packet.getCharges();
+        ((Tvsz)isten.getItemManager().getItems().get(packet.getItemIndex())).setCharges(charges);
+    }
+
+
+    private void handlePlayerChangedRoom(Packet28PlayerChangedRoom packet) {
+
+        for(PlayerMP player: isten.getUpdatablesByType(PlayerMP.class)) {
+            if(player.getUsername().equalsIgnoreCase(packet.getUsername())) {
+                player.changedRoom(true);
+            }
         }
     }
 

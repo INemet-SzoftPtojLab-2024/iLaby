@@ -43,7 +43,10 @@ public class Tvsz extends Item {
     @Override
     public void use(Player player, double deltaTime){
         //Csak akkor használodik, amikor belép a player egy szobába, ahol gegner van
+
+        System.out.println("USE TVSZ");
         if(shouldUseCharge){
+            System.out.println("should use charge");
             shouldUseCharge = false;
             if(charges > 1) {
                 charges--;
@@ -66,6 +69,7 @@ public class Tvsz extends Item {
     public void pickUpInInventory(PlayerMP player, int selectedSlotByClient) {
         super.pickUpInInventory(player, selectedSlotByClient);
         if(player.localPlayer) setUI(player);
+
     }
 
     private void setUI(PlayerMP player) {
@@ -74,6 +78,7 @@ public class Tvsz extends Item {
         Vec2 textPosition = new Vec2(slotPosition.x -10, slotPosition.y-7);
         countText.setPosition(textPosition);
         countText.setVisibility(true);
+        countText.setText(String.valueOf(charges));
     }
     @Override
     public void dropOnGround(Vec2 pos){
@@ -81,4 +86,12 @@ public class Tvsz extends Item {
         countText.setVisibility(false);
     }
     public void setShouldUseCharge(boolean value){shouldUseCharge = value;}
+
+    public int getCharges() {
+        return charges;
+    }
+
+    public void setCharges(int charges) {
+        this.charges = charges;
+    }
 }
