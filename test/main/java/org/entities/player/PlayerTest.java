@@ -46,7 +46,7 @@ public class PlayerTest {
         mockInputHandler = mock(Input.class);
         mockPlayerName = mock(Text.class);
 
-        player = new Player();
+        player = new Player("Name",mockIsten);
 
         when(mockIsten.getPhysicsEngine()).thenReturn(mockPhysicsEngine);
         when(mockIsten.getRenderer()).thenReturn((mockRenderer));
@@ -59,7 +59,7 @@ public class PlayerTest {
 
     @Test
     public void testConstructor() {
-        Player player = new Player();
+        Player player = new Player("NAME",mockIsten);
         assertNull(player.getPlayerCollider());
         assertNull(player.getPlayerImage());
         assertEquals(0, player.getActiveImage());
@@ -70,7 +70,7 @@ public class PlayerTest {
     @Test
     public void testParameterizedConstructor() {
         String name = "TestPlayer";
-        Player player = new Player(name);
+        Player player = new Player(name,mockIsten);
 
         assertNull(player.getPlayerCollider());
         assertNull(player.getPlayerImage());

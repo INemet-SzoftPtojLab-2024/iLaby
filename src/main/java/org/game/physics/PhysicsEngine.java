@@ -181,4 +181,12 @@ public class PhysicsEngine
             }
         }
     }
+    public ArrayList<Collider> getSimulatedColliders()
+    {
+        return simulatedColliders;
+    }
+
+    public ArrayList<ColliderGroup> getColliderGroups() {
+        return colliderGroups;
+    }
 }
