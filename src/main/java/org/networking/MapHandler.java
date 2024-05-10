@@ -8,6 +8,11 @@ import java.awt.event.KeyEvent;
 import java.util.Collections;
 import java.util.List;
 
+import static main.java.org.game.Map.Algorithms.Merge.mergeRooms;
+import static main.java.org.game.Map.Algorithms.SetDoors.TakeOutDoor;
+import static main.java.org.game.Map.Algorithms.SetDoors.addDoorToEdgeWithoutDoor;
+import static main.java.org.game.Map.Algorithms.Split.splitRooms;
+
 public class MapHandler extends ServerSideHandler {
 
     int sec = 0;
@@ -84,17 +89,17 @@ public class MapHandler extends ServerSideHandler {
             delta += deltaTime;
             //Original was: 1
             //Megváltoztattam 0.1-re, hogy gyorsabban tötrénjenek a változások
-            if (delta > 0.1) {
+            if (delta > 2) {
                 //TESTCASE 1:::
 
 
                if(false){
-                    Vec2 pos = isten.getMap().addDoorToEdgeWithoutDoor(isten);
+                    Vec2 pos = addDoorToEdgeWithoutDoor(isten, isten.getMap());
                     handleAddOrDeleteDoor(pos, true);
                     //System.out.println("ajtoaddolas tortent");
                 }
                 else{
-                    Vec2 pos = isten.getMap().TakeOutDoor(isten,true);
+                    Vec2 pos = TakeOutDoor(isten,true,isten.getMap());
                     if(pos.x != -1 && pos.y != -1) {
                         handleAddOrDeleteDoor(pos, false);
                         //stop = true;
@@ -116,10 +121,8 @@ public class MapHandler extends ServerSideHandler {
                     Room r2 = isten.getMap().getRooms().get(0).getPhysicallyAdjacentRooms().get(0);
                     handleUnitRoomChange(r2.getUnitRooms(), r1.getRoomType().ordinal());
                     handleWallDeletion(isten.getMap().getEdgeManager().getEdgeBetweenRooms(r1, r2));
-                    isten.getMap().mergeRooms(r1, r2, isten);
+                    mergeRooms(r1, r2,isten.getMap());
                     handleRoomEdges(r1);
-
-                    //System.out.println("r1 adjacentrooms Number: " + rooms.get(0).getPhysicallyAdjacentRooms().size());
 
                 }
                 //TESTCASE 3:
@@ -128,7 +131,7 @@ public class MapHandler extends ServerSideHandler {
                 if((sec+2)%4==0) {
                     for (Room splittable : isten.getMap().getRooms()) {
                         int newID;
-                        if ((newID = isten.getMap().splitRooms(splittable, isten)) != -1) {
+                        if ((newID = splitRooms(splittable, isten.getMap())) != -1) {
 
                             for(Room room: isten.getMap().getRooms()) {
                                 if(room.getID() == newID) {
