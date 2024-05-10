@@ -273,6 +273,11 @@ public class Chest {
         //BOTTOM -> 3
         this.wallLocation = (Chest.WallLocation) Arrays.stream(Chest.WallLocation.values()).toArray()[wallLocation];
     }
+
+    public WallLocation getWallLocation() {
+        return wallLocation;
+    }
+
     public Vec2 getPosition(){
         return pos;
     }
@@ -281,6 +286,9 @@ public class Chest {
     }
     public int getHeadingInt() {
         return 0;
+    }
+    public Vec2 getUnitRoomPosition(){
+        return unitRoom.getPosition();
     }
 
 

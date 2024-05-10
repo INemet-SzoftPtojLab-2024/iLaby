@@ -16,6 +16,11 @@ public abstract class Packet {
         ITEMPICKEDUP(12),
         ITEMDROPPED(13),
         GASMASK(14),
+        TVSZ(15),
+        SOROSPOHAR(16),
+        CAMEMBERT(17),
+        RONGY(18),
+        TRANSISTOR(19),
         WALL(20),
         DEATH(21),
         EDGEPIECECHANGED(22),
@@ -24,7 +29,8 @@ public abstract class Packet {
         PLAYERPOSFORDOOROPEN(25),
         INGASROOM(26),
         VILLAININGASROOM(27),
-        PLAYERROOMCHANGED(28);
+        PLAYERROOMCHANGED(28),
+        ISPLAYERINVILLAINROOM(41);
         private int packetId;
         private PacketTypes(int packetId) {
             this.packetId = packetId;

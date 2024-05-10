@@ -1,5 +1,6 @@
 package main.java.org.items.usable_items;
 
+import main.java.org.entities.player.Player;
 import main.java.org.entities.villain.Villain;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Isten;
@@ -25,9 +26,9 @@ public class Rongy extends Item {
 
     }
     @Override
-    public void use(double deltaTime){
+    public void use(Player player, double deltaTime){
         used=true;
-        dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
+        dropOnGround(player.getPlayerCollider().getPosition());
         Room room=getRoom();
         for (Updatable u : isten.getUpdatables()) {
             if (u.getClass().equals(Villain.class)) {
@@ -39,7 +40,7 @@ public class Rongy extends Item {
         }
         stink.setPosition(Vec2.sum(position,new Vec2(0.0f,0.25f)));
         stink.setVisibility(true);
-        isten.getInventory().deleteItem(this);
+        player.getInventory().deleteItem(this);
         Runnable stinkThread=()->{//thread azért kell, hogy ha már nem hat a rongy, akkor eltüntesse a füstfelhőt
             try {
                 Thread.sleep((long) (impactTime*1000));

@@ -1,5 +1,6 @@
 package main.java.org.game.UI;
 
+import main.java.org.entities.player.Player;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.ImageUI;
 import main.java.org.game.Graphics.Renderable;
@@ -11,6 +12,9 @@ import main.java.org.items.usable_items.Gasmask;
 import main.java.org.items.usable_items.Sorospohar;
 import main.java.org.items.usable_items.Tvsz;
 import main.java.org.linalg.Vec2;
+import main.java.org.networking.Packet12ItemPickedUp;
+import main.java.org.networking.Packet13ItemDropped;
+import main.java.org.networking.Packet15Tvsz;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -32,9 +36,9 @@ public class Inventory extends Updatable {
     private Camembert camembert;
     //Azert van ra szukseg, hogy ne haljon meg a player, ha 1 Tvsz charge-dzsal bemegyek egy gegnerhez
     private boolean canAvoidVillain = false;
+    private Player owner;
 
-
-    public Inventory(int size) {
+    public Inventory(int size, Player owner) {
         this.size = size;
         inventoryIcons = new ArrayList<>();
         itemIcons = new ArrayList<>();
@@ -47,6 +51,7 @@ public class Inventory extends Updatable {
         }
         selectedSlot = 1;
         hasGasmaskEquipped = false;
+        this.owner = owner;
     }
 
     @Override
@@ -98,32 +103,45 @@ public class Inventory extends Updatable {
             tmp.setSortingLayer(-68);
             isten.getRenderer().addRenderable(tmp);
         }
-        if (isten.getInputHandler().isKeyDown(KeyEvent.VK_F)) {
+        if (owner.localPlayer && isten.getInputHandler().isKeyReleased(KeyEvent.VK_F)) {
             useSelectedItem(deltaTime);
         }
-        if (isten.getInputHandler().isKeyDown(KeyEvent.VK_R) && storedItems.get(selectedSlot - 1) != null) {
+        if (owner.localPlayer && isten.getInputHandler().isKeyReleased(KeyEvent.VK_R) && storedItems.get(selectedSlot - 1) != null) {
             Item actItem = storedItems.get(selectedSlot - 1);
             Vec2 actPos = isten.getPlayer().getPlayerCollider().getPosition();
-            actItem.dropOnGround(actPos);
+            //actItem.dropOnGround(actPos);
             hasGasmaskEquipped = getExistenceOfGasMask();
-            isten.getSocketClient().sendData(("13" + actItem.getItemIndex() + "," + actPos.x + "," + actPos.y).getBytes());
+
+            Packet13ItemDropped packet = new Packet13ItemDropped(actItem.getItemIndex(), actPos, owner.getPlayerName().getText(), selectedSlot);
+            packet.writeData(isten.getSocketClient());
+            //isten.getSocketClient().sendData(("13" + actItem.getItemIndex() + "," + actPos.x + "," + actPos.y).getBytes());
             if(actItem.getClass() == Gasmask.class)
                 isten.getSocketClient().sendData(("14" + actItem.getItemIndex() + "," + ((Gasmask) actItem).getCapacity()).getBytes());
+            else if(actItem.getClass() == Tvsz.class) {
+                Packet15Tvsz packet15Tvsz = new Packet15Tvsz(actItem.getItemIndex(), ((Tvsz)actItem).getCharges());
+                packet15Tvsz.writeData(isten.getSocketClient());
+            }
 
 
-            storedItems.set(selectedSlot - 1, null);
-            tmp = new ImageUI(getSlotLocation(selectedSlot), new Vec2(iconSize), "./assets/ui/inventorySlot_Selected.png");
-            inventoryIcons.set(selectedSlot - 1, tmp);
-            tmp.setAlignment(Renderable.CENTER, Renderable.BOTTOM);
-            tmp.setVisibility(true);
-            tmp.setSortingLayer(-68);
-            isten.getRenderer().addRenderable(tmp);
-            itemIcons.get(selectedSlot - 1).setVisibility(false);
+            if(owner.localPlayer) {
+                tmp = new ImageUI(getSlotLocation(selectedSlot), new Vec2(iconSize), "./assets/ui/inventorySlot_Selected.png");
+                inventoryIcons.set(selectedSlot - 1, tmp);
+                tmp.setAlignment(Renderable.CENTER, Renderable.BOTTOM);
+                tmp.setVisibility(true);
+                tmp.setSortingLayer(-68);
+                isten.getRenderer().addRenderable(tmp);
+                itemIcons.get(selectedSlot - 1).setVisibility(false);
+            }
 
         }
         if (camembertTriggered && camembert != null) {
-            camembert.use(deltaTime);
+            camembert.use(owner, deltaTime);
         }
+    }
+
+    public void dropItem(Item item, Vec2 pos, int selectedSlot) {
+        item.dropOnGround(pos);
+        storedItems.set(selectedSlot - 1, null);
     }
 
     @Override
@@ -145,7 +163,7 @@ public class Inventory extends Updatable {
                 break;
             }
         }
-        if (tmp == null) {
+        if (isFull()) {
             storedItems.get(selectedSlot - 1).dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
             storedItems.set(selectedSlot - 1, item);
             if (item.getClass().equals(Gasmask.class)) {
@@ -160,6 +178,35 @@ public class Inventory extends Updatable {
         tmp.setSortingLayer(-69);
         isten.getRenderer().addRenderable(tmp);
 
+    }
+    public void addItemToClient(Item item, int selectedSlotByClient) {
+
+        for (int i = 0; i < 5; i++) {
+            if (storedItems.get(i) == null) {
+                storedItems.set(i, item);
+                if (item.getClass().equals(Gasmask.class)) {
+                    hasGasmaskEquipped = true;
+                }
+                break;
+            }
+        }
+        if (isFull()) {
+            //storedItems.get(selectedSlot - 1).dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
+            storedItems.set(selectedSlotByClient - 1, item);
+            if (item.getClass().equals(Gasmask.class)) {
+                hasGasmaskEquipped = true;
+            }
+        }
+    }
+
+
+    private boolean isFull() {
+        for(int i = 0; i < size; i++) {
+            if(storedItems.get(i) == null) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -186,8 +233,9 @@ public class Inventory extends Updatable {
         if (selectedItem != null && selectedItem.getClass().equals(Camembert.class)) {
             camembert = (Camembert) selectedItem;
             camembertTriggered = true;
-        } else if (selectedItem != null) {
-            selectedItem.use(deltatime);
+        }
+        else if (selectedItem != null) {
+            selectedItem.use(owner, deltatime);
         }
     }
 
@@ -227,11 +275,11 @@ public class Inventory extends Updatable {
         if (canAvoidVillain) return true;
         for (Item item : storedItems) {
             if (item instanceof Tvsz) {
-                item.use(deltaTime);
+                item.use(owner, deltaTime);
                 return true;
             }
             if (item instanceof Sorospohar) {
-                item.use(deltaTime);
+                //item.use(owner, deltaTime);
                 return true;
             }
         }
@@ -282,5 +330,10 @@ public class Inventory extends Updatable {
                 ((Tvsz) i).setShouldUseCharge(true);
             }
         }
+    }
+
+
+    public int getSelectedSlot() {
+        return selectedSlot;
     }
 }

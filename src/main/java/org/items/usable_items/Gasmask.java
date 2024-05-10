@@ -1,10 +1,12 @@
 package main.java.org.items.usable_items;
 
+import main.java.org.entities.player.Player;
 import main.java.org.game.Graphics.*;
 import main.java.org.game.Isten;
 import main.java.org.game.UI.Inventory;
 import main.java.org.items.Item;
 import main.java.org.linalg.Vec2;
+import main.java.org.networking.PlayerMP;
 
 public class Gasmask extends Item {
     private ImageUI capacityBar;
@@ -30,15 +32,19 @@ public class Gasmask extends Item {
         isten.getRenderer().addRenderable(capacityBarBackground);
     }
 
-    public void pickUpInInventory() {
-        super.pickUpInInventory();
+    public void pickUpInInventory(PlayerMP player, int selectedSlotByClient) {
+        super.pickUpInInventory(player, selectedSlotByClient);
 
+        if(player.localPlayer) setUI(player);
+    }
+
+    private void setUI(PlayerMP player) {
         capacityBar.setAlignment(Renderable.CENTER, Renderable.BOTTOM);
         capacityBarBackground.setAlignment(Renderable.CENTER, Renderable.BOTTOM);
         capacityBar.setSortingLayer(-80);
         capacityBarBackground.setSortingLayer(-79);
 
-        Vec2 slotPosition = isten.getInventory().getStoringSlotPosition(this);
+        Vec2 slotPosition = player.getInventory().getStoringSlotPosition(this);
         if (slotPosition.x == 0.0 && slotPosition.y == 0.0) return;
         Vec2 barPosition = new Vec2(slotPosition.x, slotPosition.y + 35);
 
@@ -49,7 +55,7 @@ public class Gasmask extends Item {
     }
 
     @Override
-    public void use(double deltaTime) {
+    public void use(Player player, double deltaTime) {
         if (capacity == 100.0f) {
             capacityBarBackground.setVisibility(true);
             capacityBar.setVisibility(true);
@@ -57,12 +63,15 @@ public class Gasmask extends Item {
         float usageRate = 5.0f;
         capacity -= (float) (deltaTime * usageRate);
         if (capacity <= 0) {
-            Inventory inventory = isten.getInventory();
+            Inventory inventory = player.getInventory();
             capacity = 0;
             deleteCapacityBar();
             int index = 0;
-            for (; index < inventory.getSize(); index++) {
+            System.out.println(inventory.getSize());
+            for (int i = 0; i < inventory.getSize(); i++) {
+                if(inventory.getStoredItems().get(index) != null) System.out.println("has item: " + inventory.getStoredItems().get(index).getClass());
                 if (inventory.getStoredItems().get(index) instanceof Gasmask) break;
+                index++;
             }
             inventory.getStoredItems().remove(index);
             inventory.getStoredItems().add(index, null);
@@ -78,7 +87,7 @@ public class Gasmask extends Item {
         if (capacityBar != null && capacityBarBackground != null) {
             capacityBar.setVisibility(false);
             capacityBarBackground.setVisibility(false);
-            isten.getInventory().setGasmaskEquipped(false);
+            isten.getPlayer().getInventory().setGasmaskEquipped(false);
             equipped = false;
         }
     }
