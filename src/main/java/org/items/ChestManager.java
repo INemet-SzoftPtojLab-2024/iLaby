@@ -99,7 +99,7 @@ public class ChestManager extends Updatable {
         Chest chest=new Chest(unitRoom.getPosition(),isten,chestType,getRightWallLocation(unitRoom) ,chests.size());
         chests.add(chest);
         //updateColliderGroup(chest);
-        colliderGroup.addCollider(chest.getCollider());
+        //colliderGroup.addCollider(chest.getCollider());
         return true;
     }
     private int getRightWallLocation(UnitRoom unitRoom){

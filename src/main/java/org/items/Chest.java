@@ -60,7 +60,6 @@ public class Chest {
 
         //graphics
         chestImage = null;
-        setNewChestImage();
 
     }
 
