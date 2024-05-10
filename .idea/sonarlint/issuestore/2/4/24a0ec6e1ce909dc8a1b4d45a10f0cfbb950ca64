@@ -1,0 +1,15 @@
+
+g	java:S112*"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8¿½‰éõ1
+h	java:S112Ÿ"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8À½‰éõ1
+Â
+java:S6539"ŸSplit this â€œMonster Classâ€ into smaller and more specialized ones to reduce its dependencies on other classes from 22 to the maximum authorized 20 or less.(§Ù¶§ÿÿÿÿÿ8Á½‰éõ1
+f
+java:S2147"DCombine this catch with the one at line 27, which has the same body.(¿Â„ÿÿÿÿÿ8ì½‰éõ1
+W
+java:S1161#":Add the "@Override" annotation above this method signature(“–ış8î½‰éõ1
+M
+java:S45246"+Move this default to the end of the switch.(İ–Ò˜ÿÿÿÿÿ8ó½‰éõ1
+]	java:S125m"<This block of commented-out lines of code should be removed.(ì©‚“úÿÿÿÿ8õ½‰éõ1
+X	java:S125¬"<This block of commented-out lines of code should be removed.(ÜİÒ8„¾‰éõ1
+H
+java:S1481"+Remove this unused "player" local variable.(‹ôø"8Œ¾‰éõ1
