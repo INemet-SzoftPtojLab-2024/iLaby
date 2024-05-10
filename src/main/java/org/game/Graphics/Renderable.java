@@ -222,7 +222,21 @@ public abstract class Renderable implements Cloneable{
     public static class SortingLayerComparator implements Comparator<Renderable>{
         public int compare(Renderable a, Renderable b)
         {
-            return b.sortingLayer - a.sortingLayer;
+            int valueA=0, valueB=0;
+
+            if(a.isUIElement())
+                valueA+=1;
+            if(!a.visible)
+                valueA+=3;
+            if(b.isUIElement())
+                valueB+=1;
+            if(!b.visible)
+                valueB+=3;
+
+            if(valueA!=valueB)
+                return valueA-valueB;
+
+            return b.sortingLayer-a.sortingLayer;
         }
     }
 }

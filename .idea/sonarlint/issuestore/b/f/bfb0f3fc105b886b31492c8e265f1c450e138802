@@ -1,0 +1,7 @@
+
+—
+java:S1186""€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(â¸„
+œ
+java:S1186'"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(´áà¼úÿÿÿÿ
+€
+java:S1149	"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(õı®ÿÿÿÿÿ

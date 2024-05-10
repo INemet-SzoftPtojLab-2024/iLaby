@@ -137,6 +137,23 @@ public class Room extends Updatable implements Graph<Room>{
         ret.sort(Comparator.comparing(UnitRoom::getRowNum));
         return ret;
     }
+
+    public void setByDoorAdjacentRooms(Map map){
+        doorAdjacentRooms.clear();
+        //tesztelesre meg jo lehet
+        //ArrayList<EdgeBetweenRooms> edgesOfRoom = edgeManager.getAllEdgeForARoom(r1);
+        //az ajtoban tarolhato, hogy egyiranyu-e, meg ezt nem tudjuk fixre
+        for(Room adjacentRoom : physicallyAdjacentRooms){
+            if(map.getEdgeManager().getEdgeBetweenRooms(this,adjacentRoom).hasDoor())
+            {
+                //az add door miatt mar benne lehet
+                doorAdjacentRooms.add(adjacentRoom);
+                adjacentRoom.getDoorAdjacentRooms().add(this);
+
+            }
+
+        }
+    }
     public ArrayList<Room> getDoorAdjacentRooms() {
         return doorAdjacentRooms;
     }
