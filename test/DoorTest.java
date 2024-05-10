@@ -5,6 +5,7 @@ import main.java.org.game.Map.Room;
 import main.java.org.game.Map.UnitRoom;
 import main.java.org.game.physics.Collider;
 import main.java.org.linalg.Vec2;
+import main.java.org.networking.PlayerMP;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,8 @@ public class DoorTest {
     Room ownerRoomMock1, ownerRoomMock2;
     @Mock
     Isten istenMock;
+    @Mock
+    PlayerMP playerMock;
 
 
     @BeforeEach
@@ -38,6 +41,7 @@ public class DoorTest {
         unitRoomMock2 = Mockito.mock(UnitRoom.class);
         ownerRoomMock1 = Mockito.mock(Room.class);
         ownerRoomMock2 = Mockito.mock(Room.class);
+        playerMock = Mockito.mock(PlayerMP.class);
         istenMock = Mockito.mock(Isten.class);
 
 
@@ -97,7 +101,7 @@ public class DoorTest {
         when(mockRoom.getDoorAdjacentRooms().contains(ownerRoomMock1)).thenReturn(true);
         when(mockRoom.getDoorAdjacentRooms().contains(ownerRoomMock2)).thenReturn(true);
 
-        boolean res = testDoor.canBeOpened(istenMock);
+        boolean res = testDoor.canBeOpened(playerMock);
 
         Assertions.assertTrue(res);
 
@@ -121,7 +125,7 @@ public class DoorTest {
         when(mockRoom.getDoorAdjacentRooms().contains(ownerRoomMock1)).thenReturn(false);
         when(mockRoom.getDoorAdjacentRooms().contains(ownerRoomMock2)).thenReturn(false);
 
-        boolean res = testDoor.canBeOpened(istenMock);
+        boolean res = testDoor.canBeOpened(playerMock);
 
         Assertions.assertFalse(res);
 

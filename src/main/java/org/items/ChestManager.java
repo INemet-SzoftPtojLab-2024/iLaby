@@ -1,7 +1,6 @@
 package main.java.org.items;
 
 import main.java.org.game.Isten;
-import main.java.org.game.Map.Map;
 import main.java.org.game.Map.UnitRoom;
 import main.java.org.game.physics.ColliderGroup;
 import main.java.org.game.updatable.Updatable;
@@ -21,7 +20,6 @@ public class ChestManager extends Updatable {
     private Vector<Chest> chests = new Vector<>();
     private int chestCount;
     private Isten isten;
-    private Map map;
     private ColliderGroup colliderGroup;
     //a random unitRoom kiválasztására
     private final ArrayList<Integer> randomUnitRoom;
@@ -32,7 +30,6 @@ public class ChestManager extends Updatable {
     public ChestManager(int n, Isten isten) {
         this.isten = isten;
         chestCount = n;
-        map = null;
         colliderGroup = new  ColliderGroup();
         int mapRowSize = isten.getMap().getMapRowSize();
         int mapColumnSize = isten.getMap().getMapColumnSize();
@@ -58,13 +55,14 @@ public class ChestManager extends Updatable {
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-        if (isten.getInputHandler().isKeyDown(KeyEvent.VK_E)) {
+        if (isten.getInputHandler().isKeyReleased(KeyEvent.VK_E)) {
             Vec2 playerPostion = isten.getPlayer().getPlayerCollider().getPosition();
             int index = 0;
             for (var chest : chests) {
                 Vec2 playerChestVector = Vec2.subtract(playerPostion, chest.getPosition());
                 double playerChestDistance = sqrt(Vec2.dot(playerChestVector, playerChestVector));
                 if (playerChestDistance <= 0.5 && !chest.isOpened()) {
+                    //osszes cliensnek kuldjuk, hogy kinyilt a chest
                     chest.open();
                     isten.getSocketClient().sendData(("11" + index).getBytes());
                     break;
@@ -73,10 +71,15 @@ public class ChestManager extends Updatable {
             }
         }
 
+        //az isOnRightPlace csak serveren ellenorizheto
         for (int i=0;i<chests.size();i++) {
-            if (!chests.get(i).getIsOnRightPlace()) {
-                chests.get(i).setUnitRoom(getPlaceForChest().getPosition());
-                updateColliderGroup(chests.get(i));
+            if (!chests.get(i).isOnRightPlace()) {
+                UnitRoom unitRoom = getPlaceForChest();
+                if(unitRoom == null) System.err.println("Elveszett egy chest!");
+                else {
+                    chests.get(i).replaceChest(unitRoom.getPosition(), getRightWallLocation(unitRoom));
+                }
+
             }
         }
     }
@@ -91,12 +94,22 @@ public class ChestManager extends Updatable {
             return false;
         }
 
-        //CHEST TIPUSOK, a networking miatt sokkal egyszerubb így az itemeket atadni --> Chest.java/fillChest
 
-        Chest chest=new Chest(unitRoom.getPosition(),isten,chestType,chests.size());
+        //CHEST TIPUSOK, a networking miatt sokkal egyszerubb így az itemeket atadni --> Chest.java/fillChest
+        Chest chest=new Chest(unitRoom.getPosition(),isten,chestType,getRightWallLocation(unitRoom) ,chests.size());
         chests.add(chest);
-        updateColliderGroup(chest);
+        //updateColliderGroup(chest);
+        colliderGroup.addCollider(chest.getCollider());
         return true;
+    }
+    private int getRightWallLocation(UnitRoom unitRoom){
+        ArrayList<Chest.WallLocation> walls = new ArrayList<>();
+        if (unitRoom.isLeftWall()) walls.add(Chest.WallLocation.LEFT);
+        if (unitRoom.isTopWall()) walls.add(Chest.WallLocation.TOP);
+        if (unitRoom.isRightWall()) walls.add(Chest.WallLocation.RIGHT);
+        if (unitRoom.isBottomWall()) walls.add(Chest.WallLocation.BOTTOM);
+        Random random = new Random();
+        return walls.get(random.nextInt(walls.size())).ordinal();
     }
     private UnitRoom getPlaceForChest(){
         int mapRowSize = isten.getMap().getMapRowSize();

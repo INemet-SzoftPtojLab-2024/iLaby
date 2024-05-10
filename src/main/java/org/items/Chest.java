@@ -1,22 +1,19 @@
 package main.java.org.items;
 
-import lombok.Setter;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Isten;
-import main.java.org.game.Map.Room;
 import main.java.org.game.Map.UnitRoom;
 import main.java.org.game.physics.Collider;
-import main.java.org.game.physics.ColliderGroup;
 import main.java.org.items.usable_items.*;
 import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 public class Chest {
-    private Heading heading;//0=left, 1=up, 2=right, 3=down
+    //private Heading heading;//0=left, 1=up, 2=right, 3=down
+    private WallLocation wallLocation;
     private final Isten isten;
     private boolean isOpened;//once a chest is opened, cant be closed anymore; default:false
     private ArrayList<Item> storedItems;
@@ -26,14 +23,17 @@ public class Chest {
     private ChestType chestType;
     private boolean isOnRightPlace; //ha ajto mellett lenne, vagy pedig nem fal mellett lenne
     private Collider collider;
-    private UnitRoom unitRoom;
+    private UnitRoom unitRoom; //csak a posiciojat hasznaljuk, lehet csak az eleg tarolni, igazabol meg az is folosleges
     private int idx;
 
     ///**
      //* @param this.heading 0=left, 1=up, 2=right, 3=down
      //*/
-    public Chest(Vec2 pos, Isten isten, int chestType,int idx) {
+    public Chest(Vec2 pos, Isten isten, int chestType,int wallLocation, int idx) {
         this.isten = isten;
+        this.isOpened = false;
+        //a heading es a WallLocation ugyan azt az adatot tarolja, overhead
+        this.setWallLocation(wallLocation);
         this.idx = idx;
         this.chestType = (Chest.ChestType) Arrays.stream(Chest.ChestType.values()).toArray()[chestType];
         storedItems = new ArrayList<Item>();
@@ -44,26 +44,46 @@ public class Chest {
             for (int i = 0; i < maxAmountOfItems; i++) {storedItems.set(i, items.get(i));}
         }
         else storedItems=items;*/
-        setUnitRoom(pos);
+
+        //a cleinsen csak a posicioja van tarolva a unitroomnak
+        this.unitRoom = isten.getMap().getUnitRooms()[(int)pos.y][(int)pos.x];
+        this.unitRoom.setHasChest(true);
+        setPos(); // a unitroom pos-bol convertal rendes post, ezert az utobbi sor ez utan mar nem allna meg a helyet
+
+        //a cleinsen csak a posicioja van
+        //ez a cliensen teljesen rossz
+        //this.wallLocation = wallInUnitRoomPicker(unitRoom);
+
+        //ezt meg addolni kell a grouphoz
+        this.collider = new Collider(pos,new Vec2(0.3f,0.3f));
+        //setUnitRoom(pos);
+
+        //graphics
+        chestImage = null;
+        setNewChestImage();
+
     }
 
-    public void setChestImage() {
+    public void setNewChestImage() {
         if(chestImage!=null){
             isten.getRenderer().deleteRenderable(chestImage);
         }
-        isOpened = false;
-        switch (this.heading) {
-            case RIGHT:
-                chestImage = new Image(pos, scale, "./assets/items/chest/chest_closed_right.png");
-                break;
-            case DOWN:
-                chestImage = new Image(pos, scale, "./assets/items/chest/chest_closed_down.png");
-                break;
+        switch (wallLocation) {
             case LEFT:
-                chestImage = new Image(pos, scale, "./assets/items/chest/chest_closed_left.png");
+                if(!isOpened) chestImage = new Image(pos, scale, "./assets/items/chest/chest_closed_right.png");
+                else chestImage = new Image(pos, scale, "./assets/items/chest/chest_opened_right.png");
                 break;
-            case UP:
-                chestImage = new Image(pos, scale, "./assets/items/chest/chest_closed_up.png");
+            case TOP:
+                if(!isOpened) chestImage = new Image(pos, scale, "./assets/items/chest/chest_closed_down.png");
+                else chestImage = new Image(pos, scale, "./assets/items/chest/chest_opened_down.png");
+                break;
+            case RIGHT:
+                if(!isOpened) chestImage = new Image(pos, scale, "./assets/items/chest/chest_closed_left.png");
+                else  chestImage = new Image(pos, scale, "./assets/items/chest/chest_opened_left.png");
+                break;
+            case BOTTOM:
+                if(!isOpened) chestImage = new Image(pos, scale, "./assets/items/chest/chest_closed_up.png");
+                else chestImage = new Image(pos, scale, "./assets/items/chest/chest_opened_up.png");
                 break;
         }
         chestImage.setVisibility(true);
@@ -109,20 +129,18 @@ public class Chest {
     }
     public void setUnitRoom(Vec2 pos){
         this.pos = pos;
-        this.unitRoom = getUnitRoom(pos);
+        this.unitRoom = isten.getMap().getUnitRooms()[(int)pos.y][(int)pos.x];
         WallLocation wall = wallInUnitRoomPicker(unitRoom);
-        setPos(wall);
-        setHeading(wall);
+        //a heading es a pos ugyan azt az adatot tarolja, overhead
+        setPos();
         chestImage = null;
-        setChestImage();
+        setNewChestImage();
         unitRoom.setHasChest(true);
     }
     public void open() {
-        chestImage.setVisibility(false);
         if(storedItems.size()>2) System.out.println("There are more than 2 items in the chest!");
-        switch(heading){
-            case RIGHT: {
-                chestImage = new Image(pos, scale, "./assets/items/chest/chest_opened_right.png");
+        switch(wallLocation){
+            case LEFT: {
                 if(storedItems.size()==1)storedItems.get(0).dropOnGround(new Vec2(pos.x+0.4f,pos.y));
                 else {
                     storedItems.get(0).dropOnGround(new Vec2(pos.x+0.3f,pos.y-0.3f));
@@ -130,8 +148,7 @@ public class Chest {
                 }
                 break;
             }
-            case DOWN: {
-                chestImage = new Image(pos, scale, "./assets/items/chest/chest_opened_down.png");
+            case TOP: {
                 if(storedItems.size()==1)storedItems.get(0).dropOnGround(new Vec2(pos.x,pos.y-0.4f));
                 else {
                     storedItems.get(0).dropOnGround(new Vec2(pos.x+0.3f,pos.y-0.3f));
@@ -139,8 +156,7 @@ public class Chest {
                 }
                 break;
             }
-            case LEFT: {
-                chestImage = new Image(pos, scale, "./assets/items/chest/chest_opened_left.png");
+            case RIGHT: {
                 if(storedItems.size()==1)storedItems.get(0).dropOnGround(new Vec2(pos.x-0.4f,pos.y));
                 else {
                     storedItems.get(0).dropOnGround(new Vec2(pos.x-0.3f,pos.y+0.3f));
@@ -148,8 +164,7 @@ public class Chest {
                 }
                 break;
             }
-            case UP: {
-                chestImage = new Image(pos, scale, "./assets/items/chest/chest_opened_up.png");
+            case BOTTOM: {
                 if(storedItems.size()==1)storedItems.get(0).dropOnGround(new Vec2(pos.x,pos.y+0.4f));
                 else {
                     storedItems.get(0).dropOnGround(new Vec2(pos.x-0.3f,pos.y+0.3f));
@@ -158,20 +173,13 @@ public class Chest {
                 break;
             }
         }
-        isten.getRenderer().addRenderable(chestImage);
-        chestImage.setVisibility(true);
         isOpened = true;
-
-    }
-    public Vec2 getPosition(){
-        return pos;
-    }
-    public Vec2 getScale(){
-        return scale;
+        setNewChestImage();
     }
 
-    public void setPos(WallLocation wall){
-        switch (wall) {//0=left, 1=top, 2=right, 3=bottom
+
+    public void setPos(){
+        switch (wallLocation) {//0=left, 1=top, 2=right, 3=bottom
             case LEFT:
                 pos = new Vec2(unitRoom.getPosition().x - 0.3f, unitRoom.getPosition().y);
                 break;
@@ -186,13 +194,10 @@ public class Chest {
                 break;
         }
     }
-    public void setHeading(WallLocation wall){
-        this.heading = Heading.values()[wall.ordinal()];
-    }
-    public int getHeadingInt() {return heading.ordinal(); }
+
+    //public int getHeadingInt() {return heading.ordinal(); }
     public boolean isOpened(){return isOpened;}
     public void setPosition(Vec2 p) { this.pos = p; }
-
 
     public int getChestType() {
         return chestType.ordinal();
@@ -210,13 +215,13 @@ public class Chest {
                 }
             }
         }
-       /* int x = (int)(playerPos.x + 0.5f);
-        int y = (int)(playerPos.y + 0.5f);
+       /* int x = (int)(pos.x + 0.5f);
+        int y = (int)(pos.y + 0.5f);
         //System.out.println(x + " " + y + " ownerroorm pozi " +  isten.getMap().getUnitRooms()[y][x].getColNum() + " " + isten.getMap().getUnitRooms()[y][x].getRowNum());
-        return isten.getMap().getUnitRooms()[y][x].getOwnerRoom();*/
+        return isten.getMap().getUnitRooms()[y][x];*/
         return chestUnitRoom;
     }
-    public boolean getIsOnRightPlace(){
+    public boolean isOnRightPlace(){// csak serveren lehet
         UnitRoom unitRoom = getUnitRoom(pos);
         if (!unitRoom.hasDoor()//ha egyik fal sem ajtó
                 && (unitRoom.isTopWall() || unitRoom.isRightWall() || unitRoom.isBottomWall() || unitRoom.isLeftWall())//ha egyik oldalán legalább fal van
@@ -233,29 +238,50 @@ public class Chest {
         this.isOnRightPlace = isOnRightPlace;
     }
 
-    private enum Heading{
-        RIGHT,
-        DOWN,
-        LEFT,
-        UP
-    }
+    //private enum Heading{RIGHT, DOWN, LEFT, UP}
+    /*public void setHeading(WallLocation wall){
+        this.heading = Heading.values()[wall.ordinal()];
+    }*/
+
+    public enum WallLocation {LEFT, TOP, RIGHT, BOTTOM}
     public enum ChestType{ONE,TWO,THREE,FOUR,FIVE,SIX}
 
-    public void setCollider() {
-
+    public void replaceChest(Vec2 newURPos, int newWallLocation){
+        //a setHasChest allitasa a cliensen folosleges, de maradhat
+        setWallLocation(newWallLocation);
+        unitRoom.setHasChest(false);
+        unitRoom = isten.getMap().getUnitRooms()[(int)newURPos.y][(int)newURPos.x];
+        unitRoom.setHasChest(true);
+        setPos(); // a unitroom alapjan beallitja a rendes positiont
+        collider.setPosition(pos);
+        setNewChestImage();
+    }
+    public void setCollider() {// a collider marad csak a pozicioja valtozik meg
         this.collider = new Collider(pos,new Vec2(0.3f,0.3f));
     }
     public Collider getCollider(){
         return collider;
     }
-    public enum WallLocation {
-        LEFT,
-        TOP,
-        RIGHT,
-        BOTTOM
-    }
     private void setidx(int i){
         this.idx = i;
     }
+    //az athelyezesnel kell, mert a klensek nem tudjal liszamolni
+    public void setWallLocation(int wallLocation){
+        //LEFT -> 0
+        //TOP -> 1
+        //RIGHT -> 2
+        //BOTTOM -> 3
+        this.wallLocation = (Chest.WallLocation) Arrays.stream(Chest.WallLocation.values()).toArray()[wallLocation];
+    }
+    public Vec2 getPosition(){
+        return pos;
+    }
+    public Vec2 getScale(){
+        return scale;
+    }
+    public int getHeadingInt() {
+        return 0;
+    }
+
 
 }
