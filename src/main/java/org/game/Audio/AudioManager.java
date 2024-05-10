@@ -309,6 +309,10 @@ public final class AudioManager {
         }
     }
 
+    public static HashMap<String, SoundPreloaded> getPreloadedSounds() {
+        return preloadedSounds;
+    }
+
     /** internal helper class */
     private static class SoundPreloaded
     {
