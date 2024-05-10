@@ -8,6 +8,9 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.java.org.game.Map.Room;
+import main.java.org.game.Map.RoomType;
+import main.java.org.game.Map.UnitRoom;
 import main.java.org.items.ChestManager;
 import main.java.org.items.Item;
 import main.java.org.items.ItemManager;
@@ -135,6 +138,39 @@ public class GameServer extends Thread {
                 packet = new Packet25PlayerForDoorOpen(data);
                 handlePlayerPosForDoorOpen((Packet25PlayerForDoorOpen)packet);
                 break;
+            case CAMEMBERT:
+                packet = new Packet17Camembert(data);
+                handleCamembert((Packet17Camembert)packet);
+                break;
+            case TVSZ:
+                packet = new Packet15Tvsz(data);
+                handleTvsz((Packet15Tvsz)packet);
+                break;
+            case ISPLAYERINVILLAINROOM:
+                packet = new Packet41IsPlayerInVillainRoom(data);
+                handleIsPlayerVillainRoom((Packet41IsPlayerInVillainRoom)packet);
+                break;
+        }
+    }
+
+    private void handleIsPlayerVillainRoom(Packet41IsPlayerInVillainRoom packet) {
+        sendDataToAllClients(packet.getData());
+    }
+
+    private void handleTvsz(Packet15Tvsz packet) {
+        sendDataToAllClients(packet.getData());
+    }
+
+    private void handleCamembert(Packet17Camembert packet) {
+        int x = (int)packet.getX();
+        int y = (int)packet.getY();
+        Room ownerRoom = isten.getMap().getUnitRooms()[y][x].getOwnerRoom();
+        ownerRoom.setRoomType(RoomType.GAS);
+
+        for(UnitRoom unitRoom: ownerRoom.getUnitRooms()) {
+            Packet04UnitRoom packet04UnitRoom = new Packet04UnitRoom(unitRoom.getPosition().x,
+                    unitRoom.getPosition().y, RoomType.GAS.ordinal());
+            sendDataToAllClients(packet04UnitRoom.getData());
         }
     }
 
@@ -153,26 +189,18 @@ public class GameServer extends Thread {
     }
 
     private void handleItemDropped(Packet13ItemDropped packet) {
-        for(int i = 0; i < isten.getUpdatables().size(); i++) {
-            if(isten.getUpdatable(i).getClass() == ItemManager.class) {
-                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).setLocation(Item.Location.GROUND);
-                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).getImage().setVisibility(true);
-                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).getImage().setPosition(packet.getPos());
-                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).setPosition(packet.getPos());
-            }
-        }
-        events.add(packet.getData());
+        //events.add(packet.getData());
         sendDataToAllClients(packet.getData());
     }
 
     private void handleItemPickedUp(Packet12ItemPickedUp packet) {
-        for(int i = 0; i < isten.getUpdatables().size(); i++) {
-            if(isten.getUpdatable(i).getClass() == ItemManager.class) {
-                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).setLocation(Item.Location.INVENTORY);
-                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).getImage().setVisibility(false);
-            }
-        }
-        events.add(packet.getData());
+//        for(int i = 0; i < isten.getUpdatables().size(); i++) {
+//            if(isten.getUpdatable(i).getClass() == ItemManager.class) {
+//                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).setLocation(Item.Location.INVENTORY);
+//                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).getImage().setVisibility(false);
+//            }
+//        }
+        //events.add(packet.getData());
         sendDataToAllClients(packet.getData());
     }
 
@@ -182,7 +210,7 @@ public class GameServer extends Thread {
                 isten.getUpdatables().get(i).getChests().get(packet.getChestIndex()).open();
             }
         }
-        events.add(packet.getData());
+        //events.add(packet.getData());
         sendDataToAllClients(packet.getData());
     }
 
@@ -194,7 +222,7 @@ public class GameServer extends Thread {
     //handle Login Packet
     private void handleLogin(Packet00Login packet, InetAddress address, int port) {
         PlayerMP player = null;
-        player = new PlayerMP(packet.getUsername(), address, port, isten);
+        player = new PlayerMP(isten, packet.getUsername(), address, port);
         player.setSkinID(packet.getSkinID());
         this.addConnection(player, packet);
 
@@ -203,6 +231,7 @@ public class GameServer extends Thread {
     }
 
     private void handlePlayerJoinedData(PlayerMP player) {
+        playerStatusHandler.addClient(player);
         mapHandler.sendDataToClient(player);
         villainHandler.sendDataToClient(player);
         chestGenerationHandler.sendDataToClient(player);

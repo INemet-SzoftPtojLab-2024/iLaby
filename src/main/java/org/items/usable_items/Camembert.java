@@ -1,5 +1,6 @@
 package main.java.org.items.usable_items;
 
+import main.java.org.entities.player.Player;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Isten;
 import main.java.org.game.Map.Room;
@@ -7,6 +8,7 @@ import main.java.org.game.Map.RoomType;
 import main.java.org.game.Map.UnitRoom;
 import main.java.org.items.Item;
 import main.java.org.linalg.Vec2;
+import main.java.org.networking.Packet17Camembert;
 
 import java.util.ArrayList;
 
@@ -41,14 +43,19 @@ public class Camembert extends Item {
         }
     }
     @Override
-    public void use(double deltaTime){
+    public void use(Player player, double deltaTime){
         used=true;
-        dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
+        dropOnGround(player.getPlayerCollider().getPosition());
+
+        Packet17Camembert packet17Camembert = new Packet17Camembert(player.getPlayerCollider().getPosition().x,
+                player.getPlayerCollider().getPosition().y);
+        packet17Camembert.writeData(isten.getSocketClient());
+
         if (!isExplosionPositionCalculated){
             for(int i = 0; i < 30; i++) {
                 explosion.get(i).setPosition(position);
             }
-            prevPos = isten.getPlayer().getPlayerCollider().getPosition();
+            prevPos = player.getPlayerCollider().getPosition();
             isExplosionPositionCalculated = true;
         }
         time += deltaTime;
@@ -58,7 +65,7 @@ public class Camembert extends Item {
                 if (currentRoom != null) {
                     currentRoom.setRoomType(RoomType.GAS);
                     for (UnitRoom unitRoom : currentRoom.getUnitRooms()) {
-                        unitRoom.addRightImage(isten);
+                        //unitRoom.addRightImage(isten);
                     }
                 }
             }
@@ -82,10 +89,10 @@ public class Camembert extends Item {
                 }
                 explosionCount = 0;
                 time = 0;
-                isten.getPlayer().getInventory().setCamembertTriggered(false);
-                isten.getPlayer().getInventory().setCamembert(null);
+                player.getInventory().setCamembertTriggered(false);
+                player.getInventory().setCamembert(null);
                 isExplosionPositionCalculated = false;
-                isten.getPlayer().getInventory().removeCamembert();
+                player.getInventory().removeCamembert();
             }
         }
     }

@@ -1,9 +1,11 @@
 package main.java.org.items;
 
+import main.java.org.entities.player.Player;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.ImageUI;
 import main.java.org.game.Isten;
 import main.java.org.linalg.Vec2;
+import main.java.org.networking.PlayerMP;
 
 import java.time.LocalDateTime;
 
@@ -48,19 +50,21 @@ public abstract class Item {
             droppedAt = LocalDateTime.now();
         }
     }
-    public void pickUpInInventory(){
+    public void pickUpInInventory(PlayerMP player, int selectedSlotByClient){
         //Pics up an item if it is not in the inventory, and it has been dropped for more than 200 millisec
         //1 ms = 1000000 ns :)
+        if(droppedAt == null) return;
         if((!location.equals(Location.INVENTORY) && droppedAt.isBefore((LocalDateTime.now()).minusNanos(200000000)))) {
             if(!used) {
                 location = Location.INVENTORY;
                 image.setVisibility(false);
-                isten.getPlayer().getInventory().addItem(this);
+                if(player.localPlayer) player.getInventory().addItem(this);
+                else player.getInventory().addItemToClient(this, selectedSlotByClient);
             }
         }
     }
 
-    public void use(double deltatime){
+    public void use(Player player, double deltatime){
 
     }
     public String getImagePath(){return imagePath;}

@@ -28,11 +28,7 @@ public class ClientMap extends Updatable {
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
-        //check if door is opened by player
-        if(isten.getInputHandler().isKeyReleased(KeyEvent.VK_O)) {
-            Packet25PlayerForDoorOpen packet = new Packet25PlayerForDoorOpen(isten.getPlayer().getPlayerName().getText());
-            packet.writeData(isten.getSocketClient());
-        }
+
     }
 
     @Override

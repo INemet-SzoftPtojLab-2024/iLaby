@@ -5,17 +5,24 @@ import main.java.org.game.Map.Room;
 import main.java.org.game.Map.RoomType;
 import main.java.org.game.Map.UnitRoom;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlayerStatusHandler extends ServerSideHandler {
 
+    List<PlayerMP> clients = new ArrayList<>();
     private double currTime = 0;
     private void checkIfPlayerInRoomWithVillain(PlayerMP player,double deltaTime) {
-        if(player.isAlive()){
             boolean isInRoomWithVillain = player.checkIfPlayerInVillainRoom(isten,deltaTime);
-            if(isInRoomWithVillain) {
+            player.setPlayerInVillainRoom(isInRoomWithVillain);
+
+        Packet41IsPlayerInVillainRoom packet41IsPlayerInVillainRoom = new Packet41IsPlayerInVillainRoom(player.getUsername(), isInRoomWithVillain);
+        sendDataToAllClients(packet41IsPlayerInVillainRoom);
+
+            if(!player.isAlive()) {
                 Packet21Death packet21Death = new Packet21Death(player.getUsername());
                 sendDataToAllClients(packet21Death);
             }
-        }
     }
 
     private void checkIfPlayerInGasRoom(PlayerMP player){
@@ -42,6 +49,15 @@ public class PlayerStatusHandler extends ServerSideHandler {
         packet.writeData(server);
     }
 
+    private PlayerMP findClient(String username) {
+        for(PlayerMP client: clients) {
+            if(client.getUsername().equalsIgnoreCase(username)) {
+                return client;
+            }
+        }
+        return null;
+    }
+
     @Override
     public void update(Isten isten, double deltaTime) {
         if(currTime < 10000) {
@@ -58,9 +74,14 @@ public class PlayerStatusHandler extends ServerSideHandler {
                     if(player.getCurrentRoom() != currentRoom) {
                         if(player.getCurrentRoom() != null){
                             Packet28PlayerChangedRoom packet = new Packet28PlayerChangedRoom(player.getUsername());
-                            if(player.port != -1) server.sendData(packet.getData(), player.ipAddress, player.port);
+                            PlayerMP client = findClient(player.getUsername());
+                            if(client.port != -1) {
+                                server.sendData(packet.getData(), client.ipAddress, client.port);
+                            }
                             player.getCurrentRoom().decreasePlayerCount();
                             currentRoom.increasePlayerCount();
+
+
                         }
                     }
                     player.setCurrentRoom(currentRoom);
@@ -70,5 +91,8 @@ public class PlayerStatusHandler extends ServerSideHandler {
                 }
             }
         }
+    }
+    public void addClient(PlayerMP client) {
+        clients.add(client);
     }
 }

@@ -1,5 +1,6 @@
 package main.java.org.items.usable_items;
 
+import main.java.org.entities.player.Player;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.Renderable;
 import main.java.org.game.Graphics.TextUI;
@@ -9,6 +10,7 @@ import main.java.org.game.Map.UnitRoom;
 import main.java.org.game.UI.Inventory;
 import main.java.org.items.Item;
 import main.java.org.linalg.Vec2;
+import main.java.org.networking.PlayerMP;
 
 public class Transistor extends Item {
 
@@ -36,20 +38,24 @@ public class Transistor extends Item {
     }
 
     @Override
-    public void pickUpInInventory(){
-        super.pickUpInInventory();
-        Inventory inv = isten.getPlayer().getInventory();
+    public void pickUpInInventory(PlayerMP player, int selectedSlotByClient) {
+        super.pickUpInInventory(player, selectedSlotByClient);
+
+        if(player.localPlayer) setUI(player);
+    }
+
+    private void setUI(PlayerMP player) {
+        Inventory inv = player.getInventory();
         Vec2 slotPosition = inv.getStoringSlotPosition(this);
         Vec2 textPosition = new Vec2(slotPosition.x -10, slotPosition.y-7);
         if(!used){
             countText.setPosition(textPosition);
             countText.setVisibility(true);
         }
-
     }
 
     @Override
-    public void use(double deltatime){
+    public void use(Player player, double deltatime){
         //exception handling a szoba szama miatt
          Room r = getActiveTransistorRoom();
          if(r != null && (r.getMaxPlayerCount()<= r.getPlayerCount())){
@@ -58,13 +64,13 @@ public class Transistor extends Item {
          }
         if(!used){
             countText.setVisibility(false);
-            Vec2 playerPosition = isten.getPlayer().getPlayerCollider().getPosition();
+            Vec2 playerPosition = player.getPlayerCollider().getPosition();
             activatedImage.setPosition(playerPosition);
             activatedImage.setVisibility(true);
             used=true;
         }
         else{
-            isten.getPlayer().getPlayerCollider().setPosition(activatedImage.getPosition());
+            player.getPlayerCollider().setPosition(activatedImage.getPosition());
         }
 
     }

@@ -385,7 +385,7 @@ public class HandlerManager {
 
     private void villainHandler(VillainData villainData) {
         Villain villain = new Villain(villainData.villainName, villainData.position, villainData.imgPath);
-        //isten.addUpdatable(villain);
+        isten.addUpdatable(villain);
     }
 
     private void villainMoveHandler(VillainMoveData villainMoveData) {
@@ -407,7 +407,7 @@ public class HandlerManager {
         Vec2 position = loginData.position;
         int skinID = loginData.skinID;
 
-        PlayerMP player = new PlayerMP(username, address, port, position, isten);
+        PlayerMP player = new PlayerMP(isten, username, address, port, position);
         player.setSkinID(skinID);
         isten.addUpdatable(player);
     }

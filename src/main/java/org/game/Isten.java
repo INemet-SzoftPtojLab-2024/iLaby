@@ -39,7 +39,6 @@ public class Isten {
     private final ArrayList<Updatable> pendingRemovedUpdatables;
 
     private Map map;
-    private Inventory inventory;
     private final Input inputHandler;
     private final ItemManager itemManager;
 
@@ -58,9 +57,9 @@ public class Isten {
      * Initializes the physics engine, game renderer, and list of updatables.
      */
     public Isten() {
-        //inventory=new Inventory(5);
-        map=new Map(this, 50, 50, 8);
-        chestManager = new ChestManager(100, this);
+
+        map=new Map(this, 20, 20, 8);
+        chestManager = new ChestManager(150, this);
         itemManager=new ItemManager();
         inputHandler = new Input();
         camera = new Camera();
@@ -138,7 +137,7 @@ public class Isten {
 
     public void initMP() {
         //Set localPlayer to true, so that only this player can be moved and followed by the camera on this client
-        player = new PlayerMP(PlayerPrefs.getString("name"),null,-1, this);
+        player = new PlayerMP(this, PlayerPrefs.getString("name"),null,-1);
 
 
         player.localPlayer = true;
@@ -168,7 +167,7 @@ public class Isten {
     }
     public void init() {
         //Create own player
-        player = new PlayerMP(PlayerPrefs.getString("name"),null,-1, this);
+        player = new PlayerMP(this, PlayerPrefs.getString("name"),null,-1);
 
         player.localPlayer = true;
 
@@ -205,7 +204,6 @@ public class Isten {
 
         updatables.add(player);
         updatables.add(itemManager);
-        //updatables.add(inventory);
         updatables.add(map);
         updatables.add(clientMap);
 
@@ -251,7 +249,6 @@ public class Isten {
     }
 
     public Player getPlayer(){return player;}
-    public Inventory getInventory(){return inventory;}
     public ItemManager getItemManager(){return itemManager;}
     public Map getMap(){return map;}
 

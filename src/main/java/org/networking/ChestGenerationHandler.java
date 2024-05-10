@@ -23,9 +23,9 @@ public class ChestGenerationHandler extends ServerSideHandler {
         for (int i = 0; i<chests.size();i++)
         {
             Packet10ChestGeneration packet = new Packet10ChestGeneration(
-                    chests.get(i).getHeadingInt(),
-                    chests.get(i).getPosition(),
-                    chests.get(i).getChestType());
+                    chests.get(i).getWallLocation().ordinal(),
+                    chests.get(i).getUnitRoomPosition(),
+                    chests.get(i).getChestType(), i);
             server.sendData(packet.getData(), client.ipAddress, client.port);
         }
     }

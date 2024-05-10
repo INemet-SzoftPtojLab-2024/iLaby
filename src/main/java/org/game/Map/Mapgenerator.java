@@ -21,16 +21,11 @@ public class Mapgenerator {
     }
 
     public void generate(int minRoomSize){
-        //collidergroup for the sideWalls
-        ColliderGroup sideWallColliders = new ColliderGroup();
 
-        String wallPath;
         for(int i = 0; i< map.getMapRowSize(); i++)
         {
             for(int j = 0;j<map.getMapColumnSize();j++)
             {
-                Vec2 horizontalScale = new Vec2(1f, 0.1f);//vizszintes
-                Vec2 verticalScale = new Vec2(0.1f, 1f); //fuggoleges
                 UnitRoom actualUnitRoom = map.getUnitRooms()[i][j];
                 if(i>0){
                     actualUnitRoom.getAdjacentUnitRooms().add(map.getUnitRooms()[i-1][j]);
@@ -49,17 +44,10 @@ public class Mapgenerator {
                     actualUnitRoom.setRightNeighbor(map.getUnitRooms()[i][j + 1]);
                 }
 
-
-                //let's generate also the sideWalls, because they are fix
-                //note: that the corner unitrooms can fulfill two conditions
-
-
-
-
             }
         }
 
-        //add the collidergroup to the system
+
 
 
 
@@ -95,19 +83,20 @@ public class Mapgenerator {
         isten.getMap().getUnitRooms()[0][0].getOwnerRoom().setRoomTypeToRoomType(RoomType.BASIC);
 
         //add the images to the unitrooms
-        //addImages(); //TODO only in singleplayer
+        //addImages();
     }
 
     public void generateSideWalls() {
-
+        //let's generate also the sideWalls, because they are fix
+        //note: that the corner unitrooms can fulfill two conditions
         ColliderGroup sideWallColliders = new ColliderGroup();
         String wallPath;
+        Vec2 imgHorizontalScale= new Vec2(1.2f, 0.6f);//vizszintes
+        Vec2 imgVerticalScale= new Vec2(0.7f, 1f); //fuggoleges
+        Vec2 colliderHorizontalScale= new Vec2(1f, 0.3f);//vizszintes
+        Vec2 colliderVerticalScale= new Vec2(0.3f, 1f); //fuggoleges
         for(int i = 0; i< map.getMapRowSize(); i++) {
             for (int j = 0; j < map.getMapColumnSize(); j++) {
-                Vec2 imgHorizontalScale= new Vec2(1.2f, 0.6f);//vizszintes
-                Vec2 imgVerticalScale= new Vec2(0.7f, 1f); //fuggoleges
-                Vec2 colliderHorizontalScale= new Vec2(1f, 0.3f);//vizszintes
-                Vec2 colliderVerticalScale= new Vec2(0.3f, 1f); //fuggoleges
                 UnitRoom actualUnitRoom = map.getUnitRooms()[i][j];
 
                 if(j == map.getMapColumnSize()-1){
@@ -156,6 +145,7 @@ public class Mapgenerator {
                 }
             }
         }
+        //add the collidergroup to the system
         isten.getPhysicsEngine().addColliderGroup(sideWallColliders);
     }
 

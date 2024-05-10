@@ -1,5 +1,6 @@
 package main.java.org.items.usable_items;
 
+import main.java.org.entities.player.Player;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.Renderable;
 import main.java.org.game.Graphics.TextUI;
@@ -8,6 +9,7 @@ import main.java.org.game.Map.Room;
 import main.java.org.game.UI.Inventory;
 import main.java.org.items.Item;
 import main.java.org.linalg.Vec2;
+import main.java.org.networking.PlayerMP;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,16 +41,19 @@ public class Tvsz extends Item {
     }
 
     @Override
-    public void use(double deltaTime){
+    public void use(Player player, double deltaTime){
         //Csak akkor használodik, amikor belép a player egy szobába, ahol gegner van
+
+        System.out.println("USE TVSZ");
         if(shouldUseCharge){
+            System.out.println("should use charge");
             shouldUseCharge = false;
             if(charges > 1) {
                 charges--;
                 countText.setText(String.valueOf(charges));
             } else{
-                isten.getPlayer().getInventory().setCanAvoidVillain(true);
-                isten.getPlayer().getInventory().deleteItem(this);
+                player.getInventory().setCanAvoidVillain(true);
+                player.getInventory().deleteItem(this);
                 isten.getItemManager().removeItem(this);
                 delete();
             }
@@ -61,13 +66,19 @@ public class Tvsz extends Item {
     }
 
     @Override
-    public void pickUpInInventory(){
-        super.pickUpInInventory();
-        Inventory inv = isten.getPlayer().getInventory();
+    public void pickUpInInventory(PlayerMP player, int selectedSlotByClient) {
+        super.pickUpInInventory(player, selectedSlotByClient);
+        if(player.localPlayer) setUI(player);
+
+    }
+
+    private void setUI(PlayerMP player) {
+        Inventory inv = player.getInventory();
         Vec2 slotPosition = inv.getStoringSlotPosition(this);
         Vec2 textPosition = new Vec2(slotPosition.x -10, slotPosition.y-7);
         countText.setPosition(textPosition);
         countText.setVisibility(true);
+        countText.setText(String.valueOf(charges));
     }
     @Override
     public void dropOnGround(Vec2 pos){
@@ -75,4 +86,12 @@ public class Tvsz extends Item {
         countText.setVisibility(false);
     }
     public void setShouldUseCharge(boolean value){shouldUseCharge = value;}
+
+    public int getCharges() {
+        return charges;
+    }
+
+    public void setCharges(int charges) {
+        this.charges = charges;
+    }
 }

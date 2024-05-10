@@ -23,6 +23,7 @@ import main.java.org.game.Map.Room;
 import main.java.org.game.Map.UnitRoom;
 import main.java.org.game.PlayerPrefs.PlayerPrefs;
 import main.java.org.game.updatable.Updatable;
+import main.java.org.networking.Packet25PlayerForDoorOpen;
 
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -34,7 +35,8 @@ import java.util.Arrays;
  */
 public class Player extends Entity {
 
-    Isten isten;
+    protected Isten isten;
+    protected Inventory inventory;
     Collider playerCollider;
     ArrayList<Image> playerImage;
     ImageUI death;
@@ -58,8 +60,7 @@ public class Player extends Entity {
     public Room currentRoom = null;
     private boolean isInGasRoom = false;
     private boolean changedRoom = false;
-
-    protected Inventory inventory;
+    private boolean playerInVillainRoom = false;
 
     private PP_FogOfWar fogOfWar=null;
     private BufferedImage fogOfWarImage=null;
@@ -70,11 +71,30 @@ public class Player extends Entity {
     private final float fogDistance=3;
     private final int fogResolution=300;
 
-    public Player(String name, Isten isten) {
-        this.isten = isten;
-        inventory = new Inventory(5);
+    public Player(Isten isten) {
+        playerCollider = null;
+        playerImage = null;
+        death = null;
+        winBgn = null;
+        motivational = null;
+        sieg = null;
+        activeImage = 0;
+        time = 0.0f;
+        playerName = new Text(PlayerPrefs.getString("name"), new Vec2(0, 0), "./assets/Bavarian.otf", 15, 0, 0, 255);
+        playerName.setShadowOn(false);
+        alive = true;
+        won = false;
+        spawnPosition = new Vec2(0, 0);
+        faintingTime = 0;
+        isFainted = false;
+        isInGasRoomButHasMask = false;
+        speed=2;
+        inventory=new Inventory(5, this);
         isten.addUpdatable(inventory);
 
+    }
+
+    public Player(Isten isten, String name) {
         playerCollider = null;
         playerImage = null;
         death = null;
@@ -91,10 +111,12 @@ public class Player extends Entity {
         faintingTime = 0;
         isFainted = false;
         speed=2;
+        inventory=new Inventory(5, this);
+        isten.addUpdatable(inventory);
     }
 
-    public Player(String name, Vec2 spawnPosition, Isten isten) {
-        this(name,isten);
+    public Player(Isten isten, String name, Vec2 spawnPosition) {
+        this(isten,name);
         this.spawnPosition.x = spawnPosition.x;
         this.spawnPosition.y = spawnPosition.y;
     }
@@ -216,10 +238,23 @@ public class Player extends Entity {
                 }
             }
 
+            //check if door is opened by player
+            if(isten.getInputHandler().isKeyReleased(KeyEvent.VK_O)) {
+                Packet25PlayerForDoorOpen packet = new Packet25PlayerForDoorOpen(isten.getPlayer().getPlayerName().getText());
+                packet.writeData(isten.getSocketClient());
+            }
+
             //Room currentRoom = getPlayerRoom(isten,playerCollider.getPosition());
             if(changedRoom) {
-                //beallitani a playerCountjat a szobanak:: (akar kiszervezheto fv-be)
 
+                if(playerInVillainRoom && !inventory.avoidVillain(deltaTime)){
+                    if (localPlayer && playerSound != null) {
+                        alive = false;
+                        AudioManager.closeSound(playerSound);
+                    }
+                }
+                //beallitani a playerCountjat a szobanak:: (akar kiszervezheto fv-be)
+                System.out.println("Changed room");
                 //Lasd Inventory canAvoidVillain member var
                 inventory.setCanAvoidVillain(false);
                 //Ha szobat valt a player, akkor a kovetkezo alkalommar, amikor gegnerrel talalkozik hasznalodnia kell a Tvsz-nek
@@ -235,9 +270,6 @@ public class Player extends Entity {
                     if(localPlayer) {
                         for (int i = 0; i < 5; i++) {
                             if (inventory.getStoredItems().get(i) != null) {
-                                //TODO
-                                // Should send item dropped to all clients.
-                                // When on client, throws nullpointer exception
                                 if(isten.getSocketServer() != null) inventory.getStoredItems().get(i).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(i + 1).getPosition().x, currentRoom.getUnitRooms().get(i + 1).getPosition().y));
                             }
                         }
@@ -247,12 +279,13 @@ public class Player extends Entity {
                     isInGasRoomButHasMask = false;
                 }
                 else {
-                    int index=0;
-                    for(;index<inventory.getSize();index++){
-                        if(inventory.getStoredItems().get(index) instanceof Gasmask) break;
+                    int index= 0;
+                    for(int i = 0;i<inventory.getSize();i++){
+                        if(inventory.getStoredItems().get(i) instanceof Gasmask) break;
+                        index++;
                     }
                     isInGasRoomButHasMask = true;
-                    inventory.getStoredItems().get(index).use(deltaTime);
+                    inventory.getStoredItems().get(index).use(this, deltaTime);
                 }
             } else {
                 faintingTime += deltaTime;
@@ -375,12 +408,7 @@ public class Player extends Entity {
                 Villain villain = (Villain) u;
                 if ((currentRoom != null && currentRoom.equals(villain.getRoom())) && currentRoom.getRoomType() != RoomType.GAS&&!villain.getIsFainted()) {
                    //Ha van akkora szerencsenk, hogy van item nalunk, ami megmentene megse halunk meg
-                    if(!inventory.avoidVillain(deltaTime)){
-                        if (localPlayer && playerSound != null)
-                            AudioManager.closeSound(playerSound);
-                        return true;
-                    }
-
+                    return true;
                 }
             }
         }
@@ -389,6 +417,20 @@ public class Player extends Entity {
 
     //kiszerveztem a fenti fv-t, mert nekem is kellett, és máshol később is hasznos lehet, ha kell, unitRoomra is ki lehetne szervezni
     public Room getPlayerRoom(Isten isten, Vec2 playerPos){
+        /*UnitRoom[][] unitRooms= isten.getMap().getUnitRooms();
+        for(int i = 0; i < unitRooms.length;i++){
+            for(int j = 0; j<unitRooms[i].length;j++){
+                if (playerPos.x >= unitRooms[i][j].getPosition().x - 0.5 &&
+                        playerPos.x <= unitRooms[i][j].getPosition().x + 0.5 &&
+                        playerPos.y >= unitRooms[i][j].getPosition().y - 0.5 &&
+                        playerPos.y <= unitRooms[i][j].getPosition().y + 0.5)
+                {
+                    return unitRooms[i][j].getOwnerRoom();
+                }
+            }
+        }
+        return null;*/
+       ///efffektivebb megoldas
         int x = (int)(playerPos.x + 0.5f);
         int y = (int)(playerPos.y + 0.5f);
         //System.out.println(x + " " + y + " ownerroorm pozi " +  isten.getMap().getUnitRooms()[y][x].getColNum() + " " + isten.getMap().getUnitRooms()[y][x].getRowNum());
@@ -619,5 +661,11 @@ public class Player extends Entity {
         this.currentRoom = currentRoom;
     }
 
-    public Inventory getInventory() { return inventory; }
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public void setPlayerInVillainRoom(boolean isInRoomWithVillain) {
+        playerInVillainRoom = isInRoomWithVillain;
+    }
 }
