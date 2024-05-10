@@ -26,7 +26,7 @@ public class Transistor extends Item {
         image.setVisibility(false);
         activatedImage.setVisibility(false);
 
-        countText = new TextUI("2", new Vec2(0,0), "./assets/Bavarian.otf", 15, 255, 255, 255);
+        countText = new TextUI("2", new Vec2(0,0), "./assets/Monocraft.ttf", 15, 255, 255, 255);
         countText.setVisibility(false);
         countText.setAlignment(Renderable.CENTER, Renderable.BOTTOM);
         countText.setSortingLayer(-80);
