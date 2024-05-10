@@ -1,5 +1,6 @@
 package main.java.org.items;
 
+import main.java.org.entities.player.Player;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.ImageUI;
 import main.java.org.game.Isten;
@@ -62,7 +63,7 @@ public abstract class Item {
         }
     }
 
-    public void use(double deltatime){
+    public void use(Player player, double deltatime){
 
     }
     public String getImagePath(){return imagePath;}

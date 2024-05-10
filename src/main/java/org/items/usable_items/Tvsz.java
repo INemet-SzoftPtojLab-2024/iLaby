@@ -1,5 +1,6 @@
 package main.java.org.items.usable_items;
 
+import main.java.org.entities.player.Player;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.Renderable;
 import main.java.org.game.Graphics.TextUI;
@@ -40,7 +41,7 @@ public class Tvsz extends Item {
     }
 
     @Override
-    public void use(double deltaTime){
+    public void use(Player player, double deltaTime){
         //Csak akkor használodik, amikor belép a player egy szobába, ahol gegner van
         if(shouldUseCharge){
             shouldUseCharge = false;
@@ -48,8 +49,8 @@ public class Tvsz extends Item {
                 charges--;
                 countText.setText(String.valueOf(charges));
             } else{
-                isten.getPlayer().getInventory().setCanAvoidVillain(true);
-                isten.getPlayer().getInventory().deleteItem(this);
+                player.getInventory().setCanAvoidVillain(true);
+                player.getInventory().deleteItem(this);
                 isten.getItemManager().removeItem(this);
                 delete();
             }

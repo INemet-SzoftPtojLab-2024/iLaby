@@ -1,5 +1,6 @@
 package main.java.org.items.usable_items;
 
+import main.java.org.entities.player.Player;
 import main.java.org.game.Graphics.*;
 import main.java.org.game.Isten;
 import main.java.org.game.UI.Inventory;
@@ -54,7 +55,7 @@ public class Gasmask extends Item {
     }
 
     @Override
-    public void use(double deltaTime) {
+    public void use(Player player, double deltaTime) {
         if (capacity == 100.0f) {
             capacityBarBackground.setVisibility(true);
             capacityBar.setVisibility(true);
@@ -62,13 +63,15 @@ public class Gasmask extends Item {
         float usageRate = 5.0f;
         capacity -= (float) (deltaTime * usageRate);
         if (capacity <= 0) {
-            Inventory inventory = isten.getPlayer().getInventory();
+            Inventory inventory = player.getInventory();
             capacity = 0;
             deleteCapacityBar();
             int index = 0;
             System.out.println(inventory.getSize());
-            for (; index < inventory.getSize(); index++) {
+            for (int i = 0; i < inventory.getSize(); i++) {
+                if(inventory.getStoredItems().get(index) != null) System.out.println("has item: " + inventory.getStoredItems().get(index).getClass());
                 if (inventory.getStoredItems().get(index) instanceof Gasmask) break;
+                index++;
             }
             inventory.getStoredItems().remove(index);
             inventory.getStoredItems().add(index, null);

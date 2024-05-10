@@ -239,9 +239,6 @@ public class Player extends Entity {
                     if(localPlayer) {
                         for (int i = 0; i < 5; i++) {
                             if (inventory.getStoredItems().get(i) != null) {
-                                //TODO
-                                // Should send item dropped to all clients.
-                                // When on client, throws nullpointer exception
                                 if(isten.getSocketServer() != null) inventory.getStoredItems().get(i).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(i + 1).getPosition().x, currentRoom.getUnitRooms().get(i + 1).getPosition().y));
                             }
                         }
@@ -251,12 +248,13 @@ public class Player extends Entity {
                     isInGasRoomButHasMask = false;
                 }
                 else {
-                    int index=0;
-                    for(;index<inventory.getSize();index++){
-                        if(inventory.getStoredItems().get(index) instanceof Gasmask) break;
+                    int index= 0;
+                    for(int i = 0;i<inventory.getSize();i++){
+                        if(inventory.getStoredItems().get(i) instanceof Gasmask) break;
+                        index++;
                     }
                     isInGasRoomButHasMask = true;
-                    inventory.getStoredItems().get(index).use(deltaTime);
+                    inventory.getStoredItems().get(index).use(this, deltaTime);
                 }
             } else {
                 faintingTime += deltaTime;

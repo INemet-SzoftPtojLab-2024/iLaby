@@ -130,7 +130,7 @@ public class Inventory extends Updatable {
 
         }
         if (camembertTriggered && camembert != null) {
-            camembert.use(deltaTime);
+            camembert.use(owner, deltaTime);
         }
     }
 
@@ -229,7 +229,7 @@ public class Inventory extends Updatable {
             camembert = (Camembert) selectedItem;
             camembertTriggered = true;
         } else if (selectedItem != null) {
-            selectedItem.use(deltatime);
+            selectedItem.use(owner, deltatime);
         }
     }
 
@@ -269,11 +269,11 @@ public class Inventory extends Updatable {
         if (canAvoidVillain) return true;
         for (Item item : storedItems) {
             if (item instanceof Tvsz) {
-                item.use(deltaTime);
+                item.use(owner, deltaTime);
                 return true;
             }
             if (item instanceof Sorospohar) {
-                item.use(deltaTime);
+                item.use(owner, deltaTime);
                 return true;
             }
         }

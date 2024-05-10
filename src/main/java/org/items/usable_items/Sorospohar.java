@@ -1,5 +1,6 @@
 package main.java.org.items.usable_items;
 
+import main.java.org.entities.player.Player;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.ImageUI;
 import main.java.org.game.Graphics.Renderable;
@@ -56,7 +57,7 @@ public class Sorospohar extends Item {
         capacityBarBackground.setVisibility(true);
     }
     @Override
-    public void use(double deltaTime) {
+    public void use(Player player, double deltaTime) {
         if (capacity == 100.0f) {
             capacityBarBackground.setVisibility(true);
             capacityBar.setVisibility(true);
@@ -64,7 +65,7 @@ public class Sorospohar extends Item {
         float usageRate = 25.0f;
         capacity -= (float) (deltaTime * usageRate);
         if (capacity <= 0) {
-            Inventory inventory = isten.getPlayer().getInventory();
+            Inventory inventory = player.getInventory();
             capacity = 0;
             deleteCapacityBar();
             int index = 0;
