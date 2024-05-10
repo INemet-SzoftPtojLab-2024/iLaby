@@ -5,6 +5,8 @@ import main.java.org.game.Map.UnitRoom;
 import main.java.org.game.physics.ColliderGroup;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
+import main.java.org.networking.Packet04UnitRoom;
+import main.java.org.networking.Packet11ChestOpened;
 
 import java.awt.event.KeyEvent;
 import java.util.*;
@@ -46,8 +48,10 @@ public class ChestManager extends Updatable {
     }
 
     public void init(Isten isten) {
+        System.out.println("init");
         isten.getPhysicsEngine().addColliderGroup(colliderGroup);
         Random random = new Random();
+        System.out.println("chestCount: " + chestCount);
         for (int i = 0; i < chestCount; i++) {
             if(!placeChest(random.nextInt(Chest.ChestType.values().length))) break;
         }
@@ -58,21 +62,37 @@ public class ChestManager extends Updatable {
         if (isten.getInputHandler().isKeyReleased(KeyEvent.VK_E)) {
             Vec2 playerPostion = isten.getPlayer().getPlayerCollider().getPosition();
             int index = 0;
+            System.out.println(chests.size());
             for (var chest : chests) {
                 Vec2 playerChestVector = Vec2.subtract(playerPostion, chest.getPosition());
                 double playerChestDistance = sqrt(Vec2.dot(playerChestVector, playerChestVector));
                 if (playerChestDistance <= 0.5 && !chest.isOpened()) {
                     //osszes cliensnek kuldjuk, hogy kinyilt a chest
-                    chest.open();
-                    isten.getSocketClient().sendData(("11" + index).getBytes());
-                    break;
+                    //chest.open();
+                    Packet11ChestOpened packet11ChestOpened;
+                    if(chest.getStoredItems().size() == 0) {
+                        packet11ChestOpened = new Packet11ChestOpened(index,
+                                -1,-1);
+                    }
+                    else if(chest.getStoredItems().size() == 1) {
+                        packet11ChestOpened = new Packet11ChestOpened(index,
+                                chest.getStoredItems().get(0).getItemIndex(),
+                                -1);
+                    }
+                    else {
+                        packet11ChestOpened = new Packet11ChestOpened(index,
+                                chest.getStoredItems().get(0).getItemIndex(),
+                                chest.getStoredItems().get(1).getItemIndex());
+                    }
+
+                    packet11ChestOpened.writeData(isten.getSocketClient());
                 }
                 index++;
             }
         }
 
         //az isOnRightPlace csak serveren ellenorizheto
-        for (int i=0;i<chests.size();i++) {
+        /*for (int i=0;i<chests.size();i++) {
             if (!chests.get(i).isOnRightPlace()) {
                 UnitRoom unitRoom = getPlaceForChest();
                 if(unitRoom == null) System.err.println("Elveszett egy chest!");
@@ -81,7 +101,7 @@ public class ChestManager extends Updatable {
                 }
 
             }
-        }
+        }*/
     }
     @Override
     public void onDestroy() {
@@ -97,9 +117,10 @@ public class ChestManager extends Updatable {
 
         //CHEST TIPUSOK, a networking miatt sokkal egyszerubb így az itemeket atadni --> Chest.java/fillChest
         Chest chest=new Chest(unitRoom.getPosition(),isten,chestType,getRightWallLocation(unitRoom) ,chests.size());
+        //chest.fillChest();
         chests.add(chest);
-        //updateColliderGroup(chest);
-        //colliderGroup.addCollider(chest.getCollider());
+        chest.setNewChestImage();
+        colliderGroup.addCollider(chest.getCollider());
         return true;
     }
     private int getRightWallLocation(UnitRoom unitRoom){

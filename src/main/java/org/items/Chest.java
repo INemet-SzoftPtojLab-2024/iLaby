@@ -9,6 +9,7 @@ import main.java.org.linalg.Vec2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class Chest {
@@ -37,7 +38,6 @@ public class Chest {
         this.idx = idx;
         this.chestType = (Chest.ChestType) Arrays.stream(Chest.ChestType.values()).toArray()[chestType];
         storedItems = new ArrayList<Item>();
-        fillChest();
         /*if(items.isEmpty()) System.err.println("There is no item in the chest!");
         if(items.size()>maxAmountOfItems){
             System.err.println("So much items cant be stored in a chest, max amount of storable items is "+maxAmountOfItems);
@@ -60,6 +60,7 @@ public class Chest {
 
         //graphics
         chestImage = null;
+        fillChest();
 
     }
 
@@ -136,38 +137,38 @@ public class Chest {
         setNewChestImage();
         unitRoom.setHasChest(true);
     }
-    public void open() {
+    public void open(Item item1, Item item2) {
         if(storedItems.size()>2) System.out.println("There are more than 2 items in the chest!");
         switch(wallLocation){
             case LEFT: {
                 if(storedItems.size()==1)storedItems.get(0).dropOnGround(new Vec2(pos.x+0.4f,pos.y));
                 else {
-                    storedItems.get(0).dropOnGround(new Vec2(pos.x+0.3f,pos.y-0.3f));
-                    storedItems.get(1).dropOnGround(new Vec2(pos.x+0.3f,pos.y+0.3f));
+                    if(item1 != null) item1.dropOnGround(new Vec2(pos.x+0.3f,pos.y-0.3f));
+                    if(item2 != null) item2.dropOnGround(new Vec2(pos.x+0.3f,pos.y+0.3f));
                 }
                 break;
             }
             case TOP: {
                 if(storedItems.size()==1)storedItems.get(0).dropOnGround(new Vec2(pos.x,pos.y-0.4f));
                 else {
-                    storedItems.get(0).dropOnGround(new Vec2(pos.x+0.3f,pos.y-0.3f));
-                    storedItems.get(1).dropOnGround(new Vec2(pos.x-0.3f,pos.y-0.3f));
+                    if(item1 != null) item1.dropOnGround(new Vec2(pos.x+0.3f,pos.y-0.3f));
+                    if(item2 != null) item2.dropOnGround(new Vec2(pos.x-0.3f,pos.y-0.3f));
                 }
                 break;
             }
             case RIGHT: {
                 if(storedItems.size()==1)storedItems.get(0).dropOnGround(new Vec2(pos.x-0.4f,pos.y));
                 else {
-                    storedItems.get(0).dropOnGround(new Vec2(pos.x-0.3f,pos.y+0.3f));
-                    storedItems.get(1).dropOnGround(new Vec2(pos.x-0.3f,pos.y-0.3f));
+                    if(item1 != null) item1.dropOnGround(new Vec2(pos.x-0.3f,pos.y+0.3f));
+                    if(item2 != null) item2.dropOnGround(new Vec2(pos.x-0.3f,pos.y-0.3f));
                 }
                 break;
             }
             case BOTTOM: {
                 if(storedItems.size()==1)storedItems.get(0).dropOnGround(new Vec2(pos.x,pos.y+0.4f));
                 else {
-                    storedItems.get(0).dropOnGround(new Vec2(pos.x-0.3f,pos.y+0.3f));
-                    storedItems.get(1).dropOnGround(new Vec2(pos.x+0.3f,pos.y+0.3f));
+                    if(item1 != null) item1.dropOnGround(new Vec2(pos.x-0.3f,pos.y+0.3f));
+                    if(item2 != null) item2.dropOnGround(new Vec2(pos.x+0.3f,pos.y+0.3f));
                 }
                 break;
             }
@@ -237,6 +238,10 @@ public class Chest {
         this.isOnRightPlace = isOnRightPlace;
     }
 
+    public void setIsOpen(boolean isOpened) {
+        this.isOpened = isOpened;
+    }
+
     //private enum Heading{RIGHT, DOWN, LEFT, UP}
     /*public void setHeading(WallLocation wall){
         this.heading = Heading.values()[wall.ordinal()];
@@ -290,5 +295,7 @@ public class Chest {
         return unitRoom.getPosition();
     }
 
-
+    public ArrayList<Item> getStoredItems() {
+        return storedItems;
+    }
 }

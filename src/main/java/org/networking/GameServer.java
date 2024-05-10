@@ -194,22 +194,11 @@ public class GameServer extends Thread {
     }
 
     private void handleItemPickedUp(Packet12ItemPickedUp packet) {
-//        for(int i = 0; i < isten.getUpdatables().size(); i++) {
-//            if(isten.getUpdatable(i).getClass() == ItemManager.class) {
-//                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).setLocation(Item.Location.INVENTORY);
-//                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).getImage().setVisibility(false);
-//            }
-//        }
         //events.add(packet.getData());
         sendDataToAllClients(packet.getData());
     }
 
     private void handleChestOpened(Packet11ChestOpened packet) {
-        for(int i = 0; i < isten.getUpdatables().size(); i++) {
-            if(isten.getUpdatable(i).getClass() == ChestManager.class) {
-                isten.getUpdatables().get(i).getChests().get(packet.getChestIndex()).open();
-            }
-        }
         //events.add(packet.getData());
         sendDataToAllClients(packet.getData());
     }

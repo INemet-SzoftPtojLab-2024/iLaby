@@ -312,16 +312,14 @@ public class GameClient extends Thread {
         int itemIndex = packet.getItemIndex();
         String username = packet.getUsername();
         int selectedSlot = packet.getSelectedSlot();
+
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ItemManager.class) {
-                //isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).setLocation(Item.Location.INVENTORY);
-                //isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).getImage().setVisibility(false);
 
                 for(PlayerMP player: isten.getUpdatablesByType(PlayerMP.class)) {
                     if(player.getUsername().equalsIgnoreCase(username)) {
                         isten.getItemManager().getItems().get(itemIndex).pickUpInInventory(player, selectedSlot);
                         break;
-
                     }
                 }
             }
@@ -329,16 +327,40 @@ public class GameClient extends Thread {
     }
 
     private void handleChestOpened(Packet11ChestOpened packet) {
+        int chestIndex = packet.getChestIndex();
+        int index1 = packet.getItemIndex1();
+        int index2 = packet.getItemIndex2();
+
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ChestManager.class) {
-                isten.getUpdatables().get(i).getChests().get(packet.getChestIndex()).open();
+                Chest chest = isten.getUpdatables().get(i).getChests().get(chestIndex);
+                Item item1 = null, item2 = null;
+                if(index1 == -1 && index2 == -1) {
+
+                }
+                else if(index1 != -1 && index2 == -1) {
+                    item1 = isten.getItemManager().getItems().get(index1);
+                }
+                else if(index1 != -1) {
+                    item1 = isten.getItemManager().getItems().get(index1);
+                    item2 = isten.getItemManager().getItems().get(index2);
+                }
+                chest.open(item1, item2);
+
+                for(Item item: isten.getItemManager().getItems()) {
+                    if(item.getLocation() == Item.Location.GROUND) {
+                        System.out.println("item is on ground: " + item.getClass());
+                    }
+                }
+                System.out.println();
+                break;
             }
         }
     }
 
     private int chestGenCount = 0;
     private void handleChestGeneration(Packet10ChestGeneration packet) {
-
+    if(isten.getSocketServer() != null) return;
         int chestIndex = 0;
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ChestManager.class) {
