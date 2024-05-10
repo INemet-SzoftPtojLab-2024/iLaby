@@ -27,6 +27,7 @@ import main.java.org.game.updatable.Updatable;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * The player class, makes almost everything related to the player.
@@ -66,7 +67,7 @@ public class Player extends Entity {
     private char[] fogOfWarHelper=null; private int mapX, mapY;
     private boolean fogOfWarDrawing=false;
     private final Object fogOfWarSync=new Object();
-    private final float fogDistance=5;
+    private final float fogDistance=3;
 
     public Player(String name, Isten isten) {
         this.isten = isten;
@@ -178,6 +179,7 @@ public class Player extends Entity {
         mapX=isten.getMap().getMapRowSize();
         mapY=isten.getMap().getMapColumnSize();
         fogOfWarHelper=new char[mapX*mapY];
+        Arrays.fill(fogOfWarHelper,(char)127);
         isten.getRenderer().registerPostProcessingEffect(fogOfWar);
     }
 
@@ -395,8 +397,9 @@ public class Player extends Entity {
         //check for newly discovered area
         final Vec2 pos=playerCollider.getPosition();
         //clearFogDistance and transparencyHelper are made to reduce the number of float operations
-        final float clearFogDistance=0.75f*fogDistance;
-        final float transparencyHelper=1/(0.25f*fogDistance);
+        final float clearFogDistance=0.6f*fogDistance;
+        final float transparencyHelper=1/(0.4f*fogDistance);
+        final float onePer127=1/127.0f;
 
         int minX=Math.round(pos.x-(float)Math.ceil(fogDistance));
         int maxX=Math.round(pos.x+(float)Math.ceil(fogDistance));
@@ -413,24 +416,108 @@ public class Player extends Entity {
         if(maxY>=mapY)
             maxY=mapY-1;
 
-        for(int i=minX; i<maxX;i++)
+        for(int i=minY; i<maxY;i++)
         {
-            int currentIndex=i*mapY+minY;
-            for(int j=minY;j<maxY;j++, currentIndex++)
+            int currentIndex=i*mapX+minX;
+            for(int j=minX;j<maxX;j++, currentIndex++)
             {
-                float distance=(float)Math.sqrt((pos.x-i)*(pos.x-i)+(pos.y-j)*(pos.y-j));
+                float distance=(float)Math.sqrt((pos.x-j)*(pos.x-j)+(pos.y-i)*(pos.y-i));
                 if(distance>fogDistance)
                     continue;
                 if(distance>clearFogDistance)
                 {
-                   char opaqueness=(char)(256*transparencyHelper*(distance-clearFogDistance));
-                   if(opaqueness<fogOfWarHelper[currentIndex])
-                       fogOfWarHelper[currentIndex]=opaqueness;
+                    char opaqueness=(char)(127*transparencyHelper*(distance-clearFogDistance));
+                    if(opaqueness<fogOfWarHelper[currentIndex])
+                        fogOfWarHelper[currentIndex]=opaqueness;
+                    continue;
                 }
+                fogOfWarHelper[currentIndex]=0;
             }
         }
 
 
+
+        //draw image
+        if(fogOfWarImage==null)
+        {
+            if(isten.getRenderer().getWidth()>3&&isten.getRenderer().getHeight()>3)
+            {
+                fogOfWarImage=new BufferedImage(isten.getRenderer().getWidth()/4,isten.getRenderer().getHeight()/4,BufferedImage.TYPE_INT_ARGB);
+                fogOfWarRaw=new int[4*fogOfWarImage.getWidth()*fogOfWarImage.getHeight()];
+                fogOfWar.setImage(fogOfWarImage);
+            }
+            else
+                return;
+        }
+        else if(fogOfWarImage.getWidth()!=isten.getRenderer().getWidth()/4||fogOfWarImage.getHeight()!=isten.getRenderer().getHeight()/4)
+        {
+            fogOfWarImage=new BufferedImage(isten.getRenderer().getWidth()/4,isten.getRenderer().getHeight()/4,BufferedImage.TYPE_INT_ARGB);
+            fogOfWarRaw=new int[4*fogOfWarImage.getWidth()*fogOfWarImage.getHeight()];
+            fogOfWar.setImage(fogOfWarImage);
+        }
+
+        Arrays.fill(fogOfWarRaw,0);
+
+        Vec2 imageStart=Vec2.sum(pos, new Vec2(-2/isten.getCamera().getPixelsPerUnit()*fogOfWarImage.getWidth(),2/isten.getCamera().getPixelsPerUnit()*fogOfWarImage.getHeight()));
+        Vec2 delta=new Vec2(4/isten.getCamera().getPixelsPerUnit(),-4/isten.getCamera().getPixelsPerUnit());
+
+        int currentIndex=3;//offset to alpha
+        Vec2 currentPos=imageStart.clone();
+        int lastX=-1000000000, currentX=0, currentY=0;
+        float topLeft=0, topRight=0, bottomLeft=0, bottomRight=0;
+        Vec2 topLeftPos=new Vec2(), topRightPos=new Vec2(), bottomLeftPos=new Vec2(), bottomRightPos=new Vec2();
+
+        for(int i=0;i<fogOfWarImage.getHeight();i++, currentPos.y+=delta.y)
+        {
+            currentPos.x=imageStart.x;
+            currentY=Math.round(currentPos.y+0.5f);
+
+            for(int j=0;j<fogOfWarImage.getWidth();j++, currentIndex+=4, currentPos.x+=delta.x)
+            {
+                currentX=Math.round(currentPos.x-0.5f);
+                if(currentX!=lastX)
+                {
+                    lastX=currentX;
+                    boolean topNO=currentY<0||currentY>=mapY;
+                    boolean bottomNO=currentY<1||currentY>mapY;
+                    boolean leftNO=currentX<0||currentX>=mapX;
+                    boolean rightNO=currentX<-1||!(currentX<mapX);
+
+                    topLeft=0;
+                    if(!(topNO||leftNO))
+                        topLeft=onePer127*fogOfWarHelper[currentY*mapX+currentX];
+                    topLeftPos.x=currentX; topLeftPos.y=currentY;
+
+                    topRight=0;
+                    if(!(topNO||rightNO))
+                        topRight=onePer127*fogOfWarHelper[currentY*mapX+currentX+1];
+                    topRightPos.x=currentX+1; topRightPos.y=currentY;;
+
+                    bottomLeft=0;
+                    if(!(bottomNO||leftNO))
+                        bottomLeft=onePer127*fogOfWarHelper[(currentY-1)*mapX+currentX];
+                    bottomLeftPos.x=currentX; bottomLeftPos.y=currentY-1;
+
+                    bottomRight=0;
+                    if(!(bottomNO||rightNO))
+                        bottomRight=onePer127*fogOfWarHelper[(currentY-1)*mapX+currentX+1];
+                    bottomRightPos.x=currentX+1; bottomRightPos.y=currentY-1;
+                }
+
+                fogOfWarRaw[currentIndex]= (int)(255*0.25f*(
+                        bottomRight*(currentPos.x-bottomLeftPos.x)+
+                        bottomLeft*(bottomRightPos.x-currentPos.x)+
+                        topRight*(currentPos.x-topLeftPos.x)+
+                        topLeft*(topRightPos.x-currentPos.x)+
+                        bottomRight*(topRightPos.y-currentPos.y)+
+                        bottomLeft*(topLeftPos.y-currentPos.y)+
+                        topRight*(currentPos.y-bottomRightPos.y)+
+                        topLeft*(currentPos.y-bottomLeftPos.y)
+                ));
+            }
+        }
+
+        fogOfWarImage.getRaster().setPixels(0,0, fogOfWarImage.getWidth(), fogOfWarImage.getHeight(),fogOfWarRaw);
 
         synchronized (fogOfWarSync)
         {
