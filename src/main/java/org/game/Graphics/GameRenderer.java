@@ -1,6 +1,7 @@
 package main.java.org.game.Graphics;
 
 import main.java.org.game.Camera.Camera;
+import main.java.org.game.Graphics.PP.PostProcessEffectBased;
 import main.java.org.game.Input.Input;
 import main.java.org.linalg.Vec2;
 
@@ -10,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -23,6 +25,8 @@ public class GameRenderer extends JPanel implements ActionListener {
 
     private ArrayList<Renderable> renderables;
     private Camera camera;
+
+    private final ArrayList<PostProcessEffectBased> ppEffects;
 
     /**
      * Constructor for GameRenderer.
@@ -40,6 +44,8 @@ public class GameRenderer extends JPanel implements ActionListener {
         renderables = new ArrayList<>();
 
         this.camera=camera;
+
+        this.ppEffects=new ArrayList<>();
     }
 
     /**
@@ -87,12 +93,6 @@ public class GameRenderer extends JPanel implements ActionListener {
      * @param graphics The Graphics object to render on
      */
     public void paint(Graphics graphics) {
-        ((Graphics2D)graphics).setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
-        ((Graphics2D)graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-        ((Graphics2D)graphics).setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_SPEED);
-        ((Graphics2D)graphics).setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-        ((Graphics2D)graphics).setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED);
-
         sortRenderables();
 
         //actual render
@@ -100,14 +100,40 @@ public class GameRenderer extends JPanel implements ActionListener {
 
         setBackground(new Color(50,50,50));
 
+        graphics.setColor(Color.BLACK);
         graphics.fillRect(0,0,this.getWidth(), this.getHeight());
 
         if(renderables.isEmpty()) return;
-        for(int i = 0; i < renderables.size(); i++) {
+
+        //game pass
+        int i=0;
+        for(i=0; i < renderables.size(); i++) {
+            Renderable renderable = renderables.get(i);
+            //if it is not visible, yeet
+            if(!renderable.getVisibility()||renderable.isUIElement())
+                break;
+
+            //if it is not on the screen, yeet
+            Vec2 tempPos=renderable.getRenderedPosition();
+            Vec2 tempScale=renderable.getRenderedScale();
+            if(tempPos.x-tempScale.x>screenSize.x||tempPos.y-tempScale.y>screenSize.y)
+                continue;
+            if(tempPos.x+tempScale.x<0||tempPos.y+tempScale.y<0)
+                continue;
+
+            //if not yet yeeten, render
+            renderable.render(graphics);
+        }
+
+        for(PostProcessEffectBased pp : ppEffects)
+            pp.doPass(graphics, this.getWidth(), this.getHeight());
+
+        //ui pass
+        for(; i < renderables.size(); i++) {
             Renderable renderable = renderables.get(i);
             //if it is not visible, yeet
             if(!renderable.getVisibility())
-                continue;
+                break;
 
             //if it is not on the screen, yeet
             Vec2 tempPos=renderable.getRenderedPosition();
@@ -146,6 +172,21 @@ public class GameRenderer extends JPanel implements ActionListener {
         coords.y = (this.getHeight() - screenSpaceCoords.y - 0.5f * this.getHeight()) / cam.getPixelsPerUnit() + cam.getPosition().y;
 
         return coords;
+    }
+
+    public void registerPostProcessingEffect(PostProcessEffectBased pp)
+    {
+        this.ppEffects.add(pp);
+    }
+
+    public void unregisterPostProcessingEffect(PostProcessEffectBased pp)
+    {
+        this.ppEffects.remove(pp);
+    }
+
+    public void unregisterAllPostProcessingEffect()
+    {
+        this.ppEffects.clear();
     }
 
 
