@@ -8,6 +8,7 @@ import main.java.org.game.Graphics.*;
 
 import main.java.org.entities.Entity;
 
+import main.java.org.game.Graphics.PP.PP_FogOfWar;
 import main.java.org.game.Isten;
 import main.java.org.game.Map.RoomType;
 import main.java.org.game.UI.Inventory;
@@ -57,6 +58,8 @@ public class Player extends Entity {
     private boolean changedRoom = false;
 
     protected Inventory inventory;
+
+    private PP_FogOfWar fogOfWar=null;
 
     public Player(String name, Isten isten) {
         this.isten = isten;
@@ -162,6 +165,10 @@ public class Player extends Entity {
         AudioManager.preloadSound("./assets/audio/playersound.ogg");
         AudioManager.preloadSound("./assets/audio/died.ogg");
         AudioManager.preloadSound("./assets/audio/won.ogg");
+
+        //fog of war
+        fogOfWar=new PP_FogOfWar(Image.loadImage("./assets/villain/villain1.png"));
+        isten.getRenderer().registerPostProcessingEffect(fogOfWar);
     }
 
     @Override
