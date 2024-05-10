@@ -102,7 +102,7 @@ public class Inventory extends Updatable {
             tmp.setSortingLayer(-68);
             isten.getRenderer().addRenderable(tmp);
         }
-        if (isten.getInputHandler().isKeyDown(KeyEvent.VK_F)) {
+        if (owner.localPlayer && isten.getInputHandler().isKeyDown(KeyEvent.VK_F)) {
             useSelectedItem(deltaTime);
         }
         if (owner.localPlayer && isten.getInputHandler().isKeyReleased(KeyEvent.VK_R) && storedItems.get(selectedSlot - 1) != null) {

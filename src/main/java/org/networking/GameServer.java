@@ -8,6 +8,9 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.java.org.game.Map.Room;
+import main.java.org.game.Map.RoomType;
+import main.java.org.game.Map.UnitRoom;
 import main.java.org.items.ChestManager;
 import main.java.org.items.Item;
 import main.java.org.items.ItemManager;
@@ -135,6 +138,23 @@ public class GameServer extends Thread {
                 packet = new Packet25PlayerForDoorOpen(data);
                 handlePlayerPosForDoorOpen((Packet25PlayerForDoorOpen)packet);
                 break;
+            case CAMEMBERT:
+                packet = new Packet17Camembert(data);
+                handleCamembert((Packet17Camembert)packet);
+                break;
+        }
+    }
+
+    private void handleCamembert(Packet17Camembert packet) {
+        int x = (int)packet.getX();
+        int y = (int)packet.getY();
+        Room ownerRoom = isten.getMap().getUnitRooms()[y][x].getOwnerRoom();
+        ownerRoom.setRoomType(RoomType.GAS);
+
+        for(UnitRoom unitRoom: ownerRoom.getUnitRooms()) {
+            Packet04UnitRoom packet04UnitRoom = new Packet04UnitRoom(unitRoom.getPosition().x,
+                    unitRoom.getPosition().y, RoomType.GAS.ordinal());
+            sendDataToAllClients(packet04UnitRoom.getData());
         }
     }
 

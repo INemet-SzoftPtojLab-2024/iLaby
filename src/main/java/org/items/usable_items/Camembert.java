@@ -8,6 +8,7 @@ import main.java.org.game.Map.RoomType;
 import main.java.org.game.Map.UnitRoom;
 import main.java.org.items.Item;
 import main.java.org.linalg.Vec2;
+import main.java.org.networking.Packet17Camembert;
 
 import java.util.ArrayList;
 
@@ -45,6 +46,11 @@ public class Camembert extends Item {
     public void use(Player player, double deltaTime){
         used=true;
         dropOnGround(player.getPlayerCollider().getPosition());
+
+        Packet17Camembert packet17Camembert = new Packet17Camembert(player.getPlayerCollider().getPosition().x,
+                player.getPlayerCollider().getPosition().y);
+        packet17Camembert.writeData(isten.getSocketClient());
+
         if (!isExplosionPositionCalculated){
             for(int i = 0; i < 30; i++) {
                 explosion.get(i).setPosition(position);
@@ -59,7 +65,7 @@ public class Camembert extends Item {
                 if (currentRoom != null) {
                     currentRoom.setRoomType(RoomType.GAS);
                     for (UnitRoom unitRoom : currentRoom.getUnitRooms()) {
-                        unitRoom.addRightImage(isten);
+                        //unitRoom.addRightImage(isten);
                     }
                 }
             }
