@@ -38,7 +38,7 @@ public class Transistor extends Item {
     @Override
     public void pickUpInInventory(){
         super.pickUpInInventory();
-        Inventory inv = isten.getInventory();
+        Inventory inv = isten.getPlayer().getInventory();
         Vec2 slotPosition = inv.getStoringSlotPosition(this);
         Vec2 textPosition = new Vec2(slotPosition.x -10, slotPosition.y-7);
         if(!used){

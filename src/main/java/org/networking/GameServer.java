@@ -194,7 +194,7 @@ public class GameServer extends Thread {
     //handle Login Packet
     private void handleLogin(Packet00Login packet, InetAddress address, int port) {
         PlayerMP player = null;
-        player = new PlayerMP(packet.getUsername(), address, port);
+        player = new PlayerMP(packet.getUsername(), address, port, isten);
         player.setSkinID(packet.getSkinID());
         this.addConnection(player, packet);
 

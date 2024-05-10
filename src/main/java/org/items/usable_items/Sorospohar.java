@@ -39,7 +39,7 @@ public class Sorospohar extends Item {
         capacityBar.setSortingLayer(-80);
         capacityBarBackground.setSortingLayer(-79);
 
-        Vec2 slotPosition = isten.getInventory().getStoringSlotPosition(this);
+        Vec2 slotPosition = isten.getPlayer().getInventory().getStoringSlotPosition(this);
         if (slotPosition.x == 0.0 && slotPosition.y == 0.0) return;
         Vec2 barPosition = new Vec2(slotPosition.x, slotPosition.y + 35);
 
@@ -57,7 +57,7 @@ public class Sorospohar extends Item {
         float usageRate = 25.0f;
         capacity -= (float) (deltaTime * usageRate);
         if (capacity <= 0) {
-            Inventory inventory = isten.getInventory();
+            Inventory inventory = isten.getPlayer().getInventory();
             capacity = 0;
             deleteCapacityBar();
             int index = 0;
@@ -77,7 +77,7 @@ public class Sorospohar extends Item {
         if (capacityBar != null && capacityBarBackground != null) {
             capacityBar.setVisibility(false);
             capacityBarBackground.setVisibility(false);
-            isten.getInventory().setGasmaskEquipped(false);
+            isten.getPlayer().getInventory().setGasmaskEquipped(false);
             equipped = false;
         }
     }

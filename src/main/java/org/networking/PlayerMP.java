@@ -9,14 +9,14 @@ import java.net.InetAddress;
 public class PlayerMP extends Player {
     public InetAddress ipAddress;
     public int port;
-    public PlayerMP(String name, InetAddress ipAddress, int port) {
-        super(name);
+    public PlayerMP(String name, InetAddress ipAddress, int port, Isten isten) {
+        super(name, isten);
         this.ipAddress = ipAddress;
         this.port = port;
     }
 
-    public PlayerMP(String name, InetAddress ipAddress, int port, Vec2 spawnPosition) {
-        super(name, spawnPosition);
+    public PlayerMP(String name, InetAddress ipAddress, int port, Vec2 spawnPosition, Isten isten) {
+        super(name, spawnPosition, isten);
         this.ipAddress = ipAddress;
         this.port = port;
         this.spawnPosition = spawnPosition;

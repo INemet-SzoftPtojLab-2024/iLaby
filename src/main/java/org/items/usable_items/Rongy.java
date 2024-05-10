@@ -39,7 +39,7 @@ public class Rongy extends Item {
         }
         stink.setPosition(Vec2.sum(position,new Vec2(0.0f,0.25f)));
         stink.setVisibility(true);
-        isten.getInventory().deleteItem(this);
+        isten.getPlayer().getInventory().deleteItem(this);
         Runnable stinkThread=()->{//thread azért kell, hogy ha már nem hat a rongy, akkor eltüntesse a füstfelhőt
             try {
                 Thread.sleep((long) (impactTime*1000));

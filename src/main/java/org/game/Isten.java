@@ -58,9 +58,9 @@ public class Isten {
      * Initializes the physics engine, game renderer, and list of updatables.
      */
     public Isten() {
-        inventory=new Inventory(5);
+        //inventory=new Inventory(5);
         map=new Map(this, 50, 50, 8);
-        chestManager = new ChestManager(50, this);
+        chestManager = new ChestManager(100, this);
         itemManager=new ItemManager();
         inputHandler = new Input();
         camera = new Camera();
@@ -138,7 +138,7 @@ public class Isten {
 
     public void initMP() {
         //Set localPlayer to true, so that only this player can be moved and followed by the camera on this client
-        player = new PlayerMP(PlayerPrefs.getString("name"),null,-1);
+        player = new PlayerMP(PlayerPrefs.getString("name"),null,-1, this);
 
 
         player.localPlayer = true;
@@ -168,7 +168,7 @@ public class Isten {
     }
     public void init() {
         //Create own player
-        player = new PlayerMP(PlayerPrefs.getString("name"),null,-1);
+        player = new PlayerMP(PlayerPrefs.getString("name"),null,-1, this);
 
         player.localPlayer = true;
 
@@ -205,7 +205,7 @@ public class Isten {
 
         updatables.add(player);
         updatables.add(itemManager);
-        updatables.add(inventory);
+        //updatables.add(inventory);
         updatables.add(map);
         updatables.add(clientMap);
 

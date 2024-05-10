@@ -55,7 +55,7 @@ public abstract class Item {
             if(!used) {
                 location = Location.INVENTORY;
                 image.setVisibility(false);
-                isten.getInventory().addItem(this);
+                isten.getPlayer().getInventory().addItem(this);
             }
         }
     }

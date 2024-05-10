@@ -10,6 +10,7 @@ import main.java.org.entities.Entity;
 
 import main.java.org.game.Isten;
 import main.java.org.game.Map.RoomType;
+import main.java.org.game.UI.Inventory;
 import main.java.org.game.UI.TimeCounter;
 import main.java.org.game.physics.Collider;
 import main.java.org.items.Item;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
  */
 public class Player extends Entity {
 
+    Isten isten;
     Collider playerCollider;
     ArrayList<Image> playerImage;
     ImageUI death;
@@ -54,27 +56,13 @@ public class Player extends Entity {
     private boolean isInGasRoom = false;
     private boolean changedRoom = false;
 
-    public Player() {
-        playerCollider = null;
-        playerImage = null;
-        death = null;
-        winBgn = null;
-        motivational = null;
-        sieg = null;
-        activeImage = 0;
-        time = 0.0f;
-        playerName = new Text(PlayerPrefs.getString("name"), new Vec2(0, 0), "./assets/Bavarian.otf", 15, 0, 0, 255);
-        playerName.setShadowOn(false);
-        alive = true;
-        won = false;
-        spawnPosition = new Vec2(0, 0);
-        faintingTime = 0;
-        isFainted = false;
-        isInGasRoomButHasMask = false;
-        speed=2;
-    }
+    protected Inventory inventory;
 
-    public Player(String name) {
+    public Player(String name, Isten isten) {
+        this.isten = isten;
+        inventory = new Inventory(5);
+        isten.addUpdatable(inventory);
+
         playerCollider = null;
         playerImage = null;
         death = null;
@@ -93,8 +81,8 @@ public class Player extends Entity {
         speed=2;
     }
 
-    public Player(String name, Vec2 spawnPosition) {
-        this(name);
+    public Player(String name, Vec2 spawnPosition, Isten isten) {
+        this(name,isten);
         this.spawnPosition.x = spawnPosition.x;
         this.spawnPosition.y = spawnPosition.y;
     }
@@ -198,8 +186,8 @@ public class Player extends Entity {
                 }
             }
 
-            for (int i = 0; i < isten.getInventory().getSize(); i++) {
-                if (isten.getInventory().getStoredItems().get(i) instanceof Logarlec) {
+            for (int i = 0; i < inventory.getSize(); i++) {
+                if (inventory.getStoredItems().get(i) instanceof Logarlec) {
                     won = true;
                     break;
                 }
@@ -210,38 +198,38 @@ public class Player extends Entity {
                 //beallitani a playerCountjat a szobanak:: (akar kiszervezheto fv-be)
 
                 //Lasd Inventory canAvoidVillain member var
-                isten.getInventory().setCanAvoidVillain(false);
+                inventory.setCanAvoidVillain(false);
                 //Ha szobat valt a player, akkor a kovetkezo alkalommar, amikor gegnerrel talalkozik hasznalodnia kell a Tvsz-nek
-                isten.getInventory().resetShouldUseChargeForTvsz();
+                inventory.resetShouldUseChargeForTvsz();
                 changedRoom = false;
             }
             if (isInGasRoom) {
                 isInGasRoom = false;
-                if (!isten.getInventory().getExistenceOfGasMask()) {
+                if (!inventory.getExistenceOfGasMask()) {
                     faintingTime = 0;
                     isFainted = true;
                     speed = 1;
                     if(localPlayer) {
                         for (int i = 0; i < 5; i++) {
-                            if (isten.getInventory().getStoredItems().get(i) != null) {
+                            if (inventory.getStoredItems().get(i) != null) {
                                 //TODO
                                 // Should send item dropped to all clients.
                                 // When on client, throws nullpointer exception
-                                if(isten.getSocketServer() != null) isten.getInventory().getStoredItems().get(i).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(i + 1).getPosition().x, currentRoom.getUnitRooms().get(i + 1).getPosition().y));
+                                if(isten.getSocketServer() != null) inventory.getStoredItems().get(i).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(i + 1).getPosition().x, currentRoom.getUnitRooms().get(i + 1).getPosition().y));
                             }
                         }
-                        isten.getInventory().dropAllItems(isten);
+                        inventory.dropAllItems(isten);
                     }
 
                     isInGasRoomButHasMask = false;
                 }
                 else {
                     int index=0;
-                    for(;index<isten.getInventory().getSize();index++){
-                        if(isten.getInventory().getStoredItems().get(index) instanceof Gasmask) break;
+                    for(;index<inventory.getSize();index++){
+                        if(inventory.getStoredItems().get(index) instanceof Gasmask) break;
                     }
                     isInGasRoomButHasMask = true;
-                    isten.getInventory().getStoredItems().get(index).use(deltaTime);
+                    inventory.getStoredItems().get(index).use(deltaTime);
                 }
             } else {
                 faintingTime += deltaTime;
@@ -352,7 +340,7 @@ public class Player extends Entity {
                 Villain villain = (Villain) u;
                 if ((currentRoom != null && currentRoom.equals(villain.getRoom())) && currentRoom.getRoomType() != RoomType.GAS&&!villain.getIsFainted()) {
                    //Ha van akkora szerencsenk, hogy van item nalunk, ami megmentene megse halunk meg
-                    if(!isten.getInventory().avoidVillain(deltaTime)){
+                    if(!inventory.avoidVillain(deltaTime)){
                         if (localPlayer && playerSound != null)
                             AudioManager.closeSound(playerSound);
                         return true;
@@ -366,20 +354,6 @@ public class Player extends Entity {
 
     //kiszerveztem a fenti fv-t, mert nekem is kellett, és máshol később is hasznos lehet, ha kell, unitRoomra is ki lehetne szervezni
     public Room getPlayerRoom(Isten isten, Vec2 playerPos){
-        /*UnitRoom[][] unitRooms= isten.getMap().getUnitRooms();
-        for(int i = 0; i < unitRooms.length;i++){
-            for(int j = 0; j<unitRooms[i].length;j++){
-                if (playerPos.x >= unitRooms[i][j].getPosition().x - 0.5 &&
-                        playerPos.x <= unitRooms[i][j].getPosition().x + 0.5 &&
-                        playerPos.y >= unitRooms[i][j].getPosition().y - 0.5 &&
-                        playerPos.y <= unitRooms[i][j].getPosition().y + 0.5)
-                {
-                    return unitRooms[i][j].getOwnerRoom();
-                }
-            }
-        }
-        return null;*/
-       ///efffektivebb megoldas
         int x = (int)(playerPos.x + 0.5f);
         int y = (int)(playerPos.y + 0.5f);
         //System.out.println(x + " " + y + " ownerroorm pozi " +  isten.getMap().getUnitRooms()[y][x].getColNum() + " " + isten.getMap().getUnitRooms()[y][x].getRowNum());
@@ -473,4 +447,6 @@ public class Player extends Entity {
     public void setCurrentRoom(Room currentRoom) {
         this.currentRoom = currentRoom;
     }
+
+    public Inventory getInventory() { return inventory; }
 }
