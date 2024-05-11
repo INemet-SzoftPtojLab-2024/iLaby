@@ -9,6 +9,7 @@ import main.java.org.items.Chest;
 import main.java.org.items.ChestManager;
 import main.java.org.items.Item;
 import main.java.org.items.ItemManager;
+import main.java.org.items.usable_items.Camembert;
 import main.java.org.items.usable_items.Gasmask;
 import main.java.org.items.usable_items.Sorospohar;
 import main.java.org.items.usable_items.Tvsz;
@@ -119,6 +120,10 @@ public class GameClient extends Thread {
                 packet = new Packet16Sorospohar(data);
                 handleSorospohar((Packet16Sorospohar) packet);
                 break;
+            case CAMEMBERT:
+                packet = new Packet17Camembert(data);
+                handleCamembert((Packet17Camembert)packet);
+                break;
             case WALL:
                 packet = new Packet20Wall(data);
                 handleWall((Packet20Wall) packet);
@@ -165,6 +170,20 @@ public class GameClient extends Thread {
                 handleItemsDropped((Packet42ItemsDropped)packet);
                 break;
         }
+    }
+
+    private void handleCamembert(Packet17Camembert packet) {
+
+        int itemIndex = packet.getItemIndex();
+        String username = packet.getUsername();
+
+        for(PlayerMP player: isten.getUpdatablesByType(PlayerMP.class)) {
+            if(player.getPlayerName().getText().equalsIgnoreCase(username)) {
+                player.getInventory().setCamembert((Camembert)isten.getItemManager().getItems().get(itemIndex));
+                player.getInventory().setCamembertTriggered(true);
+            }
+        }
+
     }
 
     private void handleReplaceChest(Packet40ReplaceChest packet) {
@@ -367,7 +386,8 @@ public class GameClient extends Thread {
 
                 for(PlayerMP player: isten.getUpdatablesByType(PlayerMP.class)) {
                     if(player.getUsername().equalsIgnoreCase(username)) {
-                        isten.getItemManager().getItems().get(itemIndex).pickUpInInventory(player, selectedSlot);
+                        Item item = isten.getItemManager().getItems().get(itemIndex);
+                        item.pickUpInInventory(player, selectedSlot);
                         break;
                     }
                 }

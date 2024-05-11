@@ -192,6 +192,8 @@ public class GameServer extends Thread {
                     unitRoom.getPosition().y, RoomType.GAS.ordinal());
             sendDataToAllClients(packet04UnitRoom.getData());
         }
+
+        sendDataToAllClients(packet.getData());
     }
 
     private void handleGasmask(Packet14Gasmask packet) {
