@@ -44,7 +44,6 @@ public class Tvsz extends Item {
     public void use(Player player, double deltaTime){
         //Csak akkor használodik, amikor belép a player egy szobába, ahol gegner van
 
-        System.out.println("USE TVSZ");
         if(shouldUseCharge){
             System.out.println("should use charge");
             shouldUseCharge = false;
