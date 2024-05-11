@@ -108,7 +108,7 @@ public class Image extends Renderable {
      * @param imagePath the path of the image
      * @return the loaded image or null, if the loading was unsuccessful
      */
-    private static BufferedImage loadImage_internal(String imagePath)
+    public static BufferedImage loadImage_internal(String imagePath)
     {
         if(imagePath==null)
             return null;
