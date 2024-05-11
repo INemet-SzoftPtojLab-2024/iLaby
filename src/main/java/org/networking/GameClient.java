@@ -150,6 +150,28 @@ public class GameClient extends Thread {
                 packet =new Packet41IsPlayerInVillainRoom(data);
                 handleIsPlayerInVillainRoom((Packet41IsPlayerInVillainRoom)packet);
                 break;
+            case ITEMSDROPPED:
+                packet = new Packet42ItemsDropped(data);
+                handleItemsDropped((Packet42ItemsDropped)packet);
+                break;
+        }
+    }
+
+    private void handleItemsDropped(Packet42ItemsDropped packet) {
+        String username = packet.getUsername();
+
+        for(PlayerMP player: isten.getUpdatablesByType(PlayerMP.class)) {
+            if(player.getUsername().equalsIgnoreCase(username)) {
+                for(int i = 0; i < player.getInventory().getStoredItems().size(); i++) {
+                    Item item = player.getInventory().getStoredItems().get(i);
+                    if(item != null) item.dropOnGround(new Vec2(player.getPlayerCollider().getPosition().x,
+                            player.getPlayerCollider().getPosition().y));
+                }
+                player.getInventory().getStoredItems().clear();
+                for (int i = 0; i < 5; i++) {
+                    player.getInventory().getStoredItems().add(null);
+                }
+            }
         }
     }
 

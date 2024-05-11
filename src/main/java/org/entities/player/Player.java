@@ -268,11 +268,6 @@ public class Player extends Entity {
                     isFainted = true;
                     speed = 1;
                     if(localPlayer) {
-                        for (int i = 0; i < 5; i++) {
-                            if (inventory.getStoredItems().get(i) != null) {
-                                if(isten.getSocketServer() != null) inventory.getStoredItems().get(i).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(i + 1).getPosition().x, currentRoom.getUnitRooms().get(i + 1).getPosition().y));
-                            }
-                        }
                         inventory.dropAllItems(isten);
                     }
 

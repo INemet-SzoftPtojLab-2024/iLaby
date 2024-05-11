@@ -15,6 +15,7 @@ import main.java.org.linalg.Vec2;
 import main.java.org.networking.Packet12ItemPickedUp;
 import main.java.org.networking.Packet13ItemDropped;
 import main.java.org.networking.Packet15Tvsz;
+import main.java.org.networking.Packet42ItemsDropped;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -249,10 +250,9 @@ public class Inventory extends Updatable {
     }
 
     public void dropAllItems(Isten isten) {
-        storedItems.clear();
-        for (int i = 0; i < 5; i++) {
-            storedItems.add(null);
-        }
+        Packet42ItemsDropped packet = new Packet42ItemsDropped(owner.getPlayerName().getText());
+        packet.writeData(isten.getSocketClient());
+
         for (Image im : itemIcons) {
             isten.getRenderer().deleteRenderable(im);
         }

@@ -150,7 +150,15 @@ public class GameServer extends Thread {
                 packet = new Packet41IsPlayerInVillainRoom(data);
                 handleIsPlayerVillainRoom((Packet41IsPlayerInVillainRoom)packet);
                 break;
+            case ITEMSDROPPED:
+                packet = new Packet42ItemsDropped(data);
+                handleItemsDropped((Packet42ItemsDropped)packet);
+                break;
         }
+    }
+
+    private void handleItemsDropped(Packet42ItemsDropped packet) {
+        sendDataToAllClients(packet.getData());
     }
 
     private void handleIsPlayerVillainRoom(Packet41IsPlayerInVillainRoom packet) {

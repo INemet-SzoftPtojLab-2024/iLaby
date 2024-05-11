@@ -30,7 +30,8 @@ public abstract class Packet {
         INGASROOM(26),
         VILLAININGASROOM(27),
         PLAYERROOMCHANGED(28),
-        ISPLAYERINVILLAINROOM(41);
+        ISPLAYERINVILLAINROOM(41),
+        ITEMSDROPPED(42);
         private int packetId;
         private PacketTypes(int packetId) {
             this.packetId = packetId;
