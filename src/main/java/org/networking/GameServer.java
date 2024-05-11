@@ -146,6 +146,10 @@ public class GameServer extends Thread {
                 packet = new Packet15Tvsz(data);
                 handleTvsz((Packet15Tvsz)packet);
                 break;
+            case SOROSPOHAR:
+                packet = new Packet16Sorospohar(data);
+                handleSorospohar((Packet16Sorospohar) packet);
+                break;
             case ISPLAYERINVILLAINROOM:
                 packet = new Packet41IsPlayerInVillainRoom(data);
                 handleIsPlayerVillainRoom((Packet41IsPlayerInVillainRoom)packet);
@@ -156,6 +160,8 @@ public class GameServer extends Thread {
                 break;
         }
     }
+
+    private void handleSorospohar(Packet16Sorospohar packet) { sendDataToAllClients(packet.getData()); }
 
     private void handleItemsDropped(Packet42ItemsDropped packet) {
         sendDataToAllClients(packet.getData());

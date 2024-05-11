@@ -90,7 +90,6 @@ public class Sorospohar extends Item {
         }
     }
     public void setCapacityBar() {
-
         capacityBar.setVisibility(true);
         capacityBarBackground.setVisibility(true);
     }
@@ -102,4 +101,9 @@ public class Sorospohar extends Item {
         float width = 60.0f / 100.0f * percent;
         capacityBar.setScale(new Vec2(width, 40));
     }
+
+    public float getCapacity() { return capacity; }
+
+    public void setCapacity(float capacity) { this.capacity = capacity; }
+
 }

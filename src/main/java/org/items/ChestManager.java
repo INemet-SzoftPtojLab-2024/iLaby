@@ -35,7 +35,7 @@ public class ChestManager extends Updatable {
         colliderGroup = new  ColliderGroup();
         int mapRowSize = isten.getMap().getMapRowSize();
         int mapColumnSize = isten.getMap().getMapColumnSize();
-         randomUnitRoom= new ArrayList<>();
+        randomUnitRoom= new ArrayList<>();
         int listSize = mapRowSize * mapColumnSize;
         for(int i =0;i<listSize;i++){
             randomUnitRoom.add(i);

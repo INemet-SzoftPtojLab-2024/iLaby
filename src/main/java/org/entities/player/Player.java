@@ -198,15 +198,15 @@ public class Player extends Entity {
         AudioManager.preloadSound("./assets/audio/won.ogg");
 
         //fog of war
-        fogOfWarImage=new BufferedImage(fogResolution, fogResolution, BufferedImage.TYPE_INT_ARGB);
-        fogOfWarRaw=new int[4*fogResolution*fogResolution];
-        fogOfWar=new PP_FogOfWar(fogOfWarImage);
-
-        mapX=isten.getMap().getMapRowSize()+1;//a plusz 1 azert kell, hogy a falak is latszodjanak
-        mapY=isten.getMap().getMapColumnSize()+1;
-        fogOfWarHelper=new char[mapX*mapY];
-        Arrays.fill(fogOfWarHelper,(char)127);
-        isten.getRenderer().registerPostProcessingEffect(fogOfWar);
+//        fogOfWarImage=new BufferedImage(fogResolution, fogResolution, BufferedImage.TYPE_INT_ARGB);
+//        fogOfWarRaw=new int[4*fogResolution*fogResolution];
+//        fogOfWar=new PP_FogOfWar(fogOfWarImage);
+//
+//        mapX=isten.getMap().getMapRowSize()+1;//a plusz 1 azert kell, hogy a falak is latszodjanak
+//        mapY=isten.getMap().getMapColumnSize()+1;
+//        fogOfWarHelper=new char[mapX*mapY];
+//        Arrays.fill(fogOfWarHelper,(char)127);
+//        isten.getRenderer().registerPostProcessingEffect(fogOfWar);
     }
 
     @Override
@@ -261,6 +261,17 @@ public class Player extends Entity {
                 inventory.resetShouldUseChargeForTvsz();
                 changedRoom = false;
             }
+            else if(playerInVillainRoom && !inventory.hasTvsz() && inventory.hasSorospohar()) {
+                inventory.getStoredItems().get(inventory.getSorospoharSlot()).use(this,deltaTime);
+                System.out.printf("hasSOR: " + inventory.hasSorospohar());
+            }
+            else if(playerInVillainRoom && !inventory.avoidVillain(deltaTime)) {
+                if (localPlayer && playerSound != null) {
+                    alive = false;
+                    AudioManager.closeSound(playerSound);
+                }
+            }
+
             if (isInGasRoom) {
                 isInGasRoom = false;
                 if (!inventory.getExistenceOfGasMask()) {
@@ -384,17 +395,17 @@ public class Player extends Entity {
         death.setScale(new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()));
         winBgn.setScale(new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()));
 
-        if(alive)
-        {
-            synchronized (fogOfWarSync)
-            {
-                if(!fogOfWarDrawing)
-                {
-                    Thread thread=new Thread(()->drawFogOfWar(isten));
-                    thread.start();
-                }
-            }
-        }
+//        if(alive)
+//        {
+//            synchronized (fogOfWarSync)
+//            {
+//                if(!fogOfWarDrawing)
+//                {
+//                    Thread thread=new Thread(()->drawFogOfWar(isten));
+//                    thread.start();
+//                }
+//            }
+//        }
     }
 
     public boolean checkIfPlayerInVillainRoom(Isten isten,double deltaTime) {

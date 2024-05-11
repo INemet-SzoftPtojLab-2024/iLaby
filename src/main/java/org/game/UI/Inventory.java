@@ -122,6 +122,10 @@ public class Inventory extends Updatable {
                 Packet15Tvsz packet15Tvsz = new Packet15Tvsz(actItem.getItemIndex(), ((Tvsz)actItem).getCharges());
                 packet15Tvsz.writeData(isten.getSocketClient());
             }
+            else if(actItem.getClass() == Sorospohar.class) {
+                Packet16Sorospohar packet16Sorospohar = new Packet16Sorospohar(actItem.getItemIndex(), ((Sorospohar)actItem).getCapacity());
+                packet16Sorospohar.writeData(isten.getSocketClient());
+            }
 
 
             if(owner.localPlayer) {
@@ -335,5 +339,20 @@ public class Inventory extends Updatable {
 
     public int getSelectedSlot() {
         return selectedSlot;
+    }
+
+    public boolean hasSorospohar() {
+        for (int i = 0; i<size; i++) if(storedItems.get(i) != null && storedItems.get(i).getClass() == Sorospohar.class) return true;
+        return false;
+    }
+
+    public int getSorospoharSlot() {
+        for (int i = 0; i<size; i++) if(storedItems.get(i) != null && storedItems.get(i).getClass() == Sorospohar.class) return i;
+        return -1;
+    }
+
+    public boolean hasTvsz() {
+        for (int i = 0; i<size; i++) if(storedItems.get(i) != null && storedItems.get(i).getClass() == Tvsz.class) return true;
+        return false;
     }
 }

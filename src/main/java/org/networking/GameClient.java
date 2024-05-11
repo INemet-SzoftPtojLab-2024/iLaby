@@ -8,6 +8,8 @@ import main.java.org.items.Chest;
 import main.java.org.items.ChestManager;
 import main.java.org.items.Item;
 import main.java.org.items.ItemManager;
+import main.java.org.items.usable_items.Gasmask;
+import main.java.org.items.usable_items.Sorospohar;
 import main.java.org.items.usable_items.Tvsz;
 import main.java.org.linalg.Vec2;
 
@@ -108,8 +110,15 @@ public class GameClient extends Thread {
                 packet = new Packet14Gasmask(data);
                 handleGasmask((Packet14Gasmask) packet);
                 break;
+            case TVSZ:
+                packet =new Packet15Tvsz(data);
+                handleTvsz((Packet15Tvsz)packet);
+                break;
+            case SOROSPOHAR:
+                packet = new Packet16Sorospohar(data);
+                handleSorospohar((Packet16Sorospohar) packet);
+                break;
             case WALL:
-                //System.out.println("GOT WALL PACKET");
                 packet = new Packet20Wall(data);
                 handleWall((Packet20Wall) packet);
                 break;
@@ -142,10 +151,6 @@ public class GameClient extends Thread {
                 packet = new Packet28PlayerChangedRoom(data);
                 handlePlayerChangedRoom((Packet28PlayerChangedRoom)packet);
                 break;
-            case TVSZ:
-                packet =new Packet15Tvsz(data);
-                handleTvsz((Packet15Tvsz)packet);
-                break;
             case ISPLAYERINVILLAINROOM:
                 packet =new Packet41IsPlayerInVillainRoom(data);
                 handleIsPlayerInVillainRoom((Packet41IsPlayerInVillainRoom)packet);
@@ -173,6 +178,11 @@ public class GameClient extends Thread {
                 }
             }
         }
+    }
+
+    private void handleSorospohar(Packet16Sorospohar packet) {
+        ((Sorospohar) isten.getItemManager().getItems().get(packet.getItemIndex())).setCapacity(packet.getCapacity());
+        ((Sorospohar) isten.getItemManager().getItems().get(packet.getItemIndex())).resizeBar(packet.getCapacity());
     }
 
     private void handleIsPlayerInVillainRoom(Packet41IsPlayerInVillainRoom packet) {
@@ -237,8 +247,8 @@ public class GameClient extends Thread {
     private void handleGasmask(Packet14Gasmask packet) {
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ItemManager.class) {
-                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).setCapacity(packet.getCapacity());
-                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).resizeBar(packet.getCapacity());
+                ((Gasmask)isten.getUpdatables().get(i).getItems().get(packet.getItemIndex())).setCapacity(packet.getCapacity());
+                ((Gasmask)isten.getUpdatables().get(i).getItems().get(packet.getItemIndex())).resizeBar(packet.getCapacity());
             }
         }
     }

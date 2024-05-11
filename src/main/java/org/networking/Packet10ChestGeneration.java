@@ -12,7 +12,6 @@ public class Packet10ChestGeneration extends Packet {
     public Packet10ChestGeneration(byte[] data) {
         super(10);
         String[] dataArray = readData(data).split(",");
-
         this.wallLocation = Integer.parseInt(dataArray[0]);
         this.pos.x = Float.parseFloat(dataArray[1]);
         this.pos.y = Float.parseFloat(dataArray[2]);

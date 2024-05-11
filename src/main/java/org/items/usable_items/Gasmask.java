@@ -103,14 +103,13 @@ public class Gasmask extends Item {
         capacityBarBackground.setVisibility(false);
     }
 
-    @Override
     public void resizeBar(float percent) {
         float width = 60.0f / 100.0f * percent;
         capacityBar.setScale(new Vec2(width, 40));
     }
 
     public float getCapacity() { return capacity; }
-    @Override
+
     public void setCapacity(float capacity) { this.capacity = capacity; }
 
 }
