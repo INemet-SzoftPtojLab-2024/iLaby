@@ -329,6 +329,7 @@ public class GameClient extends Thread {
         String username = packet.getUsername();
         int selectedSlot = packet.getSelectedSlot();
         int itemIndex = packet.getItemIndex();
+        boolean replaced = packet.getReplaced();
 
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ItemManager.class) {
@@ -341,7 +342,7 @@ public class GameClient extends Thread {
 
                         Item item = isten.getItemManager().getItems().get(itemIndex);
 
-                        player.getInventory().dropItem(item, pos, selectedSlot);
+                        player.getInventory().dropItem(item, pos, selectedSlot, replaced);
                         break;
 
                     }

@@ -111,7 +111,7 @@ public class Inventory extends Updatable {
             //actItem.dropOnGround(actPos);
             hasGasmaskEquipped = getExistenceOfGasMask();
 
-            Packet13ItemDropped packet = new Packet13ItemDropped(actItem.getItemIndex(), actPos, owner.getPlayerName().getText(), selectedSlot);
+            Packet13ItemDropped packet = new Packet13ItemDropped(actItem.getItemIndex(), actPos, owner.getPlayerName().getText(), selectedSlot, false);
             packet.writeData(isten.getSocketClient());
             //isten.getSocketClient().sendData(("13" + actItem.getItemIndex() + "," + actPos.x + "," + actPos.y).getBytes());
             if(actItem.getClass() == Gasmask.class)
@@ -142,9 +142,9 @@ public class Inventory extends Updatable {
         }
     }
 
-    public void dropItem(Item item, Vec2 pos, int selectedSlot) {
+    public void dropItem(Item item, Vec2 pos, int selectedSlot, boolean replaced) {
         item.dropOnGround(pos);
-        storedItems.set(selectedSlot - 1, null);
+        if(!replaced) storedItems.set(selectedSlot - 1, null);
     }
 
     @Override
@@ -154,6 +154,7 @@ public class Inventory extends Updatable {
 
     public void addItem(Item item) {
 
+        boolean isFull = isFull();
         ImageUI tmp = null;
         for (int i = 0; i < 5; i++) {
             if (storedItems.get(i) == null) {
@@ -166,8 +167,15 @@ public class Inventory extends Updatable {
                 break;
             }
         }
-        if (isFull()) {
-            storedItems.get(selectedSlot - 1).dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
+        if (isFull) {
+            Item selectedItem = storedItems.get(selectedSlot - 1);
+            Packet13ItemDropped packet = new Packet13ItemDropped(selectedItem.getItemIndex(),
+                    owner.getPlayerCollider().getPosition(),
+                    owner.getPlayerName().getText(),
+                    selectedSlot, true);
+            packet.writeData(isten.getSocketClient());
+            selectedItem.dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
+
             storedItems.set(selectedSlot - 1, item);
             if (item.getClass().equals(Gasmask.class)) {
                 hasGasmaskEquipped = true;
@@ -184,6 +192,7 @@ public class Inventory extends Updatable {
     }
     public void addItemToClient(Item item, int selectedSlotByClient) {
 
+        boolean isFull = isFull();
         for (int i = 0; i < 5; i++) {
             if (storedItems.get(i) == null) {
                 storedItems.set(i, item);
@@ -193,7 +202,7 @@ public class Inventory extends Updatable {
                 break;
             }
         }
-        if (isFull()) {
+        if (isFull) {
             //storedItems.get(selectedSlot - 1).dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
             storedItems.set(selectedSlotByClient - 1, item);
             if (item.getClass().equals(Gasmask.class)) {

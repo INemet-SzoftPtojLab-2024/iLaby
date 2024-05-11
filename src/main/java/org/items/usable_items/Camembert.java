@@ -59,44 +59,8 @@ public class Camembert extends Item {
             isExplosionPositionCalculated = true;
         }
         time += deltaTime;
-        if (time > 1) {
-            if (explosionCount == 1) {
-                Room currentRoom = getPrevRoom();
-                if (currentRoom != null) {
-                    currentRoom.setRoomType(RoomType.GAS);
-                    for (UnitRoom unitRoom : currentRoom.getUnitRooms()) {
-                        //unitRoom.addRightImage(isten);
-                    }
-                }
-            }
 
-            explosionCount++;
-            if (explosionCount <= 30) {
-                if (explosionCount > 1) {
-                    explosion.get(explosionCount - 2).setVisibility(false);
-                    explosion.get(explosionCount - 1).setVisibility(true);
-                }
-                else {
-                    explosion.get(0).setVisibility(true);
-                }
-            }
-            else {
-                image.setVisibility(false);
-                isten.getRenderer().deleteRenderable(image);
-                for(Image image : explosion){
-                    image.setVisibility(false);
-                    isten.getRenderer().deleteRenderable(image);
-                }
-                explosionCount = 0;
-                time = 0;
-                player.getInventory().setCamembertTriggered(false);
-                player.getInventory().setCamembert(null);
-                isExplosionPositionCalculated = false;
-                player.getInventory().removeCamembert();
-            }
-        }
     }
-
     private Room getPrevRoom() {
         Room currentRoom = null;
         for (Room room : isten.getMap().getRooms()) {
