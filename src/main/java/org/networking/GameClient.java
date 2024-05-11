@@ -189,9 +189,8 @@ public class GameClient extends Thread {
                     if(item != null) item.dropOnGround(new Vec2(player.getPlayerCollider().getPosition().x,
                             player.getPlayerCollider().getPosition().y));
                 }
-                player.getInventory().getStoredItems().clear();
                 for (int i = 0; i < 5; i++) {
-                    player.getInventory().getStoredItems().add(null);
+                    player.getInventory().getStoredItems().set(i, null);
                 }
             }
         }

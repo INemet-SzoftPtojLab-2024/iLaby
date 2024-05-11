@@ -307,8 +307,7 @@ public class Inventory extends Updatable {
     public void removeCamembert() {
         for (int i = 0; i < storedItems.size(); i++) {
             if (storedItems.get(i) != null && storedItems.get(i).getClass().equals(Camembert.class)) {
-                storedItems.remove(i);
-                storedItems.add(i, null);
+                storedItems.set(i, null);
                 isten.getRenderer().deleteRenderable(itemIcons.get(i));
             }
         }
