@@ -385,7 +385,7 @@ public class HandlerManager {
 
     private void villainHandler(VillainData villainData) {
         Villain villain = new Villain(villainData.villainName, villainData.position, villainData.imgPath);
-       // isten.addUpdatable(villain);
+        isten.addUpdatable(villain);
     }
 
     private void villainMoveHandler(VillainMoveData villainMoveData) {
