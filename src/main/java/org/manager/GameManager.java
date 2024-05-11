@@ -31,7 +31,14 @@ public class GameManager {
         frame.setVisible(true);
         frame.setBackground(new Color(50, 50, 50));
     }
-
+    public JPanel getCurrentPanel()
+    {
+        return currentPanel;
+    }
+    public static GameStage getStage()
+    {
+        return stage;
+    }
     public void changePanel(JPanel panel) {
         boolean isPanelAdded = false;
         for (int i = 0; i < frame.getComponentCount(); i++) {
