@@ -167,7 +167,9 @@ public class Mapgenerator {
         if(unitRoomNeighbourRooms.isEmpty()){
             //System.out.println("Új szoba kerül felvételre ID-val:" + unitRoom.getRowNum()*mapRowSize+unitRoom.getColNum());
             Random random = new Random();
-            Room newRoom = new Room(unitRoom.getRowNum()* map.getMapRowSize() +unitRoom.getColNum(), random.nextInt(2,5));
+            //Room newRoom = new Room(unitRoom.getRowNum()* map.getMapRowSize() +unitRoom.getColNum(), random.nextInt(2,5));
+            Room newRoom = new Room(unitRoom.getRowNum()* map.getMapRowSize() +unitRoom.getColNum(), 1);
+
             unitRoom.setOwnerRoom(newRoom);
             newRoom.getUnitRooms().add(unitRoom);
             map.getRooms().add(newRoom);
