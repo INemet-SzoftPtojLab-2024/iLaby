@@ -12,10 +12,7 @@ import main.java.org.items.usable_items.Gasmask;
 import main.java.org.items.usable_items.Sorospohar;
 import main.java.org.items.usable_items.Tvsz;
 import main.java.org.linalg.Vec2;
-import main.java.org.networking.Packet12ItemPickedUp;
-import main.java.org.networking.Packet13ItemDropped;
-import main.java.org.networking.Packet15Tvsz;
-import main.java.org.networking.Packet42ItemsDropped;
+import main.java.org.networking.*;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;

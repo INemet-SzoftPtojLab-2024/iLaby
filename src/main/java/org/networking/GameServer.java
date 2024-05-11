@@ -213,7 +213,7 @@ public class GameServer extends Thread {
     }
 
     private void handleChestOpened(Packet11ChestOpened packet) {
-        //events.add(packet.getData());
+        events.add(packet.getData());
         sendDataToAllClients(packet.getData());
     }
 
