@@ -442,6 +442,7 @@ public class GameClient extends Thread {
                 //chest.setNewChestImage();
                 //isten.getUpdatables().get(i).getChests().add(chest);
 
+
                 chestGenCount++;
             }
         }
