@@ -77,11 +77,10 @@ public class PlayerStatusHandler extends ServerSideHandler {
                             PlayerMP client = findClient(player.getUsername());
                             if(client.port != -1) {
                                 server.sendData(packet.getData(), client.ipAddress, client.port);
+
                             }
                             player.getCurrentRoom().decreasePlayerCount();
                             currentRoom.increasePlayerCount();
-
-
                         }
                     }
                     player.setCurrentRoom(currentRoom);

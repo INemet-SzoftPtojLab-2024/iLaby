@@ -134,17 +134,21 @@ public class GameServer extends Thread {
                 packet = new Packet14Gasmask(data);
                 handleGasmask((Packet14Gasmask) packet);
                 break;
-            case PLAYERPOSFORDOOROPEN:
-                packet = new Packet25PlayerForDoorOpen(data);
-                handlePlayerPosForDoorOpen((Packet25PlayerForDoorOpen)packet);
+            case TVSZ:
+                packet = new Packet15Tvsz(data);
+                handleTvsz((Packet15Tvsz)packet);
+                break;
+            case SOROSPOHAR:
+                packet = new Packet16Sorospohar(data);
+                handleSorospohar((Packet16Sorospohar) packet);
                 break;
             case CAMEMBERT:
                 packet = new Packet17Camembert(data);
                 handleCamembert((Packet17Camembert)packet);
                 break;
-            case TVSZ:
-                packet = new Packet15Tvsz(data);
-                handleTvsz((Packet15Tvsz)packet);
+            case PLAYERPOSFORDOOROPEN:
+                packet = new Packet25PlayerForDoorOpen(data);
+                handlePlayerPosForDoorOpen((Packet25PlayerForDoorOpen)packet);
                 break;
             case ISPLAYERINVILLAINROOM:
                 packet = new Packet41IsPlayerInVillainRoom(data);
@@ -152,6 +156,8 @@ public class GameServer extends Thread {
                 break;
         }
     }
+
+    private void handleSorospohar(Packet16Sorospohar packet) { sendDataToAllClients(packet.getData()); }
 
     private void handleIsPlayerVillainRoom(Packet41IsPlayerInVillainRoom packet) {
         sendDataToAllClients(packet.getData());
