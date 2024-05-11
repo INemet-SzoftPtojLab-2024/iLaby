@@ -190,4 +190,12 @@ public class ButtonUI extends Renderable{
 
         this.image=new ImageUI(new Vec2(), new Vec2(),this.imagePath);
     }
+
+    public boolean IsHovered() {
+        return isHovered;
+    }
+
+    public TextUI getText() {
+        return text;
+    }
 }
