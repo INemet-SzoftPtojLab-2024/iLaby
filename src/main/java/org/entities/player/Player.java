@@ -272,7 +272,7 @@ public class Player extends Entity {
                     faintingTime = 0;
                     isFainted = true;
                     speed = 1;
-                    if(localPlayer) {
+                    if(localPlayer && !inventory.isEmpty()) {
                         inventory.dropAllItems(isten);
                     }
 
