@@ -134,6 +134,14 @@ public class GameServer extends Thread {
                 packet = new Packet14Gasmask(data);
                 handleGasmask((Packet14Gasmask) packet);
                 break;
+            case PLAYERPOSFORDOOROPEN:
+                packet = new Packet25PlayerForDoorOpen(data);
+                handlePlayerPosForDoorOpen((Packet25PlayerForDoorOpen)packet);
+                break;
+            case CAMEMBERT:
+                packet = new Packet17Camembert(data);
+                handleCamembert((Packet17Camembert)packet);
+                break;
             case TVSZ:
                 packet = new Packet15Tvsz(data);
                 handleTvsz((Packet15Tvsz)packet);
@@ -142,22 +150,28 @@ public class GameServer extends Thread {
                 packet = new Packet16Sorospohar(data);
                 handleSorospohar((Packet16Sorospohar) packet);
                 break;
-            case CAMEMBERT:
-                packet = new Packet17Camembert(data);
-                handleCamembert((Packet17Camembert)packet);
-                break;
-            case PLAYERPOSFORDOOROPEN:
-                packet = new Packet25PlayerForDoorOpen(data);
-                handlePlayerPosForDoorOpen((Packet25PlayerForDoorOpen)packet);
+            case REPLACECHEST:
+                packet = new Packet40ReplaceChest(data);
+                handleReplaceChest((Packet40ReplaceChest) packet);
                 break;
             case ISPLAYERINVILLAINROOM:
                 packet = new Packet41IsPlayerInVillainRoom(data);
                 handleIsPlayerVillainRoom((Packet41IsPlayerInVillainRoom)packet);
                 break;
+            case ITEMSDROPPED:
+                packet = new Packet42ItemsDropped(data);
+                handleItemsDropped((Packet42ItemsDropped)packet);
+                break;
         }
     }
 
+    private void handleReplaceChest(Packet40ReplaceChest packet) { sendDataToAllClients(packet.getData());}
+
     private void handleSorospohar(Packet16Sorospohar packet) { sendDataToAllClients(packet.getData()); }
+
+    private void handleItemsDropped(Packet42ItemsDropped packet) {
+        sendDataToAllClients(packet.getData());
+    }
 
     private void handleIsPlayerVillainRoom(Packet41IsPlayerInVillainRoom packet) {
         sendDataToAllClients(packet.getData());
@@ -178,6 +192,8 @@ public class GameServer extends Thread {
                     unitRoom.getPosition().y, RoomType.GAS.ordinal());
             sendDataToAllClients(packet04UnitRoom.getData());
         }
+
+        sendDataToAllClients(packet.getData());
     }
 
     private void handleGasmask(Packet14Gasmask packet) {
@@ -205,7 +221,7 @@ public class GameServer extends Thread {
     }
 
     private void handleChestOpened(Packet11ChestOpened packet) {
-        //events.add(packet.getData());
+        events.add(packet.getData());
         sendDataToAllClients(packet.getData());
     }
 

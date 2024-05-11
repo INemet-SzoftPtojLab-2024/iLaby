@@ -44,6 +44,7 @@ public class MapHandler extends ServerSideHandler {
                 int type = map.getUnitRooms()[i][j].getOwnerRoom().getRoomType().ordinal();
                 Packet04UnitRoom packet = new Packet04UnitRoom(pos.x, pos.y, type);
                 server.sendData(packet.getData(), client.ipAddress, client.port);
+                server.sendData(packet.getData(), client.ipAddress, client.port);
             }
         }
 
@@ -89,7 +90,7 @@ public class MapHandler extends ServerSideHandler {
             delta += deltaTime;
             //Original was: 1
             //Megváltoztattam 0.1-re, hogy gyorsabban tötrénjenek a változások
-            if (delta > 2) {
+            if (delta > 1) {
                 //TESTCASE 1:::
 
 

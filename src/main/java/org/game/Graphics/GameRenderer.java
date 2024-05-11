@@ -17,6 +17,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * GameRenderer class handles rendering of game elements.
@@ -27,6 +29,7 @@ public class GameRenderer extends JPanel implements ActionListener {
     private Camera camera;
 
     private final ArrayList<PostProcessEffectBased> ppEffects;
+    private final Object lockObject = new Object();
 
     /**
      * Constructor for GameRenderer.
@@ -54,7 +57,9 @@ public class GameRenderer extends JPanel implements ActionListener {
      * @param r The renderable object to add
      */
     public void addRenderable(Renderable r) {
-        renderables.add(r);
+        synchronized (lockObject) {
+            renderables.add(r);
+        }
     }
 
     /** this function calculates the rendered positions and scales of the Renderables */
@@ -93,59 +98,66 @@ public class GameRenderer extends JPanel implements ActionListener {
      * @param graphics The Graphics object to render on
      */
     public void paint(Graphics graphics) {
-        sortRenderables();
+        //itt lehet csak eleg lenne a sortrenderablere rarakni a synchronized-ot, de menjunk biztosra
+        synchronized (lockObject) {
+            sortRenderables();
 
-        //actual render
-        Vec2 screenSize=new Vec2(this.getWidth(),this.getHeight());
 
-        setBackground(new Color(50,50,50));
+            //actual render
+            Vec2 screenSize = new Vec2(this.getWidth(), this.getHeight());
 
-        graphics.setColor(Color.BLACK);
-        graphics.fillRect(0,0,this.getWidth(), this.getHeight());
+            setBackground(new Color(50, 50, 50));
 
-        if(renderables.isEmpty()) return;
+            graphics.setColor(Color.BLACK);
+            graphics.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-        //game pass
-        int i=0;
-        for(i=0; i < renderables.size(); i++) {
-            Renderable renderable = renderables.get(i);
-            //if it is not visible, yeet
-            if(!renderable.getVisibility()||renderable.isUIElement())
-                break;
+            if (renderables.isEmpty()) return;
 
-            //if it is not on the screen, yeet
-            Vec2 tempPos=renderable.getRenderedPosition();
-            Vec2 tempScale=renderable.getRenderedScale();
-            if(tempPos.x-tempScale.x>screenSize.x||tempPos.y-tempScale.y>screenSize.y)
-                continue;
-            if(tempPos.x+tempScale.x<0||tempPos.y+tempScale.y<0)
-                continue;
+            //game pass
+            int i = 0;
 
-            //if not yet yeeten, render
-            renderable.render(graphics);
+            for (i = 0; i < renderables.size(); i++) {
+                Renderable renderable = renderables.get(i);
+                //if it is not visible, yeet
+                if (!renderable.getVisibility() || renderable.isUIElement())
+                    break;
+
+                //if it is not on the screen, yeet
+                Vec2 tempPos = renderable.getRenderedPosition();
+                Vec2 tempScale = renderable.getRenderedScale();
+                if (tempPos.x - tempScale.x > screenSize.x || tempPos.y - tempScale.y > screenSize.y)
+                    continue;
+                if (tempPos.x + tempScale.x < 0 || tempPos.y + tempScale.y < 0)
+                    continue;
+
+                //if not yet yeeten, render
+                renderable.render(graphics);
+            }
+
+
+            for (PostProcessEffectBased pp : ppEffects)
+                pp.doPass(graphics, this.getWidth(), this.getHeight());
+
+            //ui pass
+            for (; i < renderables.size(); i++) {
+                Renderable renderable = renderables.get(i);
+                //if it is not visible, yeet
+                if (!renderable.getVisibility())
+                    break;
+
+                //if it is not on the screen, yeet
+                Vec2 tempPos = renderable.getRenderedPosition();
+                Vec2 tempScale = renderable.getRenderedScale();
+                if (tempPos.x - tempScale.x > screenSize.x || tempPos.y - tempScale.y > screenSize.y)
+                    continue;
+                if (tempPos.x + tempScale.x < 0 || tempPos.y + tempScale.y < 0)
+                    continue;
+
+                //if not yet yeeten, render
+                renderable.render(graphics);
+            }
         }
 
-        for(PostProcessEffectBased pp : ppEffects)
-            pp.doPass(graphics, this.getWidth(), this.getHeight());
-
-        //ui pass
-        for(; i < renderables.size(); i++) {
-            Renderable renderable = renderables.get(i);
-            //if it is not visible, yeet
-            if(!renderable.getVisibility())
-                break;
-
-            //if it is not on the screen, yeet
-            Vec2 tempPos=renderable.getRenderedPosition();
-            Vec2 tempScale=renderable.getRenderedScale();
-            if(tempPos.x-tempScale.x>screenSize.x||tempPos.y-tempScale.y>screenSize.y)
-                continue;
-            if(tempPos.x+tempScale.x<0||tempPos.y+tempScale.y<0)
-                continue;
-
-            //if not yet yeeten, render
-            renderable.render(graphics);
-        }
     }
 
     /**
@@ -201,15 +213,20 @@ public class GameRenderer extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         //Needed for implementation
     }
-    public void deleteRenderable(Renderable r){
-        if(renderables.isEmpty()) return;
-        for(int i=0;i<renderables.size();i++)
-        {
-            if(renderables.get(i).equals(r))
-            {
-                renderables.remove(i);
-                break;
+    public void  deleteRenderable(Renderable r){
+        synchronized (lockObject) {
+            if (renderables.isEmpty() || r == null) return;
+            int sizebefor = renderables.size();
+            for (Renderable renderable : renderables) {
+                if (renderable.equals(r)) {
+                    renderables.remove(renderable);
+                    break;
+                }
+            }
+            if (sizebefor - renderables.size() != 1) {
+                System.err.println("Renderable not deleted at the delete function!");
             }
         }
     }
+
 }

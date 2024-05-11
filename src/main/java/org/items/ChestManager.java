@@ -6,7 +6,9 @@ import main.java.org.game.physics.ColliderGroup;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
 import main.java.org.networking.Packet04UnitRoom;
+import main.java.org.networking.Packet10ChestGeneration;
 import main.java.org.networking.Packet11ChestOpened;
+import main.java.org.networking.Packet40ReplaceChest;
 
 import java.awt.event.KeyEvent;
 import java.util.*;
@@ -35,7 +37,7 @@ public class ChestManager extends Updatable {
         colliderGroup = new  ColliderGroup();
         int mapRowSize = isten.getMap().getMapRowSize();
         int mapColumnSize = isten.getMap().getMapColumnSize();
-         randomUnitRoom= new ArrayList<>();
+        randomUnitRoom= new ArrayList<>();
         int listSize = mapRowSize * mapColumnSize;
         for(int i =0;i<listSize;i++){
             randomUnitRoom.add(i);
@@ -44,7 +46,7 @@ public class ChestManager extends Updatable {
 
     @Override
     public void onStart(Isten isten) {
-
+        isten.getPhysicsEngine().addColliderGroup(colliderGroup);
     }
 
     public void init(Isten isten) {
@@ -92,16 +94,26 @@ public class ChestManager extends Updatable {
         }
 
         //az isOnRightPlace csak serveren ellenorizheto
-        /*for (int i=0;i<chests.size();i++) {
-            if (!chests.get(i).isOnRightPlace()) {
-                UnitRoom unitRoom = getPlaceForChest();
-                if(unitRoom == null) System.err.println("Elveszett egy chest!");
-                else {
-                    chests.get(i).replaceChest(unitRoom.getPosition(), getRightWallLocation(unitRoom));
-                }
+        if(isten.getSocketServer() != null) {
+            for (int i = 0; i < chests.size(); i++) {
+                if (!chests.get(i).isOnRightPlace()) {
+                    UnitRoom unitRoom = getPlaceForChest();
+                    if (unitRoom == null) System.err.println("Elveszett egy chest!");
+                    else {
+                        chests.get(i).replaceChest(unitRoom.getPosition(), getRightWallLocation(unitRoom));
+                        //uzenet az osszes cliensenk, hogy athelyezodott egy chest
+                        Packet40ReplaceChest packet40ReplaceChest = new Packet40ReplaceChest(
+                                chests.get(i).getWallLocation().ordinal(),
+                                chests.get(i).getUnitRoomPosition(),
+                                chests.get(i).getIdx());
+                        packet40ReplaceChest.writeData(isten.getSocketClient());
 
+                    }
+
+                }
             }
-        }*/
+        }
+
     }
     @Override
     public void onDestroy() {
@@ -116,14 +128,21 @@ public class ChestManager extends Updatable {
 
 
         //CHEST TIPUSOK, a networking miatt sokkal egyszerubb így az itemeket atadni --> Chest.java/fillChest
-        Chest chest=new Chest(unitRoom.getPosition(),isten,chestType,chests.size());
-        //chest.fillChest();
+        Chest chest=new Chest(unitRoom.getPosition(),isten,chestType,getRightWallLocation(unitRoom) ,chests.size());
         chests.add(chest);
         chest.setNewChestImage();
         colliderGroup.addCollider(chest.getCollider());
         return true;
     }
-
+    private int getRightWallLocation(UnitRoom unitRoom){
+        ArrayList<Chest.WallLocation> walls = new ArrayList<>();
+        if (unitRoom.isLeftWall()) walls.add(Chest.WallLocation.LEFT);
+        if (unitRoom.isTopWall()) walls.add(Chest.WallLocation.TOP);
+        if (unitRoom.isRightWall()) walls.add(Chest.WallLocation.RIGHT);
+        if (unitRoom.isBottomWall()) walls.add(Chest.WallLocation.BOTTOM);
+        Random random = new Random();
+        return walls.get(random.nextInt(walls.size())).ordinal();
+    }
     private UnitRoom getPlaceForChest(){
         int mapRowSize = isten.getMap().getMapRowSize();
         Collections.shuffle(randomUnitRoom);
@@ -150,11 +169,9 @@ public class ChestManager extends Updatable {
     public Vector<Chest> getChests() {
         return chests;
     }
-    public void updateColliderGroup(Chest chest){
-        if(chest.getCollider() !=null){
-            colliderGroup.removeCollider(chest.getCollider());
-        }
-        chest.setCollider();
+    public void addChest(Chest chest){
         colliderGroup.addCollider(chest.getCollider());
+        chests.add(chest);
+        chest.setNewChestImage();
     }
 }

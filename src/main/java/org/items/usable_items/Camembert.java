@@ -47,9 +47,12 @@ public class Camembert extends Item {
         used=true;
         dropOnGround(player.getPlayerCollider().getPosition());
 
-        Packet17Camembert packet17Camembert = new Packet17Camembert(player.getPlayerCollider().getPosition().x,
-                player.getPlayerCollider().getPosition().y);
-        packet17Camembert.writeData(isten.getSocketClient());
+        if(player.localPlayer) {
+            Packet17Camembert packet17Camembert = new Packet17Camembert(player.getPlayerCollider().getPosition().x,
+                    player.getPlayerCollider().getPosition().y, getItemIndex(), player.getPlayerName().getText());
+            packet17Camembert.writeData(isten.getSocketClient());
+        }
+
 
         if (!isExplosionPositionCalculated){
             for(int i = 0; i < 30; i++) {

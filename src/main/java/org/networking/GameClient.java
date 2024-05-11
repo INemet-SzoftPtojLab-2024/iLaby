@@ -4,10 +4,12 @@ import main.java.org.game.Isten;
 import main.java.org.game.UI.TimeCounter;
 import main.java.org.game.physics.Collider;
 import main.java.org.game.physics.ColliderGroup;
+import main.java.org.game.updatable.Updatable;
 import main.java.org.items.Chest;
 import main.java.org.items.ChestManager;
 import main.java.org.items.Item;
 import main.java.org.items.ItemManager;
+import main.java.org.items.usable_items.Camembert;
 import main.java.org.items.usable_items.Gasmask;
 import main.java.org.items.usable_items.Sorospohar;
 import main.java.org.items.usable_items.Tvsz;
@@ -118,6 +120,10 @@ public class GameClient extends Thread {
                 packet = new Packet16Sorospohar(data);
                 handleSorospohar((Packet16Sorospohar) packet);
                 break;
+            case CAMEMBERT:
+                packet = new Packet17Camembert(data);
+                handleCamembert((Packet17Camembert)packet);
+                break;
             case WALL:
                 packet = new Packet20Wall(data);
                 handleWall((Packet20Wall) packet);
@@ -151,10 +157,61 @@ public class GameClient extends Thread {
                 packet = new Packet28PlayerChangedRoom(data);
                 handlePlayerChangedRoom((Packet28PlayerChangedRoom)packet);
                 break;
+            case REPLACECHEST:
+                packet = new Packet40ReplaceChest(data);
+                handleReplaceChest((Packet40ReplaceChest)packet);
+                break;
             case ISPLAYERINVILLAINROOM:
                 packet =new Packet41IsPlayerInVillainRoom(data);
                 handleIsPlayerInVillainRoom((Packet41IsPlayerInVillainRoom)packet);
                 break;
+            case ITEMSDROPPED:
+                packet = new Packet42ItemsDropped(data);
+                handleItemsDropped((Packet42ItemsDropped)packet);
+                break;
+        }
+    }
+
+    private void handleCamembert(Packet17Camembert packet) {
+
+        int itemIndex = packet.getItemIndex();
+        String username = packet.getUsername();
+
+        for(PlayerMP player: isten.getUpdatablesByType(PlayerMP.class)) {
+            if(player.getPlayerName().getText().equalsIgnoreCase(username) && !player.localPlayer) {
+                player.getInventory().setCamembert((Camembert)isten.getItemManager().getItems().get(itemIndex));
+                player.getInventory().setCamembertTriggered(true);
+            }
+        }
+
+    }
+
+    private void handleReplaceChest(Packet40ReplaceChest packet) {
+        if(isten.getSocketServer() != null) return;
+
+        Vec2 newPos = packet.getPos();
+        int wallLocation = packet.getWallLocation();
+        int index = packet.getIdx();
+        //megkeressunk a chestet, majd meghivjuk ra a replace fv-t
+        Chest chest = isten.getChestManager().getChests().get(index);
+        chest.replaceChest(newPos, wallLocation);
+
+    }
+
+    private void handleItemsDropped(Packet42ItemsDropped packet) {
+        String username = packet.getUsername();
+
+        for(PlayerMP player: isten.getUpdatablesByType(PlayerMP.class)) {
+            if(player.getUsername().equalsIgnoreCase(username)) {
+                for(int i = 0; i < player.getInventory().getStoredItems().size(); i++) {
+                    Item item = player.getInventory().getStoredItems().get(i);
+                    if(item != null) item.dropOnGround(new Vec2(player.getPlayerCollider().getPosition().x,
+                            player.getPlayerCollider().getPosition().y));
+                }
+                for (int i = 0; i < 5; i++) {
+                    player.getInventory().getStoredItems().set(i, null);
+                }
+            }
         }
     }
 
@@ -291,6 +348,7 @@ public class GameClient extends Thread {
         String username = packet.getUsername();
         int selectedSlot = packet.getSelectedSlot();
         int itemIndex = packet.getItemIndex();
+        boolean replaced = packet.getReplaced();
 
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ItemManager.class) {
@@ -303,7 +361,7 @@ public class GameClient extends Thread {
 
                         Item item = isten.getItemManager().getItems().get(itemIndex);
 
-                        player.getInventory().dropItem(item, pos, selectedSlot);
+                        player.getInventory().dropItem(item, pos, selectedSlot, replaced);
                         break;
 
                     }
@@ -328,7 +386,8 @@ public class GameClient extends Thread {
 
                 for(PlayerMP player: isten.getUpdatablesByType(PlayerMP.class)) {
                     if(player.getUsername().equalsIgnoreCase(username)) {
-                        isten.getItemManager().getItems().get(itemIndex).pickUpInInventory(player, selectedSlot);
+                        Item item = isten.getItemManager().getItems().get(itemIndex);
+                        item.pickUpInInventory(player, selectedSlot);
                         break;
                     }
                 }
@@ -375,19 +434,26 @@ public class GameClient extends Thread {
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ChestManager.class) {
                 chestIndex = i;
-                Chest chest =  new Chest(packet.getPos(),isten, packet.getChestType(), packet.getIdx());
-                chest.setNewChestImage();
-                isten.getUpdatables().get(i).getChests().add(chest);
+                Chest chest =  new Chest(packet.getPos(),isten, packet.getChestType(), packet.getWallLocation(), packet.getIdx());
+                ChestManager chestManager = (ChestManager) isten.getUpdatables().get(i); // = isten.getChestManager()...
+                chestManager.addChest(chest);
+
+                //ezek pedig a chestmanager add vfeben megtortennek
+                //chest.setNewChestImage();
+                //isten.getUpdatables().get(i).getChests().add(chest);
+
+
                 chestGenCount++;
             }
         }
 
-        ColliderGroup chestColliders=new ColliderGroup();
+        /*ColliderGroup chestColliders=new ColliderGroup();
         for (int i = 0; i < isten.getUpdatables().get(chestIndex).getChests().size(); i++) {
-            Collider c=new Collider( isten.getUpdatables().get(chestIndex).getChests().get(i).getPosition(),new Vec2(0.15f,0.15f));
+            Collider c=new Collider( isten.getUpdatables().get(chestIndex).getChests().get(i).getPosition(),new Vec2(0.3f,0.3f));
             chestColliders.addCollider(c);
-        }
-        isten.getPhysicsEngine().addColliderGroup(chestColliders);
+        }*/
+        //a chestmanager construktoraban van ez
+        //isten.getPhysicsEngine().addColliderGroup(chestColliders);
     }
 
     private void handleDeath(Packet21Death packet) {

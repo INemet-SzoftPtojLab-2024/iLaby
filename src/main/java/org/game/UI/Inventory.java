@@ -12,10 +12,7 @@ import main.java.org.items.usable_items.Gasmask;
 import main.java.org.items.usable_items.Sorospohar;
 import main.java.org.items.usable_items.Tvsz;
 import main.java.org.linalg.Vec2;
-import main.java.org.networking.Packet12ItemPickedUp;
-import main.java.org.networking.Packet13ItemDropped;
-import main.java.org.networking.Packet15Tvsz;
-import main.java.org.networking.Packet16Sorospohar;
+import main.java.org.networking.*;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -81,6 +78,7 @@ public class Inventory extends Updatable {
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
+        if(storedItems.size() != 5) System.err.println("stored item size nem 5!");
         int previousSelectedSlot = selectedSlot;
         if (isten.getInputHandler().isKeyDown(KeyEvent.VK_1)) selectedSlot = 1;
         else if (isten.getInputHandler().isKeyDown(KeyEvent.VK_2)) selectedSlot = 2;
@@ -113,7 +111,7 @@ public class Inventory extends Updatable {
             //actItem.dropOnGround(actPos);
             hasGasmaskEquipped = getExistenceOfGasMask();
 
-            Packet13ItemDropped packet = new Packet13ItemDropped(actItem.getItemIndex(), actPos, owner.getPlayerName().getText(), selectedSlot);
+            Packet13ItemDropped packet = new Packet13ItemDropped(actItem.getItemIndex(), actPos, owner.getPlayerName().getText(), selectedSlot, false);
             packet.writeData(isten.getSocketClient());
             //isten.getSocketClient().sendData(("13" + actItem.getItemIndex() + "," + actPos.x + "," + actPos.y).getBytes());
             if(actItem.getClass() == Gasmask.class)
@@ -144,9 +142,9 @@ public class Inventory extends Updatable {
         }
     }
 
-    public void dropItem(Item item, Vec2 pos, int selectedSlot) {
+    public void dropItem(Item item, Vec2 pos, int selectedSlot, boolean replaced) {
         item.dropOnGround(pos);
-        storedItems.set(selectedSlot - 1, null);
+        if(!replaced) storedItems.set(selectedSlot - 1, null);
     }
 
     @Override
@@ -156,6 +154,7 @@ public class Inventory extends Updatable {
 
     public void addItem(Item item) {
 
+        boolean isFull = isFull();
         ImageUI tmp = null;
         for (int i = 0; i < 5; i++) {
             if (storedItems.get(i) == null) {
@@ -168,8 +167,15 @@ public class Inventory extends Updatable {
                 break;
             }
         }
-        if (isFull()) {
-            storedItems.get(selectedSlot - 1).dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
+        if (isFull) {
+            Item selectedItem = storedItems.get(selectedSlot - 1);
+            Packet13ItemDropped packet = new Packet13ItemDropped(selectedItem.getItemIndex(),
+                    owner.getPlayerCollider().getPosition(),
+                    owner.getPlayerName().getText(),
+                    selectedSlot, true);
+            packet.writeData(isten.getSocketClient());
+            selectedItem.dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
+
             storedItems.set(selectedSlot - 1, item);
             if (item.getClass().equals(Gasmask.class)) {
                 hasGasmaskEquipped = true;
@@ -186,6 +192,7 @@ public class Inventory extends Updatable {
     }
     public void addItemToClient(Item item, int selectedSlotByClient) {
 
+        boolean isFull = isFull();
         for (int i = 0; i < 5; i++) {
             if (storedItems.get(i) == null) {
                 storedItems.set(i, item);
@@ -195,7 +202,7 @@ public class Inventory extends Updatable {
                 break;
             }
         }
-        if (isFull()) {
+        if (isFull) {
             //storedItems.get(selectedSlot - 1).dropOnGround(isten.getPlayer().getPlayerCollider().getPosition());
             storedItems.set(selectedSlotByClient - 1, item);
             if (item.getClass().equals(Gasmask.class)) {
@@ -208,6 +215,14 @@ public class Inventory extends Updatable {
     private boolean isFull() {
         for(int i = 0; i < size; i++) {
             if(storedItems.get(i) == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+    public boolean isEmpty(){
+        for(int i = 0; i < size; i++) {
+            if(storedItems.get(i) != null) {
                 return false;
             }
         }
@@ -254,10 +269,9 @@ public class Inventory extends Updatable {
     }
 
     public void dropAllItems(Isten isten) {
-        storedItems.clear();
-        for (int i = 0; i < 5; i++) {
-            storedItems.add(null);
-        }
+        Packet42ItemsDropped packet = new Packet42ItemsDropped(owner.getPlayerName().getText());
+        packet.writeData(isten.getSocketClient());
+
         for (Image im : itemIcons) {
             isten.getRenderer().deleteRenderable(im);
         }
@@ -310,8 +324,7 @@ public class Inventory extends Updatable {
     public void removeCamembert() {
         for (int i = 0; i < storedItems.size(); i++) {
             if (storedItems.get(i) != null && storedItems.get(i).getClass().equals(Camembert.class)) {
-                storedItems.remove(i);
-                storedItems.add(i, null);
+                storedItems.set(i, null);
                 isten.getRenderer().deleteRenderable(itemIcons.get(i));
             }
         }

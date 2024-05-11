@@ -266,12 +266,6 @@ public class Player extends Entity {
                 inventory.getStoredItems().get(inventory.getSorospoharSlot()).use(this,deltaTime);
                 System.out.printf("hasSOR: " + inventory.hasSorospohar());
             }
-            else if(playerInVillainRoom && !inventory.avoidVillain(deltaTime)) {
-                if (localPlayer && playerSound != null) {
-                    alive = false;
-                    AudioManager.closeSound(playerSound);
-                }
-            }
 
             if (isInGasRoom) {
                 isInGasRoom = false;
@@ -279,12 +273,7 @@ public class Player extends Entity {
                     faintingTime = 0;
                     isFainted = true;
                     speed = 1;
-                    if(localPlayer) {
-                        for (int i = 0; i < 5; i++) {
-                            if (inventory.getStoredItems().get(i) != null) {
-                                if(isten.getSocketServer() != null) inventory.getStoredItems().get(i).dropOnGround(new Vec2(currentRoom.getUnitRooms().get(i + 1).getPosition().x, currentRoom.getUnitRooms().get(i + 1).getPosition().y));
-                            }
-                        }
+                    if(localPlayer && !inventory.isEmpty()) {
                         inventory.dropAllItems(isten);
                     }
 

@@ -72,8 +72,7 @@ public class Sorospohar extends Item {
             for (; index < inventory.getSize(); index++) {
                 if (inventory.getStoredItems().get(index) instanceof Sorospohar) break;
             }
-            inventory.getStoredItems().remove(index);
-            inventory.getStoredItems().add(index, null);
+            inventory.getStoredItems().set(index, null);
             isten.getRenderer().deleteRenderable(inventory.getItemIcons().get(index));
             //inventory.setGasmaskEquipped(false);
         }
