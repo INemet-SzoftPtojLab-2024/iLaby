@@ -56,6 +56,7 @@ public class Chest {
 
         //ezt meg addolni kell a grouphoz
         this.collider = new Collider(pos,new Vec2(0.3f,0.3f));
+
         //setUnitRoom(pos);
 
         //graphics
