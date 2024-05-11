@@ -554,7 +554,7 @@ public class Player extends Entity {
                 isten.getCamera().getPixelsPerUnit()*fogOfWarImage.getHeight()/(float)rendererHeight
         );
 
-        final Vec2 fogUnitSizeInPixels=new Vec2(1.5f*fogPixelsPerUnit.x, 1.5f*fogPixelsPerUnit.y);
+        final Vec2 fogUnitSizeInPixels=new Vec2(1.8f*fogPixelsPerUnit.x, 1.8f*fogPixelsPerUnit.y);
 
         final Vec2 imageStartInScreenSpace=new Vec2(
                 ((float) fogOfWarImage.getWidth() /2)-(pos.x-minX)*fogPixelsPerUnit.x-0.5f*fogUnitSizeInPixels.x,
