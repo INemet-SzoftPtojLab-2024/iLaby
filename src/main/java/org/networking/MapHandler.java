@@ -90,7 +90,7 @@ public class MapHandler extends ServerSideHandler {
             delta += deltaTime;
             //Original was: 1
             //Megváltoztattam 0.1-re, hogy gyorsabban tötrénjenek a változások
-            if (delta > 2) {
+            if (delta > 1) {
                 //TESTCASE 1:::
 
 

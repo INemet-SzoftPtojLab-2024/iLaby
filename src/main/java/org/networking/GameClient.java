@@ -4,6 +4,7 @@ import main.java.org.game.Isten;
 import main.java.org.game.UI.TimeCounter;
 import main.java.org.game.physics.Collider;
 import main.java.org.game.physics.ColliderGroup;
+import main.java.org.game.updatable.Updatable;
 import main.java.org.items.Chest;
 import main.java.org.items.ChestManager;
 import main.java.org.items.Item;
@@ -151,6 +152,10 @@ public class GameClient extends Thread {
                 packet = new Packet28PlayerChangedRoom(data);
                 handlePlayerChangedRoom((Packet28PlayerChangedRoom)packet);
                 break;
+            case REPLACECHEST:
+                packet = new Packet40ReplaceChest(data);
+                handleReplaceChest((Packet40ReplaceChest)packet);
+                break;
             case ISPLAYERINVILLAINROOM:
                 packet =new Packet41IsPlayerInVillainRoom(data);
                 handleIsPlayerInVillainRoom((Packet41IsPlayerInVillainRoom)packet);
@@ -160,6 +165,18 @@ public class GameClient extends Thread {
                 handleItemsDropped((Packet42ItemsDropped)packet);
                 break;
         }
+    }
+
+    private void handleReplaceChest(Packet40ReplaceChest packet) {
+        if(isten.getSocketServer() != null) return;
+
+        Vec2 newPos = packet.getPos();
+        int wallLocation = packet.getWallLocation();
+        int index = packet.getIdx();
+        //megkeressunk a chestet, majd meghivjuk ra a replace fv-t
+        Chest chest = isten.getChestManager().getChests().get(index);
+        chest.replaceChest(newPos, wallLocation);
+
     }
 
     private void handleItemsDropped(Packet42ItemsDropped packet) {
@@ -398,18 +415,24 @@ public class GameClient extends Thread {
             if(isten.getUpdatable(i).getClass() == ChestManager.class) {
                 chestIndex = i;
                 Chest chest =  new Chest(packet.getPos(),isten, packet.getChestType(), packet.getWallLocation(), packet.getIdx());
-                chest.setNewChestImage();
-                isten.getUpdatables().get(i).getChests().add(chest);
+                ChestManager chestManager = (ChestManager) isten.getUpdatables().get(i); // = isten.getChestManager()...
+                chestManager.addChest(chest);
+
+                //ezek pedig a chestmanager add vfeben megtortennek
+                //chest.setNewChestImage();
+                //isten.getUpdatables().get(i).getChests().add(chest);
+
                 chestGenCount++;
             }
         }
 
-        ColliderGroup chestColliders=new ColliderGroup();
+        /*ColliderGroup chestColliders=new ColliderGroup();
         for (int i = 0; i < isten.getUpdatables().get(chestIndex).getChests().size(); i++) {
-            Collider c=new Collider( isten.getUpdatables().get(chestIndex).getChests().get(i).getPosition(),new Vec2(0.15f,0.15f));
+            Collider c=new Collider( isten.getUpdatables().get(chestIndex).getChests().get(i).getPosition(),new Vec2(0.3f,0.3f));
             chestColliders.addCollider(c);
-        }
-        isten.getPhysicsEngine().addColliderGroup(chestColliders);
+        }*/
+        //a chestmanager construktoraban van ez
+        //isten.getPhysicsEngine().addColliderGroup(chestColliders);
     }
 
     private void handleDeath(Packet21Death packet) {

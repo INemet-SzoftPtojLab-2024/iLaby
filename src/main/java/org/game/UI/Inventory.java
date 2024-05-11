@@ -78,6 +78,7 @@ public class Inventory extends Updatable {
 
     @Override
     public void onUpdate(Isten isten, double deltaTime) {
+        if(storedItems.size() != 5) System.err.println("stored item size nem 5!");
         int previousSelectedSlot = selectedSlot;
         if (isten.getInputHandler().isKeyDown(KeyEvent.VK_1)) selectedSlot = 1;
         else if (isten.getInputHandler().isKeyDown(KeyEvent.VK_2)) selectedSlot = 2;
