@@ -32,6 +32,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * The player class, makes almost everything related to the player.
@@ -67,11 +68,12 @@ public class Player extends Entity {
 
     private PP_FogOfWar fogOfWar=null;
     private BufferedImage fogOfWarImage;
-    private char[] fogOfWarHelper=null; private int mapX, mapY; private int rendererWidth=0, rendererHeight=0;
+    private int mapX, mapY; private int rendererWidth=0, rendererHeight=0;
+    private char[] fogOfWarHelper=null; private Vec2[] fogOfWarHelperOffsets=null;
     private boolean fogOfWarDrawing=false;
     private final Object fogOfWarSync=new Object();
     private final float fogDistance=3;
-    private final int fogMaxResolution=400;
+    private final int fogMaxResolution=500;
 
     public Player(Isten isten) {
         playerCollider = null;
@@ -203,10 +205,13 @@ public class Player extends Entity {
         fogOfWarImage=null;
         fogOfWar=new PP_FogOfWar(fogOfWarImage);
 
-        mapX=isten.getMap().getMapRowSize();//a plusz 1 azert kell, hogy a falak is latszodjanak
-        mapY=isten.getMap().getMapColumnSize();
+        mapX=isten.getMap().getMapRowSize()+1;//a plusz 1 azert kell, hogy a falak is latszodjanak
+        mapY=isten.getMap().getMapColumnSize()+1;
         fogOfWarHelper=new char[mapX*mapY];
         Arrays.fill(fogOfWarHelper,(char)10);
+
+        fogOfWarHelperOffsets=new Vec2[mapX*mapY];
+
         isten.getRenderer().registerPostProcessingEffect(fogOfWar);
     }
 
@@ -504,6 +509,17 @@ public class Player extends Entity {
 
                 rendererWidth=isten.getRenderer().getWidth();
                 rendererHeight=isten.getRenderer().getHeight();
+
+                do{
+                    final Vec2 maxRandomOffsetOrigin=new Vec2(
+                            -0.25f*isten.getCamera().getPixelsPerUnit()*fogOfWarImage.getWidth()/(float)rendererWidth,
+                            -0.25f*isten.getCamera().getPixelsPerUnit()*fogOfWarImage.getHeight()/(float)rendererHeight
+                    );
+                    final Vec2 maxRandomOffsetBound=new Vec2(-0.5f*maxRandomOffsetOrigin.x,-0.5f*maxRandomOffsetOrigin.y);
+                    Random rand=new Random();
+                    for(int i=0;i<fogOfWarHelperOffsets.length;i++)
+                        fogOfWarHelperOffsets[i]=new Vec2(rand.nextFloat(maxRandomOffsetOrigin.x, maxRandomOffsetBound.x), rand.nextFloat(maxRandomOffsetOrigin.y, maxRandomOffsetBound.y));
+                }while(69==420);
             }
             else
                 return;
@@ -526,6 +542,18 @@ public class Player extends Entity {
 
             rendererWidth=isten.getRenderer().getWidth();
             rendererHeight=isten.getRenderer().getHeight();
+
+
+            do{
+                final Vec2 maxRandomOffsetOrigin=new Vec2(
+                        -0.25f*isten.getCamera().getPixelsPerUnit()*fogOfWarImage.getWidth()/(float)rendererWidth,
+                        -0.25f*isten.getCamera().getPixelsPerUnit()*fogOfWarImage.getHeight()/(float)rendererHeight
+                );
+                final Vec2 maxRandomOffsetBound=new Vec2(-0.5f*maxRandomOffsetOrigin.x,-0.5f*maxRandomOffsetOrigin.y);
+                Random rand=new Random();
+                for(int i=0;i<fogOfWarHelperOffsets.length;i++)
+                    fogOfWarHelperOffsets[i]=new Vec2(rand.nextFloat(maxRandomOffsetOrigin.x, maxRandomOffsetBound.x), rand.nextFloat(maxRandomOffsetOrigin.y, maxRandomOffsetBound.y));
+            }while(69==420);
         }
 
         Vec2 imageStart=Vec2.sum(pos, new Vec2(-0.5f*rendererWidth/(float)isten.getCamera().getPixelsPerUnit(),0.5f*rendererHeight/(float)isten.getCamera().getPixelsPerUnit()));
@@ -563,7 +591,12 @@ public class Player extends Entity {
             {
                 if(fogOfWarHelper[currentIndex]<10)
                 {
-                    ppUnits.add(new PP_FogOfWar.FogUnitPP((int)currentPos.x, (int)currentPos.y, (int)fogUnitSizeInPixels.x, (int)fogUnitSizeInPixels.y,fogOfWarHelper[currentIndex]));
+                    ppUnits.add(new PP_FogOfWar.FogUnitPP(
+                            (int)(currentPos.x+fogOfWarHelperOffsets[currentIndex].x),
+                            (int)(currentPos.y+fogOfWarHelperOffsets[currentIndex].y),
+                            (int)fogUnitSizeInPixels.x,
+                            (int)fogUnitSizeInPixels.y,
+                            fogOfWarHelper[currentIndex]));
                 }
             }
         }
