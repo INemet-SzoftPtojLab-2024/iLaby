@@ -178,7 +178,7 @@ public class GameClient extends Thread {
         String username = packet.getUsername();
 
         for(PlayerMP player: isten.getUpdatablesByType(PlayerMP.class)) {
-            if(player.getPlayerName().getText().equalsIgnoreCase(username)) {
+            if(player.getPlayerName().getText().equalsIgnoreCase(username) && !player.localPlayer) {
                 player.getInventory().setCamembert((Camembert)isten.getItemManager().getItems().get(itemIndex));
                 player.getInventory().setCamembertTriggered(true);
             }
