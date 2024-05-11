@@ -365,7 +365,7 @@ public class GameClient extends Thread {
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ChestManager.class) {
                 chestIndex = i;
-                Chest chest =  new Chest(packet.getPos(),isten, packet.getChestType(), packet.getWallLocation(), packet.getIdx());
+                Chest chest =  new Chest(packet.getPos(),isten, packet.getChestType(), packet.getIdx());
                 chest.setNewChestImage();
                 isten.getUpdatables().get(i).getChests().add(chest);
                 chestGenCount++;

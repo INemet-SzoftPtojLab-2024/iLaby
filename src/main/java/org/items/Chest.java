@@ -30,11 +30,14 @@ public class Chest {
     ///**
      //* @param this.heading 0=left, 1=up, 2=right, 3=down
      //*/
-    public Chest(Vec2 pos, Isten isten, int chestType,int wallLocation, int idx) {
+    public Chest(Vec2 pos, Isten isten, int chestType, int idx) {
         this.isten = isten;
         this.isOpened = false;
         //a heading es a WallLocation ugyan azt az adatot tarolja, overhead
-        this.setWallLocation(wallLocation);
+        //a wallLocation maga is overHead, hiszen a UnitRoombol szarmaztathato
+        //a cleinsen csak a posicioja van tarolva a unitroomnak
+        this.unitRoom = isten.getMap().getUnitRooms()[(int)pos.y][(int)pos.x];
+        this.setWallLocation();
         this.idx = idx;
         this.chestType = (Chest.ChestType) Arrays.stream(Chest.ChestType.values()).toArray()[chestType];
         storedItems = new ArrayList<Item>();
@@ -44,9 +47,6 @@ public class Chest {
             for (int i = 0; i < maxAmountOfItems; i++) {storedItems.set(i, items.get(i));}
         }
         else storedItems=items;*/
-
-        //a cleinsen csak a posicioja van tarolva a unitroomnak
-        this.unitRoom = isten.getMap().getUnitRooms()[(int)pos.y][(int)pos.x];
         this.unitRoom.setHasChest(true);
         setPos(); // a unitroom pos-bol convertal rendes post, ezert az utobbi sor ez utan mar nem allna meg a helyet
 
@@ -128,10 +128,10 @@ public class Chest {
         return walls.get(random.nextInt(walls.size()));
     }
     public void setUnitRoom(Vec2 pos){
-        this.pos = pos;
+        this.unitRoom.setHasChest(false);
         this.unitRoom = isten.getMap().getUnitRooms()[(int)pos.y][(int)pos.x];
-        WallLocation wall = wallInUnitRoomPicker(unitRoom);
-        //a heading es a pos ugyan azt az adatot tarolja, overhead
+        //a heading es a pos ugyan azt az adatot tarolja, overhead // a unitRoomon kivul igazabol minden overhead
+        setWallLocation();
         setPos();
         chestImage = null;
         setNewChestImage();
@@ -250,15 +250,26 @@ public class Chest {
     public enum WallLocation {LEFT, TOP, RIGHT, BOTTOM}
     public enum ChestType{ONE,TWO,THREE,FOUR,FIVE,SIX}
 
-    public void replaceChest(Vec2 newURPos, int newWallLocation){
+    //ugyanezt csinalja a setUnitRoom, csak obejktumOrientalt elnevezessel :(
+    //atirtam oo-ra remelem nincs hari
+    public void replaceChest(Vec2 newURPos){
         //a setHasChest allitasa a cliensen folosleges, de maradhat
-        setWallLocation(newWallLocation);
         unitRoom.setHasChest(false);
         unitRoom = isten.getMap().getUnitRooms()[(int)newURPos.y][(int)newURPos.x];
         unitRoom.setHasChest(true);
+        setWallLocation();
         setPos(); // a unitroom alapjan beallitja a rendes positiont
         collider.setPosition(pos);
         setNewChestImage();
+    }
+    private int getRightWallLocation(){
+        ArrayList<Chest.WallLocation> walls = new ArrayList<>();
+        if (unitRoom.isLeftWall()) walls.add(Chest.WallLocation.LEFT);
+        if (unitRoom.isTopWall()) walls.add(Chest.WallLocation.TOP);
+        if (unitRoom.isRightWall()) walls.add(Chest.WallLocation.RIGHT);
+        if (unitRoom.isBottomWall()) walls.add(Chest.WallLocation.BOTTOM);
+        Random random = new Random();
+        return walls.get(random.nextInt(walls.size())).ordinal();
     }
     public void setCollider() {// a collider marad csak a pozicioja valtozik meg
         this.collider = new Collider(pos,new Vec2(0.3f,0.3f));
@@ -270,12 +281,12 @@ public class Chest {
         this.idx = i;
     }
     //az athelyezesnel kell, mert a klensek nem tudjal liszamolni
-    public void setWallLocation(int wallLocation){
+    public void setWallLocation(){
         //LEFT -> 0
         //TOP -> 1
         //RIGHT -> 2
         //BOTTOM -> 3
-        this.wallLocation = (Chest.WallLocation) Arrays.stream(Chest.WallLocation.values()).toArray()[wallLocation];
+        this.wallLocation = (Chest.WallLocation) Arrays.stream(Chest.WallLocation.values()).toArray()[getRightWallLocation()];
     }
 
     public WallLocation getWallLocation() {
