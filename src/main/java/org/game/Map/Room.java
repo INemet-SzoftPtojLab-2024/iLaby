@@ -39,7 +39,7 @@ public class Room extends Updatable implements Graph<Room>{
     public void setRoomType(boolean startRoom) {
         if(startRoom){
             roomType = RoomType.BASIC;
-            maxPlayerCount = 100;
+            //maxPlayerCount = 1;
             System.out.println(ID+ "szamu szobanak 100 a maxPlayerCountja");
         }
         else{

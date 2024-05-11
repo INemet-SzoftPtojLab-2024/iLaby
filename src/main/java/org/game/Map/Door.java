@@ -67,7 +67,8 @@ public class Door extends EdgePiece {
     public boolean canBeOpened(PlayerMP player) {
         //player helyének meghatározása
         Room placeOfPlayer = player.getCurrentRoom();
-        System.out.println(placeOfPlayer.getID());
+        System.out.println("roomID: " + placeOfPlayer.getID());
+        System.out.println("playerCount: " + placeOfPlayer.getPlayerCount());
         //masik oldali szoba meghatározása
         Room roomOnOtherSideOfDoor = null;
         for(UnitRoom unitRoom : unitRoomsBetween) {
