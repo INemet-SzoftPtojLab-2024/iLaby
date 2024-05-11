@@ -28,8 +28,8 @@ public class Chest {
     private int idx;
 
     ///**
-     //* @param this.heading 0=left, 1=up, 2=right, 3=down
-     //*/
+    //* @param this.heading 0=left, 1=up, 2=right, 3=down
+    //*/
     public Chest(Vec2 pos, Isten isten, int chestType,int wallLocation, int idx) {
         this.isten = isten;
         this.isOpened = false;

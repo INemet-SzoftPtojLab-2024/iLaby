@@ -35,7 +35,7 @@ public class ChestManager extends Updatable {
         colliderGroup = new  ColliderGroup();
         int mapRowSize = isten.getMap().getMapRowSize();
         int mapColumnSize = isten.getMap().getMapColumnSize();
-         randomUnitRoom= new ArrayList<>();
+        randomUnitRoom= new ArrayList<>();
         int listSize = mapRowSize * mapColumnSize;
         for(int i =0;i<listSize;i++){
             randomUnitRoom.add(i);
@@ -116,14 +116,22 @@ public class ChestManager extends Updatable {
 
 
         //CHEST TIPUSOK, a networking miatt sokkal egyszerubb így az itemeket atadni --> Chest.java/fillChest
-        Chest chest=new Chest(unitRoom.getPosition(),isten,chestType,chests.size());
+        Chest chest=new Chest(unitRoom.getPosition(),isten,chestType,getRightWallLocation(unitRoom) ,chests.size());
         //chest.fillChest();
         chests.add(chest);
         chest.setNewChestImage();
         colliderGroup.addCollider(chest.getCollider());
         return true;
     }
-
+    private int getRightWallLocation(UnitRoom unitRoom){
+        ArrayList<Chest.WallLocation> walls = new ArrayList<>();
+        if (unitRoom.isLeftWall()) walls.add(Chest.WallLocation.LEFT);
+        if (unitRoom.isTopWall()) walls.add(Chest.WallLocation.TOP);
+        if (unitRoom.isRightWall()) walls.add(Chest.WallLocation.RIGHT);
+        if (unitRoom.isBottomWall()) walls.add(Chest.WallLocation.BOTTOM);
+        Random random = new Random();
+        return walls.get(random.nextInt(walls.size())).ordinal();
+    }
     private UnitRoom getPlaceForChest(){
         int mapRowSize = isten.getMap().getMapRowSize();
         Collections.shuffle(randomUnitRoom);
