@@ -156,10 +156,12 @@ public class Isten {
         if(PlayerPrefs.getInt("isHost")!=0) {
             socketServer = new GameServer(this);
             socketServer.start();
-
+            socketClient = new GameClient(this, "localhost");
+            socketClient.start();
+        }else{
+            socketClient = new GameClient(this, JOptionPane.showInputDialog("IP address?"));
+            socketClient.start();
         }
-        socketClient = new GameClient(this, "localhost");
-        socketClient.start();
 
         loginPacket.writeData(socketClient);
 

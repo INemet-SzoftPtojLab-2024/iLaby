@@ -355,7 +355,7 @@ public class MainMenu extends Updatable {
 
             activeCharacterImage=PlayerPrefs.getInt("skin");
             image_characterImages=new ArrayList<>();
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 2; i++) {
                 image_characterImages.add(new ImageUI(new Vec2(0, 75), new Vec2(200, 200), "./assets/character/character" + i + "_right1.png"));
                 image_characterImages.get(i).setSortingLayer(-68);
 

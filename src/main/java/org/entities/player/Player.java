@@ -248,9 +248,9 @@ public class Player extends Entity {
             if(changedRoom) {
 
                 if(playerInVillainRoom && !inventory.avoidVillain(deltaTime)){
-                    if (localPlayer && playerSound != null) {
+                    if (localPlayer) {
                         alive = false;
-                        AudioManager.closeSound(playerSound);
+                        if(playerSound != null) AudioManager.closeSound(playerSound);
                     }
                 }
                 //beallitani a playerCountjat a szobanak:: (akar kiszervezheto fv-be)
@@ -361,7 +361,7 @@ public class Player extends Entity {
             if (localPlayer) isten.getCamera().setPosition(playerCollider.getPosition());
 
             //play sound
-            if (!AudioManager.isPlaying(playerSound) && localPlayer)
+            if (!AudioManager.isPlaying(playerSound) && localPlayer && alive)
                 playerSound = AudioManager.playSound("./assets/audio/playersound.ogg");
 
             if (TimeCounter.getTimeRemaining() < 0 && alive) {
@@ -371,8 +371,7 @@ public class Player extends Entity {
 
         }
         else {
-
-            if (!AudioManager.isPlaying(playerSound) && localPlayer)
+            if (!AudioManager.isPlaying(playerSound) && localPlayer && activeImage != 14)
                 playerSound = AudioManager.playSound("./assets/audio/died.ogg");
 
             if (activeImage != 14) {
