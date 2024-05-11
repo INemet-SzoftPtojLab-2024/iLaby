@@ -189,8 +189,8 @@ public class Villain extends Entity {
             }
         }*/
         //shortcut:
-        int x = (int)(villainCollider.getPosition().x + 0.3f);
-        int y = (int)(villainCollider.getPosition().y + 0.3f);
+        int x = (int)(villainCollider.getPosition().x + 0.5f);
+        int y = (int)(villainCollider.getPosition().y + 0.5f);
         //System.out.println(x + " " + y + " ownerroorm pozi " +  isten.getMap().getUnitRooms()[y][x].getColNum() + " " + isten.getMap().getUnitRooms()[y][x].getRowNum());
         this.room = isten.getMap().getUnitRooms()[y][x].getOwnerRoom();
         this.currentUnitRoom = isten.getMap().getUnitRooms()[y][x];
