@@ -300,13 +300,14 @@ public class Mapgenerator {
                 //ha szomszédosak, és még nincs a két szoba kozott definialva az edge (vagyis a falak)
                 if(r1.isPhysicallyAdjacent(r2) && !map.getEdgeManager().getRoomEdges().contains(map.getEdgeManager().getEdgeBetweenRooms(r1,r2))){
                     EdgeBetweenRooms newEdge = new EdgeBetweenRooms(r1,r2);
-                    map.getEdgeManager().getRoomEdges().add(newEdge);
+                    map.getEdgeManager().addEdge(newEdge);
+                    //map.getEdgeManager().getRoomEdges().add(newEdge);
                     // this collidergroup will be filled up, when the walls are created
                     //isten.getPhysicsEngine().addColliderGroup(newEdge.getColliderGroup());
                 }
             }
         }
-        fillUpEdgesBetweenRooms();
+        //fillUpEdgesBetweenRooms();
     }
     public void fillUpEdgesBetweenRooms(){
         Vec2 horizontalScale = new Vec2(1f, 0.3f); //vizszintes

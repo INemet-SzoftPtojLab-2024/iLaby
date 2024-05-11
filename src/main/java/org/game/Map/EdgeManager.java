@@ -196,7 +196,7 @@ public class EdgeManager extends Updatable {
 
     //ajto nelkul ad egy falat a ket szoba koze
     public void addEdge(EdgeBetweenRooms newEdge){
-        Vec2 horizontalScale = new Vec2(1f, 0.1f); //vizszintes
+        Vec2 horizontalScale = new Vec2(1f, 0.3f); //vizszintes
         Vec2 verticalScale = new Vec2(0.1f, 1f); //fuggoleges
         Room r1 = newEdge.getNodeRooms().get(0);
         Room r2 = newEdge.getNodeRooms().get(1);
