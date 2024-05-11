@@ -220,6 +220,14 @@ public class Inventory extends Updatable {
         }
         return true;
     }
+    public boolean isEmpty(){
+        for(int i = 0; i < size; i++) {
+            if(storedItems.get(i) != null) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     /**
      * @param slot Nr.of the slot, 1-5
