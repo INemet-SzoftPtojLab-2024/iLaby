@@ -177,7 +177,7 @@ public class Villain extends Entity {
 
     public void updateVillainOnServer(Isten isten, double deltaTime) {
 
-        for (Room room : isten.getMap().getRooms()) {
+        /*for (Room room : isten.getMap().getRooms()) {
             for (UnitRoom unitRoom : room.getUnitRooms()) {
                 if (villainCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
                         villainCollider.getPosition().x <= unitRoom.getPosition().x + 0.5 &&
@@ -187,7 +187,13 @@ public class Villain extends Entity {
                     this.room = currentUnitRoom.getOwnerRoom();
                 }
             }
-        }
+        }*/
+        //shortcut:
+        int x = (int)(villainCollider.getPosition().x + 0.5f);
+        int y = (int)(villainCollider.getPosition().y + 0.5f);
+        //System.out.println(x + " " + y + " ownerroorm pozi " +  isten.getMap().getUnitRooms()[y][x].getColNum() + " " + isten.getMap().getUnitRooms()[y][x].getRowNum());
+        this.room = isten.getMap().getUnitRooms()[y][x].getOwnerRoom();
+        this.currentUnitRoom = isten.getMap().getUnitRooms()[y][x];
 
         checkIfInGasRoom(isten);
 
