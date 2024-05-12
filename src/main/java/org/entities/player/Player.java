@@ -131,6 +131,7 @@ public class Player extends Entity {
 
         Vec2 playerScale = new Vec2(0.5f, 0.5f);
         Vec2 faintedScale = new Vec2(0.6f, 0.6f);
+        if(skinID > 1)faintedScale = new Vec2(0.53f, 0.53f);
 
         playerCollider = new Collider(new Vec2(spawnPosition.x, spawnPosition.y), playerScale);
         playerCollider.setMovability(true);
@@ -341,12 +342,19 @@ public class Player extends Entity {
                     if (prev % 2 == 0 || playerCollider.getVelocity().magnitude() == 0.0f) activeImage++;
                 }
                 else { //normal animation
-                    if (playerCollider.getVelocity().x > 0) activeImage = 0;
-                    else if (playerCollider.getVelocity().x < 0) activeImage = 2;
-                    else if (leftFacing) activeImage = 2;
-                    else activeImage = 0;
-                    if (prev % 2 == 0 || playerCollider.getVelocity().magnitude() == 0.0f) activeImage++;
-                    if (isFainted) activeImage += 4;
+                    if(!isFainted && (prev == 5 || prev == 8)) {
+                        activeImage = 1;
+                    }
+                    else if(!isFainted && (prev == 7 || prev == 9)){
+                        activeImage=3;
+                    }else {
+                        if (playerCollider.getVelocity().x > 0) activeImage = 0;
+                        else if (playerCollider.getVelocity().x < 0) activeImage = 2;
+                        else if (leftFacing) activeImage = 2;
+                        else activeImage = 0;
+                        if (prev % 2 == 0 || playerCollider.getVelocity().magnitude() == 0.0f) activeImage++;
+                        if (isFainted) activeImage += 4;
+                    }
                 }
                 playerImage.get(prev).setVisibility(false);
                 playerImage.get(activeImage).setVisibility(true);
