@@ -159,7 +159,7 @@ public class ChestManager extends Updatable {
                 && (unitRoomTmp.isTopWall() || unitRoomTmp.isRightWall() || unitRoomTmp.isBottomWall() || unitRoomTmp.isLeftWall())//ha egyik oldalán legalább fal van
         )
         {
-            if(!unitRoomTmp.getHasChest()){
+            if(!unitRoomTmp.getHasChest() && unitRoomTmp.getOwnerRoom().getID() != isten.getMap().getUnitRooms()[0][0].getOwnerRoom().getID()){
                 return true;
             }
         }
