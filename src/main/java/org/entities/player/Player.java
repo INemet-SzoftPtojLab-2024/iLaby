@@ -202,17 +202,17 @@ public class Player extends Entity {
         AudioManager.preloadSound("./assets/audio/won.ogg");
 
         //fog of war
-        fogOfWarImage=null;
-        fogOfWar=new PP_FogOfWar(fogOfWarImage);
-
-        mapX=isten.getMap().getMapRowSize()+1;//a plusz 1 azert kell, hogy a falak is latszodjanak
-        mapY=isten.getMap().getMapColumnSize()+1;
-        fogOfWarHelper=new char[mapX*mapY];
-        Arrays.fill(fogOfWarHelper,(char)10);
-
-        fogOfWarHelperOffsets=new Vec2[mapX*mapY];
-
-        isten.getRenderer().registerPostProcessingEffect(fogOfWar);
+//        fogOfWarImage=null;
+//        fogOfWar=new PP_FogOfWar(fogOfWarImage);
+//
+//        mapX=isten.getMap().getMapRowSize()+1;//a plusz 1 azert kell, hogy a falak is latszodjanak
+//        mapY=isten.getMap().getMapColumnSize()+1;
+//        fogOfWarHelper=new char[mapX*mapY];
+//        Arrays.fill(fogOfWarHelper,(char)10);
+//
+//        fogOfWarHelperOffsets=new Vec2[mapX*mapY];
+//
+//        isten.getRenderer().registerPostProcessingEffect(fogOfWar);
     }
 
     @Override
@@ -395,17 +395,17 @@ public class Player extends Entity {
         death.setScale(new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()));
         winBgn.setScale(new Vec2(isten.getRenderer().getWidth(), isten.getRenderer().getHeight()));
 
-        if(alive)
-        {
-            synchronized (fogOfWarSync)
-            {
-                if(!fogOfWarDrawing)
-                {
-                    Thread thread=new Thread(()->drawFogOfWar(isten));
-                    thread.start();
-                }
-            }
-        }
+//        if(alive)
+//        {
+//            synchronized (fogOfWarSync)
+//            {
+//                if(!fogOfWarDrawing)
+//                {
+//                    Thread thread=new Thread(()->drawFogOfWar(isten));
+//                    thread.start();
+//                }
+//            }
+//        }
     }
 
     public boolean checkIfPlayerInVillainRoom(Isten isten,double deltaTime) {
