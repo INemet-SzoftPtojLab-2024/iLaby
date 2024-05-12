@@ -82,4 +82,6 @@ public abstract class Item {
     public boolean isUsed(){return used;}
     public void setCapacity(float capacity) {}
     public void resizeBar(float percent) {}
+    //For testing
+    public void setDroppedAt(LocalDateTime droppedAt) {this.droppedAt = droppedAt;}
 }

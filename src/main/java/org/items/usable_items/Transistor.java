@@ -94,5 +94,12 @@ public class Transistor extends Item {
         }
         return null;
     }
-
+    //For testing
+    public TextUI getCountText() {
+        return countText;
+    }
+    //For testing
+    public Image getActivatedImage() {
+        return activatedImage;
+    }
 }
