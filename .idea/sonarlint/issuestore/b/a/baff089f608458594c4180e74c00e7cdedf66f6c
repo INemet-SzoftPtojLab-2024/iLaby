@@ -1,4 +1,14 @@
 
-o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(££Æ¿
-_
-java:S2094"BRemove this empty class, write its code or make it an "interface".(»›×¤8ýàÚŸõ1
+v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(££Æ¿8è”Òžö1
+W
+java:S1118	":Add a private constructor to hide the implicit public one.(»›×¤8ð”Òžö1
+X	java:S125"<This block of commented-out lines of code should be removed.(ø·ü¡8ó”Òžö1
+]	java:S125"<This block of commented-out lines of code should be removed.(”²áÖøÿÿÿÿ8ô”Òžö1
+W	java:S125"<This block of commented-out lines of code should be removed.(–œ8õ”Òžö1
+]	java:S125"<This block of commented-out lines of code should be removed.(»å‚‰ýÿÿÿÿ8õ”Òžö1
+]	java:S125 "<This block of commented-out lines of code should be removed.(â‚ˆ‰þÿÿÿÿ8÷”Òžö1
+X	java:S125."<This block of commented-out lines of code should be removed.(ŒÆÊý8ù”Òžö1
+W
+java:S1128"5Remove this unused import 'main.java.org.game.Isten'.(Åáç‰úÿÿÿÿ8ñÄÓžö1
+a
+java:S1128"?Remove this unused import 'main.java.org.game.Map.EdgeManager'.(ž„¿ýÿÿÿÿ8ñÄÓžö1
