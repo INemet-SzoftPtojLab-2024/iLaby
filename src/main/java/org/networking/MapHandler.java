@@ -130,11 +130,14 @@ public class MapHandler extends ServerSideHandler {
 
                             Room r1 = isten.getMap().getRooms().get(0);
                             Room r2 = isten.getMap().getRooms().get(0).getPhysicallyAdjacentRooms().get(0);
-                            handleUnitRoomChange(r2.getUnitRooms(), r1.getRoomType().ordinal());
-                            handleWallDeletion(isten.getMap().getEdgeManager().getEdgeBetweenRooms(r1, r2));
-                            mergeRooms(r1, r2, isten.getMap());
-                            handleRoomEdges(r1);
-                            System.out.println("Merge: " + (System.currentTimeMillis() - startTimeMillis) + " ms");
+                            if(r1.getID() != isten.getMap().getUnitRooms()[0][0].getOwnerRoom().getID()
+                            && r2.getID() != isten.getMap().getUnitRooms()[0][0].getOwnerRoom().getID()) {
+                                handleUnitRoomChange(r2.getUnitRooms(), r1.getRoomType().ordinal());
+                                handleWallDeletion(isten.getMap().getEdgeManager().getEdgeBetweenRooms(r1, r2));
+                                mergeRooms(r1, r2, isten.getMap());
+                                handleRoomEdges(r1);
+                                System.out.println("Merge: " + (System.currentTimeMillis() - startTimeMillis) + " ms");
+                            }
                             taskCount.decrementAndGet();
                         });
 
@@ -146,6 +149,7 @@ public class MapHandler extends ServerSideHandler {
                             long startTimeMillis = System.currentTimeMillis();
 
                             for (Room splittable : isten.getMap().getRooms()) {
+                                if(splittable.getID() == isten.getMap().getUnitRooms()[0][0].getOwnerRoom().getID()) continue;
                                 int newID;
                                 if ((newID = splitRooms(splittable, isten.getMap())) != -1) {
 
