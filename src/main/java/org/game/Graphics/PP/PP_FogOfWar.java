@@ -13,13 +13,13 @@ public class PP_FogOfWar implements PostProcessEffectBased{
     private BufferedImage source;
     private ArrayList<FogUnitPP> unitsToDraw=new ArrayList<>();
 
-    private final BufferedImage[] fogImages=new BufferedImage[10];
+    private final BufferedImage[] fogImages=new BufferedImage[22];
 
     public PP_FogOfWar(BufferedImage source)
     {
         this.source=source;
 
-        for(int i=0;i<10;i++)
+        for(int i=0;i<22;i++)
         {
             String path="./assets/fog/fog_mask_"+i+".png";
             fogImages[i]= Image.loadImage(path);
@@ -71,9 +71,9 @@ public class PP_FogOfWar implements PostProcessEffectBased{
 
     public static class FogUnitPP
     {
-        final int drawX, drawY;
-        final int width, height;
-        final int index;
+        public final int drawX, drawY;
+        public final int width, height;
+        public final int index;
 
         public FogUnitPP(int drawX, int drawY, int width, int height, int index)
         {

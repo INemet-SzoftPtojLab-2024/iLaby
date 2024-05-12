@@ -32,6 +32,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 
 /**
@@ -72,7 +73,7 @@ public class Player extends Entity {
     private char[] fogOfWarHelper=null; private Vec2[] fogOfWarHelperOffsets=null;
     private boolean fogOfWarDrawing=false;
     private final Object fogOfWarSync=new Object();
-    private final float fogDistance=3;
+    private final float fogDistance=2;
     private final int fogMaxResolution=500;
 
     public Player(Isten isten) {
@@ -209,7 +210,7 @@ public class Player extends Entity {
         mapX=isten.getMap().getMapRowSize()+1;//a plusz 1 azert kell, hogy a falak is latszodjanak
         mapY=isten.getMap().getMapColumnSize()+1;
         fogOfWarHelper=new char[mapX*mapY];
-        Arrays.fill(fogOfWarHelper,(char)10);
+        Arrays.fill(fogOfWarHelper,(char)22);
 
         fogOfWarHelperOffsets=new Vec2[mapX*mapY];
 
@@ -457,8 +458,8 @@ public class Player extends Entity {
         //check for newly discovered area
         final Vec2 pos=playerCollider.getPosition();
         //clearFogDistance and transparencyHelper are made to reduce the number of float operations
-        final float clearFogDistance=0.5f*fogDistance;
-        final float transparencyHelper=1/(0.5f*fogDistance);
+        final float clearFogDistance=0.25f*fogDistance;
+        final float transparencyHelper=1/(0.75f*fogDistance);
 
         int minX=Math.round(pos.x-(float)Math.ceil(fogDistance));
         int maxX=Math.round(pos.x+(float)Math.ceil(fogDistance));
@@ -485,7 +486,7 @@ public class Player extends Entity {
                     continue;
                 if(distance>clearFogDistance)
                 {
-                    char opaqueness=(char)(10*transparencyHelper*(distance-clearFogDistance));
+                    char opaqueness=(char)(22*Math.sqrt(transparencyHelper*(distance-clearFogDistance)));
                     if(opaqueness<fogOfWarHelper[currentIndex])
                         fogOfWarHelper[currentIndex]=opaqueness;
                     continue;
@@ -597,7 +598,7 @@ public class Player extends Entity {
             currentPos.x=imageStartInScreenSpace.x;
             for(int j=minX;j<=maxX;j++, currentIndex++, currentPos.x+=fogPixelsPerUnit.x)
             {
-                if(fogOfWarHelper[currentIndex]<10)
+                if(fogOfWarHelper[currentIndex]<22)
                 {
                     ppUnits.add(new PP_FogOfWar.FogUnitPP(
                             (int)(currentPos.x+fogOfWarHelperOffsets[currentIndex].x),
@@ -608,6 +609,8 @@ public class Player extends Entity {
                 }
             }
         }
+
+        ppUnits.sort((ppUnit1, ppUnit2) -> (ppUnit2.index - ppUnit1.index));
 
         fogOfWar.setUnitsToDraw(ppUnits);
 
