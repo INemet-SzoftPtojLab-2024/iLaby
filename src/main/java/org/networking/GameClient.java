@@ -2,17 +2,11 @@ package main.java.org.networking;
 
 import main.java.org.game.Isten;
 import main.java.org.game.UI.TimeCounter;
-import main.java.org.game.physics.Collider;
-import main.java.org.game.physics.ColliderGroup;
-import main.java.org.game.updatable.Updatable;
 import main.java.org.items.Chest;
 import main.java.org.items.ChestManager;
 import main.java.org.items.Item;
 import main.java.org.items.ItemManager;
-import main.java.org.items.usable_items.Camembert;
-import main.java.org.items.usable_items.Gasmask;
-import main.java.org.items.usable_items.Sorospohar;
-import main.java.org.items.usable_items.Tvsz;
+import main.java.org.items.usable_items.*;
 import main.java.org.linalg.Vec2;
 
 import java.io.IOException;
@@ -124,6 +118,10 @@ public class GameClient extends Thread {
                 packet = new Packet17Camembert(data);
                 handleCamembert((Packet17Camembert)packet);
                 break;
+            case TRANSISTOR:
+                packet = new Packet19Transistor(data);
+                handleTransistor((Packet19Transistor) packet);
+                break;
             case WALL:
                 packet = new Packet20Wall(data);
                 handleWall((Packet20Wall) packet);
@@ -141,7 +139,6 @@ public class GameClient extends Thread {
                 handleWallDelete((Packet23WallDelete)packet);
                 break;
             case DOOROPEN:
-                //System.out.println("unitRoomPacketCount: " + unitRoomPacketCount);
                 packet = new Packet24DoorOpen(data);
                 handleDoorOpen((Packet24DoorOpen)packet);
                 break;
@@ -172,8 +169,15 @@ public class GameClient extends Thread {
         }
     }
 
-    private void handleCamembert(Packet17Camembert packet) {
+    private void handleTransistor(Packet19Transistor packet) {
+        Vec2 position = new Vec2(packet.getX(), packet.getY());
 
+        ((Transistor) isten.getItemManager().getItems().get(packet.getItemIndex())).getActivatedImage().setPosition(position);
+        ((Transistor) isten.getItemManager().getItems().get(packet.getItemIndex())).getCountText().setVisibility(false);
+        ((Transistor) isten.getItemManager().getItems().get(packet.getItemIndex())).setActivated(true);
+    }
+
+    private void handleCamembert(Packet17Camembert packet) {
         int itemIndex = packet.getItemIndex();
         String username = packet.getUsername();
 
@@ -183,7 +187,6 @@ public class GameClient extends Thread {
                 player.getInventory().setCamembertTriggered(true);
             }
         }
-
     }
 
     private void handleReplaceChest(Packet40ReplaceChest packet) {
@@ -195,7 +198,6 @@ public class GameClient extends Thread {
         //megkeressunk a chestet, majd meghivjuk ra a replace fv-t
         Chest chest = isten.getChestManager().getChests().get(index);
         chest.replaceChest(newPos, wallLocation);
-
     }
 
     private void handleItemsDropped(Packet42ItemsDropped packet) {
@@ -239,7 +241,6 @@ public class GameClient extends Thread {
 
 
     private void handlePlayerChangedRoom(Packet28PlayerChangedRoom packet) {
-
         for(PlayerMP player: isten.getUpdatablesByType(PlayerMP.class)) {
             if(player.getUsername().equalsIgnoreCase(packet.getUsername())) {
                 player.changedRoom(true);
@@ -282,8 +283,8 @@ public class GameClient extends Thread {
     private void handleGasmask(Packet14Gasmask packet) {
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ItemManager.class) {
-                ((Gasmask)isten.getUpdatables().get(i).getItems().get(packet.getItemIndex())).setCapacity(packet.getCapacity());
-                ((Gasmask)isten.getUpdatables().get(i).getItems().get(packet.getItemIndex())).resizeBar(packet.getCapacity());
+                ((Gasmask) isten.getUpdatables().get(i).getItems().get(packet.getItemIndex())).setCapacity(packet.getCapacity());
+                ((Gasmask) isten.getUpdatables().get(i).getItems().get(packet.getItemIndex())).resizeBar(packet.getCapacity());
             }
         }
     }
@@ -306,7 +307,6 @@ public class GameClient extends Thread {
     }
 
     private void handleEdgePieceChanged(Packet22EdgePieceChanged packet) {
-
         float x = packet.getX();
         float y = packet.getY();
         boolean isDoor = packet.isDoor();
@@ -343,7 +343,6 @@ public class GameClient extends Thread {
     }
 
     private void handleItemDropped(Packet13ItemDropped packet) {
-
         Vec2 pos = packet.getPos();
         String username = packet.getUsername();
         int selectedSlot = packet.getSelectedSlot();
@@ -355,23 +354,12 @@ public class GameClient extends Thread {
 
                 for(PlayerMP player: isten.getUpdatablesByType(PlayerMP.class)) {
                     if(player.getUsername().equalsIgnoreCase(username)) {
-                        System.out.println(itemIndex);
-                        System.out.println(isten.getItemManager().getItems().get(itemIndex).getClass());
-                        System.out.println("selectedSlot: " + selectedSlot);
-
                         Item item = isten.getItemManager().getItems().get(itemIndex);
 
                         player.getInventory().dropItem(item, pos, selectedSlot, replaced);
                         break;
-
                     }
                 }
-                /*
-                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).setLocation(Item.Location.GROUND);
-                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).getImage().setVisibility(true);
-                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).getImage().setPosition(packet.getPos());
-                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).setPosition(packet.getPos());
-                 */
             }
         }
     }
@@ -415,45 +403,21 @@ public class GameClient extends Thread {
                     item2 = isten.getItemManager().getItems().get(index2);
                 }
                 chest.open(item1, item2);
-
-                for(Item item: isten.getItemManager().getItems()) {
-                    if(item.getLocation() == Item.Location.GROUND) {
-                        System.out.println("item is on ground: " + item.getClass());
-                    }
-                }
-                System.out.println();
                 break;
             }
         }
     }
 
-    private int chestGenCount = 0;
     private void handleChestGeneration(Packet10ChestGeneration packet) {
-    if(isten.getSocketServer() != null) return;
-        int chestIndex = 0;
+        if(isten.getSocketServer() != null) return;
+
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ChestManager.class) {
-                chestIndex = i;
                 Chest chest =  new Chest(packet.getPos(),isten, packet.getChestType(), packet.getWallLocation(), packet.getIdx());
                 ChestManager chestManager = (ChestManager) isten.getUpdatables().get(i); // = isten.getChestManager()...
                 chestManager.addChest(chest);
-
-                //ezek pedig a chestmanager add vfeben megtortennek
-                //chest.setNewChestImage();
-                //isten.getUpdatables().get(i).getChests().add(chest);
-
-
-                chestGenCount++;
             }
         }
-
-        /*ColliderGroup chestColliders=new ColliderGroup();
-        for (int i = 0; i < isten.getUpdatables().get(chestIndex).getChests().size(); i++) {
-            Collider c=new Collider( isten.getUpdatables().get(chestIndex).getChests().get(i).getPosition(),new Vec2(0.3f,0.3f));
-            chestColliders.addCollider(c);
-        }*/
-        //a chestmanager construktoraban van ez
-        //isten.getPhysicsEngine().addColliderGroup(chestColliders);
     }
 
     private void handleDeath(Packet21Death packet) {
@@ -470,9 +434,6 @@ public class GameClient extends Thread {
     }
 
     private void handleWall(Packet20Wall packet) {
-
-        //if(isten.getSocketServer() != null) return;
-
         Vec2 pos = new Vec2(packet.getPosX(), packet.getPosY());
         Vec2 scale = new Vec2(packet.getScaleX(), packet.getScaleY());
         boolean isDoor = packet.isDoor();

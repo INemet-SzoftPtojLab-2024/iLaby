@@ -11,8 +11,6 @@ import java.util.List;
 import main.java.org.game.Map.Room;
 import main.java.org.game.Map.RoomType;
 import main.java.org.game.Map.UnitRoom;
-import main.java.org.items.ChestManager;
-import main.java.org.items.Item;
 import main.java.org.items.ItemManager;
 import main.java.org.linalg.Vec2;
 import main.java.org.networking.Packet.PacketTypes;
@@ -150,6 +148,10 @@ public class GameServer extends Thread {
                 packet = new Packet16Sorospohar(data);
                 handleSorospohar((Packet16Sorospohar) packet);
                 break;
+            case TRANSISTOR:
+                packet = new Packet19Transistor(data);
+                handleTransistor((Packet19Transistor) packet);
+                break;
             case REPLACECHEST:
                 packet = new Packet40ReplaceChest(data);
                 handleReplaceChest((Packet40ReplaceChest) packet);
@@ -164,6 +166,8 @@ public class GameServer extends Thread {
                 break;
         }
     }
+
+    private void handleTransistor(Packet19Transistor packet) { sendDataToAllClients(packet.getData()); }
 
     private void handleReplaceChest(Packet40ReplaceChest packet) { sendDataToAllClients(packet.getData());}
 

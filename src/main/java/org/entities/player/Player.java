@@ -414,7 +414,7 @@ public class Player extends Entity {
                     thread.start();
                 }
             }
-        }
+       }
     }
 
     public boolean checkIfPlayerInVillainRoom(Isten isten,double deltaTime) {

@@ -10,6 +10,7 @@ import main.java.org.game.Map.UnitRoom;
 import main.java.org.game.UI.Inventory;
 import main.java.org.items.Item;
 import main.java.org.linalg.Vec2;
+import main.java.org.networking.Packet19Transistor;
 import main.java.org.networking.PlayerMP;
 
 public class Transistor extends Item {
@@ -17,7 +18,8 @@ public class Transistor extends Item {
     private TextUI countText;
     private Image activatedImage;
 
-    boolean used = false;
+    private boolean isActivated;
+
     public Transistor(Isten isten){
         super(isten,new Vec2(0.4f,0.5f));
         imagePath="./assets/items/item_transistor.png";
@@ -41,6 +43,8 @@ public class Transistor extends Item {
     public void pickUpInInventory(PlayerMP player, int selectedSlotByClient) {
         super.pickUpInInventory(player, selectedSlotByClient);
 
+
+        if(activatedImage!=null) activatedImage.setVisibility(true);
         if(player.localPlayer) setUI(player);
     }
 
@@ -48,7 +52,7 @@ public class Transistor extends Item {
         Inventory inv = player.getInventory();
         Vec2 slotPosition = inv.getStoringSlotPosition(this);
         Vec2 textPosition = new Vec2(slotPosition.x -10, slotPosition.y-7);
-        if(!used){
+        if(!isActivated){
             countText.setPosition(textPosition);
             countText.setVisibility(true);
         }
@@ -62,12 +66,14 @@ public class Transistor extends Item {
                  System.err.println("Nem volt eleg hely a szobaban a tranzisztor hasznalatakor");
                  return;
          }
-        if(!used){
+        if(!isActivated){
             countText.setVisibility(false);
             Vec2 playerPosition = player.getPlayerCollider().getPosition();
             activatedImage.setPosition(playerPosition);
             activatedImage.setVisibility(true);
-            used=true;
+            isActivated=true;
+            Packet19Transistor packet19Transistor = new Packet19Transistor(playerPosition,getItemIndex());
+            packet19Transistor.writeData(isten.getSocketClient());
         }
         else{
             player.getPlayerCollider().setPosition(activatedImage.getPosition());
@@ -77,6 +83,7 @@ public class Transistor extends Item {
     @Override
     public void dropOnGround(Vec2 pos){
         super.dropOnGround(pos);
+        activatedImage.setVisibility(false);
         countText.setVisibility(false);
     }
     public Room getActiveTransistorRoom(){
@@ -102,4 +109,7 @@ public class Transistor extends Item {
     public Image getActivatedImage() {
         return activatedImage;
     }
+
+    public boolean isActivated() { return isActivated; }
+    public void setActivated(boolean bool) { isActivated = bool; }
 }
