@@ -9,6 +9,8 @@ import main.java.org.game.Map.UnitRoom;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.items.Item;
 import main.java.org.linalg.Vec2;
+import main.java.org.networking.Packet13ItemDropped;
+import main.java.org.networking.Packet18Rongy;
 
 public class Rongy extends Item {
     private Image stink;
@@ -29,18 +31,20 @@ public class Rongy extends Item {
     public void use(Player player, double deltaTime){
         used=true;
         dropOnGround(player.getPlayerCollider().getPosition());
-        Room room=getRoom();
-        for (Updatable u : isten.getUpdatables()) {
-            if (u.getClass().equals(Villain.class)) {
-                Villain villain = (Villain) u;
-                if (villain.getRoom().equals(room)) {
-                    villain.setFainted(impactTime);
-                }
-            }
-        }
+
+        Packet13ItemDropped packet = new Packet13ItemDropped(getItemIndex(), position, player.getPlayerName().getText(), inSlot+1, false);
+        packet.writeData(isten.getSocketClient());
+
+        Vec2 playerPosition = player.getPlayerCollider().getPosition();
+        Packet18Rongy packet18Rongy = new Packet18Rongy(playerPosition.x, playerPosition.y, getItemIndex(), player.getPlayerName().getText(), impactTime);
+        packet18Rongy.writeData(isten.getSocketClient());
+
+        if(player.localPlayer) player.getInventory().deleteItem(this);
+    }
+
+    public void stinkAnimation() {
         stink.setPosition(Vec2.sum(position,new Vec2(0.0f,0.25f)));
         stink.setVisibility(true);
-        player.getInventory().deleteItem(this);
         Runnable stinkThread=()->{//thread azért kell, hogy ha már nem hat a rongy, akkor eltüntesse a füstfelhőt
             try {
                 Thread.sleep((long) (impactTime*1000));
@@ -52,6 +56,7 @@ public class Rongy extends Item {
         Thread t=new Thread(stinkThread);
         t.start();
     }
+
     private Room getRoom() {
         Room currentRoom = null;
         for (Room room : isten.getMap().getRooms()) {

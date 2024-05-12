@@ -31,6 +31,7 @@ public abstract class Item {
     private int itemIndex;
 
     private LocalDateTime droppedAt;
+    protected int inSlot;
     public Item(Isten isten,Vec2 scale){
         this.scale=scale;
         location=Location.CHEST;
@@ -62,6 +63,7 @@ public abstract class Item {
                 image.setVisibility(false);
                 if(player.localPlayer) player.getInventory().addItem(this);
                 else player.getInventory().addItemToClient(this, selectedSlotByClient);
+                inSlot = selectedSlotByClient;
             }
         }
     }
@@ -80,6 +82,7 @@ public abstract class Item {
 
     public int getItemIndex() { return itemIndex; }
     public boolean isUsed(){return used;}
+    public void setUsed(boolean bool) { used = bool; }
     public void setCapacity(float capacity) {}
     public void resizeBar(float percent) {}
     //For testing

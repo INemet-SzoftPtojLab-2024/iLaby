@@ -1,5 +1,6 @@
 package main.java.org.networking;
 
+import main.java.org.entities.villain.Villain;
 import main.java.org.game.Isten;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -11,6 +12,7 @@ import java.util.List;
 import main.java.org.game.Map.Room;
 import main.java.org.game.Map.RoomType;
 import main.java.org.game.Map.UnitRoom;
+import main.java.org.game.updatable.Updatable;
 import main.java.org.items.ItemManager;
 import main.java.org.linalg.Vec2;
 import main.java.org.networking.Packet.PacketTypes;
@@ -148,6 +150,10 @@ public class GameServer extends Thread {
                 packet = new Packet16Sorospohar(data);
                 handleSorospohar((Packet16Sorospohar) packet);
                 break;
+            case RONGY:
+                packet = new Packet18Rongy(data);
+                handleRongy((Packet18Rongy) packet);
+                break;
             case TRANSISTOR:
                 packet = new Packet19Transistor(data);
                 handleTransistor((Packet19Transistor) packet);
@@ -165,6 +171,23 @@ public class GameServer extends Thread {
                 handleItemsDropped((Packet42ItemsDropped)packet);
                 break;
         }
+    }
+
+    private void handleRongy(Packet18Rongy packet) {
+        int x = (int)packet.getX();
+        int y = (int)packet.getY();
+        Room ownerRoom = isten.getMap().getUnitRooms()[y][x].getOwnerRoom();
+
+        for (Updatable u : isten.getUpdatables()) {
+            if (u.getClass().equals(Villain.class)) {
+                Villain villain = (Villain) u;
+                if (villain.getRoom().equals(ownerRoom)) {
+                    villain.setFainted(packet.getImpactTime());
+                }
+            }
+        }
+
+        sendDataToAllClients(packet.getData());
     }
 
     private void handleTransistor(Packet19Transistor packet) { sendDataToAllClients(packet.getData()); }

@@ -118,6 +118,10 @@ public class GameClient extends Thread {
                 packet = new Packet17Camembert(data);
                 handleCamembert((Packet17Camembert)packet);
                 break;
+            case RONGY:
+                packet = new Packet18Rongy(data);
+                handleRongy((Packet18Rongy) packet);
+                break;
             case TRANSISTOR:
                 packet = new Packet19Transistor(data);
                 handleTransistor((Packet19Transistor) packet);
@@ -167,6 +171,11 @@ public class GameClient extends Thread {
                 handleItemsDropped((Packet42ItemsDropped)packet);
                 break;
         }
+    }
+
+    private void handleRongy(Packet18Rongy packet) {
+        ((Rongy) isten.getItemManager().getItems().get(packet.getItemIndex())).stinkAnimation();
+        isten.getItemManager().getItems().get(packet.getItemIndex()).setUsed(true);
     }
 
     private void handleTransistor(Packet19Transistor packet) {
