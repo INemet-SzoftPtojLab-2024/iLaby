@@ -170,6 +170,11 @@ public class GameServer extends Thread {
                 packet = new Packet42ItemsDropped(data);
                 handleItemsDropped((Packet42ItemsDropped)packet);
                 break;
+
+            case FOG:
+                packet=new Packet50Fog(data);
+                handleFog((Packet50Fog)packet);
+                break;
         }
     }
 
@@ -274,6 +279,11 @@ public class GameServer extends Thread {
         villainHandler.sendDataToClient(player);
         chestGenerationHandler.sendDataToClient(player);
         for (byte[] data : events) sendDataToAllClients(data);
+    }
+
+    private void handleFog(Packet50Fog packet)
+    {
+        sendDataToAllClients(packet.getData());
     }
 
     //handle Move Packet
