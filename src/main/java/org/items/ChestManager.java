@@ -54,8 +54,12 @@ public class ChestManager extends Updatable {
         isten.getPhysicsEngine().addColliderGroup(colliderGroup);
         Random random = new Random();
         System.out.println("chestCount: " + chestCount);
+        int type;
         for (int i = 0; i < chestCount; i++) {
-            if(!placeChest(random.nextInt(Chest.ChestType.values().length))) break;
+            int randomNumber = random.nextInt(100);
+            if(randomNumber == 0 || i == 0) type = Chest.ChestType.SIX.ordinal();
+            else type = random.nextInt(Chest.ChestType.values().length - 1);
+            if(!placeChest(type)) break;
         }
     }
 

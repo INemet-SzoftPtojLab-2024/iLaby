@@ -240,7 +240,7 @@ public class Chest {
 
 
     public enum WallLocation {LEFT, TOP, RIGHT, BOTTOM}
-    public enum ChestType{ONE,TWO,THREE,FOUR,FIVE,SIX}
+    public enum ChestType{ONE,TWO,THREE,FOUR,FIVE,SIX}//ha új tipust vennel fel, a lagarlec mindig legyen az utolsó!
 
     public void replaceChest(Vec2 newURPos, int newWallLocation){
         //a setHasChest allitasa a cliensen folosleges, de maradhat
