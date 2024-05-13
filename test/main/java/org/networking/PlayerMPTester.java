@@ -1,5 +1,6 @@
+package main.java.org.networking;
+
 import main.java.org.game.Isten;
-import main.java.org.networking.PlayerMP;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.net.InetAddress;
