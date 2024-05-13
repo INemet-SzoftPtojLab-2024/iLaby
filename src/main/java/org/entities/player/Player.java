@@ -276,9 +276,9 @@ public class Player extends Entity {
                 inventory.getStoredItems().get(inventory.getSorospoharSlot()).use(this,deltaTime);
                 System.out.printf("hasSOR: " + inventory.hasSorospohar());
             }
-
+            if(currentRoom!=null)isInGasRoom= currentRoom.getRoomType() == RoomType.GAS;
             if (isInGasRoom) {
-                isInGasRoom = false;
+               // isInGasRoom = false;
                 if (!inventory.getExistenceOfGasMask()) {
                     faintingTime = 0;
                     isFainted = true;
