@@ -37,7 +37,7 @@ public class PlayerMP extends Player {
         Packet03Animation animationPacket = new Packet03Animation(getPlayerName().getText(), getActiveImage());
         animationPacket.writeData(isten.getSocketClient());
     }
-    private void sendMoveData(Isten isten) {
+    public void sendMoveData(Isten isten) {
         if(getPlayerCollider() == null) return;
         if(getPlayerCollider().getVelocity().x == 0 && getPlayerCollider().getVelocity().y == 0) return;
         Packet02Move movePacket = new Packet02Move(getUsername(), getPlayerCollider().getPosition().x, getPlayerCollider().getPosition().y);

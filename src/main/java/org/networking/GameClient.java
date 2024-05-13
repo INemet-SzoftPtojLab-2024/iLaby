@@ -46,7 +46,7 @@ public class GameClient extends Thread {
         }
     }
 
-    private void parsePacket(byte[] data, InetAddress address, int port) {
+    public void parsePacket(byte[] data, InetAddress address, int port) {
         String message = new String(data).trim();
         Packet.PacketTypes type = Packet.lookupPacket(message.substring(0,2));
         Packet packet = null;
@@ -560,4 +560,7 @@ public class GameClient extends Thread {
         }
     }
 
+    public void setSocket(DatagramSocket socket) {
+        this.socket = socket;
+    }
 }

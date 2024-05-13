@@ -1,9 +1,6 @@
 package main.java.org.networking;
 
 import main.java.org.linalg.Vec2;
-import main.java.org.networking.*;
-
-import main.java.org.networking.Packet.PacketTypes;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -246,7 +243,7 @@ public class PacketTester {
 
     @Test
     public void testPacket15Tvsz() {
-        byte[] data = ("15" + 1 + "," +1).getBytes();
+        byte[] data = ("15" + 1 + "," + 1).getBytes();
         Packet15Tvsz packet15Tvsz1 = new Packet15Tvsz(1,1);
         Packet15Tvsz packet15Tvsz2 = new Packet15Tvsz(data);
 
