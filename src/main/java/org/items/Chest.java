@@ -55,7 +55,7 @@ public class Chest {
         //this.wallLocation = wallInUnitRoomPicker(unitRoom);
 
         //ezt meg addolni kell a grouphoz
-        this.collider = new Collider(this.pos,new Vec2(0.3f,0.3f));
+        this.collider = new Collider(this.pos,new Vec2(0.2f,0.3f));
         //setUnitRoom(pos);
 
         //graphics
