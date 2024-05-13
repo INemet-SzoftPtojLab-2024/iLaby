@@ -62,7 +62,7 @@ public class Sorospohar extends Item {
             capacityBarBackground.setVisibility(true);
             capacityBar.setVisibility(true);
         }
-        float usageRate = 25.0f;
+        float usageRate = 5.0f;
         capacity -= (float) (deltaTime * usageRate);
         if (capacity <= 0) {
             Inventory inventory = player.getInventory();

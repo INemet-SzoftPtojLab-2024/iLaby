@@ -1,0 +1,75 @@
+Official E-laby playing guide:
+    How To Play:
+        Ziel:
+            Die Item "Logarléc" in einem Chest zu finden, die Studenten haben 10? Minuten diese Aufgabe zu schaffen.
+        Taste-Kombinantionen:
+            -Bewegung: W A S D
+            -Sprint: Shift
+            -Tür öffnen: O
+            -Chest öffnen: E
+            -Item aufnehmen: E
+            -Ausgewählte Item benutzen: F
+            -Ausgewählte Item wegwerfen: R
+            -Inventory slot auswählen: 1,2,3,4,5
+            -Austreten: Esc
+            -Help: F1
+        Item-Funktionen:
+
+            Camembert:
+            Der Raum, in dem es benutzt wird, wird zu einem Gasraum.
+
+            Gasmask:
+            Immunität für 20 Sekunden gegen Gasraum.
+
+            Rongy:
+            Die Lehrer in dem Raum, in dem es benutzt wird, werden für 30 Sekunden betäubt.
+
+            Söröspohár:
+            Immunität gegen Lehrer für 20 Sekunden.
+
+            Tvsz:
+            Immunität gegen Lehrer 3-mal.
+
+            Tranzisztor:
+            Es hat zwei Teile. Wenn es erstmal benutzt wird, wird die Position von einem der Teile festgelegt,
+            und bei weiteren Verwendungen wird der Spieler zu diesem Ort teleportiert.
+
+            Logarléc:
+            Wenn es von einem der Spieler aufgenommen wird, gewinnen den Studenten das Spiel.
+
+
+    Eigenschaften der Map:
+        Räume:
+            -Die Map besteht aus Räumen, die durch Wände voneinander getrennt sind.
+            -Gasräume sind spezielle Räume, die haben die Eigenschaft, dass der Spieler in einem Gasraum wird betäubt für 15? Sekunden,
+            dass heißt sie kann nicht sprinten, und seine items werden weggeworfen.(nur wenn er keine Items hat, die das verhindern).
+            -Räume sind durch Türe überkehrbar.
+            -Räume haben eine maximale Spielerzahl, die gleichzeitig im Raum sein kann.
+
+        Türe:
+            -Es gibt Tür die man nur in eine Richtung öffnen kann.
+            -Kann man nur öffnen, wenn:
+                -sich der Spieler in der Nähe der Tür befindet
+                -die Anzahl der Spieler im anderen Raum kleiner ist, als die Maximum.
+            -Nach Eröffnung bleiben 2 Sekunden geöffnet.
+        -MiniMap:
+            Darauf kann man sehen, was sich in der Nähe des Spielers befindet.
+        -Chests:
+            -Befinden sich neben Wände
+            -Kann man nur öffnen, wenn:
+               -sich der Spieler in der Nähe der Chest befindet.
+               -es noch nicht geöffnet wurde.
+   Schwierigkeiten:
+        -Fog of War:
+            Nur die Teile der Map sind sichtbar, die von den Spielern  bereits entdeckt wurden.
+        -Lehrer:
+            Wenn ein Spieler einen Raum betritt, in dem sich ein Lehrer befindet, stirbt er
+            (wenn keines der Items im Inventory das verhindern würde).
+        -Merge:
+            Alle 5 Sekunden werden zwei zufällig ausgewählte Räume zusammengefügt.
+        -Split:
+           Alle 5 Sekunden wird ein zufällig ausgewählte Raum auf zwei kleinere aufgeteilt.
+        -Türe:
+            Alle 5 Sekunden wird eine Tür entfernt/auf eine Einwegtür umgewandelt.
+            Alle 10 Sekunden wird ein Tür zur Map hinzugefügt.
+
