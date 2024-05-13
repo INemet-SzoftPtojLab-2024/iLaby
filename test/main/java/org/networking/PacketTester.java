@@ -524,4 +524,20 @@ public class PacketTester {
         packet42ItemsDropped1.writeData(mockServer);
         verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
+
+    @Test
+    public void testPacket50Fog() {
+        int[] ints = {1,1};
+        byte[] data = ("50"+ 2 + "," + 1 + "," + 1).getBytes();
+        Packet50Fog packet50Fog1 = new Packet50Fog(ints);
+        Packet50Fog packet50Fog2 = new Packet50Fog(data);
+
+        assertArrayEquals(packet50Fog1.getValues(), packet50Fog2.getValues());
+        assertArrayEquals(packet50Fog1.getData(), packet50Fog2.getData());
+
+        packet50Fog1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet50Fog1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
+    }
 }
