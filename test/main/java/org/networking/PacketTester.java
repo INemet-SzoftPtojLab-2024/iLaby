@@ -6,7 +6,14 @@ import main.java.org.networking.*;
 import main.java.org.networking.Packet.PacketTypes;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
 public class PacketTester {
+
+    GameClient mockClient = mock(GameClient.class);
+    GameServer mockServer = mock(GameServer.class);
 
     @Test
     public void testPacketTypes() {
@@ -26,6 +33,11 @@ public class PacketTester {
         assertEquals(packet00Login1.getY(), packet00Login2.getY());
         assertEquals(packet00Login1.getSkinID(), packet00Login2.getSkinID());
         assertArrayEquals(packet00Login1.getData(), packet00Login2.getData());
+
+        packet00Login1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet00Login1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -36,10 +48,15 @@ public class PacketTester {
 
         assertEquals(packet01Disconnect1.getUsername(), packet01Disconnect2.getUsername());
         assertArrayEquals(packet01Disconnect1.getData(), packet01Disconnect2.getData());
+
+        packet01Disconnect1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet01Disconnect1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
-    public void testPacket02Constructor() {
+    public void testPacket02Move() {
         byte[] data = ("02" + "username" + "," + 1 + "," + 1).getBytes();
         Packet02Move packet02Move1 = new Packet02Move("username", 1, 1);
         Packet02Move packet02Move2 = new Packet02Move(data);
@@ -48,10 +65,15 @@ public class PacketTester {
         assertEquals(packet02Move1.getX(), packet02Move2.getX());
         assertEquals(packet02Move1.getY(), packet02Move2.getY());
         assertArrayEquals(packet02Move1.getData(), packet02Move2.getData());
+
+        packet02Move1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet02Move1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
-    public void testPacket03Constructor() {
+    public void testPacket03Animation() {
         byte[] data = ("03" + "username" + "," + 1).getBytes();
         Packet03Animation packet03Animation1 = new Packet03Animation("username", 1);
         Packet03Animation packet03Animation2 = new Packet03Animation(data);
@@ -59,10 +81,15 @@ public class PacketTester {
         assertEquals(packet03Animation1.getUsername(), packet03Animation2.getUsername());
         assertEquals(packet03Animation1.getActiveImage(), packet03Animation2.getActiveImage());
         assertArrayEquals(packet03Animation1.getData(), packet03Animation2.getData());
+
+        packet03Animation1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet03Animation1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
-    public void testPacket04Constructor() {
+    public void testPacket04CUnitRoom() {
         byte[] data = ("04" + 1 + "," + 1 + "," + 1).getBytes();
         Packet04UnitRoom packet04UnitRoom1 = new Packet04UnitRoom(1,1,1);
         Packet04UnitRoom packet04UnitRoom2 = new Packet04UnitRoom(data);
@@ -71,10 +98,15 @@ public class PacketTester {
         assertEquals(packet04UnitRoom1.getY(), packet04UnitRoom2.getY());
         assertEquals(packet04UnitRoom1.getType(), packet04UnitRoom2.getType());
         assertArrayEquals(packet04UnitRoom1.getData(), packet04UnitRoom2.getData());
+
+        packet04UnitRoom1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet04UnitRoom1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
-    public void testPacket05Constructor() {
+    public void testPacket05Villain() {
         byte[] data = ("05" + "villain" + "," + 1 + "," + 1 + "," + "imgpath").getBytes();
         Packet05Villain packet05Villain1 = new Packet05Villain("villain", new Vec2(1,1), "imgpath");
         Packet05Villain packet05Villain2 = new Packet05Villain(data);
@@ -84,10 +116,15 @@ public class PacketTester {
         assertEquals(packet05Villain1.getPosition().y, packet05Villain2.getPosition().y);
         assertEquals(packet05Villain1.getImagePath(), packet05Villain2.getImagePath());
         assertArrayEquals(packet05Villain1.getData(), packet05Villain2.getData());
+
+        packet05Villain1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet05Villain1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
-    public void testPacket06Constructor() {
+    public void testPacket06VillainMove() {
         byte[] data = ("06" + "villain" + "," + 1 + "," + 1).getBytes();
         Packet06VillainMove packet06VillainMove1 = new Packet06VillainMove("villain", 1, 1);
         Packet06VillainMove packet06VillainMove2 = new Packet06VillainMove(data);
@@ -96,6 +133,11 @@ public class PacketTester {
         assertEquals(packet06VillainMove1.getX(), packet06VillainMove2.getX());
         assertEquals(packet06VillainMove1.getY(), packet06VillainMove2.getY());
         assertArrayEquals(packet06VillainMove1.getData(), packet06VillainMove2.getData());
+
+        packet06VillainMove1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet06VillainMove1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -106,6 +148,11 @@ public class PacketTester {
 
         assertEquals(packet07Timer1.getTimeRemaining(), packet07Timer2.getTimeRemaining());
         assertArrayEquals(packet07Timer1.getData(), packet07Timer2.getData());
+
+        packet07Timer1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet07Timer1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -120,6 +167,11 @@ public class PacketTester {
         assertEquals(packet10ChestGeneration1.getChestType(),packet10ChestGeneration2.getChestType());
         assertEquals(packet10ChestGeneration1.getIdx(),packet10ChestGeneration2.getIdx());
         assertArrayEquals(packet10ChestGeneration1.getData(), packet10ChestGeneration2.getData());
+
+        packet10ChestGeneration1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet10ChestGeneration1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -132,6 +184,11 @@ public class PacketTester {
         assertEquals(packet11ChestOpened1.getItemIndex1(), packet11ChestOpened2.getItemIndex1());
         assertEquals(packet11ChestOpened1.getItemIndex2(), packet11ChestOpened2.getItemIndex2());
         assertArrayEquals(packet11ChestOpened1.getData(), packet11ChestOpened2.getData());
+
+        packet11ChestOpened1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet11ChestOpened1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -144,6 +201,11 @@ public class PacketTester {
         assertEquals(packet12ItemPickedUp1.getUsername(), packet12ItemPickedUp2.getUsername());
         assertEquals(packet12ItemPickedUp1.getSelectedSlot(), packet12ItemPickedUp2.getSelectedSlot());
         assertArrayEquals(packet12ItemPickedUp1.getData(), packet12ItemPickedUp2.getData());
+
+        packet12ItemPickedUp1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet12ItemPickedUp1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -157,7 +219,13 @@ public class PacketTester {
         assertEquals(packet13ItemDropped1.getPos().y, packet13ItemDropped2.getPos().y);
         assertEquals(packet13ItemDropped1.getUsername(), packet13ItemDropped2.getUsername());
         assertEquals(packet13ItemDropped1.getSelectedSlot(), packet13ItemDropped2.getSelectedSlot());
+        assertEquals(packet13ItemDropped1.getReplaced(), packet13ItemDropped2.getReplaced());
         assertArrayEquals(packet13ItemDropped1.getData(), packet13ItemDropped2.getData());
+
+        packet13ItemDropped1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet13ItemDropped1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -169,6 +237,11 @@ public class PacketTester {
         assertEquals(packet14Gasmask1.getItemIndex(), packet14Gasmask2.getItemIndex());
         assertEquals(packet14Gasmask1.getCapacity(), packet14Gasmask2.getCapacity());
         assertArrayEquals(packet14Gasmask1.getData(), packet14Gasmask2.getData());
+
+        packet14Gasmask1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet14Gasmask1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -180,6 +253,11 @@ public class PacketTester {
         assertEquals(packet15Tvsz1.getItemIndex(), packet15Tvsz2.getItemIndex());
         assertEquals(packet15Tvsz1.getCharges(), packet15Tvsz2.getCharges());
         assertArrayEquals(packet15Tvsz1.getData(), packet15Tvsz2.getData());
+
+        packet15Tvsz1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet15Tvsz1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -188,9 +266,14 @@ public class PacketTester {
         Packet16Sorospohar packet16Sorospohar1 = new Packet16Sorospohar(1,1);
         Packet16Sorospohar packet16Sorospohar2 = new Packet16Sorospohar(data);
 
-        assertEquals(packet16Sorospohar1.getItemIndex(), packet16Sorospohar1.getItemIndex());
+        assertEquals(packet16Sorospohar1.getItemIndex(), packet16Sorospohar2.getItemIndex());
         assertEquals(packet16Sorospohar1.getCapacity(), packet16Sorospohar2.getCapacity());
         assertArrayEquals(packet16Sorospohar1.getData(), packet16Sorospohar2.getData());
+
+        packet16Sorospohar1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet16Sorospohar1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -205,6 +288,11 @@ public class PacketTester {
         assertEquals(packet17Camembert1.getUsername(), packet17Camembert2.getUsername());
         assertArrayEquals(packet17Camembert1.getData(),packet17Camembert2.getData());
         assertArrayEquals(packet17Camembert1.getData(),packet17Camembert2.getData());
+
+        packet17Camembert1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet17Camembert1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -220,6 +308,11 @@ public class PacketTester {
         assertEquals(packet18Rongy1.getImpactTime(), packet18Rongy2.getImpactTime());
         assertArrayEquals(packet18Rongy1.getData(), packet18Rongy2.getData());
         assertArrayEquals(packet18Rongy1.getData(), packet18Rongy2.getData());
+
+        packet18Rongy1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet18Rongy1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -232,6 +325,11 @@ public class PacketTester {
         assertEquals(packet19Transistor1.getX(), packet19Transistor2.getX());
         assertEquals(packet19Transistor1.getY(), packet19Transistor2.getY());
         assertArrayEquals(packet19Transistor1.getData(), packet19Transistor2.getData());
+
+        packet19Transistor1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet19Transistor1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -246,6 +344,11 @@ public class PacketTester {
         assertEquals(packet20Wall1.getScaleY(), packet20Wall2.getScaleY());
         assertEquals(packet20Wall1.isDoor(), packet20Wall2.isDoor());
         assertArrayEquals(packet20Wall1.getData(),packet20Wall2.getData());
+
+        packet20Wall1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet20Wall1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -256,6 +359,11 @@ public class PacketTester {
 
         assertEquals(packet21Death1.getUsername(), packet21Death2.getUsername());
         assertArrayEquals(packet21Death1.getData(), packet21Death2.getData());
+
+        packet21Death1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet21Death1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -268,6 +376,11 @@ public class PacketTester {
         assertEquals(packet22EdgePieceChanged1.getY(), packet22EdgePieceChanged2.getY());
         assertEquals(packet22EdgePieceChanged1.isDoor(), packet22EdgePieceChanged2.isDoor());
         assertArrayEquals(packet22EdgePieceChanged1.getData(), packet22EdgePieceChanged2.getData());
+
+        packet22EdgePieceChanged1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet22EdgePieceChanged1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -279,6 +392,11 @@ public class PacketTester {
         assertEquals(packet23WallDelete1.getX(), packet23WallDelete2.getX());
         assertEquals(packet23WallDelete1.getY(), packet23WallDelete2.getY());
         assertArrayEquals(packet23WallDelete1.getData(), packet23WallDelete2.getData());
+
+        packet23WallDelete1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet23WallDelete1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -291,6 +409,11 @@ public class PacketTester {
         assertEquals(packet24DoorOpen1.getY(), packet24DoorOpen2.getY());
         assertEquals(packet24DoorOpen1.isSolid(), packet24DoorOpen2.isSolid());
         assertArrayEquals(packet24DoorOpen1.getData(), packet24DoorOpen2.getData());
+
+        packet24DoorOpen1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet24DoorOpen1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -301,6 +424,11 @@ public class PacketTester {
 
         assertEquals(packet25PlayerForDoorOpen1.getUsername(), packet25PlayerForDoorOpen2.getUsername());
         assertArrayEquals(packet25PlayerForDoorOpen1.getData(), packet25PlayerForDoorOpen2.getData());
+
+        packet25PlayerForDoorOpen1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet25PlayerForDoorOpen1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -312,6 +440,11 @@ public class PacketTester {
         assertEquals(packet26InGasRoom1.getUsername(), packet26InGasRoom2.getUsername());
         assertEquals(packet26InGasRoom1.isInGasRoom(), packet26InGasRoom2.isInGasRoom());
         assertArrayEquals(packet26InGasRoom1.getData(), packet26InGasRoom2.getData());
+
+        packet26InGasRoom1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet26InGasRoom1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -323,6 +456,11 @@ public class PacketTester {
         assertEquals(packet27VillainIsInGasRoom1.getVillainName(), packet27VillainIsInGasRoom2.getVillainName());
         assertEquals(packet27VillainIsInGasRoom1.isInGasRoom(), packet27VillainIsInGasRoom2.isInGasRoom());
         assertArrayEquals(packet27VillainIsInGasRoom1.getData(), packet27VillainIsInGasRoom2.getData());
+
+        packet27VillainIsInGasRoom1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet27VillainIsInGasRoom1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -333,6 +471,11 @@ public class PacketTester {
 
         assertEquals(packet28PlayerChangedRoom1.getUsername(), packet28PlayerChangedRoom2.getUsername());
         assertArrayEquals(packet28PlayerChangedRoom1.getData(), packet28PlayerChangedRoom2.getData());
+
+        packet28PlayerChangedRoom1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet28PlayerChangedRoom1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -346,6 +489,11 @@ public class PacketTester {
         assertEquals(packet40ReplaceChest1.getPos().y, packet40ReplaceChest2.getPos().y);
         assertEquals(packet40ReplaceChest1.getIdx(), packet40ReplaceChest2.getIdx());
         assertArrayEquals(packet40ReplaceChest1.getData(), packet40ReplaceChest2.getData());
+
+        packet40ReplaceChest1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet40ReplaceChest1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -358,6 +506,11 @@ public class PacketTester {
         assertEquals(packet41IsPlayerInVillainRoom1.getUsername(), packet41IsPlayerInVillainRoom2.getUsername());
         assertArrayEquals(packet41IsPlayerInVillainRoom1.getData(),packet41IsPlayerInVillainRoom2.getData());
         assertArrayEquals(packet41IsPlayerInVillainRoom1.getData(),packet41IsPlayerInVillainRoom2.getData());
+
+        packet41IsPlayerInVillainRoom1.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet41IsPlayerInVillainRoom1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 
     @Test
@@ -368,5 +521,10 @@ public class PacketTester {
 
         assertEquals(packet42ItemsDropped1.getUsername(), packet42ItemsDropped2.getUsername());
         assertArrayEquals(packet42ItemsDropped1.getData(), packet42ItemsDropped2.getData());
+
+        packet42ItemsDropped2.writeData(mockClient);
+        verify(mockClient).sendData(any(byte[].class));
+        packet42ItemsDropped1.writeData(mockServer);
+        verify(mockServer).sendDataToAllClients(any(byte[].class));
     }
 }
