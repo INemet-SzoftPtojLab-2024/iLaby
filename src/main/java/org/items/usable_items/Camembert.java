@@ -10,6 +10,7 @@ import main.java.org.items.Item;
 import main.java.org.linalg.Vec2;
 import main.java.org.networking.Packet17Camembert;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class Camembert extends Item {
@@ -62,7 +63,6 @@ public class Camembert extends Item {
             isExplosionPositionCalculated = true;
         }
         time += deltaTime;
-        if (time > 1) {
             if (explosionCount == 1) {
                 Room currentRoom = getPrevRoom();
                 if (currentRoom != null) {
@@ -72,7 +72,6 @@ public class Camembert extends Item {
                     }
                 }
             }
-
             explosionCount++;
             if (explosionCount <= 30) {
                 if (explosionCount > 1) {
@@ -84,7 +83,7 @@ public class Camembert extends Item {
                 }
             }
             else {
-                image.setVisibility(false);
+               image.setVisibility(false);
                 isten.getRenderer().deleteRenderable(image);
                 for(Image image : explosion){
                     image.setVisibility(false);
@@ -98,7 +97,6 @@ public class Camembert extends Item {
                 player.getInventory().removeCamembert();
             }
         }
-    }
 
     private Room getPrevRoom() {
         Room currentRoom = null;

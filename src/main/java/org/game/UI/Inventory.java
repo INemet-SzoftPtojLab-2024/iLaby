@@ -322,12 +322,10 @@ public class Inventory extends Updatable {
     }
 
     public void removeCamembert() {
-        for (int i = 0; i < storedItems.size(); i++) {
-            if (storedItems.get(i) != null && storedItems.get(i).getClass().equals(Camembert.class)) {
-                storedItems.set(i, null);
-                isten.getRenderer().deleteRenderable(itemIcons.get(i));
+        if (storedItems.get(selectedSlot-1) != null && storedItems.get(selectedSlot-1).getClass().equals(Camembert.class)) {
+                storedItems.set(selectedSlot-1, null);
+                isten.getRenderer().deleteRenderable(itemIcons.get(selectedSlot-1));
             }
-        }
     }
 
     public void setCamembertTriggered(boolean camembertTriggered) {
