@@ -1,5 +1,6 @@
 package main.java.org.game.UI;
 
+import main.java.org.entities.player.Player;
 import main.java.org.entities.villain.Villain;
 import main.java.org.game.Graphics.Image;
 import main.java.org.game.Graphics.ImageUI;
@@ -273,26 +274,25 @@ public class Minimap extends Updatable {
             }
         } while(69==420);
 
-        //draw player
-        do{
-            for(int i=height/2-wallWidthInPixels;i<height/2+wallWidthInPixels+1;i++)
-            {
-                for (int j=width/2-wallWidthInPixels;j<width/2+wallWidthInPixels+1;j++)
-                {
-                    int currentIndex=4*(i*width+j);
-                    rawData[currentIndex++]=0;
-                    rawData[currentIndex++]=255;
-                    rawData[currentIndex++]=0;
-                    rawData[currentIndex]=255;
-                }
-            }
-        }while(69==420);
 
-        do{//draw enemies and chests
+        do{//draw players, enemies and chests
             class Colon{int r; int g; int b; public Colon(int _r, int _g, int _b){r=_r;g=_g;b=_b;}}
 
             ArrayList<Vec2> positions=new ArrayList<>();
             ArrayList<Colon> colours=new ArrayList<>();
+
+            //players
+            ArrayList<Player> players=isten.getUpdatablesByType(Player.class);
+
+            for(int i=0;i<players.size();i++)
+            {
+                if(!players.get(i).isAlive())
+                    continue;
+
+                positions.add(players.get(i).getPlayerCollider().getPosition());
+                colours.add(new Colon(0,255,0));
+            }
+
 
             //enemies
             ArrayList<Villain> villains=isten.getUpdatablesByType(Villain.class);
