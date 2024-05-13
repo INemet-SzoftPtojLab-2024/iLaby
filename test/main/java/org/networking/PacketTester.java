@@ -1,10 +1,19 @@
-import main.java.org.game.Isten;
+package main.java.org.networking;
+
 import main.java.org.linalg.Vec2;
 import main.java.org.networking.*;
 
+import main.java.org.networking.Packet.PacketTypes;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-public class MultiplayerTester {
+public class PacketTester {
+
+    @Test
+    public void testPacketTypes() {
+        Packet.PacketTypes type1 = Packet.lookupPacket("00");
+        Packet.PacketTypes type2 = Packet.lookupPacket("number");
+        Packet.PacketTypes type3 = Packet.lookupPacket("99");
+    }
 
     @Test
     public void testPacket00Login() {
@@ -223,5 +232,141 @@ public class MultiplayerTester {
         assertEquals(packet19Transistor1.getX(), packet19Transistor2.getX());
         assertEquals(packet19Transistor1.getY(), packet19Transistor2.getY());
         assertArrayEquals(packet19Transistor1.getData(), packet19Transistor2.getData());
+    }
+
+    @Test
+    public void testPacket20Wall() {
+        byte[] data = ("20" + 1 + "," + 1 + "," + 1 + "," + 1 + "," + true).getBytes();
+        Packet20Wall packet20Wall1 = new Packet20Wall(1,1,1,1,true);
+        Packet20Wall packet20Wall2 = new Packet20Wall(data);
+
+        assertEquals(packet20Wall1.getPosX(), packet20Wall2.getPosX());
+        assertEquals(packet20Wall1.getPosY(), packet20Wall2.getPosY());
+        assertEquals(packet20Wall1.getScaleX(), packet20Wall2.getScaleX());
+        assertEquals(packet20Wall1.getScaleY(), packet20Wall2.getScaleY());
+        assertEquals(packet20Wall1.isDoor(), packet20Wall2.isDoor());
+        assertArrayEquals(packet20Wall1.getData(),packet20Wall2.getData());
+    }
+
+    @Test
+    public void testPacket21Death() {
+        byte[] data = ("21" + "username").getBytes();
+        Packet21Death packet21Death1 = new Packet21Death("username");
+        Packet21Death packet21Death2 = new Packet21Death(data);
+
+        assertEquals(packet21Death1.getUsername(), packet21Death2.getUsername());
+        assertArrayEquals(packet21Death1.getData(), packet21Death2.getData());
+    }
+
+    @Test
+    public void testPacket22EdgePieceChanging() {
+        byte[] data = ("22" + 1 + "," + 1 + "," + true).getBytes();
+        Packet22EdgePieceChanged packet22EdgePieceChanged1 = new Packet22EdgePieceChanged(1,1,true);
+        Packet22EdgePieceChanged packet22EdgePieceChanged2 = new Packet22EdgePieceChanged(data);
+
+        assertEquals(packet22EdgePieceChanged1.getX(), packet22EdgePieceChanged2.getX());
+        assertEquals(packet22EdgePieceChanged1.getY(), packet22EdgePieceChanged2.getY());
+        assertEquals(packet22EdgePieceChanged1.isDoor(), packet22EdgePieceChanged2.isDoor());
+        assertArrayEquals(packet22EdgePieceChanged1.getData(), packet22EdgePieceChanged2.getData());
+    }
+
+    @Test
+    public void testPacket23WallDelete() {
+        byte[] data = ("23" + 1 + "," + 1).getBytes();
+        Packet23WallDelete packet23WallDelete1 = new Packet23WallDelete(1,1);
+        Packet23WallDelete packet23WallDelete2 = new Packet23WallDelete(data);
+
+        assertEquals(packet23WallDelete1.getX(), packet23WallDelete2.getX());
+        assertEquals(packet23WallDelete1.getY(), packet23WallDelete2.getY());
+        assertArrayEquals(packet23WallDelete1.getData(), packet23WallDelete2.getData());
+    }
+
+    @Test
+    public void testPacket24DoorOpen() {
+        byte[] data = ("24" + 1 + "," + 1 + "," + true).getBytes();
+        Packet24DoorOpen packet24DoorOpen1 = new Packet24DoorOpen(1,1, true);
+        Packet24DoorOpen packet24DoorOpen2 = new Packet24DoorOpen(data);
+
+        assertEquals(packet24DoorOpen1.getX(), packet24DoorOpen2.getX());
+        assertEquals(packet24DoorOpen1.getY(), packet24DoorOpen2.getY());
+        assertEquals(packet24DoorOpen1.isSolid(), packet24DoorOpen2.isSolid());
+        assertArrayEquals(packet24DoorOpen1.getData(), packet24DoorOpen2.getData());
+    }
+
+    @Test
+    public void testPacket25PlayerForDoorOpen() {
+        byte[] data = ("25" + "username").getBytes();
+        Packet25PlayerForDoorOpen packet25PlayerForDoorOpen1 = new Packet25PlayerForDoorOpen("username");
+        Packet25PlayerForDoorOpen packet25PlayerForDoorOpen2 = new Packet25PlayerForDoorOpen(data);
+
+        assertEquals(packet25PlayerForDoorOpen1.getUsername(), packet25PlayerForDoorOpen2.getUsername());
+        assertArrayEquals(packet25PlayerForDoorOpen1.getData(), packet25PlayerForDoorOpen2.getData());
+    }
+
+    @Test
+    public void testPacket26InGasRoom() {
+        byte[] data = ("26" + "username" + "," + true).getBytes();
+        Packet26InGasRoom packet26InGasRoom1 = new Packet26InGasRoom("username", true);
+        Packet26InGasRoom packet26InGasRoom2 = new Packet26InGasRoom(data);
+
+        assertEquals(packet26InGasRoom1.getUsername(), packet26InGasRoom2.getUsername());
+        assertEquals(packet26InGasRoom1.isInGasRoom(), packet26InGasRoom2.isInGasRoom());
+        assertArrayEquals(packet26InGasRoom1.getData(), packet26InGasRoom2.getData());
+    }
+
+    @Test
+    public void testPacket27VillainIsInGasRoom() {
+        byte[] data = ("27" + "villain" + "," + true).getBytes();
+        Packet27VillainIsInGasRoom packet27VillainIsInGasRoom1 = new Packet27VillainIsInGasRoom("villain", true);
+        Packet27VillainIsInGasRoom packet27VillainIsInGasRoom2 = new Packet27VillainIsInGasRoom(data);
+
+        assertEquals(packet27VillainIsInGasRoom1.getVillainName(), packet27VillainIsInGasRoom2.getVillainName());
+        assertEquals(packet27VillainIsInGasRoom1.isInGasRoom(), packet27VillainIsInGasRoom2.isInGasRoom());
+        assertArrayEquals(packet27VillainIsInGasRoom1.getData(), packet27VillainIsInGasRoom2.getData());
+    }
+
+    @Test
+    public void testPacket28PlayerChangedRoom() {
+        byte[] data = ("28" + "username").getBytes();
+        Packet28PlayerChangedRoom packet28PlayerChangedRoom1 = new Packet28PlayerChangedRoom("username");
+        Packet28PlayerChangedRoom packet28PlayerChangedRoom2 = new Packet28PlayerChangedRoom(data);
+
+        assertEquals(packet28PlayerChangedRoom1.getUsername(), packet28PlayerChangedRoom2.getUsername());
+        assertArrayEquals(packet28PlayerChangedRoom1.getData(), packet28PlayerChangedRoom2.getData());
+    }
+
+    @Test
+    public void testPacket40ReplaceChest() {
+        byte[] data =  ("40" + 1 + "," + 1 + "," + 1 + "," + 1).getBytes();
+        Packet40ReplaceChest packet40ReplaceChest1 = new Packet40ReplaceChest(1, new Vec2(1,1),1);
+        Packet40ReplaceChest packet40ReplaceChest2 = new Packet40ReplaceChest(data);
+
+        assertEquals(packet40ReplaceChest1.getWallLocation(), packet40ReplaceChest2.getWallLocation());
+        assertEquals(packet40ReplaceChest1.getPos().x, packet40ReplaceChest2.getPos().x);
+        assertEquals(packet40ReplaceChest1.getPos().y, packet40ReplaceChest2.getPos().y);
+        assertEquals(packet40ReplaceChest1.getIdx(), packet40ReplaceChest2.getIdx());
+        assertArrayEquals(packet40ReplaceChest1.getData(), packet40ReplaceChest2.getData());
+    }
+
+    @Test
+    public void testPacket41IsPlayerInVillainRoom() {
+        byte[] data = ("41" + true + "," + "username").getBytes();
+        Packet41IsPlayerInVillainRoom packet41IsPlayerInVillainRoom1 = new Packet41IsPlayerInVillainRoom("username", true);
+        Packet41IsPlayerInVillainRoom packet41IsPlayerInVillainRoom2 = new Packet41IsPlayerInVillainRoom(data);
+
+        assertEquals(packet41IsPlayerInVillainRoom1.getIsPlayerInVillainRoom(), packet41IsPlayerInVillainRoom2.getIsPlayerInVillainRoom());
+        assertEquals(packet41IsPlayerInVillainRoom1.getUsername(), packet41IsPlayerInVillainRoom2.getUsername());
+        assertArrayEquals(packet41IsPlayerInVillainRoom1.getData(),packet41IsPlayerInVillainRoom2.getData());
+        assertArrayEquals(packet41IsPlayerInVillainRoom1.getData(),packet41IsPlayerInVillainRoom2.getData());
+    }
+
+    @Test
+    public void testPacket42ItemsDropped() {
+        byte[] data = ("42" + "username").getBytes();
+        Packet42ItemsDropped packet42ItemsDropped1 = new Packet42ItemsDropped("username");
+        Packet42ItemsDropped packet42ItemsDropped2 = new Packet42ItemsDropped(data);
+
+        assertEquals(packet42ItemsDropped1.getUsername(), packet42ItemsDropped2.getUsername());
+        assertArrayEquals(packet42ItemsDropped1.getData(), packet42ItemsDropped2.getData());
     }
 }
