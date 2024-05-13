@@ -43,6 +43,10 @@ public class Camembert extends Item {
             explosion.add(exp);
         }
     }
+    public ArrayList<Image> getExplosion()
+    {
+        return explosion;
+    }
     @Override
     public void use(Player player, double deltaTime){
         used=true;
