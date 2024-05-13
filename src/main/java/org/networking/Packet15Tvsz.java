@@ -3,7 +3,6 @@ package main.java.org.networking;
 public class Packet15Tvsz extends Packet {
     private int itemIndex;
     private int charges;
-    private boolean shouldUseCharge;
 
     public Packet15Tvsz(int itemIndex, int charges) {
         super(15);
@@ -17,9 +16,6 @@ public class Packet15Tvsz extends Packet {
 
         this.itemIndex = Integer.parseInt(dataArray[0]);
         this.charges = Integer.parseInt(dataArray[1]);
-        //this.shouldUseCharge = Boolean.parseBoolean(dataArray[2]);
-
-        //System.out.println("ch: " + charges);
     }
 
     @Override
@@ -44,9 +40,4 @@ public class Packet15Tvsz extends Packet {
     public int getCharges() {
         return charges;
     }
-
-    public boolean getShouldUseCharge() {
-        return shouldUseCharge;
-    }
-
 }

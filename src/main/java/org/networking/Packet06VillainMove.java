@@ -32,7 +32,6 @@ public class Packet06VillainMove extends Packet {
 
     public byte[] getData() {
         return ("06" + this.villainName + "," + this.x + "," + this.y).getBytes();
-
     }
 
     public String getVillainName() {
