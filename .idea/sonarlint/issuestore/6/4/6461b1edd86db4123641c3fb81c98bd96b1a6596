@@ -1,17 +1,15 @@
 
 ’
-java:S1319i"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(¡İ·èûÿÿÿÿ8éöãö1
+java:S1319i"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(¡İ·èûÿÿÿÿ8Úµ¤Òö1
 „
-java:S1319i"bThe type of "u1" should be an interface such as "List" rather than the implementation "ArrayList".(¡İ·èûÿÿÿÿ8éöãö1
+java:S1319i"bThe type of "u1" should be an interface such as "List" rather than the implementation "ArrayList".(¡İ·èûÿÿÿÿ8Úµ¤Òö1
 „
-java:S1319i"bThe type of "u2" should be an interface such as "List" rather than the implementation "ArrayList".(¡İ·èûÿÿÿÿ8éöãö1
-r	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(©Æ˜Èıÿÿÿÿ8ÀïÛö1
-r	java:S117'"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ƒ›¡ÿÿÿÿÿ8ÀïÛö1
-v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(££Æ¿8ÁïÛö1
+java:S1319i"bThe type of "u2" should be an interface such as "List" rather than the implementation "ArrayList".(¡İ·èûÿÿÿÿ8Úµ¤Òö1
+r	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(©Æ˜Èıÿÿÿÿ8Úµ¤Òö1
+r	java:S117'"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ƒ›¡ÿÿÿÿÿ8Úµ¤Òö1
+v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(££Æ¿8Üµ¤Òö1
 \
 java:S1118
-":Add a private constructor to hide the implicit public one.(¢óüûÿÿÿÿ8äªğö1
-]	java:S125"<This block of commented-out lines of code should be removed.(¸¾†Ğşÿÿÿÿ8ËïÛö1
-W	java:S125B"<This block of commented-out lines of code should be removed.(’±8ÎïÛö1
-W
-java:S1128"5Remove this unused import 'main.java.org.game.Isten'.(Åáç‰úÿÿÿÿ8ÎÊ®Ÿö1
+":Add a private constructor to hide the implicit public one.(¢óüûÿÿÿÿ8íµ¤Òö1
+]	java:S125"<This block of commented-out lines of code should be removed.(¸¾†Ğşÿÿÿÿ8òµ¤Òö1
+W	java:S125B"<This block of commented-out lines of code should be removed.(’±8õµ¤Òö1

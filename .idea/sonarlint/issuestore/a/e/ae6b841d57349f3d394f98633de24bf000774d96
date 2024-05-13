@@ -12,17 +12,17 @@ java:S1186Å"€Add a nested comment explaining why this method is empty, throw 
 m
 java:S6201‹"JReplace this instanceof check and cast with 'instanceof PlayerMP playermp'(¯Ï¤ıÿÿÿÿ8 ÀØÅõ1
 k
-java:S6201š"HReplace this instanceof check and cast with 'instanceof Villain villain'(óİò·øÿÿÿÿ8û©»Îõ1
+java:S6201š"HReplace this instanceof check and cast with 'instanceof Villain villain'(óİò·øÿÿÿÿ8ñÀÑÓö1
 `
 java:S1128
-"DRemove this unused import 'main.java.org.game.Map.EdgeBetweenRooms'.(·Ã£W8’¬®Ÿö1
+"DRemove this unused import 'main.java.org.game.Map.EdgeBetweenRooms'.(·Ã£W8ôÀÑÓö1
 a
-java:S1128"?Remove this unused import 'main.java.org.game.Map.EdgeManager'.(„¿ıÿÿÿÿ8’¬®Ÿö1
+java:S1128"?Remove this unused import 'main.java.org.game.Map.EdgeManager'.(„¿ıÿÿÿÿ8ôÀÑÓö1
 Z
-java:S1128"=Remove this unused import 'main.java.org.game.Map.EdgePiece'.(…ƒóá8’¬®Ÿö1
+java:S1128"=Remove this unused import 'main.java.org.game.Map.EdgePiece'.(…ƒóá8ôÀÑÓö1
 X
-java:S1128"6Remove this unused import 'main.java.org.linalg.Vec2'.(²‰¸Áúÿÿÿÿ8’¬®Ÿö1
+java:S1128"6Remove this unused import 'main.java.org.linalg.Vec2'.(²‰¸Áúÿÿÿÿ8ôÀÑÓö1
 J
-java:S1128"(Remove this unused import 'javax.swing'.(Ìí¿Üüÿÿÿÿ8’¬®Ÿö1
+java:S1128"(Remove this unused import 'javax.swing'.(Ìí¿Üüÿÿÿÿ8ôÀÑÓö1
 M
-java:S1128"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ8”¬®Ÿö1
+java:S1128"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ8ôÀÑÓö1

@@ -1,36 +1,37 @@
 
 M
-java:S1066ƒ"/Merge this if statement with the enclosing one.(öı›Ÿ8À­Ü¥õ1
+java:S1066„"/Merge this if statement with the enclosing one.(öı›Ÿ8À­Ü¥õ1
 R
-java:S1066ş"/Merge this if statement with the enclosing one.(×”şÿÿÿÿ8À­Ü¥õ1
+java:S1066ÿ"/Merge this if statement with the enclosing one.(×”şÿÿÿÿ8À­Ü¥õ1
 R
-java:S1066ˆ"/Merge this if statement with the enclosing one.(¾»Úûÿÿÿÿ8À­Ü¥õ1
+java:S1066‰"/Merge this if statement with the enclosing one.(¾»Úûÿÿÿÿ8À­Ü¥õ1
 ’
-java:S1319'"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ÏÕ›‚ûÿÿÿÿ8³İÂ‡ô1
+java:S1319("pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ÏÕ›‚ûÿÿÿÿ8³İÂ‡ô1
 “
-java:S1319—"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(—•íıÿÿÿÿ8Á­Ü¥õ1
-r	java:S117X"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Áäúÿÿÿÿ8Á­Ü¥õ1
+java:S1319˜"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(—•íıÿÿÿÿ8Á­Ü¥õ1
+r	java:S117Y"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Áäúÿÿÿÿ8Á­Ü¥õ1
 u	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš8µİÂ‡ô1
 ¤
-java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(µÕ«ùÿÿÿÿ8¸±Ü¥õ1
+java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(µÕ«ùÿÿÿÿ8¸±Ü¥õ1
 ¤
-java:S1186Æ"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(İßéàúÿÿÿÿ8¥áÂ‡ô1
-W	java:S125C"<This block of commented-out lines of code should be removed.(îó8¼±Ü¥õ1
-X	java:S125`"<This block of commented-out lines of code should be removed.(Á™´ë8¾±Ü¥õ1
-]	java:S125b"<This block of commented-out lines of code should be removed.(Éÿ“‡şÿÿÿÿ8¾±Ü¥õ1
+java:S1186È"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(İßéàúÿÿÿÿ8¥áÂ‡ô1
+W	java:S125D"<This block of commented-out lines of code should be removed.(îó8¼±Ü¥õ1
+X	java:S125a"<This block of commented-out lines of code should be removed.(Á™´ë8¾±Ü¥õ1
+]	java:S125c"<This block of commented-out lines of code should be removed.(Éÿ“‡şÿÿÿÿ8¾±Ü¥õ1
 b
-java:S1854œ"?Remove this useless assignment to local variable "doorRemoved".(İåÊšùÿÿÿÿ8¿±Ü¥õ1
+java:S1854"?Remove this useless assignment to local variable "doorRemoved".(İåÊšùÿÿÿÿ8¿±Ü¥õ1
 O
-java:S1135v"2Complete the task associated to this TODO comment.(…ïœ†8À±Ü¥õ1
+java:S1135w"2Complete the task associated to this TODO comment.(…ïœ†8À±Ü¥õ1
 S
-java:S1481”"0Remove this unused "doorRemoved" local variable.(æËíıÿÿÿÿ8Â±Ü¥õ1
+java:S1481•"0Remove this unused "doorRemoved" local variable.(æËíıÿÿÿÿ8Â±Ü¥õ1
 P
-java:S1135®"2Complete the task associated to this TODO comment.(…ïœ†8Ã±Ü¥õ1
+java:S1135¯"2Complete the task associated to this TODO comment.(…ïœ†8Ã±Ü¥õ1
 P
-java:S1135¾"2Complete the task associated to this TODO comment.(…ïœ†8Ä±Ü¥õ1
-^	java:S125Ş"<This block of commented-out lines of code should be removed.(ãÆ¦¬üÿÿÿÿ8Æ±Ü¥õ1
-H	java:S106å"+Replace this use of System.out by a logger.(ö³¦8Ç±Ü¥õ1
-p	java:S100±"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(šßù¡øÿÿÿÿ8Ê±Ü¥õ1
-M	java:S106¼"+Replace this use of System.out by a logger.(‚­¢æøÿÿÿÿ8Ë±Ü¥õ1
+java:S1135¿"2Complete the task associated to this TODO comment.(…ïœ†8Ä±Ü¥õ1
+^	java:S125ß"<This block of commented-out lines of code should be removed.(ãÆ¦¬üÿÿÿÿ8Æ±Ü¥õ1
+H	java:S106æ"+Replace this use of System.out by a logger.(ö³¦8Ç±Ü¥õ1
+p	java:S100°"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(àóÎÑÿÿÿÿÿ8é·áÌö1
+M	java:S106½"+Replace this use of System.out by a logger.(‚­¢æøÿÿÿÿ8Ë±Ü¥õ1
 Q
-java:S1128	"4Remove this unused import 'java.awt.event.KeyEvent'.(¬ğİÍ8‘«ôÄõ1
+java:S1128
+"4Remove this unused import 'java.awt.event.KeyEvent'.(¬ğİÍ8‘«ôÄõ1

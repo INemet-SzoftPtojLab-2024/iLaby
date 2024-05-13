@@ -51,6 +51,7 @@ public class Isten {
     private ChestManager chestManager;
     private Minimap minimap;
     private ClientMap clientMap;
+    private int mapSize;
 
     /**
      * Constructor for Isten.
@@ -58,7 +59,8 @@ public class Isten {
      */
     public Isten() {
 
-        map=new Map(this, 50, 50, 8);
+        mapSize = 100;
+        map=new Map(this, mapSize, mapSize, 8);
         chestManager = new ChestManager(150, this);
         itemManager=new ItemManager();
         inputHandler = new Input();
@@ -342,5 +344,8 @@ public class Isten {
         return clientMap;
     }
 
+    public int getMapSize(){
+        return  mapSize;
+        }
 
 }
