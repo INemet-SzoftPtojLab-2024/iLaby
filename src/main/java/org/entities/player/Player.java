@@ -71,6 +71,7 @@ public class Player extends Entity {
     private BufferedImage fogOfWarImage;
     private int mapX, mapY; private int rendererWidth=0, rendererHeight=0;
     private char[] fogOfWarHelper=null; private Vec2[] fogOfWarHelperOffsets=null;
+    protected ArrayList<Integer> fogSyncIncoming=null, fogSyncOutgoing=null;
     private boolean fogOfWarDrawing=false;
     private final Object fogOfWarSync=new Object();
     private final float fogDistance=2;
@@ -215,6 +216,9 @@ public class Player extends Entity {
             Arrays.fill(fogOfWarHelper,(char)22);
 
             fogOfWarHelperOffsets=new Vec2[mapX*mapY];
+
+            fogSyncIncoming=new ArrayList<>();
+            fogSyncOutgoing=new ArrayList<>();
 
             isten.getRenderer().registerPostProcessingEffect(fogOfWar);
         }
@@ -479,6 +483,18 @@ public class Player extends Entity {
         if(maxY>=mapY)
             maxY=mapY-1;
 
+        synchronized (fogSyncIncoming)//sync incoming
+        {
+            for(int i=0;i<fogSyncIncoming.size();i+=2)
+            {
+                if(fogOfWarHelper[fogSyncIncoming.get(i)]>(char)(int)fogSyncIncoming.get(i+1))
+                    fogOfWarHelper[fogSyncIncoming.get(i)]=(char)(int)fogSyncIncoming.get(i+1);
+            }
+
+            fogSyncIncoming.clear();
+        }
+
+        ArrayList<Integer> fogChanged=new ArrayList<>();
         for(int i=minY; i<maxY;i++)
         {
             int currentIndex=i*mapX+minX;
@@ -491,11 +507,26 @@ public class Player extends Entity {
                 {
                     char opaqueness=(char)(22*Math.sqrt(transparencyHelper*(distance-clearFogDistance)));
                     if(opaqueness<fogOfWarHelper[currentIndex])
+                    {
                         fogOfWarHelper[currentIndex]=opaqueness;
+                        fogChanged.add(currentIndex);
+                        fogChanged.add((int)fogOfWarHelper[currentIndex]);
+                    }
                     continue;
                 }
-                fogOfWarHelper[currentIndex]=0;
+
+                if(fogOfWarHelper[currentIndex]!=0)
+                {
+                    fogChanged.add(currentIndex);
+                    fogChanged.add(0);
+                    fogOfWarHelper[currentIndex]=0;
+                }
             }
+        }
+
+        synchronized (fogSyncOutgoing)//sync outgoing
+        {
+            fogSyncOutgoing.addAll(fogChanged);
         }
 
 
@@ -620,6 +651,18 @@ public class Player extends Entity {
         synchronized (fogOfWarSync)
         {
             fogOfWarDrawing=false;
+        }
+    }
+
+    public void appendFogSyncInfo(int[] data)
+    {
+        if(fogSyncIncoming==null)
+            return;
+
+        synchronized (fogSyncIncoming)
+        {
+            for(int i=0;i<data.length;i++)
+                fogSyncIncoming.add((Integer)data[i]);
         }
     }
 
