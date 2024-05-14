@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import static main.java.org.game.Map.Algorithms.SetDoors.TakeOutDoor;
+
 /**
  * this class is only used at the beginning of a game, when a map needs to be generated
  */
@@ -84,6 +86,9 @@ public class Mapgenerator {
 
         //add the images to the unitrooms
         //addImages();
+        for(int i = 0; i < map.getRooms().size(); i++){
+            TakeOutDoor(isten, true, map);
+        }
     }
 
     public void generateSideWalls() {

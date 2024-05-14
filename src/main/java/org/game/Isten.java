@@ -57,8 +57,8 @@ public class Isten {
      * Initializes the physics engine, game renderer, and list of updatables.
      */
     public Isten() {
-
-        map=new Map(this, 20, 20, 8);
+        int mapSize = 50;
+        map=new Map(this, mapSize, mapSize, 8);
         chestManager = new ChestManager(150, this);
         itemManager=new ItemManager();
         inputHandler = new Input();
