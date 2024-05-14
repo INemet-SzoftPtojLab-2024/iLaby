@@ -11,6 +11,7 @@ import main.java.org.linalg.Vec2;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.ArrayList;
 
 public class GameClient extends Thread {
     private InetAddress ipAddress;
@@ -169,6 +170,10 @@ public class GameClient extends Thread {
             case ITEMSDROPPED:
                 packet = new Packet42ItemsDropped(data);
                 handleItemsDropped((Packet42ItemsDropped)packet);
+                break;
+            case FOG:
+                packet=new Packet50Fog(data);
+                handleFog((Packet50Fog)packet);
                 break;
         }
     }
@@ -549,6 +554,13 @@ public class GameClient extends Thread {
         PlayerMP player = (PlayerMP)isten.getUpdatable(index);
         if(player == null) return;
         if(player.getPlayerCollider() != null) player.getPlayerCollider().setPosition(new Vec2(packet.getX(), packet.getY()));
+    }
+
+    private void handleFog(Packet50Fog packet)
+    {
+        ArrayList<PlayerMP> players=isten.getUpdatablesByType(PlayerMP.class);
+        for(int i=0;i<players.size();i++)
+            players.get(i).appendFogSyncInfo(packet.getValues());
     }
 
     public void sendData(byte[] data) {
