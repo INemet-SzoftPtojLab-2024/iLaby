@@ -90,7 +90,7 @@ public class MapHandler extends ServerSideHandler {
         if(isten.getInputHandler().isKeyReleased(KeyEvent.VK_SPACE)){
             stop = !stop;
         }
-
+        //TODO:: majd a stoppot lassaan ki kene szedni
         if(!stop && taskCount.get() < 3) {
             delta += deltaTime;
             //Original was: 1
@@ -101,11 +101,11 @@ public class MapHandler extends ServerSideHandler {
                         taskCount.incrementAndGet();
                         long startTimeMillis = System.currentTimeMillis();
 
-                        if (false) {
+                        if (sec % 10 == 0) {
                             Vec2 pos = addDoorToEdgeWithoutDoor(isten, isten.getMap());
                             handleAddOrDeleteDoor(pos, true);
                             //System.out.println("ajtoaddolas tortent");
-                        } else {
+                        } else if(sec % 5 == 0) {
 
                             Vec2 pos = TakeOutDoor(isten, true, isten.getMap());
                             if (pos.x != -1 && pos.y != -1) {
@@ -120,8 +120,7 @@ public class MapHandler extends ServerSideHandler {
                         System.out.println("Takeoutdoor: " + (System.currentTimeMillis() - startTimeMillis) + " ms");
                         taskCount.decrementAndGet();
                     });
-                    //TESTCASE 2:
-                    if (sec % 4 == 0) {
+                    if ((sec + 2) % 5 == 0) {
                         executor.submit(()-> {
                             taskCount.incrementAndGet();
                             long startTimeMillis = System.currentTimeMillis();
@@ -142,8 +141,7 @@ public class MapHandler extends ServerSideHandler {
                         });
 
                     }
-                    //TESTCASE 3:
-                    if((sec+2)%4==0) {
+                    if((sec + 3)%5==0) {
                         executor.submit(()->{
                             taskCount.incrementAndGet();
                             long startTimeMillis = System.currentTimeMillis();

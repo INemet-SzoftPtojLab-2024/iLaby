@@ -59,9 +59,9 @@ public class Isten {
      */
     public Isten() {
 
-        mapSize = 100;
+        mapSize = 50;
         map=new Map(this, mapSize, mapSize, 8);
-        chestManager = new ChestManager(150, this);
+        chestManager = new ChestManager(mapSize*2, this); //erre van beallitva a chestsize jelenleg
         itemManager=new ItemManager();
         inputHandler = new Input();
         camera = new Camera();
