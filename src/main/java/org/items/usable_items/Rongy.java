@@ -24,7 +24,7 @@ public class Rongy extends Item {
         stink=new Image(new Vec2(),new Vec2(0.8f,0.8f),"./assets/items/stink_rongy.png");
         stink.setVisibility(false);
         isten.getRenderer().addRenderable(stink);
-        impactTime=5;//sec
+        impactTime=20;//sec
 
     }
     @Override

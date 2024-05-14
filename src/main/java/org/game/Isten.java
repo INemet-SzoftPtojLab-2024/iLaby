@@ -51,13 +51,14 @@ public class Isten {
     private ChestManager chestManager;
     private Minimap minimap;
     private ClientMap clientMap;
+    private int mapSize;
 
     /**
      * Constructor for Isten.
      * Initializes the physics engine, game renderer, and list of updatables.
      */
     public Isten() {
-        int mapSize = 50;
+        mapSize = 50;
         map=new Map(this, mapSize, mapSize, 8);
         chestManager = new ChestManager(150, this);
         itemManager=new ItemManager();

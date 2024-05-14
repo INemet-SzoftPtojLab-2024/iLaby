@@ -91,89 +91,88 @@ public class MapHandler extends ServerSideHandler {
             stop = !stop;
         }
 
+//TODO:: majd a stoppot lassaan ki kene szedni
         if(!stop && taskCount.get() < 3) {
             delta += deltaTime;
             //Original was: 1
             //Megváltoztattam 0.1-re, hogy gyorsabban tötrénjenek a változások
             if (delta > 1) {
                 //TESTCASE 1:
+                executor.submit(()-> {
+                    taskCount.incrementAndGet();
+                    long startTimeMillis = System.currentTimeMillis();
+
+                    if (sec % 6 == 0) {
+                        Vec2 pos = addDoorToEdgeWithoutDoor(isten, isten.getMap());
+                        handleAddOrDeleteDoor(pos, true);
+                        //System.out.println("ajtoaddolas tortent");
+                    } else if(sec % 2 == 0) {
+
+                        Vec2 pos = TakeOutDoor(isten, true, isten.getMap());
+                        if (pos.x != -1 && pos.y != -1) {
+                            handleAddOrDeleteDoor(pos, false);
+                            //stop = true;
+                            //System.out.println("edgeNum: "+isten.getMap().getEdgeManager().getRoomEdges().size());
+                            //System.out.println("doorNum: "+isten.getMap().getEdgeManager().getDoorNum());
+                            //System.out.println("ajtokivetel tortent");
+                        }
+
+                    }
+                    System.out.println("Takeoutdoor: " + (System.currentTimeMillis() - startTimeMillis) + " ms");
+                    taskCount.decrementAndGet();
+                });
+                if ((sec + 2) % 5 == 0) {
                     executor.submit(()-> {
                         taskCount.incrementAndGet();
                         long startTimeMillis = System.currentTimeMillis();
 
-                        if (false) {
-                            Vec2 pos = addDoorToEdgeWithoutDoor(isten, isten.getMap());
-                            handleAddOrDeleteDoor(pos, true);
-                            //System.out.println("ajtoaddolas tortent");
-                        } else {
+                        Collections.shuffle(isten.getMap().getRooms());
 
-                            Vec2 pos = TakeOutDoor(isten, true, isten.getMap());
-                            if (pos.x != -1 && pos.y != -1) {
-                                handleAddOrDeleteDoor(pos, false);
-                                //stop = true;
-                                //System.out.println("edgeNum: "+isten.getMap().getEdgeManager().getRoomEdges().size());
-                                //System.out.println("doorNum: "+isten.getMap().getEdgeManager().getDoorNum());
-                                //System.out.println("ajtokivetel tortent");
-                            }
-
+                        Room r1 = isten.getMap().getRooms().get(0);
+                        Room r2 = isten.getMap().getRooms().get(0).getPhysicallyAdjacentRooms().get(0);
+                        if(r1.getID() != isten.getMap().getUnitRooms()[0][0].getOwnerRoom().getID()
+                                && r2.getID() != isten.getMap().getUnitRooms()[0][0].getOwnerRoom().getID()) {
+                            handleUnitRoomChange(r2.getUnitRooms(), r1.getRoomType().ordinal());
+                            handleWallDeletion(isten.getMap().getEdgeManager().getEdgeBetweenRooms(r1, r2));
+                            mergeRooms(r1, r2, isten.getMap());
+                            handleRoomEdges(r1);
+                            System.out.println("Merge: " + (System.currentTimeMillis() - startTimeMillis) + " ms");
                         }
-                        System.out.println("Takeoutdoor: " + (System.currentTimeMillis() - startTimeMillis) + " ms");
                         taskCount.decrementAndGet();
                     });
-                    //TESTCASE 2:
-                    if (sec % 4 == 0) {
-                        executor.submit(()-> {
-                            taskCount.incrementAndGet();
-                            long startTimeMillis = System.currentTimeMillis();
 
-                            Collections.shuffle(isten.getMap().getRooms());
+                }
+                if((sec + 3)%5==0) {
+                    executor.submit(()->{
+                        taskCount.incrementAndGet();
+                        long startTimeMillis = System.currentTimeMillis();
 
-                            Room r1 = isten.getMap().getRooms().get(0);
-                            Room r2 = isten.getMap().getRooms().get(0).getPhysicallyAdjacentRooms().get(0);
-                            if(r1.getID() != isten.getMap().getUnitRooms()[0][0].getOwnerRoom().getID()
-                            && r2.getID() != isten.getMap().getUnitRooms()[0][0].getOwnerRoom().getID()) {
-                                handleUnitRoomChange(r2.getUnitRooms(), r1.getRoomType().ordinal());
-                                handleWallDeletion(isten.getMap().getEdgeManager().getEdgeBetweenRooms(r1, r2));
-                                mergeRooms(r1, r2, isten.getMap());
-                                handleRoomEdges(r1);
-                                System.out.println("Merge: " + (System.currentTimeMillis() - startTimeMillis) + " ms");
-                            }
-                            taskCount.decrementAndGet();
-                        });
+                        for (Room splittable : isten.getMap().getRooms()) {
+                            if(splittable.getID() == isten.getMap().getUnitRooms()[0][0].getOwnerRoom().getID()) continue;
+                            int newID;
+                            if ((newID = splitRooms(splittable, isten.getMap())) != -1) {
 
-                    }
-                    //TESTCASE 3:
-                    if((sec+2)%4==0) {
-                        executor.submit(()->{
-                            taskCount.incrementAndGet();
-                            long startTimeMillis = System.currentTimeMillis();
-
-                            for (Room splittable : isten.getMap().getRooms()) {
-                                if(splittable.getID() == isten.getMap().getUnitRooms()[0][0].getOwnerRoom().getID()) continue;
-                                int newID;
-                                if ((newID = splitRooms(splittable, isten.getMap())) != -1) {
-
-                                    for(Room room: isten.getMap().getRooms()) {
-                                        if(room.getID() == newID) {
-                                            handleUnitRoomChange(room.getUnitRooms(), room.getRoomType().ordinal());
-                                            handleWallAddition(isten.getMap().getEdgeManager().getEdgeBetweenRooms(splittable, room));
-                                            handleRoomEdges(room);
-                                            handleRoomEdges(splittable);
-                                            break;
-                                        }
+                                for(Room room: isten.getMap().getRooms()) {
+                                    if(room.getID() == newID) {
+                                        handleUnitRoomChange(room.getUnitRooms(), room.getRoomType().ordinal());
+                                        handleWallAddition(isten.getMap().getEdgeManager().getEdgeBetweenRooms(splittable, room));
+                                        handleRoomEdges(room);
+                                        handleRoomEdges(splittable);
+                                        break;
                                     }
-                                    //System.out.println("sikerult a split");
-                                    //System.out.println(splittable.getID() + " adjacentrooms: " + splittable.getPhysicallyAdjacentRooms().size());
-                                    //System.out.println(splittable.getID() + " Dooradjacentrooms: " + splittable.getDoorAdjacentRooms().size());
-                                    //stop = true;
-
-                                    break;
                                 }
+                                //System.out.println("sikerult a split");
+                                //System.out.println(splittable.getID() + " adjacentrooms: " + splittable.getPhysicallyAdjacentRooms().size());
+                                //System.out.println(splittable.getID() + " Dooradjacentrooms: " + splittable.getDoorAdjacentRooms().size());
+                                //stop = true;
+
+                                break;
                             }
-                            System.out.println("Split: " + (System.currentTimeMillis() - startTimeMillis) + " ms");
-                            taskCount.decrementAndGet();
-                        });
-                    }
+                        }
+                        System.out.println("Split: " + (System.currentTimeMillis() - startTimeMillis) + " ms");
+                        taskCount.decrementAndGet();
+                    });
+                }
 
                 sec++;
                 delta = 0;
