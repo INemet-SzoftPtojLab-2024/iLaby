@@ -29,6 +29,7 @@ public class VillainHandler extends ServerSideHandler {
 
     public void createVillains() {
         villainSkeletons.add(new Villain("Kővári", "./assets/villain/villain1.png"));
+        villainSkeletons.add(new Villain("Zsóka", "./assets/villain/villain1.png"));
         villainSkeletons.add(new Villain("Sz.K.L.",  "./assets/villain/villain1.png"));
         villainSkeletons.add(new Villain("Bitó",  "./assets/villain/villain1.png"));
         villainSkeletons.add(new Villain("KissG",  "./assets/villain/villain1.png"));
