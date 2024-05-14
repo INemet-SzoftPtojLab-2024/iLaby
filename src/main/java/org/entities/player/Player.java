@@ -276,6 +276,12 @@ public class Player extends Entity {
                 inventory.getStoredItems().get(inventory.getSorospoharSlot()).use(this,deltaTime);
                 System.out.printf("hasSOR: " + inventory.hasSorospohar());
             }
+            else if(playerInVillainRoom && !inventory.avoidVillain(deltaTime)) {
+                if (localPlayer && playerSound != null) {
+                    alive = false;
+                    AudioManager.closeSound(playerSound);
+                }
+            }
 
             if (isInGasRoom) {
                 isInGasRoom = false;
