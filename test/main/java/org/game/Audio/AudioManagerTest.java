@@ -22,7 +22,7 @@ class AudioManagerTest {
 
     @Test
     public void testCloseSound() {
-        sound = AudioManager.playSound("assets/audio/click.ogg");
+        sound = AudioManager.playSound("assets/audio/playersound.ogg");
         assertNotNull(sound);
         AudioManager.closeSound(sound);
         assertFalse(AudioManager.isPlaying(sound));

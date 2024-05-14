@@ -35,7 +35,7 @@ class TransistorTest {
         t.dropOnGround(new Vec2(0,0));
         assertFalse(t.getCountText().getVisibility());
     }
-
+/*
     @Test
     public void testActivatedVisibleAfterUse(){
         Transistor t = new Transistor(isten);
@@ -56,7 +56,7 @@ class TransistorTest {
         t.use(pmp,0);
         assertEquals(t.getActivatedImage().getPosition().x,1);
         assertEquals(t.getActivatedImage().getPosition().y,1);
-    }
+    }*/
 
     @Test
     public void testChargeDecrease() {

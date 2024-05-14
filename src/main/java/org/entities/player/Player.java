@@ -767,4 +767,48 @@ public class Player extends Entity {
     public void setPlayerInVillainRoom(boolean isInRoomWithVillain) {
         playerInVillainRoom = isInRoomWithVillain;
     }
+
+    public ImageUI getDeath() {
+        return death;
+    }
+
+    public ImageUI getWinBgn() {
+        return winBgn;
+    }
+
+    public TextUI getMotivational() {
+        return motivational;
+    }
+
+    public TextUI getSieg() {
+        return sieg;
+    }
+
+    public boolean isWon() {
+        return won;
+    }
+
+    public Sound getPlayerSound() {
+        return playerSound;
+    }
+
+    public double getFaintingTime() {
+        return faintingTime;
+    }
+
+    public boolean isInGasRoomButHasMask() {
+        return isInGasRoomButHasMask;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public Vec2 getSpawnPosition() {
+        return spawnPosition;
+    }
+
+    public int getRun() {
+        return run;
+    }
 }
