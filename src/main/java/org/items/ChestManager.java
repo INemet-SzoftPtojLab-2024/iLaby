@@ -59,7 +59,7 @@ public class ChestManager extends Updatable {
             int randomNumber = random.nextInt(100);
             if(randomNumber == 0 || i == 0) type = Chest.ChestType.SIX.ordinal();
             else type = random.nextInt(Chest.ChestType.values().length - 1);
-            if(!placeChest(type)) break;
+            if(!placeChest(Chest.ChestType.SIX.ordinal())) break;
         }
     }
 

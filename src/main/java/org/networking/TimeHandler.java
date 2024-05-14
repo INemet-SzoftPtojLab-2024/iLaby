@@ -25,7 +25,7 @@ public class TimeHandler extends ServerSideHandler {
 
     @Override
     public void update(Isten isten, double deltaTime) {
-        TimeCounter.tick(deltaTime);
+        TimeCounter.tick(deltaTime, isten.getPlayer());
         Packet07Timer packet = new Packet07Timer(TimeCounter.getTimeRemaining());
         sendDataToAllClients(packet);
     }

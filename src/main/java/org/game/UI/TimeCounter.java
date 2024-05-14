@@ -1,9 +1,11 @@
 package main.java.org.game.UI;
 
+import main.java.org.entities.player.Player;
 import main.java.org.game.Graphics.*;
 import main.java.org.game.Isten;
 import main.java.org.game.updatable.Updatable;
 import main.java.org.linalg.Vec2;
+import main.java.org.networking.PlayerMP;
 
 public class TimeCounter extends Updatable {
     private static double timeRemaining; //Unit:sec
@@ -55,8 +57,8 @@ public class TimeCounter extends Updatable {
     }
 
     //called from server
-    public static void tick(double deltaTime) {
-        if (timeRemaining > 0) {
+    public static void tick(double deltaTime, Player player) {
+        if (timeRemaining > 0 && !player.hasWon()) {
             timeRemaining -= deltaTime;
         }
     }

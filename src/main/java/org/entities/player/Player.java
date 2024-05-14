@@ -716,4 +716,8 @@ public class Player extends Entity {
     public void setPlayerInVillainRoom(boolean isInRoomWithVillain) {
         playerInVillainRoom = isInRoomWithVillain;
     }
+
+    public boolean hasWon() {
+        return won;
+    }
 }
