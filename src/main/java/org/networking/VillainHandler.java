@@ -28,18 +28,6 @@ public class VillainHandler extends ServerSideHandler {
     }
 
     public void createVillains() {
-        villainSkeletons.add(new Villain("Kővári", "./assets/villain/villain1.png"));
-        villainSkeletons.add(new Villain("Zsóka", "./assets/villain/villain1.png"));
-        villainSkeletons.add(new Villain("Sz.K.L.",  "./assets/villain/villain1.png"));
-        villainSkeletons.add(new Villain("Bitó",  "./assets/villain/villain1.png"));
-        villainSkeletons.add(new Villain("KissG",  "./assets/villain/villain1.png"));
-        villainSkeletons.add(new Villain("Kapitány",  "./assets/villain/villain1.png"));
-        villainSkeletons.add(new Villain("Patrik",  "./assets/villain/villain1.png"));
-        villainSkeletons.add(new Villain("Mózer",  "./assets/villain/villain3.png"));
-        villainSkeletons.add(new Villain("Urbi",  "./assets/villain/villain3.png"));
-        villainSkeletons.add(new Villain("Tóbias",  "./assets/villain/villain3.png"));
-        villainSkeletons.add(new Villain("Halmschlager",  "./assets/villain/villain3.png"));
-        villainSkeletons.add(new Villain("Béla",  "./assets/villain/villain3.png"));
         villainSkeletons.add(new Villain("Recski",  "./assets/villain/villain3.png"));
         villainSkeletons.add(new Villain("Csőke",  "./assets/villain/villain3.png"));
         villainSkeletons.add(new Villain("Zeke", "./assets/villain/villain2.png"));
