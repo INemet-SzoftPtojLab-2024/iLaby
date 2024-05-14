@@ -60,7 +60,7 @@ public class Isten {
     public Isten() {
         mapSize = 50;
         map=new Map(this, mapSize, mapSize, 8);
-        chestManager = new ChestManager(150, this);
+        chestManager = new ChestManager(100, this);
         itemManager=new ItemManager();
         inputHandler = new Input();
         camera = new Camera();
