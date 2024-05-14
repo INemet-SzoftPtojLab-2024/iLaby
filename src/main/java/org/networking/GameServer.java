@@ -170,6 +170,10 @@ public class GameServer extends Thread {
                 packet = new Packet42ItemsDropped(data);
                 handleItemsDropped((Packet42ItemsDropped)packet);
                 break;
+            case FOG:
+                packet=new Packet50Fog(data);
+                handleFog((Packet50Fog)packet);
+                break;
         }
     }
 
@@ -312,6 +316,12 @@ public class GameServer extends Thread {
             //If the player has not been connected before, then add it to connectedPlayers
             this.connectedPlayers.add(player);
         }
+    }
+
+    //send fog packet weiter
+    private void handleFog(Packet50Fog packet)
+    {
+        sendDataToAllClients(packet.getData());
     }
 
     //Send data to one client
