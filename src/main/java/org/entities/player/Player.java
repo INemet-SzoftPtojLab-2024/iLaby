@@ -257,13 +257,6 @@ public class Player extends Entity {
 
             //Room currentRoom = getPlayerRoom(isten,playerCollider.getPosition());
             if(changedRoom) {
-
-                if(playerInVillainRoom && !inventory.avoidVillain(deltaTime)){
-                    if (localPlayer) {
-                        alive = false;
-                        if(playerSound != null) AudioManager.closeSound(playerSound);
-                    }
-                }
                 //beallitani a playerCountjat a szobanak:: (akar kiszervezheto fv-be)
                 System.out.println("Changed room");
                 //Lasd Inventory canAvoidVillain member var
