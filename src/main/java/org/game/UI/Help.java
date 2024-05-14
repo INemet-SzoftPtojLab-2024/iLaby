@@ -18,7 +18,7 @@ public class Help extends Updatable {
 
     @Override
     public void onStart(Isten isten) {
-        help = new ImageUI(new Vec2(0, 0), new Vec2(600, 600), "./assets/ui/help.png");
+        help = new ImageUI(new Vec2(0, 0), new Vec2(700, 800), "./assets/ui/help.png");
         help.setVisibility(false);
         help.setSortingLayer(-72);
         help.setAlignment(Renderable.CENTER,Renderable.CENTER);
