@@ -79,15 +79,5 @@ java:S6201Ñ"BReplace this instanceof check and cast with 'instanceof Door door
 java:S6201Ñ"BReplace this instanceof check and cast with 'instanceof Door door'(È—ÁÌ8Ñƒö1
 M	java:S106»"+Replace this use of System.out by a logger.(ç¿ïÿùÿÿÿÿ8‹„ö1
 p	java:S100Ó"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(’··’ûÿÿÿÿ8§¦ô¡õ1
-c
-java:S1128"ARemove this unused import 'main.java.org.entities.player.Player'.(Â‹¾¡øÿÿÿÿ8áŸãÒö1
-[
-java:S1128">Remove this unused import 'main.java.org.game.Graphics.Image'.(Äí·é8áŸãÒö1
-Z
-java:S1128	"=Remove this unused import 'main.java.org.game.Graphics.Text'.(˜ÀÁ‘8áŸãÒö1
-g
-java:S1128"ERemove this unused import 'main.java.org.game.physics.ColliderGroup'.(ÇÍêğûÿÿÿÿ8áŸãÒö1
-X
-java:S1128"6Remove this unused import 'java.util.logging.Handler'.(ƒœ®èûÿÿÿÿ8áŸãÒö1
 é
 java:S6541œ"ÅA "Brain Method" was detected. Refactor it to reduce at least one of the following metrics: LOC from 78 to 64, Complexity from 25 to 14, Nesting Level from 3 to 2, Number of Variables from 12 to 6.( ÎÀÿüÿÿÿÿ8–„ö1

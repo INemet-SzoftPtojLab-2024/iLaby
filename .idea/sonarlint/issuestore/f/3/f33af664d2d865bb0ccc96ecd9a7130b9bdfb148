@@ -1,14 +1,12 @@
 
-]	java:S125B"<This block of commented-out lines of code should be removed.(¡»¢üùÿÿÿÿ8ÕÜÈõ1
-X	java:S125k"<This block of commented-out lines of code should be removed.(—¸ıû8ØÜÈõ1
-X	java:S125q"<This block of commented-out lines of code should be removed.(ä„Ø½8ØÜÈõ1
-L	java:S106x"+Replace this use of System.out by a logger.(ÃÈèøÿÿÿÿ8ÂâÒö1
-H	java:S106‰"+Replace this use of System.out by a logger.(œğ’Ş8•ÂâÒö1
-^	java:S125¡"<This block of commented-out lines of code should be removed.(Ú‡İ«ùÿÿÿÿ8ŞÜÈõ1
-M	java:S106©"+Replace this use of System.out by a logger.(ÈŸÏÈùÿÿÿÿ8šÂâÒö1
-^	java:S125º"<This block of commented-out lines of code should be removed.(¡»¢üùÿÿÿÿ8ßÜÈõ1
-^	java:S125Ë"<This block of commented-out lines of code should be removed.(¡»¢üùÿÿÿÿ8áÜÈõ1
-^	java:S125İ"<This block of commented-out lines of code should be removed.(¡»¢üùÿÿÿÿ8ãÜÈõ1
-^	java:S125ì"<This block of commented-out lines of code should be removed.(¡»¢üùÿÿÿÿ8äÜÈõ1
-^	java:S125ı"<This block of commented-out lines of code should be removed.(¡»¢üùÿÿÿÿ8åÜÈõ1
-k	java:S100ˆ"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ù£–8åÜÈõ1
+]	java:S125>"<This block of commented-out lines of code should be removed.(¡»¢üùÿÿÿÿ8ÕÜÈõ1
+X	java:S125U"<This block of commented-out lines of code should be removed.(´ëŒ«8×ÜÈõ1
+X	java:S125c"<This block of commented-out lines of code should be removed.(—¸ıû8ØÜÈõ1
+X	java:S125i"<This block of commented-out lines of code should be removed.(ä„Ø½8ØÜÈõ1
+^	java:S125‘"<This block of commented-out lines of code should be removed.(Ú‡İ«ùÿÿÿÿ8ŞÜÈõ1
+^	java:S125ª"<This block of commented-out lines of code should be removed.(¡»¢üùÿÿÿÿ8ßÜÈõ1
+^	java:S125»"<This block of commented-out lines of code should be removed.(¡»¢üùÿÿÿÿ8áÜÈõ1
+^	java:S125Í"<This block of commented-out lines of code should be removed.(¡»¢üùÿÿÿÿ8ãÜÈõ1
+^	java:S125Ü"<This block of commented-out lines of code should be removed.(¡»¢üùÿÿÿÿ8äÜÈõ1
+^	java:S125í"<This block of commented-out lines of code should be removed.(¡»¢üùÿÿÿÿ8åÜÈõ1
+k	java:S100ø"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ù£–8åÜÈõ1

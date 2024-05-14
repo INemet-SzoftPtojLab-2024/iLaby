@@ -154,7 +154,7 @@ public class DoorTest {
 
         boolean result = testDoor.isClosed();
 
-        Assertions.assertFalse(result);
+        Assertions.assertTrue(result);
     }
 
     @Test

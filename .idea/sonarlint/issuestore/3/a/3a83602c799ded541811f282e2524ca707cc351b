@@ -1,8 +1,8 @@
 
 K
 java:S1066P"/Merge this if statement with the enclosing one.(ùôı8Í„ç¢õ1
-•
-java:S1319D"sThe type of "newCoherentElements" should be an interface such as "List" rather than the implementation "ArrayList".(·ÛèĞşÿÿÿÿ8Î„ç¢õ1
+
+java:S1319D"sThe type of "newCoherentElements" should be an interface such as "List" rather than the implementation "ArrayList".(š®Å8Î„ç¢õ1
 Œ
 java:S1319c"jThe type of "graphNodes" should be an interface such as "List" rather than the implementation "ArrayList".(èŞÿÜûÿÿÿÿ8Î„ç¢õ1
 ‚
@@ -18,7 +18,6 @@ java:S11861"€Add a nested comment explaining why this method is empty, throw a
 java:S1450"ZRemove the "isGenerated" field and declare it as a local variable in the relevant methods.(¨‘ÑÒüÿÿÿÿ8ÿ‡ç¢õ1
 x
 java:S1450"[Remove the "mapgenerator" field and declare it as a local variable in the relevant methods.(¬Ï‡¸8ÿ‡ç¢õ1
-X	java:S125F"<This block of commented-out lines of code should be removed.(µ¬°8™¼¢Òö1
 c
 java:S1126["AReplace this if-then-else statement by a single return statement.(ÁêĞÿÿÿÿÿ8ˆç¢õ1
 Q

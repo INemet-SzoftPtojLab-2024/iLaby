@@ -1,18 +1,14 @@
 
 Q
-java:S1066-"/Merge this if statement with the enclosing one.(â…³øÿÿÿÿ8ê‚ÀÓö1
-v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(££Æ¿8ë‚ÀÓö1
+java:S1066&"/Merge this if statement with the enclosing one.(Õ©ïúÿÿÿÿ8ÁêŸö1
+v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(££Æ¿8ÁêŸö1
 V
-java:S1118":Add a private constructor to hide the implicit public one.(³ÀÈ}8áƒÀÓö1
-j	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‹¯Ûş8áƒÀÓö1
-X	java:S125)"<This block of commented-out lines of code should be removed.(ÓµåÙ8åƒÀÓö1
-]	java:S1250"<This block of commented-out lines of code should be removed.(àÏŠ´üÿÿÿÿ8åƒÀÓö1
-L	java:S1069"+Replace this use of System.out by a logger.(ê›îùÿÿÿÿ8åƒÀÓö1
-]	java:S1257"<This block of commented-out lines of code should be removed.(„¸„¬üÿÿÿÿ8æƒÀÓö1
-]	java:S125B"<This block of commented-out lines of code should be removed.(üµÿÂÿÿÿÿÿ8æƒÀÓö1
-X	java:S125F"<This block of commented-out lines of code should be removed.(±şú“8çƒÀÓö1
-X	java:S125M"<This block of commented-out lines of code should be removed.(·Ìîô8çƒÀÓö1
-X	java:S125T"<This block of commented-out lines of code should be removed.(æ€Å8çƒÀÓö1
-X	java:S125W"<This block of commented-out lines of code should be removed.(ÈİÇİ8çƒÀÓö1
-W	java:S125n"<This block of commented-out lines of code should be removed.(ó¬ò8êƒÀÓö1
-]	java:S125u"<This block of commented-out lines of code should be removed.(áÜ°ÿÿÿÿÿ8êƒÀÓö1
+java:S1118":Add a private constructor to hide the implicit public one.(³ÀÈ}8€Ï–Ÿö1
+j	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‹¯Ûş8¯ëŸö1
+]	java:S1252"<This block of commented-out lines of code should be removed.(üµÿÂÿÿÿÿÿ8³ëŸö1
+X	java:S1256"<This block of commented-out lines of code should be removed.(±şú“8³ëŸö1
+X	java:S125="<This block of commented-out lines of code should be removed.(·Ìîô8³ëŸö1
+X	java:S125D"<This block of commented-out lines of code should be removed.(æ€Å8³ëŸö1
+X	java:S125G"<This block of commented-out lines of code should be removed.(ÈİÇİ8³ëŸö1
+W	java:S125^"<This block of commented-out lines of code should be removed.(ó¬ò8ì×•Ÿö1
+]	java:S125e"<This block of commented-out lines of code should be removed.(áÜ°ÿÿÿÿÿ8ì×•Ÿö1

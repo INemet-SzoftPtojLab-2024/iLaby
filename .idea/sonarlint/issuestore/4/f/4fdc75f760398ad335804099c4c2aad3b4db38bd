@@ -1,8 +1,8 @@
 
-{	java:S135Ï"YReduce the total number of break and continue statements in this loop to use at most one.(¾š÷¿ÿÿÿÿÿ8§¤¶Åõ1
+{	java:S135Í"YReduce the total number of break and continue statements in this loop to use at most one.(¾š÷¿ÿÿÿÿÿ8§¤¶Åõ1
 u	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš8·—§õ1
 b
-java:S1226é"DIntroduce a new variable instead of reusing the parameter "edgelen".(‡È«Æ8°¤¶Åõ1
+java:S1226ç"DIntroduce a new variable instead of reusing the parameter "edgelen".(‡È«Æ8°¤¶Åõ1
 C
 java:S1905>"&Remove this unnecessary cast to "int".(ş½Æå8Âš§õ1
 W	java:S125P"<This block of commented-out lines of code should be removed.(ƒ ƒC8½­¶Åõ1
@@ -11,29 +11,23 @@ W	java:S125V"<This block of commented-out lines of code should be removed.(˜áæ
 ]	java:S125x"<This block of commented-out lines of code should be removed.(Ãë°íûÿÿÿÿ8Ã­¶Åõ1
 Y	java:S125ƒ"<This block of commented-out lines of code should be removed.(õ—½Ï8Ä­¶Åõ1
 Y	java:S125"<This block of commented-out lines of code should be removed.(õ—½Ï8Å­¶Åõ1
-W
-java:S1854©":Remove this useless assignment to local variable "random".(¼İÅf8ÂŸÛÌö1
 Y	java:S125¨"<This block of commented-out lines of code should be removed.(ĞğşË8È­¶Åõ1
 ;
 java:S2119©"Save and re-use this "Random".(¼İÅf8Ê­¶Åõ1
-H
-java:S1481©"+Remove this unused "random" local variable.(¼İÅf8ËŸÛÌö1
-Y	java:S125ª"<This block of commented-out lines of code should be removed.(½åÖ8ËŸÛÌö1
-Y	java:S125°"<This block of commented-out lines of code should be removed.(¾†¾°8Ë­¶Åõ1
-^	java:S125µ"<This block of commented-out lines of code should be removed.(×îÀ£úÿÿÿÿ8Ë­¶Åõ1
-X	java:S125Â"<This block of commented-out lines of code should be removed.(¹‚„8Ì­¶Åõ1
+Y	java:S125®"<This block of commented-out lines of code should be removed.(¾†¾°8Ë­¶Åõ1
+^	java:S125³"<This block of commented-out lines of code should be removed.(×îÀ£úÿÿÿÿ8Ë­¶Åõ1
+X	java:S125À"<This block of commented-out lines of code should be removed.(¹‚„8Ì­¶Åõ1
 O
-java:S1481Ç",Remove this unused "minSize" local variable.(§ª®çşÿÿÿÿ8Í­¶Åõ1
-Y	java:S125Í"<This block of commented-out lines of code should be removed.(·–¿…8Í­¶Åõ1
-^	java:S125Ö"<This block of commented-out lines of code should be removed.(ë²Åšúÿÿÿÿ8Ï­¶Åõ1
-^	java:S125á"<This block of commented-out lines of code should be removed.(Ï¯†Äùÿÿÿÿ8Ï­¶Åõ1
+java:S1481Å",Remove this unused "minSize" local variable.(§ª®çşÿÿÿÿ8Í­¶Åõ1
+Y	java:S125Ë"<This block of commented-out lines of code should be removed.(·–¿…8Í­¶Åõ1
+^	java:S125Ô"<This block of commented-out lines of code should be removed.(ë²Åšúÿÿÿÿ8Ï­¶Åõ1
+^	java:S125ß"<This block of commented-out lines of code should be removed.(Ï¯†Äùÿÿÿÿ8Ï­¶Åõ1
 Y
-java:S1854é";Remove this useless assignment to local variable "edgelen".(‡È«Æ8Ğ­¶Åõ1
+java:S1854ç";Remove this useless assignment to local variable "edgelen".(‡È«Æ8Ğ­¶Åõ1
 J
-java:S1481é",Remove this unused "edgelen" local variable.(‡È«Æ8Ñ­¶Åõ1
-M	java:S106"+Replace this use of System.err by a logger.(•ªËßûÿÿÿÿ8Õ­¶Åõ1
-Y	java:S125œ"<This block of commented-out lines of code should be removed.(ŒÆÊı8×­¶Åõ1
-^	java:S125°"<This block of commented-out lines of code should be removed.(ßçÏÍùÿÿÿÿ8çŸÛÌö1
-^	java:S125¶"<This block of commented-out lines of code should be removed.(Ò³ÂÖùÿÿÿÿ8çŸÛÌö1
+java:S1481ç",Remove this unused "edgelen" local variable.(‡È«Æ8Ñ­¶Åõ1
+M	java:S106Œ"+Replace this use of System.err by a logger.(•ªËßûÿÿÿÿ8Õ­¶Åõ1
+Y	java:S125š"<This block of commented-out lines of code should be removed.(ŒÆÊı8×­¶Åõ1
+^	java:S125¯"<This block of commented-out lines of code should be removed.(ãÆ¦¬üÿÿÿÿ8Ù­¶Åõ1
 V
-java:S1144ú"9Remove this unused private "getSmallestNeighbour" method.(‰èÔL8Ş­¶Åõ1
+java:S1144ø"9Remove this unused private "getSmallestNeighbour" method.(‰èÔL8Ş­¶Åõ1

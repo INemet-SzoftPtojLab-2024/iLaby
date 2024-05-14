@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-import static main.java.org.game.Map.Algorithms.SetDoors.TakeOutDoor;
-
 /**
  * this class is only used at the beginning of a game, when a map needs to be generated
  */
@@ -83,9 +81,7 @@ public class Mapgenerator {
         }
         //ez egyenlore a spawnRoom beallitasa, Bea fv-eit e szerint lehetne modositani.
         isten.getMap().getUnitRooms()[0][0].getOwnerRoom().setRoomTypeToRoomType(RoomType.BASIC);
-        for(int i =0;i<isten.getMapSize()/2;i++){ //should be changed with mapsize
-            TakeOutDoor(isten,true,map);
-        }
+
         //add the images to the unitrooms
         //addImages();
     }

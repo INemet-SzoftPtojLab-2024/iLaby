@@ -1,22 +1,40 @@
 
 {
-java:S2293("YReplace the type specification in this constructor call with the diamond operator ("<>").(üØÜâùÿÿÿÿ8˜±šÌö1
+java:S2293+"YReplace the type specification in this constructor call with the diamond operator ("<>").(üØÜâùÿÿÿÿ8¸µ‘©ö1
 
-java:S1319 "pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ğ»ø8š±šÌö1
+java:S1319µ"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ğ»ø8ºµ‘©ö1
 e
-java:S2259Y"HA "NullPointerException" could be thrown; "chestImage" is nullable here.(ûÚï8ÿ±šÌö1
-X	java:S125)"<This block of commented-out lines of code should be removed.(º•É˜8•²šÌö1
-X	java:S1257"<This block of commented-out lines of code should be removed.(Ö„¿›8˜²šÌö1
-X	java:S125;"<This block of commented-out lines of code should be removed.(ÑÕİ½8œ²šÌö1
-W	java:S125x"<This block of commented-out lines of code should be removed.(›¶¡H8¸²šÌö1
-^	java:S125‚"<This block of commented-out lines of code should be removed.(›Ï”õıÿÿÿÿ8¹²šÌö1
-M	java:S106"+Replace this use of System.out by a logger.(°¨éıûÿÿÿÿ8º²šÌö1
-X	java:S125Æ"<This block of commented-out lines of code should be removed.(ÆÖ¿D8Ì²šÌö1
-^	java:S125Í"<This block of commented-out lines of code should be removed.(ÇŠ¤íıÿÿÿÿ8Ï²šÌö1
-Y	java:S125é"<This block of commented-out lines of code should be removed.(«ûÂ•8Ô²šÌö1
+java:S2259Y"HA "NullPointerException" could be thrown; "chestImage" is nullable here.(ûÚï8ğµ‘©ö1
+z
+java:S1450"]Remove the "isOnRightPlace" field and declare it as a local variable in the relevant methods.(¿ä†8ñµ‘©ö1
+X	java:S125,"<This block of commented-out lines of code should be removed.(º•É˜8õµ‘©ö1
+X	java:S1257"<This block of commented-out lines of code should be removed.(Ö„¿›8õµ‘©ö1
+X	java:S125;"<This block of commented-out lines of code should be removed.(ÑÕİ½8Æ†ªö1
+K
+java:S1481y")Remove this unused "wall" local variable.(µµ÷óşÿÿÿÿ8úµ‘©ö1
+:
+java:S2119"Save and re-use this "Random".(¼İÅf8üµ‘©ö1
+M	java:S106"+Replace this use of System.out by a logger.(°¨éıûÿÿÿÿ8şµ‘©ö1
+X	java:S125Æ"<This block of commented-out lines of code should be removed.(ÆÖ¿D8¶‘©ö1
+_
+java:S1117Ñ"<Rename "unitRoom" which hides the field declared at line 27.(£§şÿÿÿÿÿ8‚¶‘©ö1
+Y	java:S125Ú"<This block of commented-out lines of code should be removed.(×é”¿8ƒ¶‘©ö1
+_
+java:S1117á"<Rename "unitRoom" which hides the field declared at line 27.( ú Úşÿÿÿÿ8ƒ¶‘©ö1
+_
+java:S1126â"AReplace this if-then-else statement by a single return statement.(á–Ù¼8ƒ¶‘©ö1
+^	java:S125å"<This block of commented-out lines of code should be removed.(©ÍÌëüÿÿÿÿ8„¶‘©ö1
+Y	java:S125é"<This block of commented-out lines of code should be removed.( î·Û8„¶‘©ö1
+Y	java:S125õ"<This block of commented-out lines of code should be removed.(×ªÑá8„¶‘©ö1
+;
+java:S2119"Save and re-use this "Random".(¼İÅf8†¶‘©ö1
 M
 java:S1128"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ8›¹©ö1
 O
-java:S1128"-Remove this unused import 'java.util.Random'.(èøÉ›ùÿÿÿÿ8ä²šÌö1
+java:S1068"2Remove this unused "isOnRightPlace" private field.(¿ä†8ˆ¶‘©ö1
+D
+java:S1068"'Remove this unused "idx" private field.(Ùîëñ8‰¶‘©ö1
+[
+java:S1144x"9Remove this unused private "wallInUnitRoomPicker" method.(’ë÷¢şÿÿÿÿ8÷„¨©ö1
 I
-java:S1144ƒ"+Remove this unused private "setidx" method.(øÊº8å²šÌö1
+java:S1144˜"+Remove this unused private "setidx" method.(øÊº8‰¶‘©ö1
