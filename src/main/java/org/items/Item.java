@@ -31,6 +31,7 @@ public abstract class Item {
     private int itemIndex;
 
     private LocalDateTime droppedAt;
+    protected int inSlot;
     public Item(Isten isten,Vec2 scale){
         this.scale=scale;
         location=Location.CHEST;
@@ -53,13 +54,16 @@ public abstract class Item {
     public void pickUpInInventory(PlayerMP player, int selectedSlotByClient){
         //Pics up an item if it is not in the inventory, and it has been dropped for more than 200 millisec
         //1 ms = 1000000 ns :)
-        if(droppedAt == null) return;
+        if(droppedAt == null) {
+            System.out.println("droppedAt is null");
+        }
         if((!location.equals(Location.INVENTORY) && droppedAt.isBefore((LocalDateTime.now()).minusNanos(200000000)))) {
             if(!used) {
                 location = Location.INVENTORY;
                 image.setVisibility(false);
                 if(player.localPlayer) player.getInventory().addItem(this);
                 else player.getInventory().addItemToClient(this, selectedSlotByClient);
+                inSlot = selectedSlotByClient;
             }
         }
     }
@@ -78,6 +82,9 @@ public abstract class Item {
 
     public int getItemIndex() { return itemIndex; }
     public boolean isUsed(){return used;}
+    public void setUsed(boolean bool) { used = bool; }
     public void setCapacity(float capacity) {}
     public void resizeBar(float percent) {}
+    //For testing
+    public void setDroppedAt(LocalDateTime droppedAt) {this.droppedAt = droppedAt;}
 }

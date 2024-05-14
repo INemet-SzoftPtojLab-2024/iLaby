@@ -65,9 +65,9 @@ public class Map extends Updatable {
 
 
     //elozo fv, vagyis wouldRoomBeCoherent atirasa generikusra, es akkor egy wouldMapBeCoherent fv-t is helyettesit.
-    public <T extends Graph> boolean kruskalForCheckingIfGraphIsCoherent(ArrayList<T> newCoherentElements)
+    public <T extends Graph> boolean kruskalForCheckingIfGraphIsCoherent(ArrayList<T> newCoherentElements, T starterRoom)
     {
-        T starterRoom = newCoherentElements.get(0);
+        //T starterRoom = newCoherentElements.get(0);
         ArrayList<T> coherentGraph = new ArrayList<>();
         coherentGraph.add(starterRoom);
         for(int i = 0;i<newCoherentElements.size();i++){

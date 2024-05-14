@@ -51,7 +51,7 @@ public class Split {
         ArrayList<UnitRoom> oldRoomWithoutNewRoom = getDifference(r1.getUnitRooms(),addableUnitRooms);
         //ellenorzom, hogy osszefuggoek lennének-e: ha igen:
         //id mindegy micsoda, itt igazabol nem hasznalom
-        if( map.kruskalForCheckingIfGraphIsCoherent(oldRoomWithoutNewRoom) && map.kruskalForCheckingIfGraphIsCoherent(addableUnitRooms)) {
+        if( map.kruskalForCheckingIfGraphIsCoherent(oldRoomWithoutNewRoom,oldRoomWithoutNewRoom.get(0)) && map.kruskalForCheckingIfGraphIsCoherent(addableUnitRooms,addableUnitRooms.get(0))) {
             // removeoljuk a szomszedos roomok szomszedossagi listaibol a szobat fizikalisan, es a func vegen hozzaadjuk a ket szetvalasztott szoba egyiket/mindekettot
             for(Room physicalNeighbourRoom : r1.getPhysicallyAdjacentRooms()){
                 physicalNeighbourRoom.getPhysicallyAdjacentRooms().remove(r1);

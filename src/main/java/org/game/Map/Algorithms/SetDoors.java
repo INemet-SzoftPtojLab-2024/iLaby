@@ -25,6 +25,8 @@ public class SetDoors {
             //csak akkor veszek ki ajtót, ha mindkét szobának ami között van az edge van legalább 2 szomszédja
             Room r1 = chosenEdge.getNodeRooms().get(0);
             Room r2 = chosenEdge.getNodeRooms().get(1);
+            Room start = null;
+            Room end = null;
             //ha van ajtaja
             if(chosenEdge.hasDoor()) {
                 //csak akkor, ha van legalabb 2 ajtaja mindkettonekj, egyebkent mindenkepp szar lenne
@@ -33,12 +35,26 @@ public class SetDoors {
                     //megnezem, hogy ha egyiranyura akarom allitani, akkor mar egyiranyu-e alapbol, mert ha igen, akkor ki lesz veve
                     if( !r1.getDoorAdjacentRooms().contains(r2) || !r2.getDoorAdjacentRooms().contains(r1)) alreadyOneWay = true;
                     //ha nincs benne nem kell lekezelni, max falseot dob
-                    if(r1.getDoorAdjacentRooms().remove(r2)) r2WasRemovedFromR1 = true;
+                    if(r1.getDoorAdjacentRooms().remove(r2)){
+                        start = r1;
+                        end = r2;
+                        //roomToCheckWithKruskal = r1;
+                        r2WasRemovedFromR1 = true;
+                    }
                     if(alreadyOneWay || !oneWay){
-                        if(r2.getDoorAdjacentRooms().remove(r1)) r1WasRemovedFromR2= true;
+                        if(r2.getDoorAdjacentRooms().remove(r1)) {
+                            start = r2;
+                            end = r1;
+                            //roomToCheckWithKruskal = r2;
+                            r1WasRemovedFromR2 = true;
+                        }
                     }
                     //megnézem, hogy osszefuggo lenne-e az uj graph
-                    if (map.isGraphKoherent(map.getRooms())) {
+                    long startTimeMillis = System.currentTimeMillis();
+                    if(isReachable(start,end)){
+                    //if (map.kruskalForCheckingIfGraphIsCoherent(map.getRooms(),roomToCheckWithKruskal)) {
+                    //if(map.isGraphKoherent(map.getRooms())){
+                        System.out.println("isGraphKoherent: " + (System.currentTimeMillis() - startTimeMillis) + " ms");
                         EdgeBetweenRooms edgeBeingModified = map.getEdgeManager().getEdgeBetweenRooms(r1, r2);//ez pont a chosenEdge
                         ArrayList<EdgePiece> edgePieces = edgeBeingModified.getWalls();
                         for (EdgePiece edgePiece : edgePieces) {
@@ -100,5 +116,20 @@ public class SetDoors {
         //ha nem tudtam ajtot hozzaadni, akkor teli a map
         //System.out.println("Teli a map");
         return new Vec2(-1,-1);
+    }
+    public static boolean isReachable(Room start, Room end) {
+        ArrayList<Room> visited = new ArrayList<>();
+        dfs(start, visited);
+        return visited.contains(end);
+    }
+    private static void dfs(Room vertex, ArrayList<Room> visited) {
+        if (visited.contains(vertex))
+            return;
+
+        visited.add(vertex);
+        ArrayList<Room>neighbors = vertex.getDoorAdjacentRooms();
+        for (Room neighbor : neighbors) {
+            dfs(neighbor, visited);
+        }
     }
 }

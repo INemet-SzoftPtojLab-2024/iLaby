@@ -73,8 +73,7 @@ public class Gasmask extends Item {
                 if (inventory.getStoredItems().get(index) instanceof Gasmask) break;
                 index++;
             }
-            inventory.getStoredItems().remove(index);
-            inventory.getStoredItems().add(index, null);
+            inventory.getStoredItems().set(index, null);
             isten.getRenderer().deleteRenderable(inventory.getItemIcons().get(index));
             inventory.setGasmaskEquipped(false);
         }

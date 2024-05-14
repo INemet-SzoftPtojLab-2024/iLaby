@@ -67,3 +67,9 @@ i
 9src/main/java/org/networking/Packet10ChestGeneration.java,d\8\d8e79879d0ceaf067200b5fe560fc80fbeea6e6d
 `
 0src/main/java/org/networking/VillainHandler.java,8\e\8ef5a23ca837bb2baf83a2bacc882e6bcedf7dd4
+`
+0src/main/java/org/game/Map/Algorithms/Split.java,6\4\6461b1edd86db4123641c3fb81c98bd96b1a6596
+c
+3src/main/java/org/game/Map/Algorithms/SetDoors.java,b\c\bce122eccafa57f6dc66de616d37201ed200a808
+e
+5src/main/java/org/networking/Packet11ChestOpened.java,3\a\3ae531a454f284bc47c2d13020007ba2eb8b07dc

@@ -8,11 +8,11 @@ java:S1319x"pThe return type of this method should be an interface such as "Lis
 
 java:S1319‚"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(–¯±ø8‰ı½¦õ1
 
-java:S1319Œ"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ê¾Ú¹8‰ı½¦õ1
+java:S1319"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ê¾Ú¹8‰ı½¦õ1
 “
-java:S1319"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ØÎ­şùÿÿÿÿ8‰ı½¦õ1
+java:S1319¡"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ØÎ­şùÿÿÿÿ8‰ı½¦õ1
 “
-java:S1319“"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(Ş„Ù­úÿÿÿÿ8Šı½¦õ1
+java:S1319¤"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(Ş„Ù­úÿÿÿÿ8Šı½¦õ1
 m	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(™­¡û8Šı½¦õ1
 u	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(„Öš8Œı½¦õ1
 i	java:S116"MRename this field "ID" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÆÌèš8ªş½¦õ1
@@ -29,5 +29,6 @@ G	java:S106+"+Replace this use of System.out by a logger.(›»£å8®ş½¦õ1
 ]	java:S125S"<This block of commented-out lines of code should be removed.(âù¨Œøÿÿÿÿ8¯ş½¦õ1
 h
 java:S1659g"FDeclare "maxRowNum" and all following declarations on a separate line.(«óÔûÿÿÿÿ8±ş½¦õ1
+Y	java:S125"<This block of commented-out lines of code should be removed.(’Ãˆ8ˆÄóö1
 O
-java:S1128	"-Remove this unused import 'java.util.Random'.(èøÉ›ùÿÿÿÿ8´ş½¦õ1
+java:S1128	"-Remove this unused import 'java.util.Random'.(èøÉ›ùÿÿÿÿ8ä×øö1

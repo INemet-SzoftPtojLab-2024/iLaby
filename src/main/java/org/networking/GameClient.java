@@ -2,15 +2,11 @@ package main.java.org.networking;
 
 import main.java.org.game.Isten;
 import main.java.org.game.UI.TimeCounter;
-import main.java.org.game.physics.Collider;
-import main.java.org.game.physics.ColliderGroup;
 import main.java.org.items.Chest;
 import main.java.org.items.ChestManager;
 import main.java.org.items.Item;
 import main.java.org.items.ItemManager;
-import main.java.org.items.usable_items.Gasmask;
-import main.java.org.items.usable_items.Sorospohar;
-import main.java.org.items.usable_items.Tvsz;
+import main.java.org.items.usable_items.*;
 import main.java.org.linalg.Vec2;
 
 import java.io.IOException;
@@ -118,6 +114,18 @@ public class GameClient extends Thread {
                 packet = new Packet16Sorospohar(data);
                 handleSorospohar((Packet16Sorospohar) packet);
                 break;
+            case CAMEMBERT:
+                packet = new Packet17Camembert(data);
+                handleCamembert((Packet17Camembert)packet);
+                break;
+            case RONGY:
+                packet = new Packet18Rongy(data);
+                handleRongy((Packet18Rongy) packet);
+                break;
+            case TRANSISTOR:
+                packet = new Packet19Transistor(data);
+                handleTransistor((Packet19Transistor) packet);
+                break;
             case WALL:
                 packet = new Packet20Wall(data);
                 handleWall((Packet20Wall) packet);
@@ -135,7 +143,6 @@ public class GameClient extends Thread {
                 handleWallDelete((Packet23WallDelete)packet);
                 break;
             case DOOROPEN:
-                //System.out.println("unitRoomPacketCount: " + unitRoomPacketCount);
                 packet = new Packet24DoorOpen(data);
                 handleDoorOpen((Packet24DoorOpen)packet);
                 break;
@@ -151,6 +158,10 @@ public class GameClient extends Thread {
                 packet = new Packet28PlayerChangedRoom(data);
                 handlePlayerChangedRoom((Packet28PlayerChangedRoom)packet);
                 break;
+            case REPLACECHEST:
+                packet = new Packet40ReplaceChest(data);
+                handleReplaceChest((Packet40ReplaceChest)packet);
+                break;
             case ISPLAYERINVILLAINROOM:
                 packet =new Packet41IsPlayerInVillainRoom(data);
                 handleIsPlayerInVillainRoom((Packet41IsPlayerInVillainRoom)packet);
@@ -160,6 +171,42 @@ public class GameClient extends Thread {
                 handleItemsDropped((Packet42ItemsDropped)packet);
                 break;
         }
+    }
+
+    private void handleRongy(Packet18Rongy packet) {
+        ((Rongy) isten.getItemManager().getItems().get(packet.getItemIndex())).stinkAnimation();
+        isten.getItemManager().getItems().get(packet.getItemIndex()).setUsed(true);
+    }
+
+    private void handleTransistor(Packet19Transistor packet) {
+        Vec2 position = new Vec2(packet.getX(), packet.getY());
+
+        ((Transistor) isten.getItemManager().getItems().get(packet.getItemIndex())).getActivatedImage().setPosition(position);
+        ((Transistor) isten.getItemManager().getItems().get(packet.getItemIndex())).getCountText().setVisibility(false);
+        ((Transistor) isten.getItemManager().getItems().get(packet.getItemIndex())).setActivated(true);
+    }
+
+    private void handleCamembert(Packet17Camembert packet) {
+        int itemIndex = packet.getItemIndex();
+        String username = packet.getUsername();
+
+        for(PlayerMP player: isten.getUpdatablesByType(PlayerMP.class)) {
+            if(player.getPlayerName().getText().equalsIgnoreCase(username) && !player.localPlayer) {
+                player.getInventory().setCamembert((Camembert)isten.getItemManager().getItems().get(itemIndex));
+                player.getInventory().setCamembertTriggered(true);
+            }
+        }
+    }
+
+    private void handleReplaceChest(Packet40ReplaceChest packet) {
+        if(isten.getSocketServer() != null) return;
+
+        Vec2 newPos = packet.getPos();
+        int wallLocation = packet.getWallLocation();
+        int index = packet.getIdx();
+        //megkeressunk a chestet, majd meghivjuk ra a replace fv-t
+        Chest chest = isten.getChestManager().getChests().get(index);
+        chest.replaceChest(newPos, wallLocation);
     }
 
     private void handleItemsDropped(Packet42ItemsDropped packet) {
@@ -172,9 +219,8 @@ public class GameClient extends Thread {
                     if(item != null) item.dropOnGround(new Vec2(player.getPlayerCollider().getPosition().x,
                             player.getPlayerCollider().getPosition().y));
                 }
-                player.getInventory().getStoredItems().clear();
                 for (int i = 0; i < 5; i++) {
-                    player.getInventory().getStoredItems().add(null);
+                    player.getInventory().getStoredItems().set(i, null);
                 }
             }
         }
@@ -204,7 +250,6 @@ public class GameClient extends Thread {
 
 
     private void handlePlayerChangedRoom(Packet28PlayerChangedRoom packet) {
-
         for(PlayerMP player: isten.getUpdatablesByType(PlayerMP.class)) {
             if(player.getUsername().equalsIgnoreCase(packet.getUsername())) {
                 player.changedRoom(true);
@@ -247,8 +292,8 @@ public class GameClient extends Thread {
     private void handleGasmask(Packet14Gasmask packet) {
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ItemManager.class) {
-                ((Gasmask)isten.getUpdatables().get(i).getItems().get(packet.getItemIndex())).setCapacity(packet.getCapacity());
-                ((Gasmask)isten.getUpdatables().get(i).getItems().get(packet.getItemIndex())).resizeBar(packet.getCapacity());
+                ((Gasmask) isten.getUpdatables().get(i).getItems().get(packet.getItemIndex())).setCapacity(packet.getCapacity());
+                ((Gasmask) isten.getUpdatables().get(i).getItems().get(packet.getItemIndex())).resizeBar(packet.getCapacity());
             }
         }
     }
@@ -271,7 +316,6 @@ public class GameClient extends Thread {
     }
 
     private void handleEdgePieceChanged(Packet22EdgePieceChanged packet) {
-
         float x = packet.getX();
         float y = packet.getY();
         boolean isDoor = packet.isDoor();
@@ -308,34 +352,23 @@ public class GameClient extends Thread {
     }
 
     private void handleItemDropped(Packet13ItemDropped packet) {
-
         Vec2 pos = packet.getPos();
         String username = packet.getUsername();
         int selectedSlot = packet.getSelectedSlot();
         int itemIndex = packet.getItemIndex();
+        boolean replaced = packet.getReplaced();
 
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ItemManager.class) {
 
                 for(PlayerMP player: isten.getUpdatablesByType(PlayerMP.class)) {
                     if(player.getUsername().equalsIgnoreCase(username)) {
-                        System.out.println(itemIndex);
-                        System.out.println(isten.getItemManager().getItems().get(itemIndex).getClass());
-                        System.out.println("selectedSlot: " + selectedSlot);
-
                         Item item = isten.getItemManager().getItems().get(itemIndex);
 
-                        player.getInventory().dropItem(item, pos, selectedSlot);
+                        player.getInventory().dropItem(item, pos, selectedSlot, replaced);
                         break;
-
                     }
                 }
-                /*
-                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).setLocation(Item.Location.GROUND);
-                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).getImage().setVisibility(true);
-                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).getImage().setPosition(packet.getPos());
-                isten.getUpdatables().get(i).getItems().get(packet.getItemIndex()).setPosition(packet.getPos());
-                 */
             }
         }
     }
@@ -350,7 +383,8 @@ public class GameClient extends Thread {
 
                 for(PlayerMP player: isten.getUpdatablesByType(PlayerMP.class)) {
                     if(player.getUsername().equalsIgnoreCase(username)) {
-                        isten.getItemManager().getItems().get(itemIndex).pickUpInInventory(player, selectedSlot);
+                        Item item = isten.getItemManager().getItems().get(itemIndex);
+                        item.pickUpInInventory(player, selectedSlot);
                         break;
                     }
                 }
@@ -378,38 +412,21 @@ public class GameClient extends Thread {
                     item2 = isten.getItemManager().getItems().get(index2);
                 }
                 chest.open(item1, item2);
-
-                for(Item item: isten.getItemManager().getItems()) {
-                    if(item.getLocation() == Item.Location.GROUND) {
-                        System.out.println("item is on ground: " + item.getClass());
-                    }
-                }
-                System.out.println();
                 break;
             }
         }
     }
 
-    private int chestGenCount = 0;
     private void handleChestGeneration(Packet10ChestGeneration packet) {
-    if(isten.getSocketServer() != null) return;
-        int chestIndex = 0;
+        if(isten.getSocketServer() != null) return;
+
         for(int i = 0; i < isten.getUpdatables().size(); i++) {
             if(isten.getUpdatable(i).getClass() == ChestManager.class) {
-                chestIndex = i;
                 Chest chest =  new Chest(packet.getPos(),isten, packet.getChestType(), packet.getWallLocation(), packet.getIdx());
-                chest.setNewChestImage();
-                isten.getUpdatables().get(i).getChests().add(chest);
-                chestGenCount++;
+                ChestManager chestManager = (ChestManager) isten.getUpdatables().get(i); // = isten.getChestManager()...
+                chestManager.addChest(chest);
             }
         }
-
-        ColliderGroup chestColliders=new ColliderGroup();
-        for (int i = 0; i < isten.getUpdatables().get(chestIndex).getChests().size(); i++) {
-            Collider c=new Collider( isten.getUpdatables().get(chestIndex).getChests().get(i).getPosition(),new Vec2(0.15f,0.15f));
-            chestColliders.addCollider(c);
-        }
-        isten.getPhysicsEngine().addColliderGroup(chestColliders);
     }
 
     private void handleDeath(Packet21Death packet) {
@@ -426,9 +443,6 @@ public class GameClient extends Thread {
     }
 
     private void handleWall(Packet20Wall packet) {
-
-        //if(isten.getSocketServer() != null) return;
-
         Vec2 pos = new Vec2(packet.getPosX(), packet.getPosY());
         Vec2 scale = new Vec2(packet.getScaleX(), packet.getScaleY());
         boolean isDoor = packet.isDoor();

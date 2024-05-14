@@ -95,11 +95,6 @@ public class Villain extends Entity {
             villainName.setSortingLayer(-50);
             isten.getRenderer().addRenderable(villainName);
         }
-        //isten.getCamera().setPixelsPerUnit(100);
-
-        Map map = isten.getMap();
-
-
     }
 
     @Override
@@ -116,11 +111,16 @@ public class Villain extends Entity {
         villainName.setPosition(Vec2.sum(playerPosition, new Vec2(0, (float) 0.5)));
 
         if(faintTime > 0) {
+            villainImage.setVisibility(false);
             if ((timeElapsed*1000000) % 1000000 < 500000) {
-                setVillainImage(isten,faintedImage1);
+                //setVillainImage(isten,faintedImage1);
+                faintedImage2.setVisibility(false);
+                faintedImage1.setVisibility(true);
             }
             else {
-                setVillainImage(isten,faintedImage2);
+                faintedImage1.setVisibility(false);
+                faintedImage2.setVisibility(true);
+                //setVillainImage(isten,faintedImage2);
             }
         }
 
@@ -177,7 +177,7 @@ public class Villain extends Entity {
 
     public void updateVillainOnServer(Isten isten, double deltaTime) {
 
-        for (Room room : isten.getMap().getRooms()) {
+        /*for (Room room : isten.getMap().getRooms()) {
             for (UnitRoom unitRoom : room.getUnitRooms()) {
                 if (villainCollider.getPosition().x >= unitRoom.getPosition().x - 0.5 &&
                         villainCollider.getPosition().x <= unitRoom.getPosition().x + 0.5 &&
@@ -187,9 +187,27 @@ public class Villain extends Entity {
                     this.room = currentUnitRoom.getOwnerRoom();
                 }
             }
-        }
+        }*/
+        //shortcut:
+        int x = (int)(villainCollider.getPosition().x + 0.5f);
+        int y = (int)(villainCollider.getPosition().y + 0.5f);
+        //System.out.println(x + " " + y + " ownerroorm pozi " +  isten.getMap().getUnitRooms()[y][x].getColNum() + " " + isten.getMap().getUnitRooms()[y][x].getRowNum());
+        this.room = isten.getMap().getUnitRooms()[y][x].getOwnerRoom();
+        this.currentUnitRoom = isten.getMap().getUnitRooms()[y][x];
 
         checkIfInGasRoom(isten);
+
+        if(faintTime > 0) {
+            villainImage.setVisibility(false);
+            if ((timeElapsed*1000000) % 1000000 < 500000) {
+                faintedImage2.setVisibility(false);
+                faintedImage1.setVisibility(true);
+            }
+            else {
+                faintedImage1.setVisibility(false);
+                faintedImage2.setVisibility(true);
+            }
+        }
 
         if(!isInGasRoom&&faintTime==0) {
             Random random = new Random();

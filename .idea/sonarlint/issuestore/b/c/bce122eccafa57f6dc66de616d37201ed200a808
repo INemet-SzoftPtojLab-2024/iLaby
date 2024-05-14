@@ -1,0 +1,14 @@
+
+Q
+java:S1066&"/Merge this if statement with the enclosing one.(Õ©ïúÿÿÿÿ8ÁêŸö1
+v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(££Æ¿8ÁêŸö1
+V
+java:S1118":Add a private constructor to hide the implicit public one.(³ÀÈ}8€Ï–Ÿö1
+j	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‹¯Ûş8¯ëŸö1
+]	java:S1252"<This block of commented-out lines of code should be removed.(üµÿÂÿÿÿÿÿ8³ëŸö1
+X	java:S1256"<This block of commented-out lines of code should be removed.(±şú“8³ëŸö1
+X	java:S125="<This block of commented-out lines of code should be removed.(·Ìîô8³ëŸö1
+X	java:S125D"<This block of commented-out lines of code should be removed.(æ€Å8³ëŸö1
+X	java:S125G"<This block of commented-out lines of code should be removed.(ÈİÇİ8³ëŸö1
+W	java:S125^"<This block of commented-out lines of code should be removed.(ó¬ò8ì×•Ÿö1
+]	java:S125e"<This block of commented-out lines of code should be removed.(áÜ°ÿÿÿÿÿ8ì×•Ÿö1

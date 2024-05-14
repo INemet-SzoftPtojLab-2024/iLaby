@@ -95,7 +95,7 @@ public class VillainHandler extends ServerSideHandler {
             if(villain == null || !villain.isInitialized()) continue;
 
             villain.updateVillainOnServer(isten, deltaTime);
-            if (villain.isInGasRoom()){
+            if (villain.isInGasRoom() || villain.getIsFainted()){
                 Packet27VillainIsInGasRoom packet = new Packet27VillainIsInGasRoom(villain.getVillainName(), true);
                 sendDataToAllClients(packet);
                 villain.setVelocity(0.0f);

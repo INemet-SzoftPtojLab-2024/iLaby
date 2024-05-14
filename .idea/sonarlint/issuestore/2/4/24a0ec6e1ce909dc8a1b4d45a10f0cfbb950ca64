@@ -1,15 +1,27 @@
 
-g	java:S112*"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8¿½‰éõ1
-h	java:S112Ÿ"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8À½‰éõ1
+g	java:S112,"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8¿½‰éõ1
+h	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8À½‰éõ1
 Â
-java:S6539"ŸSplit this â€œMonster Classâ€ into smaller and more specialized ones to reduce its dependencies on other classes from 22 to the maximum authorized 20 or less.(§Ù¶§ÿÿÿÿÿ8Á½‰éõ1
+java:S6539"ŸSplit this â€œMonster Classâ€ into smaller and more specialized ones to reduce its dependencies on other classes from 25 to the maximum authorized 20 or less.(§Ù¶§ÿÿÿÿÿ8Á½‰éõ1
+¥
+java:S2681ì"†This line will not be executed conditionally; only the first line of this 2-line block will be. The rest will execute unconditionally.(×»‰Ì8âû¢©ö1
 f
-java:S2147"DCombine this catch with the one at line 27, which has the same body.(¿Â„ÿÿÿÿÿ8ì½‰éõ1
+java:S2147 "DCombine this catch with the one at line 29, which has the same body.(¿Â„ÿÿÿÿÿ8ì½‰éõ1
 W
-java:S1161#":Add the "@Override" annotation above this method signature(“–ış8î½‰éõ1
+java:S1161%":Add the "@Override" annotation above this method signature(“–ış8î½‰éõ1
 M
-java:S45246"+Move this default to the end of the switch.(İ–Ò˜ÿÿÿÿÿ8ó½‰éõ1
-]	java:S125m"<This block of commented-out lines of code should be removed.(ì©‚“úÿÿÿÿ8õ½‰éõ1
-X	java:S125¬"<This block of commented-out lines of code should be removed.(ÜİÒ8„¾‰éõ1
+java:S45248"+Move this default to the end of the switch.(İ–Ò˜ÿÿÿÿÿ8ó½‰éõ1
+]	java:S125p"<This block of commented-out lines of code should be removed.(ì©‚“úÿÿÿÿ8õ½‰éõ1
+^	java:S125"<This block of commented-out lines of code should be removed.(¹ «Ëøÿÿÿÿ8İı¢©ö1
+H	java:S106¢"+Replace this use of System.out by a logger.(â€’Š8ìı¢©ö1
+H	java:S106£"+Replace this use of System.out by a logger.(ñ¥¦ª8íı¢©ö1
+H	java:S106¤"+Replace this use of System.out by a logger.(¡á¤Ñ8íı¢©ö1
+Y	java:S125®"<This block of commented-out lines of code should be removed.(Òà¯£8îı¢©ö1
+A
+java:S1659Ñ"#Declare "item2" on a separate line.(ğ¥û°8ñı¢©ö1
+E	java:S108Ò")Either remove or fill this block of code.(„·`8òı¢©ö1
+M	java:S106à"+Replace this use of System.out by a logger.(€”íÎıÿÿÿÿ8óı¢©ö1
+M	java:S106ã"+Replace this use of System.out by a logger.(ªÓ¼áşÿÿÿÿ8ôı¢©ö1
+X	java:S125"<This block of commented-out lines of code should be removed.(ÜİÒ8„¾‰éõ1
 H
-java:S1481"+Remove this unused "player" local variable.(‹ôø"8Œ¾‰éõ1
+java:S1481ã"+Remove this unused "player" local variable.(‹ôø"8Œ¾‰éõ1

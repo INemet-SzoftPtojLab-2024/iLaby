@@ -7,12 +7,14 @@ public class Packet13ItemDropped extends Packet {
     private Vec2 pos = new Vec2();
     private String username;
     private int selectedSlot;
-    public Packet13ItemDropped(int itemIndex, Vec2 pos, String username, int selectedSlot) {
+    private boolean replaced;
+    public Packet13ItemDropped(int itemIndex, Vec2 pos, String username, int selectedSlot, boolean replaced) {
         super(13);
         this.itemIndex = itemIndex;
         this.pos = pos;
         this.username = username;
         this.selectedSlot = selectedSlot;
+        this.replaced = replaced;
     }
     public Packet13ItemDropped(byte[] data) {
         super(13);
@@ -23,6 +25,7 @@ public class Packet13ItemDropped extends Packet {
         this.pos.y = Float.parseFloat(dataArray[2]);
         this.username = dataArray[3];
         this.selectedSlot = Integer.parseInt(dataArray[4]);
+        this.replaced = Boolean.parseBoolean(dataArray[5]);
     }
 
     @Override
@@ -35,7 +38,7 @@ public class Packet13ItemDropped extends Packet {
 
     @Override
     public byte[] getData() { return ("13" + itemIndex + "," + pos.x + "," + pos.y
-    + "," + username + "," + selectedSlot).getBytes(); }
+    + "," + username + "," + selectedSlot + "," + replaced).getBytes(); }
 
     public int getItemIndex() { return itemIndex; }
 
@@ -45,5 +48,9 @@ public class Packet13ItemDropped extends Packet {
     }
     public int getSelectedSlot() {
         return selectedSlot;
+    }
+
+    public boolean getReplaced() {
+        return replaced;
     }
 }
