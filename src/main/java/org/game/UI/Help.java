@@ -35,4 +35,8 @@ public class Help extends Updatable {
     public void onDestroy() {
         //not implemented yet
     }
+
+    public ImageUI getHelp() {
+        return help;
+    }
 }
