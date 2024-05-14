@@ -38,12 +38,6 @@ public class Chest {
         this.idx = idx;
         this.chestType = (Chest.ChestType) Arrays.stream(Chest.ChestType.values()).toArray()[chestType];
         storedItems = new ArrayList<Item>();
-        /*if(items.isEmpty()) System.err.println("There is no item in the chest!");
-        if(items.size()>maxAmountOfItems){
-            System.err.println("So much items cant be stored in a chest, max amount of storable items is "+maxAmountOfItems);
-            for (int i = 0; i < maxAmountOfItems; i++) {storedItems.set(i, items.get(i));}
-        }
-        else storedItems=items;*/
 
         //a cleinsen csak a posicioja van tarolva a unitroomnak
         this.unitRoom = isten.getMap().getUnitRooms()[(int)pos.y][(int)pos.x];
@@ -117,26 +111,6 @@ public class Chest {
                 break;
         }
     }
-   /* private WallLocation wallInUnitRoomPicker (UnitRoom unitRoom){
-        WallLocation wall;//0=left, 1=top, 2=right, 3=bottom
-        ArrayList<WallLocation> walls = new ArrayList<>();
-        if (unitRoom.isLeftWall()) walls.add(WallLocation.LEFT);
-        if (unitRoom.isTopWall()) walls.add(WallLocation.TOP);
-        if (unitRoom.isRightWall()) walls.add(WallLocation.RIGHT);
-        if (unitRoom.isBottomWall()) walls.add(WallLocation.BOTTOM);
-        Random random = new Random();
-        return walls.get(random.nextInt(walls.size()));
-    }*/
-   /* public void setUnitRoom(Vec2 pos){
-        this.pos = pos;
-        this.unitRoom = isten.getMap().getUnitRooms()[(int)pos.y][(int)pos.x];
-        WallLocation wall = wallInUnitRoomPicker(unitRoom);
-        //a heading es a pos ugyan azt az adatot tarolja, overhead
-        setPos();
-        chestImage = null;
-        setNewChestImage();
-        unitRoom.setHasChest(true);
-    }*/
     public void open(Item item1, Item item2) {
         if(storedItems.size()>2) System.out.println("There are more than 2 items in the chest!");
         switch(wallLocation){
@@ -202,25 +176,7 @@ public class Chest {
     public int getChestType() {
         return chestType.ordinal();
     }
-    /*public UnitRoom getUnitRoom(Vec2 pos){
-        UnitRoom chestUnitRoom=null;
-        for (int i = 0; i < isten.getMap().getUnitRooms().length; i++) {
-            for (int j = 0; j < isten.getMap().getUnitRooms()[i].length; j++) {
-                UnitRoom unitRoom = isten.getMap().getUnitRooms()[i][j];
-                if (pos.x >= unitRoom.getPosition().x - 0.5 &&
-                        pos.x <= unitRoom.getPosition().x + 0.5 &&
-                        pos.y >= unitRoom.getPosition().y - 0.5 &&
-                        pos.y <= unitRoom.getPosition().y + 0.5) {
-                    chestUnitRoom=unitRoom;
-                }
-            }
-        }
-        //int x = (int)(pos.x + 0.5f);
-        //int y = (int)(pos.y + 0.5f);
-        //System.out.println(x + " " + y + " ownerroorm pozi " +  isten.getMap().getUnitRooms()[y][x].getColNum() + " " + isten.getMap().getUnitRooms()[y][x].getRowNum());
-        //return isten.getMap().getUnitRooms()[y][x];
-        //return chestUnitRoom;
-    }*/
+
     public boolean isOnRightPlace(){// csak serveren lehet
         if(!unitRoom.hasDoor()){
             if(unitRoom.isTopWall() && wallLocation==WallLocation.TOP) return true;
@@ -230,10 +186,6 @@ public class Chest {
         }
         return false;
     }
-    /*public void setIsOnRightPlace(boolean isOnRightPlace){
-        this.isOnRightPlace = isOnRightPlace;
-    }*/
-
     public void setIsOpen(boolean isOpened) {
         this.isOpened = isOpened;
     }
@@ -241,6 +193,7 @@ public class Chest {
 
     public enum WallLocation {LEFT, TOP, RIGHT, BOTTOM}
     public enum ChestType{ONE,TWO,THREE,FOUR,FIVE,SIX}
+    //ha új chesttípust veszel fel, a logarléces mindig az utolsó legyen!
 
     public void replaceChest(Vec2 newURPos, int newWallLocation){
         //a setHasChest allitasa a cliensen folosleges, de maradhat
