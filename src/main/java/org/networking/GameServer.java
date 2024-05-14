@@ -95,7 +95,7 @@ public class GameServer extends Thread {
     }
 
     //Parse packet to string
-    private void parsePacket(byte[] data, InetAddress address, int port) {
+    void parsePacket(byte[] data, InetAddress address, int port) {
         String message = new String(data).trim();
         PacketTypes type = Packet.lookupPacket(message.substring(0,2));
         Packet packet = null;
@@ -194,11 +194,11 @@ public class GameServer extends Thread {
         sendDataToAllClients(packet.getData());
     }
 
-    private void handleTransistor(Packet19Transistor packet) { sendDataToAllClients(packet.getData()); }
+    void handleTransistor(Packet19Transistor packet) { sendDataToAllClients(packet.getData()); }
 
-    private void handleReplaceChest(Packet40ReplaceChest packet) { sendDataToAllClients(packet.getData());}
+    void handleReplaceChest(Packet40ReplaceChest packet) { sendDataToAllClients(packet.getData());}
 
-    private void handleSorospohar(Packet16Sorospohar packet) { sendDataToAllClients(packet.getData()); }
+    void handleSorospohar(Packet16Sorospohar packet) { sendDataToAllClients(packet.getData()); }
 
     private void handleItemsDropped(Packet42ItemsDropped packet) {
         sendDataToAllClients(packet.getData());
@@ -208,7 +208,7 @@ public class GameServer extends Thread {
         sendDataToAllClients(packet.getData());
     }
 
-    private void handleTvsz(Packet15Tvsz packet) {
+    void handleTvsz(Packet15Tvsz packet) {
         sendDataToAllClients(packet.getData());
     }
 

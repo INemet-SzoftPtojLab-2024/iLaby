@@ -99,7 +99,7 @@ public class MainMenu extends Updatable {
                     if(currentPanel!=null)
                         currentPanel.unload(isten);
                     currentPanel=null;
-                    TimeCounter.setTime(301);
+                    TimeCounter.setTime(601);
 
                     GameManager.setStage(GameManager.GameStage.MULTI);
                     break;
