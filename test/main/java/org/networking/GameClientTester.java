@@ -82,11 +82,7 @@ public class GameClientTester {
         gameClient.parsePacket(data12, testAddress, testPort);
         gameClient.parsePacket(data13, testAddress, testPort);
         gameClient.parsePacket(data14, testAddress, testPort);
-//        gameClient.parsePacket(data15, testAddress, testPort);
-//        gameClient.parsePacket(data16, testAddress, testPort);
         gameClient.parsePacket(data17, testAddress, testPort);
-//        gameClient.parsePacket(data18, testAddress, testPort);
-//        gameClient.parsePacket(data19, testAddress, testPort);
         gameClient.parsePacket(data20, testAddress, testPort);
         gameClient.parsePacket(data21, testAddress, testPort);
         gameClient.parsePacket(data22, testAddress, testPort);
@@ -96,7 +92,6 @@ public class GameClientTester {
         gameClient.parsePacket(data26, testAddress, testPort);
         gameClient.parsePacket(data27, testAddress, testPort);
         gameClient.parsePacket(data28, testAddress, testPort);
-//        gameClient.parsePacket(data40, testAddress, testPort);
         gameClient.parsePacket(data41, testAddress, testPort);
         gameClient.parsePacket(data42, testAddress, testPort);
     }
